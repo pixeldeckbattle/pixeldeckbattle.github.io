@@ -1950,7 +1950,7 @@ $('view').onclick=ev=>{{const w=ev.target.closest('.dk,.ibtn,.pill,.row2 .btn');
   else if(a==='twpick'){const k=S.team.indexOf(id);if(k>=0)S.team.splice(k,1);else if(S.team.length<3)S.team.push(id);save();const m=document.querySelector('.main'),y=m?m.scrollTop:0;tower();const n=document.querySelector('.main');if(n)n.scrollTop=y}
   else if(a==='twgo')twEnter();
   else if(a==='twstop')twLeave();
-  else if(a==='twdev'){if(isDev()){const tt=twGet(),d=t.dataset.d;if(d==='week'){tt.w-=1;pvGet().sw=twWeek()-1;save();twRoll();return home()}tt.f=Math.max(0,tt.f+ +d);tt.pf=Math.min(tt.pf||0,tt.f);save()}tower()}
+  else if(a==='twdev'){if(isDev()){const tt=twGet(),d=t.dataset.d;if(d==='week'){tt.w-=1;S.twd=Math.min(S.twd||0,tt.w-1);pvGet().sw=twWeek()-1;save();twRoll();return home()}tt.f=Math.max(0,tt.f+ +d);tt.pf=Math.min(tt.pf||0,tt.f);save()}tower()}
   else if(a==='mail')mailbox();
   else if(a==='mailget'){const g=mailTake(t.dataset.id);if(g){save();cloudFlush();sfx('win');pvpPush()}mailbox(g)}
   else if(a==='mailall'){let g=[];[...(S.mail||[])].forEach(m=>{g=g.concat(mailTake(m.id)||[])});save();cloudFlush();sfx('win');pvpPush();mailbox(g)}
@@ -2250,7 +2250,13 @@ function pvpResult(won,opp){const me=pvGet(),was=me.st,[g,c]=pvPay(won,was),r0=r
    and nobody has to close it by hand. The first time a player opens the game in a new week the game reads the frozen table, works out the rank and puts the reward in the mailbox (S.mail).
    Shields (S.sh, codes 'T<rank>.<season>' tower top 3 and 'P<tier>.<season>' best PvP rank of a season) are Limited: account-bound, never traded, kept through the end-of-CBT wipe. */
 const TW_W0=2962,TW_K=2,TW_GROW=1.006,TW_OPEN=10,TW_PART_F=10,TW_DROP=.5,TW_EXP=.5,TW_TOP=50;
-const twWeek=(ms=Date.now())=>Math.max(TW_W0,Math.floor(((ms+7*36e5)/864e5-4)/7)),twEnd=w=>((w+1)*7+4)*864e5-7*36e5,twSeason=w=>Math.max(1,w-TW_W0+1);
+// The week is told by the SERVER's clock, not the device's: TOFF = server time - device time, measured once per session (srvSync). Until it is known a signed-in player's week is not rolled,
+// so a device with a wrong date (or one set forward on purpose) cannot end a week early; a week never rolls backwards and is settled only once (S.twd).
+let TOFF=0,tSync=0,tBusy=0;const now=()=>Date.now()+TOFF;
+function srvSync(){if(tSync||tBusy||!mkOn())return;tBusy=1;
+  fbLoad().then(fbUser).then(u=>{if(!u)return;const d=firebase.firestore().collection('online').doc(USER.sub);return d.set({at:firebase.firestore.FieldValue.serverTimestamp()}).then(()=>d.get()).then(x=>{const m=atMs(x.data()&&x.data().at);if(m>15e11){TOFF=m-Date.now();tSync=1}})})
+   .catch(()=>{}).then(()=>{tBusy=0;if(!tSync)return setTimeout(srvSync,60000);const w0=S.tw&&S.tw.w;twRoll();if(((S.tw&&S.tw.w)!==w0||Math.abs(TOFF)>6e4)&&!bt){if(document.querySelector('.lobby'))home();else if(document.querySelector('.twhub'))tower()}})}
+const twWeek=(ms=now())=>Math.max(TW_W0,Math.floor(((ms+7*36e5)/864e5-4)/7)),twEnd=w=>((w+1)*7+4)*864e5-7*36e5,twSeason=w=>Math.max(1,w-TW_W0+1);
 const TWZ=[
  {n:'Ancient Stone Hall',th:'โถงหินโบราณ',bg:'bg/m2.webp',fx:{fog:'#b8c8ff',p:[['dust','#c8d8ff',30],['fly','#ffc46b',10]]},m:['t01','t02'],b:'tb1'},
  {n:'Cursed Library',th:'หอสมุดต้องสาป',bg:'bg/m8.webp',fx:{glow:'#3affb0',p:[['spore','#b6ffd9',26],['dust','#dfe8ff',18]]},m:['t03','t04'],b:'tb2'},
@@ -2314,16 +2320,16 @@ function mailbox(got){const L=[...(S.mail||[])].reverse();
    ${L.length?L.map(m=>`<div class="mlrow px"><span class="mli">${m.it&&m.it.sh?shBadge(m.it.sh,46):m.k==='pv'?'⚔️':m.k==='tw'?'🗼':'🎁'}</span><span class="mlt"><b>${mailTitle(m)}</b><small>${mailSub(m)}</small><small class="mlit">${itText(m.it||{})}</small></span><button class="btn go sm" data-act="mailget" data-id="${esc(m.id)}">${T('รับ','Claim')}</button></div>`).join(''):`<p class="sub" style="text-align:center;margin-top:30px">${T('ไม่มีจดหมาย · รางวัลจบซีซั่นของหอคอยและ PvP จะมาที่นี่ทุกวันจันทร์','No mail. Tower and PvP season rewards arrive here every Monday')}</p>`}</div></div>`)}
 
 /* week roll: tower progress and PvP stars */
-function twGet(){const w=twWeek();if(!S.tw||S.tw.w!==w){if(S.tw&&S.tw.f>0){S.twp=S.twp||[];if(!S.twp.some(p=>p.w===S.tw.w))S.twp.push({w:S.tw.w,f:S.tw.f})}S.tw={w,f:0};save()}return S.tw}
+function twGet(){const w=twWeek();if(S.tw&&(S.tw.w>=w||(mkOn()&&!tSync)))return S.tw;if(S.tw&&S.tw.f>0&&S.tw.w>(S.twd||0)){S.twp=S.twp||[];if(!S.twp.some(p=>p.w===S.tw.w))S.twp.push({w:S.tw.w,f:S.tw.f})}S.tw={w,f:0};save();return S.tw}
 // PvP season = the same week. At its end: best rank of the season becomes a collectible shield (mailed with arena coins), stars are halved, the season's win/loss record starts over.
 function pvRoll(){const me=pvGet(),w=twWeek();if(me.sw==null){me.sw=w;return}if(me.sw>=w)return;
   if(me.w+me.l>0){const i=rankOf(Math.max(me.hi||0,me.st)).i;mailAdd({id:'pv'+me.sw,k:'pv',w:me.sw,r:i,it:{sh:'P'+i+'.'+twSeason(me.sw),ac:PV_END_AC[i]}})}
   me.st=Math.floor(me.st/2);me.hi=me.st;me.w=0;me.l=0;me.ws=0;me.bs=0;me.sw=w;save();pvpPush()}
 let twBusy=0;
-function twSettle(){const P=S.twp||[];if(!P.length||twBusy)return;const p=P[0],done=r=>{if(r||p.f>=TW_PART_F){if(p.f>=TW_PART_F)mailAdd({id:'tw'+p.w,k:'tw',w:p.w,r:r||0,f:p.f,it:twPrize(r||0,p.w)})}S.twp=S.twp.filter(x=>x!==p);save();cloudFlush();const b=$('mailbdg');if(b){b.hidden=!mailN();b.textContent=mailN()}twSettle()};
+function twSettle(){const P=S.twp||[];if(!P.length||twBusy)return;const p=P[0],done=r=>{if(r||p.f>=TW_PART_F){if(p.f>=TW_PART_F)mailAdd({id:'tw'+p.w,k:'tw',w:p.w,r:r||0,f:p.f,it:twPrize(r||0,p.w)})}S.twp=S.twp.filter(x=>x!==p);S.twd=Math.max(S.twd||0,p.w);save();cloudFlush();const b=$('mailbdg');if(b){b.hidden=!mailN();b.textContent=mailN()}twSettle()};
   if(p.f<TW_PART_F||!mkOn())return done(0);
   twBusy=1;twFetch(p.w).then(()=>{twBusy=0;const b=twB[p.w];if(!b||b.state!=='ok')return;const i=b.list.findIndex(o=>o.uid===USER.sub);done(i>=0?i+1:0)})}
-function twRoll(){twGet();pvRoll();twSettle()}
+function twRoll(){if(mkOn()&&!tSync)return srvSync();twGet();pvRoll();twSettle()}
 
 /* ranking table */
 let twB={},twTab='board',twTok=0,twRun=null,twPushAt=0;
@@ -2337,7 +2343,7 @@ function twFetch(w,soft){const b=twB[w]=twB[w]||{state:'idle',list:[],at:0,tried
 function twPush(now){const t=twGet(),f=t.f;if(!mkOn()||!(f>(t.pf||0))||(!now&&Date.now()-twPushAt<60000))return;twPushAt=Date.now();
   fbLoad().then(fbUser).then(u=>{if(!u||t!==S.tw)return;return twCol(t.w).doc(USER.sub).set({name:S.me.name,look:S.me.look,fd:S.fd?1:0,sh:shMine(),st:pvGet().st,f,at:firebase.firestore.FieldValue.serverTimestamp()}).then(()=>{if(t===S.tw){t.pf=f;save()}const b=twB[t.w];if(b)b.at=0})}).catch(()=>{})}
 const twRank=()=>{const b=twB[twWeek()];if(!b||b.state!=='ok'||!USER)return 0;const i=b.list.findIndex(o=>o.uid===USER.sub);return i>=0?i+1:0};
-const twLeft=()=>{const ms=twEnd(twWeek())-Date.now(),d=Math.floor(ms/864e5),h=Math.floor(ms%864e5/36e5),m=Math.floor(ms%36e5/6e4);return d>0?T(`${d} วัน ${h} ชม.`,`${d}d ${h}h`):T(`${h} ชม. ${m} นาที`,`${h}h ${m}m`)};
+const twLeft=()=>{const ms=Math.max(0,twEnd(twWeek())-now()),d=Math.floor(ms/864e5),h=Math.floor(ms%864e5/36e5),m=Math.floor(ms%36e5/6e4);return d>0?T(`${d} วัน ${h} ชม.`,`${d}d ${h}h`):T(`${h} ชม. ${m} นาที`,`${h}h ${m}m`)};
 const twWhen=ms=>{const d=new Date(ms);return d.toLocaleString(S.lang==='en'?'en-GB':'th-TH',{weekday:'short',hour:'2-digit',minute:'2-digit'})};
 function twTable(w,live){const b=twB[w]||{state:'idle',list:[]},uid=USER&&USER.sub,s=twSeason(w);
   const st={guest:T('ล็อกอิน Google เพื่อขึ้นตารางอันดับและรับรางวัลอันดับ','Sign in with Google to appear in the ranking and earn rank rewards'),load:T('กำลังโหลด…','Loading…'),err:T('โหลดตารางไม่ได้ ลองใหม่อีกครั้ง','Could not load the table. Try again'),idle:T('กำลังโหลด…','Loading…')}[b.state];
