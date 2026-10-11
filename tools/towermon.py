@@ -7,7 +7,7 @@ TINT.update({'t01':(40,52,96),'t02':(20,70,76),'t03':(80,50,24),'t04':(20,40,70)
  'tb1':(50,60,100),'tb2':(20,80,50),'tb3':(120,40,10),'tb4':(40,80,130),'tb5':(130,100,30)})
 # file, id, body height in the 252x204 cell, hand cuts in the attack row (x in the source picture) where two frames touch
 J={'09':('t01',132,()),'10':('t02',136,()),'11':('t03',118,()),'12':('t04',136,()),'13':('t05',132,()),'14':('t06',120,()),'15':('t07',138,()),'16':('t08',134,()),'17':('t09',138,()),'18':('t10',136,()),
-   '19':('tb1',184,()),'20':('tb2',182,()),'21':('tb3',184,()),'22':('tb4',180,()),'23':('tb5',184,())}
+   '19':('tb1',184,()),'20':('tb2',182,()),'21':('tb3',158,()),'22':('tb4',180,()),'23':('tb5',184,())}
 import os
 only=[a for a in sys.argv[1:] if a!='v3']
 # ---- second cutter, for sheets whose frames touch or whose painted effects reach into the next frame: each row is cut at the emptiest column near every sixth of the width;
@@ -31,7 +31,7 @@ def slices(rgba,y0,y1,atk):
         ys,xs=np.where(c[...,3]>40);X0,X1,Y0,Y1=xs.min(),xs.max(),ys.min(),ys.max();out.append((c[Y0:Y1+1,X0:X1+1],(bb[0]-X0,bb[1]-X0,bb[2]-Y0,bb[3]-Y0)))
     return out,cuts
 # sheets whose attack row cannot be cut cleanly (a beam or blast painted across two frames): the attack row repeats the idle frames until a redrawn sheet arrives; the game still lunges and plays its own hit effect
-ATK_IDLE={'t06','t08','tb2','tb3','tb4','tb5'}
+ATK_IDLE=set()
 def build3(src,name,target_h,maxw=236):
     rgba=key(Image.open(U+src));rb=rows2(rgba);idle,c1=slices(rgba,*rb[0],0);atk,c2=slices(rgba,*rb[1],1)
     if name in ATK_IDLE:atk=idle
