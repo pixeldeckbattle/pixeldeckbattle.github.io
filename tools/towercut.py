@@ -24,7 +24,7 @@ def strip(src,cols,rows,out,pad=3):
         fr=fr.resize((w,H),Image.LANCZOS);st.paste(fr,(i*w,0));fr0=fr0 or fr
     st.save(P+out,quality=90,method=6);print(out,'frame',w,'x',H,'aspect',round(w/H,4));return fr0
 def single(src,out):
-    rgba=key(Image.open(D+src));ys,xs=np.where(rgba[...,3]>40);im=Image.fromarray(rgba[ys.min()-3:ys.max()+4,xs.min()-3:xs.max()+4],'RGBA');w=round(im.width*H/im.height);im.resize((w,H),Image.LANCZOS).save(P+out,quality=90,method=6);print(out,w,H)
+    rgba=key(Image.open(D+src));m=rgba[...,3]>60;lab,n=nd.label(m);sz=nd.sum(m,lab,range(1,n+1));rgba[lab!=int(np.argmax(sz))+1]=0;ys,xs=np.where(rgba[...,3]>40);im=Image.fromarray(rgba[max(0,ys.min()-3):ys.max()+4,max(0,xs.min()-3):xs.max()+4],'RGBA');w=round(im.width*H/im.height);im.resize((w,H),Image.LANCZOS).save(P+out,quality=90,method=6);print(out,w,H)
 def tint(fr,out,sat,val,hue=None):
     a=np.asarray(fr).astype(float)/255;r,g,b,al=a[...,0],a[...,1],a[...,2],a[...,3];mx=a[...,:3].max(-1);mn=a[...,:3].min(-1);gold=(r>b+.08)&(g>b)   # the warm metal only; the blue enamel and gem stay
     lum=.3*r+.59*g+.11*b;o=a.copy()
@@ -32,7 +32,26 @@ def tint(fr,out,sat,val,hue=None):
     else:
         hr,hg,hb=colorsys.hsv_to_rgb(hue,sat,1);t=np.stack([lum*val*hr*1.25,lum*val*hg*1.25,lum*val*hb*1.25],-1)
     o[...,:3]=np.where(gold[...,None],np.clip(t,0,1),a[...,:3]);Image.fromarray((o*255).astype('uint8'),'RGBA').save(P+out,quality=90,method=6);print(out,'(recoloured)')
-g=[f for f in sorted(os.listdir(D)) if f.startswith('01')][-1];fr=strip(g,3,2,'ui/tw1.webp')
+# rank 1 with its storm effects (v1): every frame is a square cut around the shield, centred on the navy enamel so the shield itself never moves; the shield fills FX_BODY of the frame's height
+FX=500;FX_OUT=260
+def fxstrip(src,out):
+    im=Image.open(D+src).convert('RGB');a=np.asarray(im);Hh,W=a.shape[:2];rgba=key(im);fr=[]
+    for i in range(6):
+        r,c=divmod(i,3);x0,y0=c*W//3,r*Hh//2;cell=a[y0:y0+Hh//2,x0:x0+W//3].astype(int);m=(cell[...,2]>cell[...,0]+25)&(cell[...,2]>cell[...,1]+10)&(cell[...,2]<150)&(cell[...,0]<70);ys,xs=np.where(m)
+        cx,cy=x0+xs.mean(),y0+ys.mean()+28;L,T=int(round(cx-FX/2)),int(round(cy-FX/2));f=Image.new('RGBA',(FX,FX),(0,0,0,0));src_im=Image.fromarray(rgba,'RGBA')
+        # only this cell's own pixels: a bolt from the neighbour must not show up
+        box=(max(L,x0),max(T,y0),min(L+FX,x0+W//3),min(T+FX,y0+Hh//2));f.paste(src_im.crop(box),(box[0]-L,box[1]-T));fr.append(f.resize((FX_OUT,FX_OUT),Image.LANCZOS))
+    st=Image.new('RGBA',(FX_OUT*6,FX_OUT),(0,0,0,0))
+    for i,f in enumerate(fr):st.paste(f,(i*FX_OUT,0))
+    st.save(P+out,quality=90,method=6);print(out,'fx strip',st.size)
+G=[f for f in sorted(os.listdir(D)) if f.startswith('01')];fr=strip('01-shield-gold-v0.png',3,2,'ui/tw1s.webp')
+fxstrip(G[-1],'ui/tw1.webp')
 s=[f for f in sorted(os.listdir(D)) if f.startswith('02')];b=[f for f in sorted(os.listdir(D)) if f.startswith('03')]
 single(s[-1],'ui/tw2.webp') if s else tint(fr,'ui/tw2.webp',0,1.18)
 single(b[-1],'ui/tw3.webp') if b else tint(fr,'ui/tw3.webp',.62,.92,.065)
+# maps 04-08 -> bg/t1..t5.webp, same recipe as mapcut.py (ground line 46% from the top)
+HZ,SQ=236,.8
+for f in sorted(os.listdir(D)):
+    if f[:2] not in('04','05','06','07','08'):continue
+    im=Image.open(D+f).convert('RGB');W,Hh=im.size;hz=round(Hh*.561);sx=1280/W;g=min(Hh-hz,round((512-HZ)/sx));top=max(0,round(hz-HZ/(sx*SQ)))
+    o=Image.new('RGB',(1280,512));o.paste(im.crop((0,top,W,hz)).resize((1280,HZ),Image.LANCZOS),(0,0));o.paste(im.crop((0,hz,W,hz+g)).resize((1280,512-HZ),Image.LANCZOS),(0,HZ));o.save(P+'bg/t%d.webp'%(int(f[:2])-3),quality=84,method=6);print('bg/t%d'%(int(f[:2])-3),f)
