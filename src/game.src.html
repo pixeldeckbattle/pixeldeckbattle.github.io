@@ -613,6 +613,16 @@ h1{color:#f2d98a;text-shadow:0 3px 0 #7a4a1c,0 6px 0 #0a1019}h2{color:#f2d98a;te
 .pkb{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin-top:4px}.pkb .btn{min-width:150px}.pkb i{font-style:normal}
 .shhint{margin:0;text-align:center;font-size:10.5px;color:#8f9ac8}
 .shres{position:absolute;inset:0;z-index:5;display:grid;align-content:center;justify-items:center;gap:8px;background:rgba(5,8,24,.93);border-radius:10px}.shrt{font-family:var(--display);font-size:20px;color:#ffe45c}.shres .pull{width:100%;padding:0}
+.shopv2{height:100%;display:grid;grid-template-rows:auto minmax(0,1fr);gap:6px}
+.tubody{min-height:0;display:grid;grid-template-columns:minmax(0,1.12fr) minmax(0,1fr);gap:10px}.tul{min-height:0;display:grid;grid-template-rows:auto minmax(0,1fr) auto;gap:5px}.tul>.sub{font-size:10px;line-height:1.25}.tur{min-height:0;overflow-y:auto}.tur .tustep{margin:0}
+.dpg{grid-template-columns:repeat(3,minmax(0,1fr));grid-template-rows:repeat(2,minmax(0,1fr));gap:6px;min-height:0;margin:0}
+#view .dpg .dpk{position:relative;min-height:0;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;padding:3px 4px 5px;gap:0;cursor:pointer;overflow:hidden}#view .dpg .dpk.on{outline:3px solid #ffe45c;box-shadow:0 0 14px rgba(255,228,92,.6)}
+.dpi{position:absolute;left:6%;right:6%;top:6%;bottom:30px;background:50% 100%/contain no-repeat;image-rendering:pixelated;filter:drop-shadow(0 3px 0 rgba(0,0,0,.4))}
+.dpg .dpk .dpt{position:relative;z-index:1;display:grid;justify-items:center;line-height:1.05;white-space:nowrap;text-shadow:0 2px 0 #0a0e22,0 0 6px #0a0e22}.dpg .dpk b{font-size:14px}.dpg .dpk small{min-height:0;font-weight:700;font-size:10.5px}.dpg .dpk .thb{position:absolute;right:3px;top:3px;margin:0;border-radius:6px;font-size:13.5px;padding:1px 7px 3px;z-index:1}
+.tg{position:absolute;left:-3px;top:-3px;z-index:1;text-decoration:none;font:900 10.5px var(--display);background:#e63946;color:#fff;border-radius:6px 0 8px 0;padding:2px 8px 3px}.tg.b{background:#1f9a55}
+.tux{display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-size:11.5px;color:#c8d2ff}.tux b{color:#ffd84a;font-size:12px}.tux .btn{padding-top:2px;padding-bottom:3px}
+.vpbody{min-height:0;display:grid;grid-template-columns:minmax(0,220px) minmax(0,1fr);gap:12px}.vpinfo{min-height:0;overflow-y:auto;display:grid;gap:6px;align-content:start}.vpmain{min-height:0;overflow-y:auto}
+@media(max-width:700px){.vpbody{grid-template-columns:minmax(0,170px) minmax(0,1fr)}}
 /* b167 tower, mailbox, shields */
 .tsh{position:relative;display:inline-block;width:var(--sw,40px);aspect-ratio:171/200;vertical-align:middle;flex:none;pointer-events:none;--ac:#ffd84a}
 .tsh i{position:absolute;inset:0;z-index:1;background:url(ui/tw2.webp) 50% 50%/contain no-repeat}.tsh.t3 i{background-image:url(ui/tw3.webp)}
@@ -1318,16 +1328,13 @@ function grantFetch(force){if(!mkOn()||(!force&&Date.now()-grantAt<600000))retur
     q.docs.forEach(d=>{const x=Math.max(0,Math.min(100000,d.data().dia|0));if(x>0&&!S.gr.includes(d.id)&&!oldEra(d.data().at)){n+=x;S.gr.push(d.id);if(S.gr.length>60)S.gr.shift();S.pay=S.pay||[];S.pay.push({d:x,t:Date.now(),id:d.id})}d.ref.delete().catch(()=>{})});
     if(n){S.dia=(S.dia||0)+n;save();cloudFlush();sfx('win');fx.push(['view','+'+n.toLocaleString('en')+' 💎','g']);const v=document.querySelector('.lobby')?home:document.querySelector('[data-tu]')?topup:null;if(v)v()}}).catch(()=>{})}
 function topup(){const on=mkOn(),auto=!!PAYINFO.api,open=!!(PAYINFO.pp&&(auto||PAYINFO.line)),pk=dSel!=null?DPACKS[dSel]:null;grantFetch();
-  view(`<div class="cols wide" data-tu="1"><div class="rail">
-    <div class="row"><button class="btn alt sm" data-act="home">กลับ</button><h2>ร้านค้า</h2></div>${shopTabs('topup')}
-    <p class="num dia">เพชร <span class="nt">${(S.dia||0).toLocaleString('en')}</span></p>
-    <div class="pk2 px g"><b>แลก Gold เป็นเพชร</b><small class="nt">${EX_GOLD.toLocaleString('en')} Gold → ${EX_DIA} 💎</small><small>แลกได้ไม่จำกัด · คุณมี <span class="nt">${S.gold.toLocaleString('en')}</span> Gold</small>
-     <button class="btn sm" data-act="exch" ${S.gold<EX_GOLD?'disabled':''}>แลก</button></div>
-    <button class="btn alt sm" data-act="grantref"><span class="nt">${T('เช็กเพชรที่เติม','Check for my top-up')}</span></button>
-    ${isDev()?`<button class="btn sm" data-act="admin"><span class="nt">ADMIN · ${T('เติมเพชรให้ผู้เล่น','Send diamonds to a player')}</span></button><a class="btn alt sm nt" href="admin.html" target="_blank" rel="noopener" style="text-align:center;text-decoration:none">${T('เปิดหลังบ้าน (Admin)','Open the admin page')}</a>`:''}
-  </div><div class="main nt">
-    <p class="sub" style="color:#ff8a7a;margin-bottom:10px">${T('ช่วง CBT: เพชรที่เติมจะถูกล้างพร้อมข้อมูลทั้งหมดเมื่อจบ CBT และไม่มีการคืนเงินหรือคืนเพชรตอน OBT โปรดอ่านก่อนโอน','CBT notice: diamonds you buy are wiped with all other progress when the CBT ends. No money or diamonds are returned in the OBT. Read this before you pay')}</p>
-    <div class="dgrid">${DPACKS.map(([d,b,p],i)=>`<button class="dpk px ${dSel===i?'on':''}" data-act="tpick" data-i="${i}"><img src="${UI.gem}" alt="" style="image-rendering:auto"><b>${d.toLocaleString('en')}</b><small>${b?'+'+b+' bonus':''}</small><span class="thb">฿${p.toLocaleString('en')}</span></button>`).join('')}</div>
+  const rate=DPACKS.map(([d,b,p])=>(d+b)/p),best=rate.indexOf(Math.max(...rate)),hot=2;   // the best-value tag is worked out from the price table, never written by hand
+  view(`<div class="shopv2 nt" data-tu="1">${shopTop('topup')}<div class="tubody"><div class="tul">
+    <p class="sub" style="color:#ff8a7a;margin:0">${T('ช่วง CBT: เพชรที่เติมจะถูกล้างพร้อมข้อมูลทั้งหมดเมื่อจบ CBT และไม่มีการคืนเงินหรือคืนเพชรตอน OBT โปรดอ่านก่อนโอน','CBT notice: diamonds you buy are wiped with all other progress when the CBT ends. No money or diamonds are returned in the OBT. Read this before you pay')}</p>
+    <div class="dgrid dpg">${DPACKS.map(([d,b,p],i)=>`<button class="dpk px ${dSel===i?'on':''}" data-act="tpick" data-i="${i}">${i===best?`<u class="tg b">${T('คุ้มที่สุด','Best value')}</u>`:i===hot?`<u class="tg">${T('ยอดนิยม','Popular')}</u>`:''}<i class="dpi" style="background-image:url(ui/dp${i+1}.webp)"></i><span class="dpt"><b>${d.toLocaleString('en')} 💎</b>${b?`<small>+${b} ${T('ฟรี','free')}</small>`:''}</span><span class="thb">฿${p.toLocaleString('en')}</span></button>`).join('')}</div>
+    <div class="tux"><span>${T('แลก Gold เป็นเพชร','Gold to diamonds')}: <b>${EX_GOLD.toLocaleString('en')} Gold → ${EX_DIA} 💎</b></span><button class="btn sm" data-act="exch" ${S.gold<EX_GOLD?'disabled':''}>${T('แลก','Exchange')}</button><button class="btn alt sm" data-act="grantref">${T('เช็กเพชรที่เติม','Check for my top-up')}</button>
+     ${isDev()?`<button class="btn sm" data-act="admin">ADMIN</button><a class="btn alt sm" href="admin.html" target="_blank" rel="noopener" style="text-decoration:none">${T('หลังบ้าน','Admin page')}</a>`:''}</div>
+   </div><div class="tur">
     <div class="px tustep">${!on?`<p style="color:#ffe45c">${T('ต้องล็อกอินด้วย Google ก่อนจึงเติมเพชรได้','Sign in with Google before topping up')}</p>`:!open?`<p style="color:#ffe45c">${T('ยังไม่เปิดรับเติมเพชร ช่องทางโอนและ LINE จะประกาศเร็ว ๆ นี้','Top-up is not open yet. The transfer and LINE details will be announced soon')}</p>`:`
       <p class="payh ${payOpen()?'on':''}">${payOff()?T('🔴 ปิดรับเติมเพชรชั่วคราว ทีมงานกำลังตรวจสอบระบบ โปรดรอประกาศ','🔴 Top-up is paused while the team checks the system. Please wait for an announcement'):payOpen()?T('🟢 เปิดเติมเพชรอยู่ · ทุกวัน 17:00–00:00 น. (เวลาไทย)','🟢 Top-up is open · daily 17:00–00:00 (Thai time)'):T('🔴 ตอนนี้ปิดเติมเพชร · เปิดทุกวัน 17:00–00:00 น. (เวลาไทย) · เปิดในอีก ','🔴 Top-up is closed · open daily 17:00–00:00 (Thai time) · opens in ')+payWait()}<small>${T('เหตุผล: เป็นช่วงที่แอดมินออนไลน์ดูแลระบบ ถ้าโอนแล้วเพชรไม่เข้าจะตรวจและแก้ให้ได้ทันที ไม่ต้องรอข้ามวัน · โอนนอกเวลาได้ แล้วมาอัปสลิปตอนเปิด (สลิปใช้ได้ 24 ชม.)','Why: this is when the admin is online, so a payment that does not arrive can be checked and fixed straight away instead of the next day · you may pay outside these hours and upload the slip once it opens (a slip is good for 24 hours)')}</small></p>
       <b>${T('วิธีเติม','How to top up')}</b>
@@ -1339,7 +1346,7 @@ ${auto?`<li>${T('กดปุ่มด้านล่าง เลือกร�
       <li>${T('รอแอดมินตรวจสลิป แล้วกด "เช็กเพชรที่เติม" หรือเข้าเกมใหม่ เพชรจะเข้าเอง','Wait for the admin to check the slip, then press "Check for my top-up" or reopen the game')}</li>`}</ol>
       ${auto?`<label class="btn go slipb ${pk&&!slip.busy&&payOpen()?'':'off'}">${payOff()?T('ปิดรับเติมเพชรชั่วคราว','Top-up is paused'):!payOpen()?T('เปิดเติม 17:00 น. · อีก ','Opens 17:00 · in ')+payWait():slip.busy?T('กำลังตรวจ…','Checking…'):pk?T('อัปโหลดสลิป','Upload slip')+' · ฿'+pk[2].toLocaleString('en'):T('เลือกแพ็กเพชรก่อน','Pick a pack first')}<input id="slipin" type="file" accept="image/*" ${pk&&!slip.busy&&payOpen()?'':'disabled'} hidden></label>${slip.msg?`<p style="color:${slip.err?'#ff8a7a':'#6cf586'};font-weight:700;margin-top:8px">${esc(slip.msg)}</p>`:''}${PAYINFO.line?`<p class="sub" style="margin-top:6px">${T('ติดปัญหา ติดต่อ LINE','Need help? LINE')} <b>${esc(PAYINFO.line)}</b> · <button class="btn alt sm" data-act="discord">Discord</button></p>`:''}`:''}`}
       ${on?`<p class="pid">${T('รหัสผู้เล่นของคุณ','Your player ID')}: <code id="pidv">${esc(USER.sub)}</code> <button class="btn alt sm" data-act="pidcopy">${T('คัดลอก','Copy')}</button></p>`:''}</div>
-  </div></div>`);
+  </div></div></div>`);
 }
 // owner-only screen. The page being reachable proves nothing: the Firestore rule on grants/ is what stops anyone else from creating a grant.
 function adminGrant(){if(!isDev())return topup();
@@ -1363,6 +1370,7 @@ const shopTabs=cur=>`<div class="stabs nt">${[['shop',UI.pack,T('แพ็คก
 // b167 shop: tabs across the top, then a row of treasure chests (one per pack) that is swiped left and right; the chest in the middle is the chosen pack and its details and buttons sit under it.
 // After opening, the cards come up over the same screen (pull) and are dismissed with OK.
 let shopSel=0,shopT=0;
+const shopTop=cur=>`<div class="shtop"><button class="btn alt sm" data-act="home">${T('กลับ','Back')}</button><h2>${T('ร้านค้า','Shop')}</h2>${shopTabs(cur)}<span class="shcur"><span class="num gold">Gold ${S.gold.toLocaleString('en')}</span><span class="num dia">💎 ${(S.dia||0).toLocaleString('en')}</span></span></div>`;
 function shopPacks(){const d=S.dia||0,nt=x=>`<i class="nt">${x}</i>`,L=[
   {k:'gold',n:'GOLD PACK',c:'#ffd84a',sub:T(`การ์ด ${GN} ใบ ลุ้นทุกใบ`,`${GN} cards, each rolled on its own`),odds:pct(GODDS),
    btn:`<button class="btn" data-act="opengold" ${S.gold<GPACK?'disabled':''}>${T('เปิด','Open')} ${nt(GPACK.toLocaleString('en')+' Gold')}</button>`},
@@ -1382,7 +1390,7 @@ function shopMid(smooth){const tr=$('chrow'),el=tr&&tr.children[shopSel];if(el)t
 function shopMark(){const L=shopPacks(),tr=$('chrow');if(!tr)return;[...tr.children].forEach((c,i)=>c.classList.toggle('on',i===shopSel));const d=$('pkd');if(d)d.innerHTML=shopInfo(L[shopSel]);const dots=$('chdots');if(dots)[...dots.children].forEach((c,i)=>c.classList.toggle('on',i===shopSel));
   const a=$('chl'),b=$('chr');if(a)a.disabled=shopSel<=0;if(b)b.disabled=shopSel>=L.length-1}
 function shop(){const d=S.dia||0,L=shopPacks();shopSel=Math.max(0,Math.min(L.length-1,shopSel));
-  view(`<div class="shopv nt"><div class="shtop"><button class="btn alt sm" data-act="home">${T('กลับ','Back')}</button><h2>${T('ร้านค้า','Shop')}</h2>${shopTabs('shop')}<span class="shcur"><span class="num gold">Gold ${S.gold.toLocaleString('en')}</span><span class="num dia">💎 ${d.toLocaleString('en')}</span></span></div>
+  view(`<div class="shopv nt">${shopTop('shop')}
    <div class="shbody"><button class="charr" id="chl" data-act="shoparr" data-d="-1" aria-label="previous">‹</button>
     <div class="chrow" id="chrow">${L.map((p,i)=>`<button class="chest ${i===shopSel?'on':''} ${p.lock?'lock':''}" data-act="shopsel" data-i="${i}" style="--c:${p.c}"><i style="background-image:url(ui/ch_${p.k}.webp)"></i><b>${p.n}</b>${p.lock?'<u>OBT</u>':''}</button>`).join('')}</div>
     <button class="charr" id="chr" data-act="shoparr" data-d="1" aria-label="next">›</button></div>
@@ -1447,15 +1455,14 @@ function vip(){const d=S.dia||0,tr=vipOwn(),ck=t=>`<li>${t}</li>`;
     q.afk>1?T('Gold ออฟไลน์ '+(q.afk===2?'x2':'+50%'),'Offline Gold '+(q.afk===2?'x2':'+50%')):'',
     q.fee<1?(q.fee?T('ค่าลงขายตลาดลด 50%','Market listing fee -50%'):T('ลงขายตลาดฟรี ไม่มีค่าธรรมเนียม','Free market listings')):'',
     i===3?T('ชื่อ VIP สีทองในล็อบบี้','Gold VIP name in the lobby'):''].filter(Boolean).map(ck).join('')};
-  view(`<div class="cols wide"><div class="rail"><div class="row"><button class="btn alt sm" data-act="home">กลับ</button><h2>ร้านค้า</h2></div>${shopTabs('vip')}
-    <p class="num dia">เพชร <span class="nt">${d.toLocaleString('en')}</span></p>
+  view(`<div class="shopv2 nt">${shopTop('vip')}<div class="vpbody"><div class="vpinfo">
     ${isDev()?'<p class="sub">บัญชี Dev ได้สิทธิ์ VIP Gold ถาวรโดยไม่ต้องซื้อ กล่องด้านล่างแสดงบัตรที่ซื้อจริง (เหมือนที่ผู้เล่นเห็น)</p>':''}${tr?`<div class="pk2 px nt" style="border-color:${VIPC[tr]}"><b style="color:${VIPC[tr]}">${T('กำลังใช้','Active')}: VIP ${VIPN[tr]}</b><small>${T('หมดอายุ','Ends')}: <b style="color:#fff;font-size:13px">${vipEnd()}</b><br>${T('เหลือเวลา','Time left')}: <b style="color:#6cf586;font-size:13px">${vipRem()}</b>${VIPT[tr].day?`<br>${T('เพชรรายวัน','Daily diamonds')}: <b style="color:#6fd8ff;font-size:13px">${S.vd===new Date().toDateString()?T('รับแล้ววันนี้','collected today'):'+'+VIPT[tr].day}</b>`:''}</small></div>`:isDev()?'':'<p class="sub">ตอนนี้ยังไม่มี VIP</p>'}
     <p class="sub nt">${T('ซื้อบัตรเพิ่มเป็นการต่ออายุ · ระดับสิทธิ์ใช้ของบัตรสูงสุดที่ซื้อไว้ตราบที่ VIP ไม่ขาดช่วง','Another card adds days · you keep the perks of the highest card bought for as long as VIP does not lapse')}</p>
     <p class="sub nt">${T('เพชรรายวันเข้าเองเมื่อเปิดหน้าล็อบบี้ วันละครั้ง · Gold จากภารกิจและโบนัสบอสไม่คูณ','Daily diamonds arrive when you open the lobby, once a day · quest and boss-bonus Gold are not doubled')}</p></div>
-   <div class="main"><div class="dgrid vipg">${VIPS.map(([days,c],i)=>`<div class="dpk px vipc ${tr===i+1?'on':''}" style="--vc:${VIPC[i+1]}">${tr===i+1?`<i class="vuse nt">${T('ใช้อยู่','In use')}</i>`:''}<img src="ic2/vip${i+1}.webp" alt="">
+   <div class="vpmain"><div class="dgrid vipg">${VIPS.map(([days,c],i)=>`<div class="dpk px vipc ${tr===i+1?'on':''}" style="--vc:${VIPC[i+1]}">${tr===i+1?`<i class="vuse nt">${T('ใช้อยู่','In use')}</i>`:''}<img src="ic2/vip${i+1}.webp" alt="">
       <b class="nt">VIP ${VIPN[i+1]}</b><small class="nt vd">${days===365?T('1 ปี','1 year'):days+T(' วัน',' days')} · ${(c/days).toFixed(1)} 💎/${T('วัน','day')}</small>
       <button class="btn go sm" data-act="vipbuy" data-i="${i}" ${d<c?'disabled':''}><i class="nt" style="font-style:normal">${c.toLocaleString('en')} 💎</i></button>
-      <ul class="nt">${perks(i+1)}</ul></div>`).join('')}</div></div></div>`)}
+      <ul class="nt">${perks(i+1)}</ul></div>`).join('')}</div></div></div></div>`)}
 // roll a rank from an odds table, best rank first
 const rollRank=o=>{let x=Math.random();for(const r of['SL','L','R','UC'])if((x-=o[r])<0)return r;return 'C'};
 const pct=o=>['C','UC','R','L','SL'].map(r=>RAR[r].n+' '+(+(o[r]*100).toFixed(1))+'%').join(' · ');

@@ -37,3 +37,13 @@ def cut(name):
         f=Image.new('RGBA',(side,side),(0,0,0,0));f.paste(Image.fromarray(c,'RGBA'),(-(left+dx),-(top+dy)));st.paste(f.resize((OUT,OUT),Image.LANCZOS),(i*OUT,0))
     st.save(P+'ui/ch_'+name+'.webp',quality=90,method=6);print(name,'side',side,'shifts',sh)
 for n in('gold','starter','pro','ltd'):cut(n)
+# diamond piles for the top-up page: 6 icons in one sheet -> ui/dp1..6.webp, all at ONE scale and standing on the bottom edge, so the piles really grow
+def piles():
+    rgba=key(Image.open(D+'diamonds.png'));H,W=rgba.shape[:2];ch,cw=H//2,W//3;out=[]
+    for i in range(6):
+        r,c=divmod(i,3);cell=rgba[r*ch:(r+1)*ch,c*cw:(c+1)*cw];ys,xs=np.where(cell[...,3]>40);out.append(Image.fromarray(cell[ys.min():ys.max()+1,xs.min():xs.max()+1],'RGBA'))
+    S=max(max(o.size) for o in out);k=240/S
+    for i,o in enumerate(out):
+        o=o.resize((round(o.width*k),round(o.height*k)),Image.LANCZOS);f=Image.new('RGBA',(240,240),(0,0,0,0));f.paste(o,((240-o.width)//2,240-o.height));f.save(P+'ui/dp%d.webp'%(i+1),quality=90,method=6)
+    print('piles',[o.size for o in out])
+piles()
