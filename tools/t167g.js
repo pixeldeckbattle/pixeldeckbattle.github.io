@@ -1,0 +1,5 @@
+const {chromium}=require('playwright');(async()=>{const b=await chromium.launch({executablePath:'/opt/pw-browsers/chromium'});const p=await b.newPage({viewport:{width:900,height:420},deviceScaleFactor:2});const e=[];p.on('pageerror',x=>e.push(x.message));const w=n=>new Promise(r=>setTimeout(r,n));
+await p.goto('file:///home/claude/pixeldeck/_t.html');await w(900);
+await p.evaluate(()=>{USER={guest:true,name:'G'};S=unlock(fresh());S.me={name:'Toey'};S.gift=true;S.n160=S.n165=S.n167=1;S.cards={h15:{lv:60,exp:0}};S.team=['h15'];S.cleared=50;S.sh=['T2.1','P3.1','T1.2','P4.2','P5.3'];S.shp='T1.2';charMake();document.querySelector('.main').scrollTop=235});await w(900);await p.screenshot({path:'b167_cab.png'});
+await p.evaluate(()=>{S.sh=['P3.1'];S.shp='P3.1';charMake();document.querySelector('.main').scrollTop=235});await w(500);await p.screenshot({path:'b167_cab2.png'});
+await p.evaluate(()=>{document.querySelector('[data-act=shpick]').click()});await w(200);console.log(await p.evaluate(()=>S.shp),e);await b.close()})()
