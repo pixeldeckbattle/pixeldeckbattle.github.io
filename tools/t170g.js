@@ -12,8 +12,8 @@ await c('[data-act=futo][data-r=L]');await w(200);await c('[data-act=afall]');aw
 await c('[data-act=fuback]');await c('[data-act=futo][data-r=SL]');await w(200);await p.screenshot({path:D+'/g_sl0.png'});await c('[data-act=afall]');await c('[data-act=afto][data-k=kfang]');await w(200);await p.screenshot({path:D+'/g_sl1.png'});
 await c('[data-act=afgo]');await c('[data-act=afgo]');await w(400);console.log('L->SL',await st());await p.screenshot({path:D+'/g_sl2.png'});
 // forced break then pity
-console.log('break',await p.evaluate(()=>{const R=Math.random;S.gold=1e6;S.am.dragon=200;S.afp=0;fuTo='SL';afTo='deye';afPick={dragon:30};Math.random=()=>.99;const a=afDo();const p1=afP('L');afPick={dragon:30};Math.random=()=>.59;const b2=afDo();const p2=afP('L');Math.random=R;return [a.ok,a.bad,p1,b2.ok,b2.bad,p2,S.am.dragon,S.am.deye]}));
-await p.evaluate(()=>{afGot={got:{},ok:0,bad:1,cost:20000};fuseAm()});await w(200);await p.screenshot({path:D+'/g_sl_bad.png'});
+console.log('break',await p.evaluate(()=>{const R=Math.random;S.gold=1e6;S.am.dragon=200;S.afp=0;fuTo='SL';afTo='deye';afPick={dragon:30};Math.random=()=>.99;const g1=S.gold;const a=afDo();const p1=g1-S.gold;afPick={dragon:30};Math.random=()=>.59;const g2=S.gold;const b2=afDo();const p2=g2-S.gold;Math.random=R;return [a.ok,a.bad,p1,b2.ok,b2.bad,p2,S.am.dragon,S.am.deye]}));
+await p.evaluate(()=>{afGot={got:{},ok:0,bad:1,cost:0};fuseAm()});await w(200);await p.screenshot({path:D+'/g_sl_bad.png'});
 // success rate over many
 console.log('rate',await p.evaluate(()=>{let ok=0,n=0;for(let i=0;i<4000;i++){S.gold=1e7;S.am.dragon=30;S.afp=0;afPick={dragon:30};const g=afDo();ok+=g.ok;n++}return ok/n}));
 console.log('stale target',await p.evaluate(()=>{fuTab='c';fuTo='ST';fuse();return [fuTo,!!document.querySelector('.futiles')]}));
