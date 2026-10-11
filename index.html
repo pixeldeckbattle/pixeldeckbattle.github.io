@@ -1041,7 +1041,7 @@ function fresh(){return{gold:0,dia:0,cleared:0,cards:{},team:[],auto:false,era:E
 const eraKeep=s=>{const lt={};Object.keys(s.cards||{}).forEach(id=>{if(C[id]&&C[id].r==='LT')lt[id]=1+(s.cards[id].cp||0)});Object.keys(s.ev||{}).forEach(id=>{if(C[id]&&C[id].r==='LT'&&s.ev[id]>0)lt[id]=(lt[id]||0)+s.ev[id]});return lt};
 function eraWipe(s){if((s.era||1)>=ERA)return s;const lt=eraKeep(s),n=fresh();
   Object.keys(lt).forEach(id=>{n.cards[id]={lv:1,exp:0};if(lt[id]>1)n.cards[id].cp=lt[id]-1});
-  if(s.me&&s.me.name)n.me={name:s.me.name};['lang','snd','sfx','spd','fd','fdg'].forEach(k=>{if(s[k]!=null)n[k]=s[k]});
+  if(s.me&&s.me.name)n.me={name:s.me.name};['lang','snd','sfx','spd','fd','fdg','rv'].forEach(k=>{if(s[k]!=null)n[k]=s[k]});
   Object.keys(AM).forEach(k=>{if(AM[k].r==='LT'&&s.am&&s.am[k]>0){n.am=n.am||{};n.am[k]=s.am[k]}});   // Limited amulets (worn or spare) stay with whoever holds them
   n.wiped={era:ERA,lt};n.ts=Date.now();return n}
 const atMs=v=>v==null?Date.now():v.toMillis?v.toMillis():+v||Date.parse(v)||0,oldEra=v=>atMs(v)<ERA_AT;
@@ -1052,14 +1052,33 @@ function unlock(s){s=eraWipe(s);s.am=s.am||{};
 const SESSION='pdb_session';let USER=null;try{USER=JSON.parse(localStorage.getItem(SESSION))}catch(e){}
 // each Google account keeps its own save on this device; guests share the device save
 const saveKey=()=>USER&&USER.sub?KEY+'_'+USER.sub:KEY;
-function load(){try{const s=JSON.parse(localStorage.getItem(saveKey()));if(s&&s.cards)return unlock(s)}catch(e){}return unlock(fresh())}
+/* b168 save guard. The loss it stops: the game open in two places (two tabs, the installed app and a tab, two devices). The copy that was left behind still held an OLD state in memory,
+   and its next save (the update pop-up saves before reloading) wrote that old state over the newer one, on the device and in the cloud.
+   - S.rv counts saves (seeded from the save's time the first time this build loads it). A copy whose rv is behind what is stored never saves: it stops and asks for a reload.
+   - every save is also kept under a second key that older builds never touch; if the main key was overwritten by one of them, the backup is loaded instead.
+   - the cloud copy is checked before it is overwritten, and a cloud save from an older build is only taken if it shows at least as much play as the one on the device. */
+const rvKey=()=>saveKey()+'_rv',bkKey=()=>saveKey()+'_bk',rvOf=s=>s&&+s.rv||0,sumV=o=>o&&typeof o==='object'?Object.values(o).reduce((a,b)=>a+(+b||0),0):0;
+const prog=s=>!s?0:(+s.cleared||0)+sumV(s.lg&&s.lg.c)+sumV(s.cl&&s.cl.src)+sumV(s.cl&&s.cl.pk)+((s.pv&&(+s.pv.w||0)+(+s.pv.l||0))||0)+Object.keys(s.cards||{}).length;
+const rvSeed=s=>{if(!s.rv)s.rv=Math.floor((+s.ts||0)/1000);return s};
+let stale=0;
+function staleStop(){if(stale)return;stale=1;try{bt=null}catch(e){}const en=S&&S.lang==='en',d=document.createElement('div');d.id='stale';d.setAttribute('role','alert');
+  d.style.cssText='position:fixed;inset:0;z-index:99999;display:grid;place-content:center;justify-items:center;gap:12px;padding:24px;text-align:center;background:rgba(6,9,26,.97);color:#eef2ff;font-family:sans-serif';
+  d.innerHTML=`<h2 style="color:#ffd84a;font-size:22px;margin:0">${en?'The game is open somewhere else':'เกมถูกเปิดอยู่อีกที่หนึ่ง'}</h2><p style="max-width:460px;font-size:15px;line-height:1.6;margin:0">${en?'A newer save was found (another tab, the installed app or another device). This screen has stopped saving so that it cannot overwrite it.':'พบเซฟที่ใหม่กว่า (แท็บอื่น แอปที่ติดตั้งไว้ หรืออีกเครื่อง) หน้านี้จึงหยุดบันทึกเพื่อไม่ให้ไปทับเซฟใหม่'}</p><button style="font-size:17px;font-weight:700;padding:10px 26px;border-radius:10px;border:0;background:#ffd84a;color:#2a1600;cursor:pointer">${en?'Reload':'โหลดใหม่'}</button>`;
+  document.body.appendChild(d);d.querySelector('button').onclick=()=>location.reload()}
+// write S to this device as it is (main key, counter, backup)
+function stash(){try{const j=JSON.stringify(S);localStorage.setItem(saveKey(),j);localStorage.setItem(rvKey(),rvOf(S));localStorage.setItem(bkKey(),j)}catch(e){}}
+function load(){let m=null,b=null;try{m=JSON.parse(localStorage.getItem(saveKey()))}catch(e){}try{b=JSON.parse(localStorage.getItem(bkKey()))}catch(e){}
+  if(!(m&&m.cards))m=null;if(!(b&&b.cards))b=null;const s=b&&(!m||!m.rv||rvOf(b)>rvOf(m))?b:m;if(!s){try{localStorage.removeItem(rvKey())}catch(e){}return unlock(fresh())}return rvSeed(unlock(s))}
 // Gold ledger for the admin page: every place Gold moves calls lg(kind, amount) right after changing S.gold, so the save carries totals by source (i), by use (o) and a count (c).
 // lg.b is the balance the ledger expects; save() compares it with the real S.gold and books any difference as 'unk' (Gold that moved without going through the game's own code, such as an edited save or an old build).
 // g0/t0 are the balance and time when tracking began on this save.
 const lgInit=d=>{if(!S.lg||typeof S.lg!=='object'||!S.lg.i){const b=(+S.gold||0)-(d||0);S.lg={b,g0:b,t0:Date.now(),i:{},o:{},c:{}}}return S.lg};
 const lg=(k,d)=>{d=+d||0;if(!d||!S)return;const L=lgInit(d),m=d>0?L.i:L.o;m[k]=(m[k]||0)+Math.abs(d);L.c[k]=(L.c[k]||0)+1;L.b+=d};
 const lgSync=()=>{try{const L=lgInit(0),d=(+S.gold||0)-L.b;if(d){lg('unk',d);L.u=L.u||[];L.u.push([Date.now(),d]);if(L.u.length>8)L.u.shift()}}catch(e){}};
-function save(){lgSync();clSync();S.ts=Date.now();try{localStorage.setItem(saveKey(),JSON.stringify(S))}catch(e){}cloudPush()}
+function save(){if(stale)return;
+  try{if((+localStorage.getItem(rvKey())||0)>rvOf(S)){let m=null;try{m=JSON.parse(localStorage.getItem(bkKey())||localStorage.getItem(saveKey()))}catch(e){}if(m&&m.cards&&rvOf(m)>rvOf(S))return staleStop()}}catch(e){}
+  lgSync();clSync();S.ts=Date.now();S.rv=rvOf(S)+1;stash();cloudPush()}
+addEventListener('storage',e=>{try{if(S&&e.key===rvKey()&&(+e.newValue||0)>rvOf(S))staleStop()}catch(x){}});
 const capBonus=r=>Math.max(1,Math.round(RAR[r].cap*.03)),capOf=id=>RAR[C[id].r].cap+capBonus(C[id].r)*starOf(id),starCost=id=>(C[id].r==='ST'?STAR_COST_ST:STAR_COST)[starOf(id)]||null;
 const canStar=id=>{const c=starCost(id),o=S.cards[id];return !!(c&&o&&S.gold>=c[0]&&(o.cp||0)>=c[1])};
 const _capOld=id=>RAR[C[id].r].cap,maxed=id=>S.cards[id]&&S.cards[id].lv>=capOf(id);
@@ -1990,7 +2009,7 @@ $('view').onclick=ev=>{{const w=ev.target.closest('.dk,.ibtn,.pill,.row2 .btn');
   else if(a==='mktab'){mkTab=t.dataset.t;mkSel=null;market()}
   else if(a==='mkmode'){mkMode=t.dataset.m;mkSel=null;market()}
   else if(a==='zoom')zoom(id);
-  else if(a==='reset'){if(armed){armed=false;S=unlock(fresh());save();home()}else{armed=true;settings()}}
+  else if(a==='reset'){if(armed){armed=false;const rv=rvOf(S);S=unlock(fresh());S.rv=rv;save();home()}else{armed=true;settings()}}
 };
 $('zoom').onclick=ev=>{const lk=ev.target.closest('[data-lock]');if(lk){const id=lk.dataset.lock;setLock(id,!isLock(id));sfx('tap');if(document.querySelector('.tab'))coll();zoom(id);return}
   const wb=ev.target.closest('[data-swap]');if(wb){swapPick(wb.dataset.swap);return}
@@ -2371,7 +2390,7 @@ function titleScreen(){
    <p class="cfoot nt">PixelDeckBattle · CBT build ${BUILD}</p></div>`);
 }
 // ---------- Firebase: Google sign-in and one cloud save document per account (saves/{uid}) ----------
-const BUILD='b167';
+const BUILD='b168';
 // The game moved to its own address. Anyone opening the old address is sent on, but only once the new site answers, so a broken move cannot lock players out.
 const DISCORD='https://discord.gg/dHDzRyPG9',DC_SVG='<svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="currentColor" d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.4189-2.1568 2.4189Z"/></svg>';
 const NEW_HOME='https://pixeldeckbattle.github.io/';
@@ -2402,13 +2421,20 @@ const saveDoc=()=>firebase.firestore().collection('saves').doc(USER.sub);
 // take whichever save is newer, the one on this device or the one in the cloud
 function cloudPull(){if(!FB_CFG||!USER||!USER.sub)return Promise.resolve();
   return fbLoad().then(fbUser).then(u=>{if(!u||u.uid!==USER.sub){USER=null;try{localStorage.removeItem(SESSION)}catch(e){}throw new Error('signed-out')}return saveDoc().get()})
-   .then(d=>{if(d.exists){try{const c=JSON.parse(d.data().data);if(c&&c.cards&&(c.ts||0)>(S.ts||0)){const lang=S.lang;S=unlock(c);if(lang)S.lang=lang;try{localStorage.setItem(saveKey(),JSON.stringify(S))}catch(e){}}}catch(e){}}else cloudDirty=true;if(cloudDirty)cloudFlush()})}
+   .then(d=>{cloudChk=Date.now();if(d.exists){try{const c=JSON.parse(d.data().data);if(c&&c.cards){if(cloudNewer(c))cloudTake(c);else if(rvOf(c)!==rvOf(S)||(c.ts||0)<(S.ts||0))cloudDirty=true}}catch(e){}}else cloudDirty=true;if(cloudDirty)cloudFlush()})}
+// is the cloud copy c ahead of S? Both counted: the higher counter. A cloud copy without a counter comes from an older build: it must be later AND show at least as much play, or it is a left-behind copy.
+const cloudNewer=c=>rvOf(c)?rvOf(c)>rvOf(S):(c.ts||0)>(S.ts||0)&&prog(c)>=prog(S);
+function cloudTake(c){const lang=S.lang;S=rvSeed(unlock(c));if(lang)S.lang=lang;stash()}
+let cloudChk=0;
 // The cloud copy is written at most once every 2 minutes while playing (the free database plan allows 20k writes a day, and measured play was ~350 writes per player-day),
 // and at once when it matters: leaving or hiding the page, and right after spending or receiving something (CLOUD_NOW actions, market, trade, top-up). The copy on the device is always saved immediately.
 const CLOUD_GAP=120000,CLOUD_NOW=['opengold','open','openpro','openltd','vipbuy','exch','asbuy','disgo','fugo','claim','logout','reset'];
 function cloudPush(){if(!FB_CFG||!USER||!USER.sub)return;cloudDirty=true;if(!cloudT)cloudT=setTimeout(cloudFlush,CLOUD_GAP)}
 function cloudFlush(){clearTimeout(cloudT);cloudT=0;if(!cloudDirty||!FB_CFG||!USER||!USER.sub||!window.firebase||!firebase.apps.length||!firebase.auth().currentUser)return;cloudDirty=false;
-  saveDoc().set({data:JSON.stringify(S),ts:S.ts||0,name:S.me?S.me.name:'',cleared:S.cleared||0,at:firebase.firestore.FieldValue.serverTimestamp()}).catch(()=>{cloudDirty=true})}
+  const put=()=>saveDoc().set({data:JSON.stringify(S),ts:S.ts||0,rv:rvOf(S),name:S.me?S.me.name:'',cleared:S.cleared||0,at:firebase.firestore.FieldValue.serverTimestamp()});
+  // after a quiet spell (this copy may have been left behind) look at the cloud copy first; if it is ahead, take it and stop instead of overwriting it
+  if(stale)return;if(Date.now()-cloudChk<300000)return void put().catch(()=>{cloudDirty=true});
+  saveDoc().get().then(d=>{cloudChk=Date.now();let c=null;try{c=d.exists&&JSON.parse(d.data().data)}catch(e){}if(c&&c.cards&&rvOf(c)>rvOf(S)){cloudTake(c);return staleStop()}return put()}).catch(()=>{cloudDirty=true})}
 addEventListener('visibilitychange',()=>{if(document.hidden)cloudFlush()});addEventListener('pagehide',()=>cloudFlush());$('view').addEventListener('click',e=>{const t=e.target.closest('[data-act]');if(t&&CLOUD_NOW.includes(t.dataset.act))setTimeout(cloudFlush,1200)},true);
 function gLogin(){const b=$('gbtn'),m=$('gmsg'),say=t=>{if(m)m.textContent=t+' '};if(b)b.disabled=true;say(S.lang==='en'?'Connecting…':'กำลังเชื่อมต่อ…');
   fbLoad().then(()=>firebase.auth().signInWithPopup(new firebase.auth.GoogleAuthProvider())).then(r=>{const u=r.user;signIn({sub:u.uid,name:(u.displayName||'Player').split(' ')[0],email:u.email,pic:u.photoURL})})
