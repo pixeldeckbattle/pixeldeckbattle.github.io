@@ -2283,8 +2283,9 @@ function twRound(b){if(!b.tw)return;b.en.forEach(e=>{if(e.gim!=='raise'||e.hp<=0
 // rewards. A floor pays about half of what the stage of the same strength pays (Gold, Exp and drop chance), every boss floor adds a fixed bonus, and a few floors hand out a one-off prize;
 // each floor is cleared once a week, so none of this can be farmed.
 const twGold=f=>Math.round(goldBase(twEq(f))*GOLD_UP),twBossG=f=>f%10===0?500+50*f:0,twXp=f=>Math.max(1,Math.round(expOf(twEq(f))*TW_EXP));
-const TW_MS={50:{dia:20},100:{card:'R'},150:{dia:50},200:{am:'L'},300:{card:'L'}};
-const TW_RANK=[[1,1,{sh:1,dia:500,card:'L'}],[2,2,{sh:2,dia:300,card:'L'}],[3,3,{sh:3,dia:200,card:'R'}],[4,10,{dia:100,gold:20000}],[11,TW_TOP,{dia:50,gold:10000}]],TW_PART={gold:5000},PV_END_AC=[50,100,200,350,550,800];
+const TW_MS={50:{dia:10},100:{card:'R'},150:{dia:20},200:{am:'L'},300:{card:'L'}};
+// diamonds are kept small on purpose (b167 review): a diamond sells for about 0.5 baht and buys Limited Packs, whose cards survive the wipe, so the shield is the prize and the rest is a bonus
+const TW_RANK=[[1,1,{sh:1,dia:150,card:'L'}],[2,2,{sh:2,dia:100,card:'R'}],[3,3,{sh:3,dia:60,card:'R'}],[4,10,{dia:30,gold:20000}],[11,TW_TOP,{gold:10000}]],TW_PART={gold:5000},PV_END_AC=[50,100,200,350,550,800];
 const twPrize=(r,w)=>{const t=TW_RANK.find(x=>r>=x[0]&&r<=x[1]);if(!t)return{...TW_PART};const it={...t[2]};if(it.sh)it.sh='T'+it.sh+'.'+twSeason(w);return it};
 // one item bundle {gold,dia,ac,card:<rank>,am:<rank>,sh:<code>} -> applied to the save; returns what was handed over, for display
 function itGive(it,src){const out=[];if(!it)return out;
