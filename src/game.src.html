@@ -770,7 +770,7 @@ const mkSelf=k=>!AM[k]&&!!S.cards[k]&&!(S.cards[k].cp>0); // selling the card it
 // a card anywhere in a list is the real card, frame and rank effects included, only smaller; ev = an event card: picture and name, no effects
 const mkIcon=(k,ev)=>AM[k]?amu(k):ev?`<span class="cf cth evc r-${C[k].r}"><img src="${img(k)}" alt="${C[k].n}"><span class="cnm nt">${C[k].n}</span></span>`:full(k,'','cth').replace('<button','<span').replace('</button>','</span>');
 const mkTake=k=>{if(AM[k]){S.am[k]--;return null}const c=S.cards[k];if(c.cp>0){c.cp--;return null}const sv={...c};delete sv.am;delete S.cards[k];S.team=S.team.filter(x=>x!==k);if(S.pvt)S.pvt=S.pvt.filter(x=>x!==k);return sv};
-const mkGive=(k,sv)=>{if(AM[k]){S.am=S.am||{};S.am[k]=(S.am[k]||0)+1}else if(sv&&!S.cards[k])S.cards[k]=sv;else giveCard(k)};
+const mkGive=(k,sv,src='market')=>{if(AM[k]){S.am=S.am||{};S.am[k]=(S.am[k]||0)+1}else if(sv&&!S.cards[k]){S.cards[k]=sv;clAdd(k,src)}else giveCard(k,src)};
 /* ---------- player avatar + trade room ---------- */
 const TRADE_TAX=10000;
 // What may change hands in a trade room: Legend amulets, and Super Legend / Limited cards. Nothing else.
@@ -780,8 +780,8 @@ const trName=k=>AM[k]?AM[k].n:C[k].n,trDesc=k=>AM[k]?AM[k].t:RAR[C[k].r].n+' · 
 const trHave=k=>AM[k]?spare(k):S.cards[k]?(S.cards[k].cp||0)+1:0,trSelf=k=>!AM[k]&&!!S.cards[k]&&!(S.cards[k].cp>0);
 const trList=()=>Object.keys(AM).filter(k=>trOK(k)&&spare(k)>0&&!isLock(k)).concat(byRank(Object.keys(S.cards).filter(id=>trOK(id)&&!isLock(id))));
 function trTake(k){if(AM[k]){S.am[k]--;return null}const c=S.cards[k];if(c.cp>0){c.cp--;return null}const sv={...c};delete sv.am;delete S.cards[k];S.team=S.team.filter(x=>x!==k);if(S.pvt)S.pvt=S.pvt.filter(x=>x!==k);return sv}
-function trBack(g){if(AM[g.k]){S.am[g.k]=(S.am[g.k]||0)+1;return}if(!C[g.k])return;if(S.cards[g.k])S.cards[g.k].cp=(S.cards[g.k].cp||0)+1;else S.cards[g.k]=g.sv||{lv:1,exp:0}}
-function trGet(k){if(AM[k]){S.am=S.am||{};S.am[k]=(S.am[k]||0)+1}else if(C[k])giveCard(k)}
+function trBack(g){if(AM[g.k]){S.am[g.k]=(S.am[g.k]||0)+1;return}if(!C[g.k])return;if(S.cards[g.k])S.cards[g.k].cp=(S.cards[g.k].cp||0)+1;else{S.cards[g.k]=g.sv||{lv:1,exp:0};clAdd(g.k,'trback')}}
+function trGet(k){if(AM[k]){S.am=S.am||{};S.am[k]=(S.am[k]||0)+1}else if(C[k])giveCard(k,'trade')}
 const CHARS=["Paladin", "Fire Mage", "Ice Mage", "Necromancer", "Druid", "Cleric", "Bard", "Monk", "Samurai", "Pirate Captain", "Fisherman", "Blacksmith", "Dwarf Miner", "Dwarf Guard", "Elf Ranger", "Assassin", "Berserker", "Gladiator", "Hoplite", "Valkyrie", "Witch", "Alchemist", "Thief", "Royal Guard", "King", "Jester", "Gunslinger", "Musketeer", "Chef", "Farmer", "Orc Brute", "Goblin Sneak", "Skeleton", "Zombie", "Vampire", "Mummy", "Ghost", "Slime", "Imp", "Angel", "Lizardman", "Cat Rogue", "Werewolf", "Treant", "Mushroom", "Scarecrow", "Fire Spirit", "Snowman", "Frog Knight", "Cyclops"];
 const chPos=(c,f)=>`background-position:${-f*56}px ${-c*52}px`,chs=(c,f=0)=>`<i class="chs" style="${chPos(c,f)}"></i>`;
 // every player has a profile from the start; a save from before the character sheet falls back to the first character
@@ -928,7 +928,7 @@ function mkList(){const k=mkSel,p=mkPrice,fee=mkFee(p);if(!mkOn()||!(mkHave(k)>0
   mkDb().collection('market').add({seller:USER.sub,name:(S.me&&S.me.name||'').slice(0,12),k,p,at:firebase.firestore.FieldValue.serverTimestamp()})
    .then(ref=>{const sv=mkTake(k);if(sv&&ref&&ref.id){S.mks=S.mks||{};S.mks[ref.id]=sv;const ks=Object.keys(S.mks);if(ks.length>40)delete S.mks[ks[0]]}mkSel=null;S.gold-=fee;lg('mkfee',-fee);save();cloudFlush();mk.msg='listed'},e=>{mk.msg='err:'+(e&&e.code||'')}).then(()=>{mk.busy=false;mkFetch()})}
 function mkCancel(id){const l=mk.list.find(x=>x.id===id);if(!l||l.seller!==USER.sub||mk.busy)return;mk.busy=true;
-  mkDb().collection('market').doc(id).delete().then(()=>{mkGive(l.k,S.mks&&S.mks[id]);if(S.mks)delete S.mks[id];save();cloudFlush();mk.msg='cancelled'},e=>{mk.msg='err:'+(e&&e.code||'')}).then(()=>{mk.busy=false;mkFetch()})}
+  mkDb().collection('market').doc(id).delete().then(()=>{mkGive(l.k,S.mks&&S.mks[id],'mkback');if(S.mks)delete S.mks[id];save();cloudFlush();mk.msg='cancelled'},e=>{mk.msg='err:'+(e&&e.code||'')}).then(()=>{mk.busy=false;mkFetch()})}
 function mkBuy(id){const l=mk.list.find(x=>x.id===id);if(!l||l.seller===USER.sub||S.gold<l.p||mk.busy)return;mk.busy=true;const db=mkDb(),ref=db.collection('market').doc(id);
   db.runTransaction(tx=>tx.get(ref).then(d=>{if(!d.exists)throw new Error('sold-out');const v=d.data();tx.delete(ref);tx.set(db.collection('payouts').doc(),{to:v.seller,gold:Math.floor(v.p*(1-TAX)),k:v.k,p:v.p,by:String(S.me&&S.me.name||'').slice(0,12),at:firebase.firestore.FieldValue.serverTimestamp()});return v}))
    .then(v=>{S.gold-=v.p;lg('mkbuy',-v.p);mkGive(v.k);save();cloudFlush();sfx('win');mk.msg='bought:'+v.k},e=>{mk.msg=e&&e.message==='sold-out'?'gone':'err:'+(e&&e.code||e&&e.message||'')}).then(()=>{mk.busy=false;mkFetch()})}
@@ -1005,7 +1005,7 @@ function load(){try{const s=JSON.parse(localStorage.getItem(saveKey()));if(s&&s.
 const lgInit=d=>{if(!S.lg||typeof S.lg!=='object'||!S.lg.i){const b=(+S.gold||0)-(d||0);S.lg={b,g0:b,t0:Date.now(),i:{},o:{},c:{}}}return S.lg};
 const lg=(k,d)=>{d=+d||0;if(!d||!S)return;const L=lgInit(d),m=d>0?L.i:L.o;m[k]=(m[k]||0)+Math.abs(d);L.c[k]=(L.c[k]||0)+1;L.b+=d};
 const lgSync=()=>{try{const L=lgInit(0),d=(+S.gold||0)-L.b;if(d){lg('unk',d);L.u=L.u||[];L.u.push([Date.now(),d]);if(L.u.length>8)L.u.shift()}}catch(e){}};
-function save(){lgSync();S.ts=Date.now();try{localStorage.setItem(saveKey(),JSON.stringify(S))}catch(e){}cloudPush()}
+function save(){lgSync();clSync();S.ts=Date.now();try{localStorage.setItem(saveKey(),JSON.stringify(S))}catch(e){}cloudPush()}
 const capBonus=r=>Math.max(1,Math.round(RAR[r].cap*.03)),capOf=id=>RAR[C[id].r].cap+capBonus(C[id].r)*starOf(id),starCost=id=>(C[id].r==='ST'?STAR_COST_ST:STAR_COST)[starOf(id)]||null;
 const canStar=id=>{const c=starCost(id),o=S.cards[id];return !!(c&&o&&S.gold>=c[0]&&(o.cp||0)>=c[1])};
 const _capOld=id=>RAR[C[id].r].cap,maxed=id=>S.cards[id]&&S.cards[id].lv>=capOf(id);
@@ -1089,11 +1089,17 @@ const vipRem=()=>{const m=Math.max(0,(S.vip||0)-Date.now()),d=Math.floor(m/864e5
 const dropMul=(n,first)=>{const m=Math.max(.5,Math.min(1.5,.5+n/300));return first?Math.max(1,m):m},dropP=(n,base,boss,first)=>Math.min(1,(n%10===0?boss:base)*dropMul(n,first)*vipP().dr);
 const CDROP=.04,CDROP_BOSS=.12,CD_ODDS=[['LT',.0002,400],['SL',.001,250],['L',.009,100],['R',.05,30],['UC',.24,1]];
 function cardDropRank(n){let x=Math.random();for(const [r,pr,min] of CD_ODDS){if(n>=min&&(x-=pr)<0)return r}return 'C'}
-const giveCard=id=>{if(S.cards[id]){S.cards[id].cp=(S.cards[id].cp||0)+1;return{id,dup:true}}S.cards[id]={lv:1,exp:0};return{id}};
+// b163 card ledger for the admin page (S.cl): pk = packs opened by kind, src = cards received by source, r = the last 60 Legend-or-better cards with time and source,
+// own = the card ids the ledger knows about. save() compares own with the real collection; a card that appeared without passing through the game's own code is booked as 'unk'.
+const clInit=()=>{if(!S.cl||!S.cl.own){S.cl={t0:Date.now(),own:Object.keys(S.cards||{}),pk:{},src:{},r:[]}}return S.cl};
+const clPack=k=>{try{const L=clInit();L.pk[k]=(L.pk[k]||0)+1}catch(e){}};
+const clAdd=(id,src,dup)=>{try{const L=clInit();L.src[src]=(L.src[src]||0)+1;if(!L.own.includes(id))L.own.push(id);if(src==='unk'||['L','SL','LT'].includes(C[id].r)){L.r.push([Date.now(),id,src,dup?1:0]);if(L.r.length>60)L.r.shift()}}catch(e){}};
+const clSync=()=>{try{if(!S||!S.cards)return;const L=clInit();Object.keys(S.cards).forEach(id=>{if(C[id]&&!L.own.includes(id))clAdd(id,'unk')});L.own=L.own.filter(id=>S.cards[id])}catch(e){}};
+const giveCard=(id,src='other')=>{if(S.cards[id]){S.cards[id].cp=(S.cards[id].cp||0)+1;clAdd(id,src,1);return{id,dup:true}}S.cards[id]={lv:1,exp:0};clAdd(id,src);return{id}};
 // first win over these bosses hands out guaranteed cards, so a free player can always reach a Rare (S.bc remembers which were paid; older saves get theirs in the lobby)
 const BOSS_CARD={10:['h24'],20:['R','h25']};   // b160: a mage, then a Rare and a tank, so a new free player holds every role by stage 20
 const randNew=r=>{const ids=Object.keys(C).filter(id=>C[id].r===r),nw=ids.filter(id=>!S.cards[id]),p=nw.length?nw:ids;return p[Math.floor(Math.random()*p.length)]};
-const bcTake=()=>{const out=[];S.bc=S.bc||[];for(const k in BOSS_CARD){if(S.cleared>=+k&&!S.bc.includes(+k)){S.bc.push(+k);BOSS_CARD[k].forEach(r=>out.push(giveCard(C[r]?r:randNew(r))))}}return out};
+const bcTake=()=>{const out=[];S.bc=S.bc||[];for(const k in BOSS_CARD){if(S.cleared>=+k&&!S.bc.includes(+k)){S.bc.push(+k);BOSS_CARD[k].forEach(r=>out.push(giveCard(C[r]?r:randNew(r),'boss')))}}return out};
 const bcRow=c=>`<div class="row"><span class="pvc r-${C[c.id].r}" style="width:38px">${art(c.id)}</span><span class="nt">${T('รางวัลชนะบอส','Boss reward')}${c.dup?T(' (ใบซ้ำ)',' (copy)'):''}<br><b class="r-${C[c.id].r}" style="color:var(--gl)">${C[c.id].n}</b> · ${RAR[C[c.id].r].n}</span></div>`;
 const bcLate=()=>{const o=bcTake();if(!o.length)return;save();cloudFlush();setTimeout(()=>{if(!bt)ov(`<div class="cd dlg nt"><div class="px cdbox"><b>🎁 ${T('รางวัลชนะบอส (ย้อนหลัง)','Boss rewards (back-dated)')}</b><p>${T('บอสด่าน 10 และ 20 แจกการ์ดการันตีแล้ว คุณผ่านมาก่อน จึงได้รับย้อนหลัง','Bosses 10 and 20 now give guaranteed cards. You had already beaten them, so here are yours')}</p>${o.map(bcRow).join('')}<div class="row"><button class="btn go" data-lp="no">${T('รับทราบ','OK')}</button></div></div></div>`)},600)};
 const randOf=r=>{const ids=Object.keys(C).filter(id=>C[id].r===r);return ids[Math.floor(Math.random()*ids.length)]};
@@ -1116,7 +1122,7 @@ const DEVH='38ee325cd572325c',h32=(s,k)=>{let h=k;for(const c of s)h=Math.imul(h
 const isDev=()=>{if(!USER||!USER.sub||!USER.email)return false;const e=String(USER.email).toLowerCase();return h32(e,2166136261)+h32(e,40389)===DEVH};
 function devGrant(){if(!isDev())return;let ch=0;
   if(S.gold<1e7){const d=1e7-S.gold;S.gold=1e7;lg('dev',d);ch=1}if((S.dia||0)<1e6){S.dia=1e6;ch=1}if(S.cleared<MAXST){S.cleared=MAXST;ch=1}if(!S.gift){S.gift=true;ch=1}
-  Object.keys(C).forEach(id=>{const c=S.cards[id]||(ch=1,S.cards[id]={lv:1,exp:0});if((c.star||0)<5){c.star=5;ch=1}const cap=capOf(id);if(c.lv<cap){c.lv=cap;c.exp=0;ch=1}});
+  Object.keys(C).forEach(id=>{const c=S.cards[id]||(ch=1,clAdd(id,'dev'),S.cards[id]={lv:1,exp:0});if((c.star||0)<5){c.star=5;ch=1}const cap=capOf(id);if(c.lv<cap){c.lv=cap;c.exp=0;ch=1}});
   S.am=S.am||{};Object.keys(AM).forEach(k=>{if((S.am[k]||0)<30){S.am[k]=30;ch=1}});
   if(!S.team.length){S.team=['h03','h22','h07'];ch=1}
   if(ch)save()}
@@ -1296,7 +1302,7 @@ function shop(){const d=S.dia||0;
 const ltdP=r=>r==='C'?1-Object.values(LTD.odds).reduce((a,b)=>a+b,0):LTD.odds[r],P2=v=>+(v*100).toFixed(v<.01?2:1)+'%';
 function ltdRoll(){S.lp=(S.lp||0)+1;let x=Math.random(),r='C';if(S.lp>=LTD.pity)r='LT';else for(const k of['LT','SL','L','R','UC'])if((x-=LTD.odds[k])<0){r=k;break}if(r==='LT')S.lp=0;return r}
 function openLtd(cur){if(!CBT)return;if(cur==='d'){if((S.dia||0)<LTD.dia)return;S.dia-=LTD.dia}else{if((S.dp||0)<LTD.pts)return;S.dp-=LTD.pts}
-  const id=randOf(ltdRoll());S.ev=S.ev||{};S.ev[id]=(S.ev[id]||0)+1;pull=[{id,ev:true}];save();sfx('win');shop()}
+  const id=randOf(ltdRoll());S.ev=S.ev||{};S.ev[id]=(S.ev[id]||0)+1;clPack('ltd');try{const L=clInit();L.src.ltd=(L.src.ltd||0)+1;if(C[id].r==='LT'){L.r.push([Date.now(),id,'ltd',0]);if(L.r.length>60)L.r.shift()}}catch(e){}pull=[{id,ev:true}];save();sfx('win');shop()}
 // An event card: the card picture and name only, with a stamp. No fire, lightning, sparkles, stars, level or stats.
 const evCard=id=>`<div class="cf evc r-${C[id].r}"><img src="${img(id)}" alt="${C[id].n}"><span class="cnm nt">${C[id].n}</span><span class="evst"><b class="nt">EVENT CARD</b><i>ใช้เล่นไม่ได้</i></span></div>`;
 // Fusion: FUSE.n[rank] spare copies (cp) of ONE card + FUSE.gold[rank] Gold -> 1 random card of the next rank (b147: cost rises per step so SL stays rare). Stars/level don't matter (copies have none),
@@ -1306,7 +1312,7 @@ const fuN=id=>FUSE.n[C[id].r]||99,fuG=id=>FUSE.gold[C[id].r]||0,fuTxt=T=>Object.
 let fuSel=null,fuGot=null;
 const fuCan=id=>!!(id&&C[id]&&S.cards[id]&&FUSE.up[C[id].r]&&!isLock(id)),fuOk=id=>fuCan(id)&&(S.cards[id].cp||0)>=fuN(id);
 const fuList=()=>byRank(Object.keys(S.cards).filter(id=>fuCan(id)&&(S.cards[id].cp||0)>0)).sort((a,b)=>fuOk(b)-fuOk(a));
-function fuDo(id){if(!fuOk(id)||S.gold<fuG(id))return null;const to=randNew(FUSE.up[C[id].r]);if(!to)return null;const c=fuG(id);S.cards[id].cp-=fuN(id);S.gold-=c;lg('fuse',-c);const g=giveCard(to);g.from=id;g.cost=c;return g}
+function fuDo(id){if(!fuOk(id)||S.gold<fuG(id))return null;const to=randNew(FUSE.up[C[id].r]);if(!to)return null;const c=fuG(id);S.cards[id].cp-=fuN(id);S.gold-=c;lg('fuse',-c);const g=giveCard(to,'fuse');g.from=id;g.cost=c;return g}
 function fuse(){const L=fuList();if(!L.includes(fuSel))fuSel=null;const id=fuSel,ok=fuOk(id),cp=id?S.cards[id].cp||0:0,need=id?fuN(id):0,cost=id?fuG(id):0,poor=S.gold<cost;
   view(`<div class="cols wide"><div class="rail">
     <div class="row"><button class="btn alt sm" data-act="coll">กลับ</button><h2 class="nt">${T('ฟิวชั่นการ์ด','Card Fusion')}</h2></div>
@@ -1341,7 +1347,7 @@ function dis(){const L=disList();disS.forEach(k=>{if(!L.includes(k))disS.delete(
     <button class="btn alt sm" data-act="shop">ไปร้านค้า</button>
   </div><div class="main">${keep.length?`<p class="sub" style="color:#6fd8ff">การ์ดอีเวนต์ Limited ที่เก็บไว้ใช้ตอน OBT: <b class="nt">${keep.map(id=>C[id].n+' x'+S.ev[id]).join(', ')}</b></p>`:''}<div class="disg">${L.map(k=>`<button class="mkpick ${disS.has(k)?'on':''}" data-act="dissel" data-k="${k}" aria-pressed="${disS.has(k)}" aria-label="${C[disId(k)].n}">${mkIcon(disId(k),k.startsWith('e:'))}${k.startsWith('e:')?'<em class="evb nt">EV</em>':''}<small>x${disN(k)}</small></button>`).join('')||'<span class="sub">ไม่มีการ์ดให้ย่อย</span>'}</div></div></div>`)}
 function openPro(cur){if(CBT&&!isDev())return;if(cur==='d'){if((S.dia||0)<PRO.dia)return;S.dia-=PRO.dia}else{if(S.gold<PRO.gold)return;S.gold-=PRO.gold;lg('pro',-PRO.gold)}
-  pull=Array.from({length:PRO.n},()=>{const x=Math.random();return giveCard(randOf(x<PRO.odds.SL?'SL':x<PRO.odds.SL+PRO.odds.L?'L':'R'))});save();sfx('win');shop()}
+  clPack('pro');pull=Array.from({length:PRO.n},()=>{const x=Math.random();return giveCard(randOf(x<PRO.odds.SL?'SL':x<PRO.odds.SL+PRO.odds.L?'L':'R'),'pro')});save();sfx('win');shop()}
 function vip(){const d=S.dia||0,tr=vipOwn(),ck=t=>`<li>${t}</li>`;
   const perks=i=>{const q=VIPT[i];return [T('Exp x2 · Gold x2 · เหรียญอารีน่า x2','Exp x2 · Gold x2 · arena coins x2'),T('โอกาสดรอป +'+Math.round((q.dr-1)*100)+'%','Drop chance +'+Math.round((q.dr-1)*100)+'%'),
     q.day?T('เพชรฟรีวันละ '+q.day+' 💎 (รวม '+(q.day*VIPS[i-1][0]).toLocaleString('en')+')',q.day+' free 💎 every day ('+(q.day*VIPS[i-1][0]).toLocaleString('en')+' in total)'):'',
@@ -1361,13 +1367,13 @@ function vip(){const d=S.dia||0,tr=vipOwn(),ck=t=>`<li>${t}</li>`;
 const rollRank=o=>{let x=Math.random();for(const r of['SL','L','R','UC'])if((x-=o[r])<0)return r;return 'C'};
 const pct=o=>['C','UC','R','L','SL'].map(r=>RAR[r].n+' '+(+(o[r]*100).toFixed(1))+'%').join(' · ');
 function openPack(){
-  if((S.dia||0)<PACK)return;S.dia-=PACK;const got=[];
-  pull=ST_GIVE.map(r=>{let ids=Object.keys(C).filter(id=>C[id].r===r&&!got.includes(id));const id=ids[Math.floor(Math.random()*ids.length)];got.push(id);return giveCard(id)});
+  if((S.dia||0)<PACK)return;S.dia-=PACK;clPack('starter');const got=[];
+  pull=ST_GIVE.map(r=>{let ids=Object.keys(C).filter(id=>C[id].r===r&&!got.includes(id));const id=ids[Math.floor(Math.random()*ids.length)];got.push(id);return giveCard(id,'starter')});
   save();shop();
 }
 const gr=(b,id)=>+(b*RAR[C[id].r].g).toFixed(1);
 function openGold(){
-  if(S.gold<GPACK)return;S.gold-=GPACK;lg('gpack',-GPACK);pull=Array.from({length:GN},()=>giveCard(randOf(rollRank(GODDS))));save();shop();
+  if(S.gold<GPACK)return;S.gold-=GPACK;lg('gpack',-GPACK);clPack('gpack');pull=Array.from({length:GN},()=>giveCard(randOf(rollRank(GODDS)),'gpack'));save();shop();
 }
 function zoom(id){const o=S.cards[id],v=stat(id,o?o.lv:1),mx=stat(id,capOf(id)),z=$('zoom');
   z.innerHTML=`${full(id,'','glow').replace('<button','<span').replace('</button>','</span>')}<div class="inf"><h2>${C[id].n}</h2><span class="rib r-${C[id].r}">${RAR[C[id].r].n} · ${ROLE[C[id].role]}</span>
@@ -1635,7 +1641,7 @@ async function finish(won){
   if(my.pvp){bt=null;busy=false;return pvpResult(won,my.pvp)}
   const n=bt.n,team=bt.al.map(a=>a.id),farm=!!bt.farm,first=!!bt.first;bt=null;busy=false;let rows='',g=0,drop=null,jp=false,bb=0,eb=0,cdrop=null,bcs=[];
   if(won){const rg=rollGold(n);g=rg.g*VX();jp=rg.jp;bb=bossBonus(n);eb=earlyB(n);S.gold+=g+bb+eb;lg('stage',g);lg('boss',bb);lg('early',eb);qAdd('win');if(n%10===0)qAdd('boss');if(Math.random()<dropP(n,DROP,DROP_BOSS,first)){drop=amRoll();S.am=S.am||{};S.am[drop]=(S.am[drop]||0)+1}
-    if(Math.random()<dropP(n,CDROP,CDROP_BOSS,first))cdrop=giveCard(randOf(cardDropRank(n)));const x=expOf(n)*VX();
+    if(Math.random()<dropP(n,CDROP,CDROP_BOSS,first))cdrop=giveCard(randOf(cardDropRank(n)),'drop');const x=expOf(n)*VX();
     rows=team.map(id=>{const was=S.cards[id].lv,wasMax=maxed(id),up=addExp(id,x),c=S.cards[id];
       return `<div class="mini r-${C[id].r} glow ${fr(id)}">${fxh(id)}${rib(id)}<div class="art"><img src="${artSrc(id)}" alt=""></div></div><div><b>${C[id].n}</b> ${wasMax?'<span class="gold">Lv MAX</span>':'Exp +'+x} ${up?`<span class="gold">Lv ${was} → ${c.lv}</span>`:`· Lv ${c.lv}`}<div class="hp xp"><i style="width:${maxed(id)?100:c.exp/need(c.lv)*100}%"></i></div></div>`}).join('');
     if(n>S.cleared)S.cleared=n;if(S.ls)delete S.ls;bcs=bcTake();save()}
@@ -1814,7 +1820,7 @@ $('view').onclick=ev=>{{const w=ev.target.closest('.dk,.ibtn,.pill,.row2 .btn');
   else if(a==='lang'){S.lang=t.dataset.l;save();document.documentElement.lang=S.lang;settings()}
   else if(a==='logout'){save();cloudFlush();USER=null;try{localStorage.removeItem(SESSION)}catch(e){}try{window.firebase&&firebase.auth().signOut()}catch(e){}titleScreen()}
   else if(a==='glogin')gLogin()
-  else if(a==='claim'){if(!S.gift){S.gift=true;refTake();if(!S.cleared)S.tut=0;S.afk=Date.now();GIFT.forEach(id=>{if(!S.cards[id])S.cards[id]={lv:1,exp:0}});if(!S.team.length)S.team=[...GIFT];save();sfx('win')}home()}
+  else if(a==='claim'){if(!S.gift){S.gift=true;refTake();if(!S.cleared)S.tut=0;S.afk=Date.now();GIFT.forEach(id=>{if(!S.cards[id]){S.cards[id]={lv:1,exp:0};clAdd(id,'gift')}});if(!S.team.length)S.team=[...GIFT];save();sfx('win')}home()}
   else if(a==='guest')signIn({guest:true,name:'Guest'})
   else if(a==='tlang'){S.lang=t.dataset.l;document.documentElement.lang=S.lang;try{localStorage.setItem('pdb_lang',S.lang)}catch(e){}titleScreen()}
   else if(a==='troom')roomList();
@@ -2042,7 +2048,7 @@ const SWAP_N=2,swLeft=()=>Math.max(0,SWAP_N-(S.swu|0)),swTo=id=>POOL.filter(x=>C
 const swPlan=id=>{const o=S.cards[id],p=starPaid(id),cap=RAR[C[id].r].cap,lv=Math.min(o.lv,cap);return{lv,cut:o.lv-lv,exp:lv<o.lv?0:o.exp|0,g:p.g,sn:p.sn,cp:(o.cp|0)+p.c,back:p.c,am:o.am||''}};
 function swapDo(id,to){if(!swOk(id)||isLock(id)||!swTo(id).includes(to))return false;const o=S.cards[id],p=swPlan(id);
   if(p.g){S.gold+=p.g;lg('unstar',p.g)}if(p.sn)S.ss=(S.ss||0)+p.sn;
-  const n={lv:p.lv,exp:p.exp};if(p.cp)n.cp=p.cp;delete S.cards[id];S.cards[to]=n;
+  const n={lv:p.lv,exp:p.exp};if(p.cp)n.cp=p.cp;delete S.cards[id];S.cards[to]=n;clAdd(to,'swap');
   S.team=S.team.map(x=>x===id?to:x);if(S.pvt)S.pvt=S.pvt.map(x=>x===id?to:x);if(S.me&&S.me.look===id)S.me.look=to;
   S.swu=(S.swu|0)+1;save();cloudFlush();return true}
 // one-time note in the lobby about the b160 changes, shown when no other dialog is up
@@ -2080,7 +2086,7 @@ function unstar(id){if(!canUnstar(id))return;const p=starPaid(id),o=S.cards[id];
 const STONE_N={C:1,UC:1,R:1,L:2,SL:3,LT:3},stoneCost=id=>{const c=starCost(id);return c&&c[1]?c[1]*(STONE_N[C[id].r]||1):0},canStone=id=>{const c=starCost(id),n=stoneCost(id);return !!(c&&n&&S.cards[id]&&S.gold>=c[0]&&(S.ss||0)>=n)};
 const AS_COST={pack:600,gem:200,vip:3000,stone:250},AS_PACK={SL:.005,L:.08,R:.45},AS_GEM=[[1,5,.5],[6,10,.28],[11,20,.15],[21,35,.055],[36,50,.015]],AS_VIP=7;
 function asBuy(k){const c=AS_COST[k];if(!c||(S.ac||0)<c)return;S.ac-=c;let got;
-  if(k==='pack'){let x=Math.random(),r='UC';for(const q of['SL','L','R'])if((x-=AS_PACK[q])<0){r=q;break}got={k,card:giveCard(randOf(r))}}
+  if(k==='pack'){let x=Math.random(),r='UC';for(const q of['SL','L','R'])if((x-=AS_PACK[q])<0){r=q;break}got={k,card:(clPack('arena'),giveCard(randOf(r),'arena'))}}
   else if(k==='gem'){let x=Math.random(),b=AS_GEM[0];for(const g of AS_GEM)if((x-=g[2])<0){b=g;break}const n=b[0]+Math.floor(Math.random()*(b[1]-b[0]+1));S.dia=(S.dia||0)+n;got={k,n}}
   else if(k==='stone'){S.ss=(S.ss||0)+1;got={k}}
   else{vipAdd(AS_VIP,1,1);got={k}}
@@ -2273,7 +2279,7 @@ function titleScreen(){
    <p class="cfoot nt">PixelDeckBattle · CBT build ${BUILD}</p></div>`);
 }
 // ---------- Firebase: Google sign-in and one cloud save document per account (saves/{uid}) ----------
-const BUILD='b162';
+const BUILD='b163';
 // The game moved to its own address. Anyone opening the old address is sent on, but only once the new site answers, so a broken move cannot lock players out.
 const DISCORD='https://discord.gg/dHDzRyPG9',DC_SVG='<svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="currentColor" d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.4189-2.1568 2.4189Z"/></svg>';
 const NEW_HOME='https://pixeldeckbattle.github.io/';
