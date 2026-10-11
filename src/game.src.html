@@ -913,14 +913,14 @@ const mkOn=()=>!!(FB_CFG&&USER&&USER.sub),mkDb=()=>firebase.firestore();
 // The buyer writes p and by into the payout (b149); payouts made by an older build have neither and show "-".
 function mkPayIn(docs){let got=0;const dels=[];docs.forEach(d=>{const v=d.data();if(!oldEra(v.at)){const g=Math.max(0,v.gold|0);got+=g;if(AM[v.k]||C[v.k]){S.mkh=S.mkh||[];S.mkh.unshift({k:v.k,g,p:v.p|0,by:String(v.by||'').slice(0,12),at:atMs(v.at)});S.mkn=(S.mkn||0)+1}}dels.push(d.ref.delete())});if(S.mkh){S.mkh.sort((a,b)=>b.at-a.at);S.mkh.length=Math.min(S.mkh.length,30)}S.gold+=got;lg('mksell',got);return[got,dels]}
 // lobby check (one cheap query, every 5 min at most) so a seller hears about a sale without opening the market
-let mkPayAt=0;function mkPayCheck(){if(!mkOn()||Date.now()-mkPayAt<300000)return;mkPayAt=Date.now();
+let mkPayAt=0;function mkPayCheck(){if(!mkOn()||Date.now()-mkPayAt<900000)return;mkPayAt=Date.now();
   fbLoad().then(fbUser).then(u=>u?mkDb().collection('payouts').where('to','==',USER.sub).get():null).then(q=>{if(!q||!q.docs.length)return;const [got,dels]=mkPayIn(q.docs);
     if(got>0){save();sfx('win');fx.push(['view',T('ตลาด: ขายได้ +','Market: sold +')+got.toLocaleString('en')+' Gold','g']);if(document.querySelector('.lobby'))home()}return Promise.all(dels)}).catch(()=>{})}
 const mkWhen=ms=>ms?new Date(ms).toLocaleString(S.lang==='en'?'en-GB':'th-TH',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit',hour12:false}):'-';
 function mkHist(){const h=S.mkh||[];return `<p class="sub nt" style="margin:18px 0 10px"><b style="color:#f2d98a">${T('ประวัติการขาย','Sales history')}</b> (${h.length}) · ${T('เก็บ 30 รายการล่าสุด','last 30 kept')}</p>
   ${h.length?`<div class="amlist">${h.map(x=>{const a=AM[x.k];if(!a&&!C[x.k])return '';return `<div class="amrow">${mkIcon(x.k)}<span><b class="nt">${a?T(a.n,EN[a.n]||a.n):mkName(x.k)}</b><small class="nt" style="color:#6cf586">✔ ${T('ขายแล้ว','Sold')} · ${T('ได้รับ','received')} <b>${x.g.toLocaleString('en')}</b> Gold${x.p?` (${T('ราคา','price')} ${x.p.toLocaleString('en')})`:''}</small><small class="nt">${T('ผู้ซื้อ','Buyer')}: <b>${esc(x.by||'-')}</b> · ${mkWhen(x.at)}</small></span></div>`}).join('')}</div>`:`<p class="sub nt">${T('ยังไม่มีรายการที่ขายได้','Nothing sold yet')}</p>`}`}
-function mkFetch(soft){if(!mkOn())return;if(soft&&mk.state==='ok'&&Date.now()-(mk.at||0)<90000){if(document.querySelector('[data-mk]'))market();return}mk.state='load';
-  fbLoad().then(fbUser).then(u=>{if(!u)throw new Error('auth');return Promise.all([mkDb().collection('market').orderBy('at','desc').limit(60).get(),mkDb().collection('payouts').where('to','==',USER.sub).get()])})
+function mkFetch(soft){if(!mkOn())return;if(soft&&mk.state==='ok'&&Date.now()-(mk.at||0)<300000){if(document.querySelector('[data-mk]'))market();return}mk.state='load';
+  fbLoad().then(fbUser).then(u=>{if(!u)throw new Error('auth');return Promise.all([mkDb().collection('market').orderBy('at','desc').limit(40).get(),mkDb().collection('payouts').where('to','==',USER.sub).get()])})
    .then(([q,pay])=>{mk.list=q.docs.map(d=>({id:d.id,...d.data()})).filter(l=>!oldEra(l.at)&&(AM[l.k]||(C[l.k]&&C[l.k].r!=='ST'))&&l.p>0);const [got,dels]=mkPayIn(pay.docs);
      if(got>0){save();mk.msg='sold:'+got}mk.state='ok';mk.at=Date.now();return Promise.all(dels)})
    .catch(e=>{mk.state='err';mk.msg='err:'+(e&&e.code||e&&e.message||'')}).then(()=>{if(document.querySelector('[data-mk]'))market()})}
@@ -1233,7 +1233,7 @@ async function slipSend(file){if(!payOpen()){slip={busy:false,msg:T('ตอน�
     slip={busy:false,err:0,msg:T(`สำเร็จ ได้ ${j.dia.toLocaleString('en')} เพชร`,`Done: ${j.dia.toLocaleString('en')} diamonds`)};dSel=null;grantFetch(1)}
   catch(e){const m=SLIP_MSG[e&&e.code];slip={busy:false,err:1,msg:m?T(m[0],m[1]):T('เชื่อมต่อเซิร์ฟเวอร์เติมเพชรไม่ได้ ลองใหม่อีกครั้ง','Could not reach the top-up server. Try again')}}
   if(document.querySelector('[data-tu]'))topup()}
-function grantFetch(force){if(!mkOn()||(!force&&Date.now()-grantAt<180000))return;grantAt=Date.now();
+function grantFetch(force){if(!mkOn()||(!force&&Date.now()-grantAt<600000))return;grantAt=Date.now();
   fbLoad().then(fbUser).then(u=>{if(!u)return null;return mkDb().collection('grants').where('to','==',USER.sub).get()}).then(q=>{if(!q||!q.docs.length)return;let n=0;S.gr=S.gr||[];
     q.docs.forEach(d=>{const x=Math.max(0,Math.min(100000,d.data().dia|0));if(x>0&&!S.gr.includes(d.id)&&!oldEra(d.data().at)){n+=x;S.gr.push(d.id);if(S.gr.length>60)S.gr.shift();S.pay=S.pay||[];S.pay.push({d:x,t:Date.now(),id:d.id})}d.ref.delete().catch(()=>{})});
     if(n){S.dia=(S.dia||0)+n;save();cloudFlush();sfx('win');fx.push(['view','+'+n.toLocaleString('en')+' 💎','g']);const v=document.querySelector('.lobby')?home:document.querySelector('[data-tu]')?topup:null;if(v)v()}}).catch(()=>{})}
@@ -1723,7 +1723,7 @@ function devVip(){if(!isDev())return home();const g=CFG.gift,on=giftOn(g),d0=new
     <label>${T('สิ้นสุด','Until')}<input id="dvu" type="datetime-local" value="${dtl(t)}"></label>
    </div>
    <div class="row" style="margin-top:14px;gap:10px"><button class="btn go sm" data-act="dvset" ${dv.busy?'disabled':''}>${on?T('บันทึกเป็นการแจกรอบใหม่','Save as a new gift'):T('ตั้งแจก','Schedule')}</button>${on?`<button class="btn warn sm" data-act="dvoff" ${dv.busy?'disabled':''}>${T('ยกเลิกการแจก','Cancel gift')}</button>`:''}</div>
-   <p class="sub" style="margin-top:12px">${T('บันทึกใหม่ = นับเป็นรอบใหม่ คนที่รับรอบเก่าไปแล้วจะได้อีก · ผู้เล่นที่เปิดเกมค้างไว้จะเห็นการแจกภายในราว 3 นาที · ยกเลิกแล้วคนที่รับไปแล้วไม่ถูกดึงคืน','Saving again starts a new gift, so players who already received the old one get it again · games already open pick it up within about 3 minutes · cancelling does not take back what was already given')}</p>
+   <p class="sub" style="margin-top:12px">${T('บันทึกใหม่ = นับเป็นรอบใหม่ คนที่รับรอบเก่าไปแล้วจะได้อีก · ผู้เล่นที่เปิดเกมค้างไว้จะเห็นการแจกภายในราว 10 นาที · ยกเลิกแล้วคนที่รับไปแล้วไม่ถูกดึงคืน','Saving again starts a new gift, so players who already received the old one get it again · games already open pick it up within about 10 minutes · cancelling does not take back what was already given')}</p>
   </div></div>`)}
 function devVipSave(off){if(!isDev()||!mkOn()){dv.err=1;dv.msg='not allowed';return devVip()}let gift=null;
   if(!off){const tier=+($('dvt')||{}).value|0,days=+($('dvd')||{}).value|0,from=Date.parse(($('dvf')||{}).value),to=Date.parse(($('dvu')||{}).value);dv.err=1;
@@ -1732,7 +1732,7 @@ function devVipSave(off){if(!isDev()||!mkOn()){dv.err=1;dv.msg='not allowed';ret
   dv.busy=true;dv.msg='';devVip();fbLoad().then(fbUser).then(()=>mkDb().collection('config').doc('main').set({gift},{merge:true}))
    .then(()=>{CFG.gift=gift;try{localStorage.setItem('pdb_cfg',JSON.stringify(CFG))}catch(e){}dv.err=0;dv.msg=off?T('ยกเลิกการแจกแล้ว','Gift cancelled'):T('ตั้งแจกแล้ว','Gift scheduled')},e=>{dv.err=1;dv.msg=T('บันทึกไม่สำเร็จ: ','Failed: ')+(e&&(e.code||e.message)||'?')}).then(()=>{dv.busy=false;if(document.querySelector('#dvt'))devVip()})}
 /* ---------- live settings (admin page) ---------- */
-const CFG_POLL=180000;let cfgAt=0;
+const CFG_POLL=600000;let cfgAt=0;
 function cfgFetch(){if(!FB_CFG||document.hidden||Date.now()-cfgAt<CFG_POLL-5000)return;cfgAt=Date.now();
   fbLoad().then(()=>firebase.firestore().collection('config').doc('main').get()).then(d=>{const was=JSON.stringify(CFG);CFG=d.exists?d.data()||{}:{};try{localStorage.setItem('pdb_cfg',JSON.stringify(CFG))}catch(e){}if(JSON.stringify(CFG)!==was)cfgApply()}).catch(()=>{})}
 function cfgApply(){
@@ -2011,8 +2011,8 @@ const myDef=()=>pvTeam().map(id=>({id,lv:S.cards[id].lv,star:starOf(id),am:S.car
 function pvClean(d,uid){const team=(Array.isArray(d.team)?d.team:[]).filter(c=>c&&C[c.id]).slice(0,3).map(c=>{const star=Math.max(0,Math.min(5,c.star|0));return{id:c.id,star,am:AM[c.am]?c.am:'',lv:Math.max(1,Math.min(RAR[C[c.id].r].cap+capBonus(C[c.id].r)*star,c.lv|0))}});
   return{uid,name:String(d.name||'Player').slice(0,12),look:C[d.look]?d.look:(team[0]&&team[0].id),team,st:Math.max(0,Math.min(ST_MAX,d.st|0)),w:d.w|0,l:d.l|0}}
 function pvpPush(){if(!mkOn())return;const me=pvGet();fbLoad().then(fbUser).then(u=>{if(u)return firebase.firestore().collection('arena').doc(USER.sub).set({name:S.me.name,look:S.me.look,team:myDef(),st:me.st,pts:me.st,w:me.w,l:me.l,at:Date.now()})}).catch(()=>{})}
-function pvpFetch(soft){if(!mkOn()){pv.state='guest';if(document.querySelector('.arenav'))arena();return}if(soft&&pv.state==='ok'&&Date.now()-(pv.at||0)<120000){if(document.querySelector('.arenav'))arena();return}pv.state='load';if(document.querySelector('.arenav'))arena();pvpPush();
-  fbLoad().then(fbUser).then(u=>{if(!u)throw new Error('signed-out');const col=firebase.firestore().collection('arena'),st=pvGet().st;return Promise.all([col.orderBy('st','desc').limit(25).get(),col.where('st','>=',Math.max(0,st-MM_MAX)).where('st','<=',st+MM_MAX).limit(40).get()])})
+function pvpFetch(soft){if(!mkOn()){pv.state='guest';if(document.querySelector('.arenav'))arena();return}if(soft&&pv.state==='ok'&&Date.now()-(pv.at||0)<600000){if(document.querySelector('.arenav'))arena();return}pv.state='load';if(document.querySelector('.arenav'))arena();pvpPush();
+  fbLoad().then(fbUser).then(u=>{if(!u)throw new Error('signed-out');const col=firebase.firestore().collection('arena'),st=pvGet().st;return Promise.all([col.orderBy('st','desc').limit(20).get(),col.where('st','>=',Math.max(0,st-MM_MAX)).where('st','<=',st+MM_MAX).limit(24).get()])})
    .then(([q,n])=>{pv.list=q.docs.filter(d=>!oldEra(d.data().at)).map(d=>pvClean(d.data(),d.id)).filter(o=>o.team.length);pv.near=n.docs.filter(d=>!oldEra(d.data().at)).map(d=>pvClean(d.data(),d.id)).filter(o=>o.team.length);pv.state='ok';pv.at=Date.now()}).catch(e=>{pv.state='err';pv.err=e&&(e.code||e.message)||'?'}).then(()=>{if(document.querySelector('.arenav'))arena()})}
 // bots fill the list so there is always someone to fight: same ranks as my team, levels around mine, fixed for the day
 const BOTN=['Kraken','Mako','Barracuda','Marlin','Tsunami','Leviathan','Coral','Riptide'];
@@ -2279,7 +2279,7 @@ function titleScreen(){
    <p class="cfoot nt">PixelDeckBattle · CBT build ${BUILD}</p></div>`);
 }
 // ---------- Firebase: Google sign-in and one cloud save document per account (saves/{uid}) ----------
-const BUILD='b163';
+const BUILD='b164';
 // The game moved to its own address. Anyone opening the old address is sent on, but only once the new site answers, so a broken move cannot lock players out.
 const DISCORD='https://discord.gg/dHDzRyPG9',DC_SVG='<svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="currentColor" d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.4189-2.1568 2.4189Z"/></svg>';
 const NEW_HOME='https://pixeldeckbattle.github.io/';
