@@ -632,7 +632,7 @@ h1{color:#f2d98a;text-shadow:0 3px 0 #7a4a1c,0 6px 0 #0a1019}h2{color:#f2d98a;te
 .twflash{position:absolute;inset:0;display:grid;place-items:center;background:#fff;animation:twfl calc(1.1s/var(--sp,1)) ease-in-out both;pointer-events:none}.twflash b{font-family:var(--display);font-weight:900;font-style:italic;font-size:44px;letter-spacing:.06em;color:#0a0e22;text-shadow:0 0 18px #ffd84a}
 @keyframes twfl{0%{opacity:0}30%,70%{opacity:1}100%{opacity:0}}
 .twin .pos.r{animation:twin calc(.42s/var(--sp,1)) cubic-bezier(.2,.8,.3,1) both}@keyframes twin{from{transform:translateX(70vw);opacity:0}}
-.fig .plate .gtg{background:#3a6cff;color:#fff}
+.fig:not(.dead) .spr.glw{filter:drop-shadow(0 0 1.5px #9ff2ff) drop-shadow(0 0 5px rgba(70,215,255,.75))}.fig .plate .gtg{background:#3a6cff;color:#fff}
 @media (prefers-reduced-motion:reduce){.tsh::before,.tsh::after,.tsh.t1 i,.twscr,.twin .pos.r{animation:none}}
 @keyframes twpop{from{transform:scale(.6);opacity:0}}
 </style>
@@ -759,7 +759,7 @@ const MON={m01:{n:'Ember Imp',a:60,h:30,d:6,c:12},m02:{n:'Hellhound Pup',a:50,h:
  b04:{n:'Magma Colossus',k:'arm',a:76,h:78,d:18,c:12,boss:1,st:'smash'},b05:{n:'Obsidian Dragon',k:'ward',a:84,h:72,d:14,c:16,boss:1,m:1,st:'cast',pj:'fire'},
  // b167 Endless Tower: two monsters and one boss per zone (tw:1 keeps them out of the 500 stages); gim = the boss's trick, see GIM
  t01:{n:'Rune Sentinel',k:'arm',a:50,h:52,d:14,c:8,st:'smash',tw:1},t02:{n:'Hall Acolyte',k:'ward',a:62,h:36,d:6,c:12,m:1,st:'cast',pj:'moon',tw:1},
- t03:{n:'Chained Grimoire',k:'arm',a:58,h:46,d:14,c:14,tw:1},t04:{n:'Ink Wraith',k:'ward',a:64,h:34,d:6,c:14,m:1,st:'cast',pj:'soul',tw:1},
+ t03:{n:'Chained Grimoire',k:'arm',a:58,h:46,d:14,c:14,tw:1},t04:{n:'Ink Wraith',gl:1,k:'ward',a:64,h:34,d:6,c:14,m:1,st:'cast',pj:'soul',tw:1},
  t05:{n:'Forge Automaton',k:'arm',a:54,h:52,d:16,c:8,st:'smash',tw:1},t06:{n:'Cinder Shaman',k:'ward',a:66,h:32,d:6,c:14,m:1,st:'cast',pj:'fire',tw:1},
  t07:{n:'Glacier Knight',k:'arm',a:56,h:50,d:16,c:10,st:'smash',tw:1},t08:{n:'Storm Siren',k:'ward',a:66,h:34,d:6,c:14,m:1,st:'cast',pj:'light',tw:1},
  t09:{n:'Seraph Guard',k:'arm',a:58,h:50,d:16,c:10,tw:1},t10:{n:'Star Oracle',k:'ward',a:68,h:32,d:6,c:14,m:1,st:'cast',pj:'light',tw:1},
@@ -1601,7 +1601,7 @@ function unit(u,el,cls,attr,sp,side){const p=Math.max(0,u.hp/u.max*100),mon=u.bo
   return `<div class="pos ${side?'r':'l'}" style="left:calc(${side?100-sp[0]:sp[0]}% - var(--bw)*${(k*.65).toFixed(3)});bottom:${100-sp[1]}%;--cw:calc(var(--bw)*${k.toFixed(3)});z-index:${Math.round(sp[1])}"><button class="fig ${u.boss?'boss':''} ${u.hp<=0?'dead':''} ${cls}" id="${el}" ${attr} title="${C[u.id].n}">
     <span class="plate">${u.boss?'<b class="tagb">BOSS</b>':''}${u.taunt&&u.hp>0?`<b class="tnt">TAUNT${u.taunt>1?' '+u.taunt:''}</b>`:''}${u.gate>0&&u.hp>0?`<b class="tnt gtg nt">🛡 ×${u.gate}</b>`:''}${el[0]==='e'&&u.hp>0&&wkU(u)?`<b class="wkt ${wkU(u)} nt">${weakTxt(wkU(u))}</b>`:''}<span class="fhp"><i style="width:${p}%"></i>${u.sh>0&&u.hp>0?`<b style="width:${Math.min(100,u.sh/u.max*100)}%"></b>`:''}</span>
      <span class="st"><span class="a ${C[u.id].m?'m':''}"><img src="${ICON[MAGIC.includes(u.id)?'orb':'sword']}" alt="${atkName(u.id)}">${u.atk}</span><span class="d"><img src="${ICON.heart}" alt="HP">${Math.max(0,u.hp)}${u.sh>0&&u.hp>0?`<b class="shv">+${u.sh}</b>`:''}</span>${u.def>0?`<span class="f"><img src="${ICON.shield}" alt="DEF">${u.def}</span>`:''}</span></span>
-    <span class="sw ${side?'':'flip'}">${sprite(u.id,u.walk?'walk':'')}</span></button></div>`}
+    <span class="sw ${side?'':'flip'}">${sprite(u.id,(u.walk?'walk':'')+(C[u.id].gl?' glw':''))}</span></button></div>`}
 function draw(){
   const ac=busy?null:actor(),ord=[...bt.al.filter(a=>a.hp>0&&!a.done).map(a=>[a,'al']),...bt.en.filter(e=>e.hp>0).map(e=>[e,'en'])];
   view(`<div class="arena px ${bt.tw&&bt.in?'twin':''}">${bt.tw?twBg(bt.tw):bgLayers(bt.n)}

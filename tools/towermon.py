@@ -16,13 +16,20 @@ def rows2(rgba):
     al=rgba[...,3];rb=bands(al,1)
     if len(rb)==2:return rb
     p=(al>40).sum(1).astype(float);H=len(p);lo,hi=int(H*.4),int(H*.6);y=lo+int(np.argmin(nd.uniform_filter1d(p,9)[lo:hi]));ys=np.where(p>3)[0];return[(ys.min(),y),(y,ys.max()+1)]
-def slices(rgba,y0,y1,atk):
+# STEAL: parts of a frame that reach over the cut into the previous frame's slice (a levelled spear), as boxes in the source picture: {id:{frame:[(x0,x1,y0,y1),...]}}
+STEAL={'tb5':{2:[(470,505,729,746),(505,566,700,776)],3:[(765,805,729,746),(805,846,700,776)]}}
+def slices(rgba,y0,y1,atk,steal=None):
+    steal=steal or {};Y=max(0,y0-4)
     y0=max(0,y0-4);y1=min(rgba.shape[0],y1+4);band=rgba[y0:y1].copy();W=band.shape[1];p=nd.uniform_filter1d((band[...,3]>40).sum(0).astype(float),7);cuts=[0]
     for k in range(1,6):
         c=round(k*W/6);lo,hi=c-110,c+110;seg=p[lo:hi];m=seg.min();cand=np.where(seg<=m+2)[0]+lo;cuts.append(int(cand[np.argmin(abs(cand-c))]))
-    cuts.append(W);out=[]
+    cuts.append(W);out=[];src=band.copy()
+    for i,R in steal.items():
+        for x0,x1,ya,yb in R:band[ya-Y:yb-Y,x0:min(x1,cuts[i])]=0   # the previous frame gives the box up
     for i in range(6):
-        c=band[:,cuts[i]:cuts[i+1]].copy();m=c[...,3]>40;lab,n=nd.label(m,structure=np.ones((3,3)));sz=nd.sum(m,lab,range(1,n+1));big=int(np.argmax(sz))+1;ys,xs=np.where(lab==big);bb=(xs.min(),xs.max(),ys.min(),ys.max());w=c.shape[1]
+        R=steal.get(i,[]);s0=min([cuts[i]]+[r[0] for r in R]);c=band[:,s0:cuts[i+1]].copy();c[:,:cuts[i]-s0]=0
+        for x0,x1,ya,yb in R:c[ya-Y:yb-Y,x0-s0:min(x1,cuts[i])-s0]=src[ya-Y:yb-Y,x0:min(x1,cuts[i])]
+        m=c[...,3]>40;lab,n=nd.label(m,structure=np.ones((3,3)));sz=nd.sum(m,lab,range(1,n+1));big=int(np.argmax(sz))+1;ys,xs=np.where(lab==big);bb=(xs.min(),xs.max(),ys.min(),ys.max());w=c.shape[1]
         for j in range(1,n+1):
             if j==big:continue
             yy,xx=np.where(lab==j);edge=xx.min()<=1 or xx.max()>=w-2
@@ -33,7 +40,7 @@ def slices(rgba,y0,y1,atk):
 # sheets whose attack row cannot be cut cleanly (a beam or blast painted across two frames): the attack row repeats the idle frames until a redrawn sheet arrives; the game still lunges and plays its own hit effect
 ATK_IDLE=set()
 def build3(src,name,target_h,maxw=236):
-    rgba=key(Image.open(U+src));rb=rows2(rgba);idle,c1=slices(rgba,*rb[0],0);atk,c2=slices(rgba,*rb[1],1)
+    rgba=key(Image.open(U+src));rb=rows2(rgba);idle,c1=slices(rgba,*rb[0],0);atk,c2=slices(rgba,*rb[1],1,STEAL.get(name))
     if name in ATK_IDLE:atk=idle
     bh=np.median([b[3]-b[2] for _,b in idle]);bw=np.median([b[1]-b[0] for _,b in idle]);sc=min(target_h/bh,maxw/bw);right=CW/2+bw*sc/2
     def place(fr,by_right):
