@@ -55,3 +55,7 @@ if 'v3' in sys.argv or True:
         if k in J and (not only or k in only):
             try:build3(f,J[k][0],J[k][1],maxw=200 if 'BOSS' in f else 236)
             except Exception as e:print(J[k][0],'v3 FAILED',type(e).__name__,e)
+# the Forge Automaton's smoke was painted purple and survives the key as pink flecks: drop them
+if not only or '13' in only:
+    for q in('spr/t05.webp',):
+        im=Image.open('/home/claude/pixeldeck/'+q).convert('RGBA');a=np.asarray(im).copy();r,g,b=a[...,0].astype(int),a[...,1].astype(int),a[...,2].astype(int);a[(np.minimum(r,b)-g>35)&(b>90),3]=0;Image.fromarray(a,'RGBA').save('/home/claude/pixeldeck/'+q,quality=90,method=6)

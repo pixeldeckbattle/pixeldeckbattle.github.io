@@ -6,6 +6,6 @@ await p.evaluate(async()=>{USER={sub:'me',name:'T'};S=unlock(fresh());S.me={name
  const W=twWeek(),t=Date.now(),c=window.__DB['tower/'+W+'/s']={};[['a','Narathip',141,3],['b','Kanit',141,5],['c','Getter',112,1],['e','Zed',70,9]].forEach(([u,nm,f,h],i)=>c[u]={name:nm,look:'h06',f,at:new Date(t-h*36e5),fd:i<2?1:0,sh:i===0?'T1.1':'',st:i*9});save();await fbLoad();await fbUser();home()});
 await w(1800);await p.screenshot({path:'c_lobby.png'});
 await p.evaluate(()=>tower());await w(1200);await p.screenshot({path:'c_hub.png'});
-let k=0;for(const f of [10,30,50,70,90,5,25,45,65,85]){await p.evaluate(f=>{bt=null;busy=false;S.tw.f=f-1;twTok++;startTower(f)},f);await w(f%10?2600:3600);await p.screenshot({path:'c_f'+f+'.png'})}
+let k=0;for(const f of [5,6,25,26,45,46,65,66,85,86]){await p.evaluate(f=>{bt=null;busy=false;S.tw.f=f-1;twTok++;startTower(f)},f);await w(f%10?2600:3600);await p.screenshot({path:'c_f'+f+'.png'})}
 await p.evaluate(()=>{bt=null;busy=false;charMake();document.querySelector('.main').scrollTop=235});await w(700);await p.screenshot({path:'c_cab.png'});
 console.log('errs',e);await b.close()})()
