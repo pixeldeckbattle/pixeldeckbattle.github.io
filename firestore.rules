@@ -53,6 +53,26 @@ service cloud.firestore {
       allow update: if request.auth != null && resource.data.to == request.auth.uid
         && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['claimed']);
     }
+    // Endless Tower ranking, one table per week: tower/{week}/s/{player}. A week runs Monday 00:00 to Sunday 23:59 Bangkok time (UTC+7).
+    // A player writes only their own line, only into the week the SERVER clock is in (so a finished week is frozen without anyone closing it),
+    // the floor may only go up, and 'at' must be the server time of that write (it breaks ties: who got there first).
+    // week number w starts at w x 7 days + 4 days - 7 hours after 1 Jan 1970 UTC (the first Monday 00:00 Bangkok was 5 Jan 1970)
+    function towerNow(week) {
+      let start = int(week) * 604800000 + 320400000;
+      return request.time.toMillis() >= start && request.time.toMillis() < start + 604800000;
+    }
+    match /tower/{week}/s/{uid} {
+      allow read: if request.auth != null;
+      allow create: if request.auth != null && request.auth.uid == uid
+        && towerNow(week)
+        && request.resource.data.f is int && request.resource.data.f >= 1 && request.resource.data.f <= 9999
+        && request.resource.data.at == request.time;
+      allow update: if request.auth != null && request.auth.uid == uid
+        && towerNow(week)
+        && request.resource.data.f is int && request.resource.data.f > resource.data.f && request.resource.data.f <= 9999
+        && request.resource.data.at == request.time;
+      allow delete: if owner();
+    }
     // live game settings (maintenance, notice, top-up hours, end of CBT, suspended accounts): everyone reads, only the owner writes
     match /config/{id} {
       allow read: if true;
