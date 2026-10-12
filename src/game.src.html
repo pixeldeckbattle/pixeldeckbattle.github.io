@@ -136,7 +136,7 @@ p{margin:0}
 .fsbox{width:min(380px,92%);max-height:92%;padding:10px 12px;gap:7px}.fshd{gap:5px}.fshd>b{font-size:16px}.fsx{width:26px;height:26px;font-size:13px;right:-4px;top:-3px}.fsst{gap:4px}.fsst span{padding:1px 6px;font-size:11px}
 .fsbox .fsg{gap:10px;padding:5px 12px;border-width:2px}.fsc{width:32px;height:32px}.fsbox .fsg small{font-size:10.5px}.fsbox .fsg b{font-size:22px;text-shadow:2px 2px 0 #000,0 0 8px rgba(255,210,58,.6)}.fsbox .fsg i{font-size:11px}.fsv{right:5px;top:4px;font-size:10px}
 .fsbd{grid-template-columns:1fr;gap:6px}.fss{gap:4px;padding:5px 7px 7px}.fss h4{font-size:12.5px}.fss h4 i{font-size:11px}.fss .sub{font-size:12px}
-.fsgr{gap:9px 7px;padding-top:4px}.fsit .cth{width:44px}.fsbox .fsit em{right:-6px;top:-6px;min-width:20px;padding:0 3px;font-size:10px;border-width:1px}.fsbox .fsa{width:auto}.fsa .amu{width:32px;height:32px}.fsbox .fsa small{display:none}.fsbox .fsa em{right:-7px;top:-7px}.fsbox .row .btn{min-width:110px;min-height:32px;font-size:14px;padding:4px 12px}.fsch i{font-style:normal;color:#7dff8a;margin:0 2px}.glsm{display:block;margin-top:10px;font-family:var(--body);font-weight:500;font-size:13px;line-height:1.45;color:#c9d2f5;text-shadow:none}.art-SL{color:#ff9d1a}
+.fsgr{gap:9px 7px;padding-top:4px}.fsit .cth{width:44px}.fsbox .fsit em{right:-6px;top:-6px;min-width:20px;padding:0 3px;font-size:10px;border-width:1px}.fsbox .fsa{width:auto}.fsa .amu{width:32px;height:32px}.fsbox .fsa small{display:none}.fsbox .fsa em{right:-7px;top:-7px}.fsbox .row .btn{min-width:110px;min-height:32px;font-size:14px;padding:4px 12px}.rlb{color:#8fe9ff;font-weight:700}.rlp{color:#c9d2f5;line-height:1.5}.rlp b{color:#8fe9ff}.tagb.lord{background:linear-gradient(#ffe45c,#d9902a);color:#2a1300;box-shadow:0 0 8px #ffd23a}.fsch i{font-style:normal;color:#7dff8a;margin:0 2px}.glsm{display:block;margin-top:10px;font-family:var(--body);font-weight:500;font-size:13px;line-height:1.45;color:#c9d2f5;text-shadow:none}.art-SL{color:#ff9d1a}
 .amu.ar-SL{background:radial-gradient(circle at 50% 35%,#7a3a12,#1a0c08 78%);box-shadow:inset 0 0 0 2px var(--k1),0 0 0 2px #0a0e22,0 0 0 4px #ff9d1a,0 0 0 6px #0a0e22,0 0 12px 5px rgba(255,140,30,.85);animation:slaura 1.8s ease-in-out infinite}
 .amslot .amu.ar-SL{box-shadow:inset 0 0 0 .5cqw var(--k1),0 0 0 .6cqw #0a0e22,0 0 0 1.3cqw #ff9d1a,0 0 2.4cqw 1.2cqw rgba(255,140,30,.8);animation:none}
 @keyframes slaura{50%{filter:brightness(1.25) saturate(1.2)}}
@@ -826,16 +826,29 @@ const MON={m01:{n:'Ember Imp',a:60,h:30,d:6,c:12},m02:{n:'Hellhound Pup',a:50,h:
  t09:{n:'Seraph Guard',k:'arm',a:58,h:50,d:16,c:10,tw:1},t10:{n:'Star Oracle',k:'ward',a:68,h:32,d:6,c:14,m:1,st:'cast',pj:'light',tw:1},
  tb1:{n:'Gatekeeper Titan',k:'arm',a:62,h:88,d:22,c:8,boss:1,st:'smash',gim:'gate',tw:1},tb2:{n:'Arch-Lich Librarian',k:'ward',a:78,h:72,d:12,c:14,boss:1,m:1,st:'cast',pj:'soul',gim:'raise',tw:1},
  tb3:{n:'Forge Tyrant',k:'arm',a:74,h:80,d:18,c:12,boss:1,st:'smash',gim:'rage',tw:1},tb4:{n:'Blizzard Wyrm',k:'ward',a:80,h:74,d:14,c:14,boss:1,m:1,st:'cast',pj:'moon',gim:'breath',tw:1},
- tb5:{n:'Sky Emperor',a:82,h:76,d:16,c:16,boss:1,m:1,st:'cast',pj:'light',gim:'shift',tw:1}};
+ tb5:{n:'Sky Emperor',a:82,h:76,d:16,c:16,boss:1,m:1,st:'cast',pj:'light',gim:'shift',tw:1},
+ // b173 Chapter 2 (c2:1 keeps them out of stages 1-500): per realm three monsters (xR1-xR3), a boss for every 10th stage (xR4) and the realm lord on the 100th (xR5, lord:1, with a gimmick)
+ x11:{n:'Reef Crab Knight',k:'arm',a:54,h:54,d:16,c:8,st:'smash',c2:1},x12:{n:'Abyss Angler',k:'ward',a:64,h:34,d:6,c:12,m:1,st:'cast',pj:'moon',c2:1},x13:{n:'Drowned Corsair',a:62,h:42,d:10,c:16,c2:1},
+ x14:{n:'Tidecaller Kraken',k:'ward',a:80,h:76,d:14,c:12,boss:1,m:1,st:'cast',pj:'moon',c2:1},x15:{n:'Leviathan Empress',k:'ward',a:86,h:84,d:16,c:14,boss:1,lord:1,m:1,st:'cast',pj:'moon',gim:'breath',c2:1},
+ x21:{n:'Ember Hound',a:64,h:40,d:8,c:16,c2:1},x22:{n:'Cinder Imp',k:'ward',a:66,h:32,d:6,c:14,m:1,st:'cast',pj:'fire',c2:1},x23:{n:'Ash Wyvern',k:'arm',a:58,h:50,d:14,c:10,st:'cast',pj:'fire',c2:1},
+ x24:{n:'Pyroclast Titan',k:'arm',a:76,h:86,d:20,c:10,boss:1,st:'smash',c2:1},x25:{n:'Inferno Phoenix King',k:'ward',a:88,h:80,d:14,c:16,boss:1,lord:1,m:1,st:'cast',pj:'fire',gim:'rage',c2:1},
+ x31:{n:'Frost Yeti',k:'arm',a:58,h:54,d:14,c:10,st:'smash',c2:1},x32:{n:'Ice Wraith',k:'ward',a:66,h:32,d:6,c:14,m:1,st:'cast',pj:'moon',c2:1},x33:{n:'Mammoth Knight',k:'arm',a:56,h:58,d:18,c:8,st:'smash',c2:1},
+ x34:{n:'Rime Witch',k:'ward',a:82,h:72,d:12,c:14,boss:1,m:1,st:'cast',pj:'moon',c2:1},x35:{n:'Frost Titan',k:'arm',a:84,h:92,d:22,c:10,boss:1,lord:1,st:'smash',gim:'gate',c2:1},
+ x41:{n:'Storm Harpy',a:64,h:38,d:8,c:18,c2:1},x42:{n:'Arcane Sentinel',k:'ward',a:66,h:40,d:10,c:12,m:1,st:'cast',pj:'light',c2:1},x43:{n:'Griffin Rider',k:'arm',a:62,h:48,d:14,c:14,c2:1},
+ x44:{n:'Star Archmage',k:'ward',a:84,h:70,d:12,c:16,boss:1,m:1,st:'cast',pj:'light',c2:1},x45:{n:'Seraph Colossus',a:88,h:86,d:18,c:14,boss:1,lord:1,m:1,st:'cast',pj:'light',gim:'shift',c2:1},
+ x51:{n:'Gear Hound',k:'arm',a:60,h:44,d:16,c:14,c2:1},x52:{n:'Steam Knight',k:'arm',a:58,h:56,d:18,c:10,st:'smash',c2:1},x53:{n:'Copter Drone',a:64,h:36,d:10,c:16,st:'shoot',c2:1},
+ x54:{n:'Brass Juggernaut',k:'arm',a:80,h:88,d:22,c:10,boss:1,st:'smash',c2:1},x55:{n:'Clockwork Emperor',k:'arm',a:90,h:86,d:20,c:14,boss:1,lord:1,gim:'raise',c2:1},
+ x61:{n:'Void Stalker',a:68,h:40,d:8,c:18,c2:1},x62:{n:'Rift Eye',k:'ward',a:70,h:34,d:6,c:14,m:1,st:'cast',pj:'soul',c2:1},x63:{n:'Mirror Knight',k:'arm',a:62,h:50,d:16,c:14,c2:1},
+ x64:{n:'Chaos Chimera',k:'ward',a:88,h:80,d:14,c:16,boss:1,m:1,st:'cast',pj:'fire',c2:1},x65:{n:'The Void King',a:94,h:92,d:20,c:16,boss:1,lord:1,gim:'breath',c2:1}};
 Object.keys(MON).forEach(id=>Object.defineProperty(C,id,{value:{r:'C',role:'atk',...MON[id],mon:1},enumerable:false}));
-const MSM=Object.keys(MON).filter(id=>!MON[id].boss&&!MON[id].tw),MBS=Object.keys(MON).filter(id=>MON[id].boss&&!MON[id].tw);
+const MSM=Object.keys(MON).filter(id=>!MON[id].boss&&!MON[id].tw&&!MON[id].c2),MBS=Object.keys(MON).filter(id=>MON[id].boss&&!MON[id].tw&&!MON[id].c2);
 const RORD=['C','UC','R','L','SL','LT'],STARTERS=['h06','h20','h11'],POOL=Object.keys(C).filter(id=>C[id].r!=='ST').sort((x,y)=>RORD.indexOf(C[x].r)-RORD.indexOf(C[y].r));
 // Firebase web config of the live site (null in the preview build = no Google sign-in or cloud save, guests only)
 const FB_CFG=null;
 // stars: each one adds 3% ATK/HP/DEF and raises the card's max level by 3% of its rank cap (at least 1); costs are [Gold, duplicate copies] per star
 const STAR_STAT=.03,STAR_COST=[[500,1],[1000,1],[2000,2],[4000,2],[8000,3]],STAR_COST_ST=[[200,0],[400,0],[800,0],[1500,0],[3000,0]];
 const GPACK=5000,GN=3,GODDS={SL:.001,L:.004,R:.03,UC:.22,C:.745};
-const PACK=200,ST_GIVE=['R','R','UC'],DUP=50,MAXST=500,KEY='pdb_save4';
+const PACK=200,ST_GIVE=['R','R','UC'],DUP=50,MAXST=1100,ST1=500,KEY='pdb_save4';   // b173 Chapter 2: stages 501-1100 (ST1 = the end of chapter 1, the tower's scale)
 let S,bt=null,busy=false,fx=[],prepN=1,pull=null,armed=false;
 
 const sleep=ms=>new Promise(r=>setTimeout(r,ms));
@@ -1183,7 +1196,33 @@ let DIFF=3.0,EA=.3,EH=1.3,E0=.42,LATE=.003,LATE_N=250,LATE_W=50;   // b160: enem
 // b160 soft walls, only on a stage the player has not cleared: each loss there weakens its enemies by PITY (ATK and HP), up to PITY_MAX, until the stage is won (S.ls = {n, k losses});
 // and every attempt rolls the enemies' strength within +-VARY, so a near miss can become a win on the next try. Cleared stages and the replay loop stay fixed.
 const PITY=.04,PITY_MAX=.12,VARY=.10,lossK=n=>S.ls&&S.ls.n===n?S.ls.k|0:0,softMul=n=>n>(S.cleared||0)?(1-Math.min(PITY_MAX,PITY*lossK(n)))*(1-VARY+2*VARY*Math.random()):1;
-function stageDef(n){
+// b173 Chapter 2: six realms of 100 stages after stage 500. Enemies start from stage 500's strength and grow CH2_G a stage (+ the realm's battlefield rule);
+// every 10th stage is the realm boss with two minions, every 100th the realm lord (bigger, with its own gimmick), x5 is an elite (one big monster), x7 a survival stage (live through 5 rounds).
+const CH2_G=.0012,RLM=[
+ {n:'Deep Sea',th:'ทะเลลึก',m:['x11','x12','x13'],b:'x14',l:'x15',r:'tide',bg:['r11','r12'],fx:[{glow:'#2ad8ff',p:[['bubble','#9ff3ff',22],['spark','#9ff3ff',18],['fly','#7ae8ff',12]]},{glow:'#3affd8',p:[['bubble','#bff8ff',26],['spark','#ffffff',16],['dust','#bfeaff',20]]}]},
+ {n:'Raging Volcano',th:'ภูเขาไฟคลั่ง',m:['x21','x22','x23'],b:'x24',l:'x25',r:'burn',bg:['r21','r22'],fx:[{glow:'#ff6a1a',volc:[[24,36],[57,22]],p:[['ember','#ffb04a',56],['ash','#c9b0a8',22]]},{glow:'#ff7a2a',p:[['ember','#ffc04a',60],['ash','#bfa8a0',16]]}]},
+ {n:'Eternal Glacier',th:'ธารน้ำแข็งนิรันดร์',m:['x31','x32','x33'],b:'x34',l:'x35',r:'frost',bg:['r31','r32'],fx:[{aur:1,p:[['snow','#ffffff',56],['spark','#bfe6ff',14]]},{fog:'#e8f4ff',p:[['snow','#ffffff',40],['spark','#dff4ff',22]]}]},
+ {n:'Sky Citadel',th:'ป้อมลอยฟ้า',m:['x41','x42','x43'],b:'x44',l:'x45',r:'sky',bg:['r41','r42'],fx:[{glow:'#ffe9a0',p:[['dust','#ffe9a0',36],['spark','#ffffff',16],['petal','#fff3d0',10]]},{glow:'#b9a2ff',p:[['spark','#ffffff',34],['dust','#cfc0ff',26]]}]},
+ {n:'Clockwork City',th:'เมืองจักรกล',m:['x51','x52','x53'],b:'x54',l:'x55',r:'gear',bg:['r51','r52'],fx:[{glow:'#ffb04a',puff:[[3,40],[95,42],[60,44]],p:[['dust','#ffe0a0',30],['spark','#ffd27a',10]]},{glow:'#7dff8a',puff:[[6,30],[94,32],[70,36],[30,38]],p:[['dust','#fff0c0',24],['spark','#c8ffd0',12]]}]},
+ {n:'The Void',th:'ความว่างเปล่า',m:['x61','x62','x63'],b:'x64',l:'x65',r:'void',bg:['r61','r62'],fx:[{glow:'#b05cff',flash:'#c58cff',p:[['spore','#d6a8ff',34],['spark','#ffffff',22]]},{glow:'#c27aff',p:[['spore','#e0b8ff',30],['spark','#ffd8ff',18],['dust','#b9a2ff',18]]}]}];
+const realmOf=n=>n>ST1?Math.min(RLM.length-1,Math.floor((n-ST1-1)/100)):-1,stKind=n=>n<=ST1?'':n%100===0?'lord':n%10===0?'boss':n%10===5?'elite':n%10===7?'surv':'';
+// the battlefield rule of a stage; the Void takes one of the other five, changing from stage to stage
+const RULE_K=['tide','burn','frost','sky','gear'],ruleOf=n=>{const r=realmOf(n);if(r<0)return '';const k=RLM[r].r;return k==='void'?RULE_K[n%5]:k};
+const RULES={tide:['🌊','คลื่นยักษ์','Tidal Wave','ทุก 3 รอบ คลื่นซัดทั้งสองฝ่าย เสียเลือด 8%','every 3rd round a wave hits both sides for 8% life'],
+ burn:['🔥','พื้นลาวา','Lava Floor','ทุกรอบ ทุกตัวทั้งสองฝ่ายเสียเลือด 3%','every round everyone on both sides loses 3% life'],
+ frost:['❄','ลมเยือกแข็ง','Frostbite','การโจมตีแรกของศัตรูแต่ละตัว มีโอกาส 35% ทำให้เป้าหมายแข็ง ข้ามเทิร์นถัดไป','each enemy\'s first hit has a 35% chance to freeze its target for its next turn'],
+ sky:['✨','สนามเวท','Arcane Field','ดาเมจเวท +30% · ดาเมจกายภาพ −20% (ทั้งสองฝ่าย)','magic damage +30% · physical damage −20% (both sides)'],
+ gear:['⚙','เฟืองเร่ง','Overclock','ศัตรู ATK +6% ทุกรอบ (สูงสุด +60%)','enemies gain 6% ATK every round (up to +60%)']};
+const ruleTxt=(k,full)=>{const r=RULES[k];return r?`${r[0]} ${T(r[1],r[2])}${full?': '+T(r[3],r[4]):''}`:''};
+const KIND_T={lord:['เจ้าอาณาจักร','Realm Lord'],boss:['บอส','Boss'],elite:['ศัตรูยักษ์','Elite'],surv:['เอาตัวรอด 5 รอบ','Survive 5 rounds']};
+const stBud=n=>{const ease=Math.min(1,E0+(1-E0)*(n-1)/29);return 135*(1+.09*(LNAT[n]-1))*DIFF*ease*(1+LATE*Math.min(LATE_W,Math.max(0,n-LATE_N)))};
+function stageDef2(n){const R=RLM[realmOf(n)],k=n-ST1,kd=stKind(n),bud=stBud(ST1)*(1+CH2_G*k),one=(id,ma,mh,x)=>{const sh=.35+.3*C[id].a/(C[id].a+C[id].h+C[id].d);
+    return{id,boss:!!C[id].boss,atk:Math.round(bud*sh*EA*ma),hp:Math.round(bud*(1-sh)*EH*mh),crit:C[id].c/200,cx:1.5,sh:0,...x}},M=i=>R.m[(k*7+i*5+(k>>2))%3];
+  if(kd==='lord')return[one(M(0),1,1),one(R.l,1.35,3,{lord:1,gim:C[R.l].gim,gate:C[R.l].gim==='gate'?3:0}),one(M(1),1,1)];
+  if(kd==='boss')return[one(M(0),1,1),one(R.b,1.2,2.2),one(M(2),1,1)];
+  if(kd==='elite')return[one(M(1),1.9,3.2,{elite:1})];
+  return[0,1,2].map(i=>one(M(i),1,kd==='surv'?2.6:1))}
+function stageDef(n){if(n>ST1)return stageDef2(n);
   const ease=Math.min(1,E0+(1-E0)*(n-1)/29),bud=135*(1+.09*(LNAT[n]-1))*DIFF*ease*(1+LATE*Math.min(LATE_W,Math.max(0,n-LATE_N))),cnt=n<=3?1:n<=10?2:3,EP=MSM,size=Math.min(EP.length,3+Math.floor(n/5)),boss=n%10===0;
   return Array.from({length:cnt},(_,i)=>{const b=boss&&i===(cnt>1?1:0),id=b&&MBS.length?MBS[(n/10-1)%MBS.length]:EP[(n*7+i*5+(n>>2))%size],sh=.35+.3*C[id].a/(C[id].a+C[id].h+C[id].d);
     return{id,boss:b,atk:Math.round(bud*sh*EA*(b?1.2:1)),hp:Math.round(bud*(1-sh)*EH*(b?2.2:1)),crit:C[id].c/200,cx:1.5,sh:0}});
@@ -1194,7 +1233,7 @@ const GOLD_UP=1.5,goldRange=n=>{const b=goldBase(n)*GOLD_UP;return n>S.cleared?[
 // b155: the first two bosses pay for a Gold Pack each, so a new free player gets real cards on day one instead of grinding the starter team
 // b157: every first clear of a non-boss stage up to EARLY_N also pays EARLY_G, and the offline farm never earns less than AFK_MIN an hour - new players get cards by moving on and by coming back, not by looping one stage. Both are one-time or time-gated, so they cannot be farmed.
 const EARLY_N=50,EARLY_G=200,AFK_MIN=400,earlyB=n=>n<=EARLY_N&&n%10!==0&&n>S.cleared?EARLY_G:0;
-const BOSS_GIFT={10:5000,20:5000},bossBonus=n=>n%10===0&&n>S.cleared?(BOSS_GIFT[n]||100+5*n):0;
+const LORD_DIA=20,BOSS_GIFT={10:5000,20:5000},bossBonus=n=>n%10===0&&n>S.cleared?(BOSS_GIFT[n]||100+5*n):0;
 function rollGold(n){const jp=Math.random()<.05,[lo,hi]=goldRange(n);return{g:(lo+Math.floor(Math.random()*(hi-lo+1)))*(jp?4:1),jp}}
 
 /* ---------- screens ---------- */
@@ -1342,8 +1381,8 @@ function prep(){
   view(`<div class="cols"><div class="rail">
     <div class="row"><button class="btn alt sm" data-act="home">กลับ</button><h2>ด่าน ${prepN}</h2></div>
     <div class="row"><button class="btn alt sm" data-act="stg" data-d="-10">-10</button><button class="btn alt sm" data-act="stg" data-d="-1">-1</button><button class="btn alt sm" data-act="stg" data-d="1">+1</button><button class="btn alt sm" data-act="stg" data-d="10">+10</button></div>${isDev()?'<div class="row"><button class="btn alt sm" data-act="stg" data-d="-100">-100</button><button class="btn alt sm" data-act="stg" data-d="100">+100</button><button class="btn alt sm" data-act="stg" data-d="-999">1</button><button class="btn alt sm" data-act="stg" data-d="999">500</button></div>':''}
-    <div class="mapth" style="background-image:url(${mapImg(prepN)})" role="img" aria-label="${MAPS[mapOf(prepN)-1]}"></div>
-    <p class="sub">แผนที่: ${MAPS[mapOf(prepN)-1]}</p>
+    <div class="mapth" style="background-image:url(${mapImg(prepN)})" role="img" aria-label="${mapName(prepN)}"></div>
+    ${prepN>ST1?'':`<p class="sub">แผนที่: ${mapName(prepN)}</p>`}${prepN>ST1?`<p class="sub nt rlp">${T('อาณาจักร','Realm')} ${realmOf(prepN)+1}: <b>${T(RLM[realmOf(prepN)].th,RLM[realmOf(prepN)].n)}</b>${stKind(prepN)?` · <b style="color:#ffe45c">${T(...KIND_T[stKind(prepN)])}</b>`:''}<br>${T('กฎสนาม','Battlefield rule')} ${ruleTxt(ruleOf(prepN),1)}</p>`:''}
     <p class="sub">ศัตรู: ${en.map(e=>(e.boss?'บอส ':'')+C[e.id].n+(weakOf(e.id,prepN)?` <b class="nt" style="color:${weakOf(e.id,prepN)==='m'?'#b9a2ff':'#ffb27a'}">(${weakTxt(weakOf(e.id,prepN))})</b>`:'')).join(', ')}</p>${en.some(e=>weakOf(e.id,prepN))?`<p class="sub nt" style="color:#c9d2f5">${T('ทีมคุณ','Your team')}: ${T('กายภาพ','physical')} ${S.team.filter(id=>!C[id].m).length} · ${T('เวท','magic')} ${S.team.filter(id=>C[id].m).length}</p>`:''}${lossK(prepN)&&prepN>S.cleared?`<p class="sub nt" style="color:#8fe9ff">${T('ศัตรูเหนื่อยล้าลง','Enemies worn down')} ${'●'.repeat(Math.min(3,lossK(prepN)))}${'○'.repeat(3-Math.min(3,lossK(prepN)))} <small style="display:inline">(${T('แพ้ด่านนี้','lost here')} ${lossK(prepN)} ${T('ครั้ง','times')})</small></p>`:''}
     <p class="sub">รางวัล: Gold ${goldRange(prepN).join('–')}${bossBonus(prepN)?' + โบนัสบอส '+bossBonus(prepN):''}${earlyB(prepN)?' + '+T('โบนัสด่านใหม่','new stage bonus')+' '+earlyB(prepN):''}${BOSS_CARD[prepN]&&prepN>S.cleared?' + <b class="nt" style="color:#ffe45c">'+T('การ์ดการันตี: ','guaranteed cards: ')+BOSS_CARD[prepN].map(r=>C[r]?C[r].n:RAR[r].n).join(' + ')+'</b>':''} · Exp ${expOf(prepN)} ต่อใบ${prepN<=S.cleared?' (เล่นซ้ำ)':''}</p>
     ${hasLuck()?`<p class="sub nt" style="color:#7dff8a">Lucky Clover: ${'🍀'.repeat(luckLv(prepN))} ${T(['','โชคเล็กน้อย','โชคพอมี','โชคดี','โชคดีมาก','โชคสูงสุด'][luckLv(prepN)],['','a little luck','some luck','lucky','very lucky','top luck'][luckLv(prepN)])} <small style="display:inline">(${T('ลุ้นการ์ด Legend','a shot at a Legend card')})</small></p>`:''}<p class="sub nt">${T('โอกาสดรอป','Drop chance')}: ${T('เครื่องราง','amulet')} <b style="color:#ffe45c">${P2(dropP(prepN,DROP,DROP_BOSS,prepN>S.cleared))}</b> · ${T('การ์ด','card')} <b style="color:#ffe45c">${P2(dropP(prepN,CDROP,CDROP_BOSS,prepN>S.cleared))}</b></p>
@@ -1646,9 +1685,13 @@ const VAR=[
 const NSTAGE=VAR.length-1;
 const MAPS=VAR.map(v=>v[1]),FX={};VAR.forEach((v,i)=>FX[i+1]=v[2]);
 // stage order: a fixed pseudo-random walk over the variants that never shows the same picture twice in a row
-const MAPSEQ=[0];{let x=20261009,prev=0;for(let n=1;n<=MAXST;n++){let k;do{x=(Math.imul(x,1103515245)+12345)>>>0;k=(x>>>8)%NSTAGE}while(VAR[k][0]===prev);prev=VAR[k][0];MAPSEQ[n]=k+1}}
-const mapOf=n=>n===0?VAR.length:MAPSEQ[Math.max(1,Math.min(MAXST,n))],mapImg=n=>`bg/m${VAR[mapOf(n)-1][0]}.webp`;
+const MAPSEQ=[0];{let x=20261009,prev=0;for(let n=1;n<=ST1;n++){let k;do{x=(Math.imul(x,1103515245)+12345)>>>0;k=(x>>>8)%NSTAGE}while(VAR[k][0]===prev);prev=VAR[k][0];MAPSEQ[n]=k+1}}
+const MAPSEQ_N=ST1; // chapter 1 walks the 50 old pictures; a chapter 2 realm alternates its two pictures every 10 stages and its lord fights on the second (throne) one
+const rlmPic=n=>{const r=realmOf(n),i=n%100===0?1:Math.floor((n-ST1-1)/10)%2;return[r,i]};
+RLM.forEach((R,r)=>R.bg.forEach((b,i)=>{FX[201+r*2+i]=R.fx[i];MAPS[200+r*2+i]=R.n}));
+const mapOf=n=>n===0?VAR.length:n>ST1?(([r,i])=>201+r*2+i)(rlmPic(n)):MAPSEQ[Math.max(1,Math.min(ST1,n))],mapImg=n=>n>ST1?(([r,i])=>`bg/${RLM[r].bg[i]}.webp`)(rlmPic(n)):`bg/m${VAR[mapOf(n)-1][0]}.webp`;
 function bgLayers(n){return bgCore(mapOf(n),mapImg(n))}
+const mapName=n=>n>ST1?T(RLM[realmOf(n)].th,RLM[realmOf(n)].n):MAPS[mapOf(n)-1];
 function bgCore(m,src){const f=FX[m]||{},u=`style="background-image:url(${src})"`,d=k=>`animation-delay:-${((performance.now()/1000)%k).toFixed(2)}s`;
   return `<div class="bgl ${f.sway?'lowr':''}" ${u}></div>${f.sway?`<div class="bgl top" style="background-image:url(${src});${d(5.6)}"></div>`:''}
    ${f.aur?`<div class="baur" style="${d(10)}"></div>`:''}${f.glow?`<div class="bglow" style="--gc:${f.glow};${d(13.2)}"></div>`:''}${f.fog?`<div class="bfog" style="${f.fog===1?'':'--fc:'+f.fog+';'}${d(32)}"></div>`:''}<canvas id="bgfx" data-m="${m}"></canvas>`}
@@ -1676,6 +1719,8 @@ function fxStep(c,t){
     if(t>fxNext){fxNext=t+1800+R()*2600;const [vx,vy]=f.volc[Math.floor(R()*f.volc.length)];for(let i=0;i<22;i++)fxB.push({x:vx/100*W,y:vy/100*H,vx:(R()-.5)*2.4,vy:-1.2-R()*2.6,l:1,k:0})}
     if(R()<.35){const [vx,vy]=f.volc[Math.floor(R()*f.volc.length)];fxB.push({x:vx/100*W+(R()-.5)*6,y:vy/100*H,vx:.15+R()*.2,vy:-.35-R()*.3,l:1,k:1})}
     fxB=fxB.filter(b=>b.l>0);for(const b of fxB){b.x+=b.vx;b.y+=b.vy;if(b.k){b.l-=.012;x.globalAlpha=b.l*.5;x.fillStyle='#3a3038';const r=2+(1-b.l)*7;x.fillRect(b.x-r/2,b.y-r/2,r,r)}else{b.vy+=.07;b.l-=.016;x.globalAlpha=b.l;x.fillStyle=b.l>.6?'#fff3a0':b.l>.3?'#ff9a2a':'#ff2a00';x.fillRect(b.x,b.y,2,2)}}}
+  if(f.puff){if(R()<.3){const [vx,vy]=f.puff[Math.floor(R()*f.puff.length)];fxB.push({x:vx/100*W+(R()-.5)*4,y:vy/100*H,vx:(R()-.5)*.25,vy:-.3-R()*.35,l:1,k:2})}
+    fxB=fxB.filter(b=>b.l>0);for(const b of fxB){if(b.k!==2)continue;b.x+=b.vx;b.y+=b.vy;b.l-=.01;x.globalAlpha=b.l*.45;x.fillStyle='#f4f0ea';const r=2+(1-b.l)*9;x.fillRect(b.x-r/2,b.y-r/2,r,r)}}
   if(f.flash){if(t>fxFlashAt){fxFlash=1;fxFlashAt=t+3500+R()*5500}if(fxFlash>0){x.globalAlpha=fxFlash*.55;x.fillStyle=f.flash===1?'#ffffff':f.flash;x.fillRect(0,0,W,H);fxFlash-=.09}}
   x.globalAlpha=1}
 if(!RM)(function loop(t){const c=$('bgfx');if(c){const w=Math.max(1,c.clientWidth>>1),h=Math.max(1,c.clientHeight>>1);if(c.width!==w||c.height!==h){c.width=w;c.height=h;fxM=0}fxStep(c,t)}requestAnimationFrame(loop)})(0);
@@ -1699,7 +1744,8 @@ const fighter=(id,lv,o)=>{const v=stat(id,lv,o);return{id,lv,atk:v.atk,base:v.at
 async function startBattle(n,opp){
   bt={n,round:1,sel:0,log:'',pvp:opp||null,farm:!opp&&loop===2,first:!opp&&n>(S.cleared||0),
     al:(opp?pvTeam():S.team).map(id=>fighter(id,S.cards[id].lv)),
-    en:opp?opp.team.map(c=>fighter(c.id,c.lv,c)):(m=>stageDef(n).map(e=>{const hp=Math.max(1,Math.round(e.hp*m));return{...e,atk:Math.max(1,Math.round(e.atk*m)),hp,max:hp}}))(softMul(n))};
+    en:opp?opp.team.map(c=>fighter(c.id,c.lv,c)):(m=>stageDef(n).map(e=>{const hp=Math.max(1,Math.round(e.hp*m)),atk=Math.max(1,Math.round(e.atk*m));return{...e,atk,base:atk,hp,max:hp}}))(softMul(n))};
+  if(!opp){bt.rule=ruleOf(n);bt.surv=stKind(n)==='surv'}
   if(opp)[...bt.al,...bt.en].forEach(f=>{f.hp=f.max=f.max*PV_HP}); // cards hit each other far harder than stage monsters do, so arena fights give everyone more life
   const my=bt;busy=true;draw();await vsIntro();if(bt!==my)return;
   if(opp)for(const n of[3,2,1]){beep();ov(`<div class="bn cd"><span>${n}</span></div>`);await sleep(RM?600:1000);if(bt!==my)return}
@@ -1761,16 +1807,16 @@ async function pose(from,tos){const f=$(from);if(!f||RM)return;
   f.querySelector('.spr').animate([{transform:'none'},{transform:'translateY(-14px) scale(1.06)'},{transform:'none'}],{duration:380/(S.spd||1)});await W(200);sfx('heal');const fk=FK;FK=null;const ty=fk&&fk[0][2];if(ty==='heal'){const L=from[0]==='a'?bt.al:bt.en;let b=-1;L.forEach((x,j)=>{if(x.hp>0&&(b<0||x.hp/x.max<L[b].hp/L[b].max))b=j});tos=b<0?tos:[from[0]+b]}
   tos.forEach(t=>ty==='guard'||ty==='shieldall'?fxAt(t,'shield'):ty==='heal'||ty==='healall'?fxAt(t,'heal'):ty==='buff'||ty==='rally'?fxAt(t,'buff'):addFx(t,'aur'));await W(150)} // sprites drawn facing right; mirrored when they fight on the enemy side
 // where each fighter stands on the floor: [x %, feet y %, size]; the back row is higher up, smaller and nearer the middle, the front row lower and larger
-const SPOT=[[37,44,.8],[24,62,.92],[10,81,1.04]],spots=n=>n===1?[SPOT[1]]:n===2?[SPOT[0],SPOT[2]]:SPOT;
-function unit(u,el,cls,attr,sp,side){const p=Math.max(0,u.hp/u.max*100),mon=u.boss!==undefined,k=sp[2]*(u.boss?1.18:1);
+const SPOT=[[19,47,.86],[34,63,.96],[17,80,1.04]],spots=n=>n===1?[[30,63,.96]]:n===2?[[24,50,.88],[24,77,1.02]]:SPOT;   // b173: triangle formation, the tip (middle fighter) nearest the enemy
+function unit(u,el,cls,attr,sp,side){const p=Math.max(0,u.hp/u.max*100),mon=u.boss!==undefined,k=sp[2]*(u.lord?1.3:u.elite?1.5:u.boss?1.18:1);
   return `<div class="pos ${side?'r':'l'}" style="left:calc(${side?100-sp[0]:sp[0]}% - var(--bw)*${(k*.65).toFixed(3)});bottom:${100-sp[1]}%;--cw:calc(var(--bw)*${k.toFixed(3)});z-index:${Math.round(sp[1])}"><button class="fig ${u.boss?'boss':''} ${u.hp<=0?'dead':''} ${cls}" id="${el}" ${attr} title="${C[u.id].n}">
-    <span class="plate">${u.boss?'<b class="tagb">BOSS</b>':''}${u.taunt&&u.hp>0?`<b class="tnt">TAUNT${u.taunt>1?' '+u.taunt:''}</b>`:''}${u.gate>0&&u.hp>0?`<b class="tnt gtg nt">🛡 ×${u.gate}</b>`:''}${el[0]==='e'&&u.hp>0&&wkU(u)?`<b class="wkt ${wkU(u)} nt">${weakTxt(wkU(u))}</b>`:''}<span class="fhp"><i style="width:${p}%"></i>${u.sh>0&&u.hp>0?`<b style="width:${Math.min(100,u.sh/u.max*100)}%"></b>`:''}</span>
+    <span class="plate">${u.lord?'<b class="tagb lord">LORD</b>':u.boss?'<b class="tagb">BOSS</b>':u.elite?'<b class="tagb">ELITE</b>':''}${u.taunt&&u.hp>0?`<b class="tnt">TAUNT${u.taunt>1?' '+u.taunt:''}</b>`:''}${u.gate>0&&u.hp>0?`<b class="tnt gtg nt">🛡 ×${u.gate}</b>`:''}${el[0]==='e'&&u.hp>0&&wkU(u)?`<b class="wkt ${wkU(u)} nt">${weakTxt(wkU(u))}</b>`:''}<span class="fhp"><i style="width:${p}%"></i>${u.sh>0&&u.hp>0?`<b style="width:${Math.min(100,u.sh/u.max*100)}%"></b>`:''}</span>
      <span class="st"><span class="a ${C[u.id].m?'m':''}"><img src="${ICON[MAGIC.includes(u.id)?'orb':'sword']}" alt="${atkName(u.id)}">${u.atk}</span><span class="d"><img src="${ICON.heart}" alt="HP">${Math.max(0,u.hp)}${u.sh>0&&u.hp>0?`<b class="shv">+${u.sh}</b>`:''}</span>${u.def>0?`<span class="f"><img src="${ICON.shield}" alt="DEF">${u.def}</span>`:''}</span></span>
     <span class="sw ${side?'':'flip'}">${sprite(u.id,(u.walk?'walk':'')+(C[u.id].gl?' glw':''))}</span></button></div>`}
 function draw(){
   const ac=busy?null:actor(),ord=[...bt.al.filter(a=>a.hp>0&&!a.done).map(a=>[a,'al']),...bt.en.filter(e=>e.hp>0).map(e=>[e,'en'])];
   view(`<div class="arena px ${bt.tw&&bt.in?'twin':''}">${bt.tw?twBg(bt.tw):bgLayers(bt.n)}
-    <div class="atop"><span class="num">${bt.pvp?`<span class="nt">PvP · vs ${esc(bt.pvp.name)}${bt.pvp.fd?' '+fdBadge(78):''}</span>`:bt.tw?`<span class="nt">TOWER · ${T('ชั้น','Floor')} ${bt.tw} · ${T(TWZ[twZone(bt.tw)].th,TWZ[twZone(bt.tw)].n)}</span>`:`ด่าน ${bt.n} · ${MAPS[mapOf(bt.n)-1]}`} · รอบ ${bt.round}</span><span class="alog" aria-live="polite">${bt.log}</span>
+    <div class="atop"><span class="num">${bt.pvp?`<span class="nt">PvP · vs ${esc(bt.pvp.name)}${bt.pvp.fd?' '+fdBadge(78):''}</span>`:bt.tw?`<span class="nt">TOWER · ${T('ชั้น','Floor')} ${bt.tw} · ${T(TWZ[twZone(bt.tw)].th,TWZ[twZone(bt.tw)].n)}</span>`:`ด่าน ${bt.n} · ${mapName(bt.n)}${ruleOf(bt.n)?` · <b class="rlb">${ruleTxt(ruleOf(bt.n))}</b>`:''}${bt.surv?` · <b class="rlb">⏳ ${Math.max(0,6-bt.round)}</b>`:''}`} · รอบ ${bt.round}</span><span class="alog" aria-live="polite">${bt.log}</span>
       <span class="row"><button class="btn sm ${S.auto?'on':'alt'}" data-act="auto">ออโต้</button><button class="btn alt sm" data-act="spd">x${S.spd||1}</button>${!bt.pvp&&loop&&fs?`<button class="btn alt sm nt fsch" data-act="fsview" title="${T('ฟาร์มรอบนี้ได้อะไรบ้าง','This farm run so far')}">💰 ${S.gold.toLocaleString('en')} <i>+${fs.g.toLocaleString('en')}</i> 📊</button>`:''}${!bt.pvp&&loop?`<button class="btn on sm nt" data-act="lpstop">${loop===2?'🔁':'⏩'} ${T('หยุดวน','Stop loop')}</button>`:''}<button class="btn red sm" data-act="prep">ถอย</button></span></div>
     <div class="field">
       <div class="order">${ord.map(([u,sd],i)=>`<span class="op ${sd} ${i?'':'now'}">${art(u.id)}</span>`).join('')}</div>
@@ -1796,7 +1842,7 @@ const resRamp=n=>Math.max(0,Math.min(1,(n-30)/30));
 const resMul=(id,magic,n)=>{const k=resKind(id);if(!k)return 1;return 1+(RESV[k][magic?1:0]-1)*(C[id].mon?resRamp(n):1)};
 const weakOf=(id,n)=>{const k=resKind(id);if(!k||(C[id].mon&&resRamp(n)<=0))return '';return RESV[k][1]>1?'m':'p'},weakTxt=w=>w==='m'?T('แพ้เวท','weak to magic'):w==='p'?T('แพ้กายภาพ','weak to physical'):'';
 let hitM=false,hitA=0; // hitA = ATK of whoever is hitting right now, used by DEF // is the current attacker a magic user
-function hurt(list,pre,i,d,cls='d',cr){const t=list[i],k=d<0?'g':(hitM?'m':'p')+(cr?'c':'');let wk='';if(d>0&&t.gate>0){t.gate--;q(pre+i,'BLOCK','s');hits.add(pre+i);return}if(d>0){const rm=t.gim==='shift'?((bt.round%2===1)===!hitM?.5:1.3):resMul(t.id,hitM,bt.n);if(rm!==1){d=Math.max(1,Math.round(d*rm));wk=rm>1.01?'▲':rm<.99?'▼':''}}if(d>0&&t.taunt)d=Math.round(d*.6);if(d>0&&hitA>0&&t.def>0)d=Math.max(1,Math.round(d*hitA/(hitA+t.def)));
+function hurt(list,pre,i,d,cls='d',cr){const t=list[i],k=d<0?'g':(hitM?'m':'p')+(cr?'c':'');let wk='';if(d>0&&t.gate>0){t.gate--;q(pre+i,'BLOCK','s');hits.add(pre+i);return}if(d>0){const rm=t.gim==='shift'?((bt.round%2===1)===!hitM?.5:1.3):resMul(t.id,hitM,bt.n);if(rm!==1){d=Math.max(1,Math.round(d*rm));wk=rm>1.01?'▲':rm<.99?'▼':''}}if(d>0&&bt&&bt.rule==='sky')d=Math.max(1,Math.round(d*(hitM?1.3:.8)));if(d>0&&t.taunt)d=Math.round(d*.6);if(d>0&&hitA>0&&t.def>0)d=Math.max(1,Math.round(d*hitA/(hitA+t.def)));
   if(d>0&&t.sh>0){const ab=Math.min(t.sh,d);t.sh-=ab;d-=ab;if(d<=0){q(pre+i,'🛡 -'+ab,'s');hits.add(pre+i);return}}
   t.hp-=d;q(pre+i,(d<0?'+':'-')+Math.abs(d)+(cr?'!':'')+wk,k);if(d>0)hits.add(pre+i);
   if(d>0&&t.gim==='rage'&&t.hp>0){const a=Math.round(t.base*(2-Math.max(0,t.hp)/t.max));if(a>t.atk){t.atk=a;q(pre+i,'ATK ↑','g')}}}
@@ -1826,7 +1872,17 @@ function cast(a,k,ti,mine=true){SD=sideOf(mine);
 // an enemy hits whoever is taunting, otherwise a random fighter (an arena opponent goes for the weakest instead)
 function foePick(){const live=bt.al.map((x,j)=>j).filter(j=>bt.al[j].hp>0);if(!live.length)return -1;const tn=live.filter(j=>bt.al[j].taunt);if(tn.length)return tn[0];
   return bt.pvp?live.reduce((b,j)=>bt.al[j].hp<bt.al[b].hp?j:b):live[Math.floor(Math.random()*live.length)]}
-function foeHit(e,j){hitM=!!C[e.id].m;hitA=e.atk;const [d,cr]=roll(e,1);hurt(bt.al,'a',j,d,'d',cr)}
+function foeHit(e,j){hitM=!!C[e.id].m;hitA=e.atk;const [d,cr]=roll(e,1);hurt(bt.al,'a',j,d,'d',cr);
+  if(bt.rule==='frost'&&!e.fz0){e.fz0=1;const t=bt.al[j];if(t.hp>0&&Math.random()<FROST_P){t.frz=1;q('a'+j,'❄ FROZEN','s')}}}
+// b173 realm rules, run at the start of every round (draw() follows). Rule damage goes through shields and never kills (it leaves at least 1 life).
+const FROST_P=.35,TIDE=.08,BURN=.03,GEAR=.06,GEAR_MAX=.6;
+function rlmChip(L,pre,f){L.forEach((x,i)=>{if(x.hp<=1)return;let d=Math.max(1,Math.round(x.max*f));if(x.sh>0){const a=Math.min(x.sh,d);x.sh-=a;d-=a}d=Math.min(d,x.hp-1);if(d>0){x.hp-=d;q(pre+i,'-'+d,'d');hits.add(pre+i)}})}
+function rlmRound(b){const r=b.rule;
+  if(r==='tide'&&b.round%3===0){b.log=ruleTxt('tide');rlmChip(b.al,'a',TIDE);rlmChip(b.en,'e',TIDE);quake=true}
+  if(r==='burn'){rlmChip(b.al,'a',BURN);rlmChip(b.en,'e',BURN)}
+  if(r==='gear')b.en.forEach((e,i)=>{if(e.hp<=0)return;const a=Math.round(e.base*(1+Math.min(GEAR_MAX,GEAR*(b.round-1))));if(a>e.atk){e.atk=a;q('e'+i,'ATK ↑','g')}});
+  b.al.forEach((x,i)=>{if(x.frz&&x.hp>0){x.done=true;x.frz=0;q('a'+i,'❄','s')}});
+  if(!b.al.some(x=>x.hp>0&&!x.done)){const x=b.al.find(x=>x.hp>0);if(x)x.done=false}}
 async function act(ti){
   const my=bt;if(busy||!my)return;const a=actor();if(!a)return;const k=a.cds[my.sel]?0:my.sel,sk=SK[a.id][k],ai=my.al.indexOf(a);
   if(needT(sk)){const tn=my.en.findIndex(e=>e.hp>0&&e.taunt);if(tn>=0)ti=tn}
@@ -1855,6 +1911,8 @@ async function act(ti){
     if(my.al.every(x=>x.hp<=0))return finish(false);
     if(my.pvp&&my.round>=PV_CAP){const fr=l=>l.reduce((t,x)=>t+Math.max(0,x.hp),0)/l.reduce((t,x)=>t+x.max,0);return finish(fr(my.al)>fr(my.en))}
     my.round++;my.al.forEach(x=>{x.done=false});my.en.forEach(x=>{x.done=false});twRound(my);
+    if(my.surv&&my.round>5)return finish(true);
+    if(my.rule){rlmRound(my);draw();if(my.rule==='tide'&&my.round%3===0)await W(520);if(bt!==my)return}
   }
   busy=false;if(!S.auto)my.log='เลือกสกิล แล้วแตะศัตรู';draw();if(S.auto)autoAct();
 }
@@ -1901,6 +1959,7 @@ async function finish(won){
     if(!cdrop&&hasLuck()&&Math.random()<luckP(n)){cdrop=giveCard(randOf('L'),'lucky');cdrop.lucky=1}const x0=expOf(n)*VX();
     let ups=0;rows=team.map(id=>{const x=Math.round(x0*(amOf(id)&&amOf(id).xp||1)),was=S.cards[id].lv,wasMax=maxed(id),up=addExp(id,x),c=S.cards[id];ups+=up;
       return `<div class="mini r-${C[id].r} glow ${fr(id)}">${fxh(id)}${rib(id)}<div class="art"><img src="${artSrc(id)}" alt=""></div></div><div><b>${C[id].n}</b> ${wasMax?'<span class="gold">Lv MAX</span>':'Exp +'+x} ${up?`<span class="gold">Lv ${was} → ${c.lv}</span>`:`· Lv ${c.lv}`}<div class="hp xp"><i style="width:${maxed(id)?100:c.exp/need(c.lv)*100}%"></i></div></div>`}).join('');
+    if(n>S.cleared&&stKind(n)==='lord'){S.dia=(S.dia||0)+LORD_DIA;fx.push(['view','+'+LORD_DIA+' 💎','g'])}
     if(n>S.cleared)S.cleared=n;if(S.ls)delete S.ls;bcs=bcTake();save();if(loop)fsAdd(true,g+bb+eb,drop,cdrop&&cdrop.id,ups)}
   else if(loop)fsAdd(false)
   else if(first){S.ls={n,k:lossK(n)+1};save()}
@@ -2482,7 +2541,7 @@ const TWZ=[
  {n:'Storm Spire',th:'ยอดหอพายุน้ำแข็ง',bg:'bg/t4.webp',fx:{fog:'#e8f4ff',flash:1,p:[['bliz']]},m:['t07','t08'],b:'tb4'},
  {n:'Throne above the Clouds',th:'บัลลังก์เหนือเมฆ',bg:'bg/t5.webp',fx:{glow:'#ffe9a0',p:[['spark','#ffffff',26],['dust','#ffe9a0',34]]},m:['t09','t10'],b:'tb5'}];
 TWZ.forEach((z,i)=>FX[101+i]=z.fx);
-const twZone=f=>Math.floor((Math.max(1,f)-1)/20)%TWZ.length,twBg=f=>bgCore(101+twZone(f),TWZ[twZone(f)].bg),twEq=f=>Math.max(1,Math.min(MAXST,Math.round(f*TW_K)));
+const twZone=f=>Math.floor((Math.max(1,f)-1)/20)%TWZ.length,twBg=f=>bgCore(101+twZone(f),TWZ[twZone(f)].bg),twEq=f=>Math.max(1,Math.min(ST1,Math.round(f*TW_K)));
 // what each tower boss does (C[boss].gim): shown on the tower screen and in the guide, enforced in hurt() / act() / twRound()
 const GIM={gate:['ประตูเหล็ก','Iron Gate','กันการโจมตี 3 ครั้งแรกทั้งหมด','blocks the first 3 hits completely'],
  raise:['ชุบชีวิต','Raise Dead','ตั้งแต่รอบ 3 ชุบลูกน้องที่ตายขึ้นมา 1 ครั้ง (เลือด 50%)','from round 3, raises its fallen minions once (50% life)'],
@@ -2490,12 +2549,12 @@ const GIM={gate:['ประตูเหล็ก','Iron Gate','กันกา�
  breath:['ลมหายใจพายุ','Storm Breath','ทุกรอบที่ 3 โจมตีทั้งทีม 60%','every 3rd round it hits your whole team for 60%'],
  shift:['สลับเกราะ','Shifting Aegis','รอบคี่กันกายภาพ (แพ้เวท) รอบคู่กันเวท (แพ้กายภาพ)','odd rounds it resists physical (weak to magic), even rounds the reverse']};
 const gimT=id=>{const g=GIM[C[id].gim];return g?`<b>${T(g[0],g[1])}</b>: ${T(g[2],g[3])}`:''};
-function twDef(f){const s=twEq(f),z=TWZ[twZone(f)],ease=Math.min(1,E0+(1-E0)*(s-1)/29),top=MAXST/TW_K,over=f>top?Math.pow(TW_GROW,f-top):1,
+function twDef(f){const s=twEq(f),z=TWZ[twZone(f)],ease=Math.min(1,E0+(1-E0)*(s-1)/29),top=ST1/TW_K,over=f>top?Math.pow(TW_GROW,f-top):1,
   bud=135*(1+.09*(LNAT[s]-1))*DIFF*ease*(1+LATE*Math.min(LATE_W,Math.max(0,s-LATE_N)))*over,cnt=f<=2?1:f<=5?2:3,boss=f%10===0,lord=f%20===0;
   return Array.from({length:cnt},(_,i)=>{const b=boss&&i===(cnt>1?1:0),id=b?z.b:z.m[(f+i+(f>>1))%2],sh=.35+.3*C[id].a/(C[id].a+C[id].h+C[id].d),atk=Math.round(bud*sh*EA*(b?1.2:1)),hp=Math.round(bud*(1-sh)*EH*(b?2.2*(lord?1.15:1):1));
     return{id,boss:b,atk,base:atk,hp,max:hp,crit:C[id].c/200,cx:1.5,sh:0,gim:b?C[id].gim:'',gate:b&&C[id].gim==='gate'?3:0}})}
 const wkU=u=>u.gim==='shift'?(bt.round%2===1?'m':'p'):weakOf(u.id,bt.n);
-function twRound(b){if(!b.tw)return;b.en.forEach(e=>{if(e.gim!=='raise'||e.hp<=0||e.used||b.round<3)return;const dead=b.en.map((x,j)=>x!==e&&x.hp<=0?j:-1).filter(j=>j>=0);if(!dead.length)return;
+function twRound(b){if(!b.tw&&!(b.n>ST1))return;b.en.forEach(e=>{if(e.gim!=='raise'||e.hp<=0||e.used||b.round<3)return;const dead=b.en.map((x,j)=>x!==e&&x.hp<=0?j:-1).filter(j=>j>=0);if(!dead.length)return;
   e.used=1;dead.forEach(j=>{const x=b.en[j];x.hp=Math.round(x.max*.5);x.done=false;q('e'+j,T('ฟื้น!','RISE!'),'g')});b.log=`${C[e.id].n}: ${T(GIM.raise[0],GIM.raise[1])}`})}
 // rewards. A floor pays about half of what the stage of the same strength pays (Gold, Exp and drop chance), every boss floor adds a fixed bonus, and a few floors hand out a one-off prize;
 // each floor is cleared once a week, so none of this can be farmed.
@@ -2768,7 +2827,7 @@ function guide(){
      T(`หอคอยไร้ที่สิ้นสุด (ปุ่ม TOWER ในล็อบบี้ เปิดเมื่อผ่านด่าน ${TW_OPEN}): ชั้นไม่มีที่สิ้นสุด ใช้ทีมเดียวกับด่านปกติ กติกาสู้เหมือนด่านปกติ เลือดเต็มทุกชั้น`,`The Endless Tower (TOWER button in the lobby, open after stage ${TW_OPEN}): floors never end. It uses the same team and the same battle rules as normal stages, with full life on every floor`),
      T('ชนะแล้วทีมวิ่งขึ้นชั้นถัดไปเอง ไม่กลับหน้าผลด่าน · กด หยุดพัก ระหว่างวิ่ง หรือ ถอย ระหว่างสู้ เพื่อออกไปจัดทีม · แพ้แล้วจบรอบ เข้าใหม่เริ่มที่ชั้นที่แพ้ ไม่ต้องไต่ใหม่ · เข้าได้ไม่จำกัดรอบ','After a win the team runs on to the next floor by itself · tap Stop while running, or Retreat in a fight, to leave and change your team · a defeat ends the run and the next one starts on that same floor · runs are unlimited'),
      T(`ทุก 10 ชั้นเป็นบอส · ทุก 20 ชั้นเปลี่ยนโซน มี ${TWZ.length} โซนวนไป: ${TWZ.map(z=>z.th).join(' → ')}`,`Every 10th floor is a boss · the zone changes every 20 floors, ${TWZ.length} zones in a loop: ${TWZ.map(z=>z.n).join(' → ')}`),
-     T(`ความแรง: ชั้น f แรงเท่าด่าน f × ${TW_K} (ชั้น ${MAXST/TW_K} = ด่าน ${MAXST}) หลังจากนั้นศัตรูแรงขึ้นชั้นละ ${+((TW_GROW-1)*100).toFixed(1)}% ไม่มีเพดาน · เกราะ 2 ชนิดของศัตรูมีผลเต็มตั้งแต่ชั้น ${Math.ceil(60/TW_K)}`,`Strength: floor f equals stage f × ${TW_K} (floor ${MAXST/TW_K} = stage ${MAXST}); after that enemies gain ${+((TW_GROW-1)*100).toFixed(1)}% per floor with no limit · the two kinds of enemy armour are at full effect from floor ${Math.ceil(60/TW_K)}`),
+     T(`ความแรง: ชั้น f แรงเท่าด่าน f × ${TW_K} (ชั้น ${ST1/TW_K} = ด่าน ${ST1}) หลังจากนั้นศัตรูแรงขึ้นชั้นละ ${+((TW_GROW-1)*100).toFixed(1)}% ไม่มีเพดาน · เกราะ 2 ชนิดของศัตรูมีผลเต็มตั้งแต่ชั้น ${Math.ceil(60/TW_K)}`,`Strength: floor f equals stage f × ${TW_K} (floor ${ST1/TW_K} = stage ${ST1}); after that enemies gain ${+((TW_GROW-1)*100).toFixed(1)}% per floor with no limit · the two kinds of enemy armour are at full effect from floor ${Math.ceil(60/TW_K)}`),
      T('ทุกวันจันทร์ 00:00 น. ทุกคนกลับไปเริ่มชั้น 1 และเริ่มซีซั่นใหม่ ระบบตัดรอบเอง','Every Monday 00:00 (Bangkok) everyone goes back to floor 1 and a new season begins, automatically'),
      T(`อันดับ: วัดจากชั้นสูงสุดที่ผ่านในสัปดาห์นั้น ชั้นเท่ากันคนที่ถึงก่อนอยู่สูงกว่า แสดง ${TW_TOP} อันดับแรก · ต้องล็อกอิน Google จึงขึ้นตาราง`,`Ranking: by the highest floor cleared that week; on equal floors whoever got there first ranks higher. The top ${TW_TOP} are shown · sign in with Google to be ranked`),
      T(`รางวัลตามชั้น ได้ทันที สัปดาห์ละครั้ง: ทุกชั้นบอส Gold 500 + 50 × เลขชั้น · ${Object.keys(TW_MS).map(k=>'ชั้น '+k+': '+itText(TW_MS[k])).join(' · ')}`,`Floor rewards, at once, once a week: every boss floor Gold 500 + 50 × floor · ${Object.keys(TW_MS).map(k=>'floor '+k+': '+itText(TW_MS[k])).join(' · ')}`),
