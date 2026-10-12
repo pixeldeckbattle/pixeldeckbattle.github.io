@@ -141,7 +141,7 @@ p{margin:0}
 .amu img{width:94%;image-rendering:auto}
 .amu.ar-L{box-shadow:inset 0 0 0 2px var(--k1),0 0 0 2px #0a0e22,0 0 0 4px #ffd23a,0 0 0 6px #0a0e22,0 0 10px 4px rgba(255,210,58,.75)}.amu.ar-R{box-shadow:inset 0 0 0 2px var(--k1),0 0 0 2px #0a0e22,0 0 0 4px #4aa8ff,0 0 0 6px #0a0e22}
 .amslot .amu.ar-L{box-shadow:inset 0 0 0 .5cqw var(--k1),0 0 0 .6cqw #0a0e22,0 0 0 1.3cqw #ffd23a,0 0 2cqw 1cqw rgba(255,210,58,.7)}.amslot .amu.ar-R{box-shadow:inset 0 0 0 .5cqw var(--k1),0 0 0 .6cqw #0a0e22,0 0 0 1.3cqw #4aa8ff}
-.art-L{color:#ffd23a}.art-R{color:#6cbcff}.art-SL{color:#ff9d1a}
+.art-L{color:#ffd23a}.art-R{color:#6cbcff}.glsm{display:block;margin-top:10px;font-family:var(--body);font-weight:500;font-size:13px;line-height:1.45;color:#c9d2f5;text-shadow:none}.art-SL{color:#ff9d1a}
 .amu.ar-SL{background:radial-gradient(circle at 50% 35%,#7a3a12,#1a0c08 78%);box-shadow:inset 0 0 0 2px var(--k1),0 0 0 2px #0a0e22,0 0 0 4px #ff9d1a,0 0 0 6px #0a0e22,0 0 12px 5px rgba(255,140,30,.85);animation:slaura 1.8s ease-in-out infinite}
 .amslot .amu.ar-SL{box-shadow:inset 0 0 0 .5cqw var(--k1),0 0 0 .6cqw #0a0e22,0 0 0 1.3cqw #ff9d1a,0 0 2.4cqw 1.2cqw rgba(255,140,30,.8);animation:none}
 @keyframes slaura{50%{filter:brightness(1.25) saturate(1.2)}}
@@ -2059,6 +2059,7 @@ $('view').onclick=ev=>{{const w=ev.target.closest('.dk,.ibtn,.pill,.row2 .btn');
   else if(a==='lang'){S.lang=t.dataset.l;save();document.documentElement.lang=S.lang;settings()}
   else if(a==='logout'){save();cloudFlush();USER=null;try{localStorage.removeItem(SESSION)}catch(e){}try{window.firebase&&firebase.auth().signOut()}catch(e){}titleScreen()}
   else if(a==='glogin')gLogin()
+  else if(a==='glink')gLinkAsk()
   else if(a==='claim'){if(!S.gift){S.gift=true;refTake();if(!S.cleared)S.tut=0;S.afk=Date.now();GIFT.forEach(id=>{if(!S.cards[id]){S.cards[id]={lv:1,exp:0};clAdd(id,'gift')}});if(!S.team.length)S.team=[...GIFT];save();sfx('win')}home()}
   else if(a==='guest')signIn({guest:true,name:'Guest'})
   else if(a==='tlang'){S.lang=t.dataset.l;document.documentElement.lang=S.lang;try{localStorage.setItem('pdb_lang',S.lang)}catch(e){}titleScreen()}
@@ -2734,7 +2735,7 @@ function guide(){
      T('<b>โล่ประจำซีซั่น</b>: โล่หอคอยมีเฉพาะอันดับ 1–3 ลายเปลี่ยนทุกซีซั่น อันดับ 1 ขยับได้ · โล่ PvP ทุกคนที่ลงแข่งได้ตามแร้งค์สูงสุดของซีซั่น · โล่เป็นของ Limited ผูกบัญชี เทรดและขายไม่ได้ ไม่ถูกล้างเมื่อจบ CBT · เลือกใบที่โชว์ข้างชื่อได้ที่หน้าโปรไฟล์ (แตะรูปตัวเองในล็อบบี้) โชว์ในห้องเทรด PvP และตารางอันดับ','<b>Season shields</b>: tower shields go to ranks 1–3 only, with a new design each season; rank 1 is animated · everyone who plays PvP gets a shield for their best rank of the season · shields are Limited, account-bound, cannot be traded or sold and are not wiped when the CBT ends · choose the one shown beside your name on the profile screen (tap your avatar in the lobby); it shows in trade rooms, PvP and the rankings')])],
    acct:[T('บัญชีและเซฟ','Account and saves'),()=>ul([
      T('ล็อกอิน Google: เซฟเก็บบนคลาวด์ เปลี่ยนเครื่องแล้วเล่นต่อได้','Google sign-in: your save is stored in the cloud and follows you between devices'),
-     T('Guest: เซฟอยู่ในเครื่องนี้เท่านั้น ล้างข้อมูลเบราว์เซอร์แล้วเซฟหาย','Guest: the save stays on this device only and is lost if browser data is cleared'),
+     T('Guest: เซฟอยู่ในเครื่องนี้เท่านั้น ล้างข้อมูลเบราว์เซอร์แล้วเซฟหาย · ย้ายตัว Guest เข้าบัญชี Google ได้ที่ ตั้งค่า → ผูกบัญชี (เฉพาะบัญชี Google ที่ยังไม่เคยเล่น ไม่ทับเซฟเดิม)','Guest: the save stays on this device only and is lost if browser data is cleared · move a guest player into a Google account from Settings → Link (only an account that has never played; no save is overwritten)'),
      T('ตั้งค่า: เสียง ภาษา ขนาด UI เต็มจอแนวนอน และเริ่มใหม่ทั้งหมด','Settings: sound, language, UI size, fullscreen landscape, and a full reset'),
      T('ติดตั้งเป็นแอป: เมนูเบราว์เซอร์ > เพิ่มลงในหน้าจอหลัก จะเปิดเต็มจอไม่มีแถบ URL','Install as an app: browser menu > Add to Home screen, for fullscreen with no address bar'),
      `Build ${BUILD} · PixelDeckBattle`,
@@ -2757,6 +2758,7 @@ function settings(){
     <div class="row"><span style="flex:1">ภาษา</span><button class="btn sm nt ${S.lang==='en'?'alt':'on'}" data-act="lang" data-l="th">ไทย</button><button class="btn sm nt ${S.lang==='en'?'on':'alt'}" data-act="lang" data-l="en">English</button></div>
     <div class="row"><span style="flex:1">บัญชี: <b class="nt">${USER&&USER.email?USER.email.replace(/</g,'&lt;'):'Guest'}</b></span><button class="btn red sm" data-act="logout">ออกจากระบบ</button></div>
     <p class="sub">${USER&&USER.sub?'เซฟเก็บบนคลาวด์ตามบัญชี Google เปลี่ยนเครื่องแล้วเล่นต่อได้':'Guest เก็บเซฟในเครื่องนี้เท่านั้น ล็อกอิน Google เพื่อเก็บเซฟบนคลาวด์'}</p>
+    ${USER&&!USER.sub?`<div class="row"><span style="flex:1" class="nt">${T('ผูกตัวนี้กับบัญชี Google','Link this player to Google')}<br><small class="sub">${T('ย้ายตัว Guest นี้ขึ้นคลาวด์ เล่นข้ามเครื่องได้ ขึ้นอันดับและเจอผู้เล่นจริง','Move this guest player to the cloud: play on any device, join the rankings, meet real players')}</small></span><button class="btn go sm nt" data-act="glink" ${FB_CFG?'':'disabled'}>${T('ผูกบัญชี','Link')}</button></div>`:''}
     <div class="row"><span style="flex:1">เซฟ</span><button class="btn red sm" data-act="reset">${armed?'แตะอีกครั้งเพื่อลบเซฟ':'เริ่มใหม่ทั้งหมด'}</button></div>
     ${TEST?`<p class="sub">โหมดเทส: ปลดล็อกครบทุกใบ</p><div class="row"><button class="btn alt sm" data-act="tgold">Gold +10000</button><button class="btn alt sm" data-act="tlv">ทุกใบ Lv +5</button><button class="btn alt sm" data-act="tam">เครื่องราง +1 ทุกชิ้น</button></div>`:''}</div></div>`)}
 const COVER_BG='cover.webp',CAST=[['h03',78,24,0,1],['h07',66,2,0,1],['h19',66,50,0,1],['h22',60,14,0,0],['h13',58,38,0,0],['h09',60,62,0,0]];
@@ -2774,7 +2776,7 @@ function titleScreen(){
    <p class="cfoot nt">PixelDeckBattle · CBT build ${BUILD}</p></div>`);
 }
 // ---------- Firebase: Google sign-in and one cloud save document per account (saves/{uid}) ----------
-const BUILD='b170';
+const BUILD='b171';
 // The game moved to its own address. Anyone opening the old address is sent on, but only once the new site answers, so a broken move cannot lock players out.
 const DISCORD='https://discord.gg/dHDzRyPG9',DC_SVG='<svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="currentColor" d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.4189-2.1568 2.4189Z"/></svg>';
 const NEW_HOME='https://pixeldeckbattle.github.io/';
@@ -2823,6 +2825,25 @@ addEventListener('visibilitychange',()=>{if(document.hidden)cloudFlush()});addEv
 function gLogin(){const b=$('gbtn'),m=$('gmsg'),say=t=>{if(m)m.textContent=t+' '};if(b)b.disabled=true;say(S.lang==='en'?'Connecting…':'กำลังเชื่อมต่อ…');
   fbLoad().then(()=>firebase.auth().signInWithPopup(new firebase.auth.GoogleAuthProvider())).then(r=>{const u=r.user;signIn({sub:u.uid,name:(u.displayName||'Player').split(' ')[0],email:u.email,pic:u.photoURL})})
    .catch(e=>{if(b)b.disabled=false;say((S.lang==='en'?'Sign-in failed: ':'ล็อกอินไม่สำเร็จ: ')+(e&&e.code||e&&e.message||''))})}
+// b171 link a guest player to a Google account. Only into an account that has never played (no save in the cloud or on this device), so nothing is ever overwritten.
+// The guest save on this device is then removed, so one guest player cannot be copied into several accounts. A linked save carries lnk (shown on the admin page).
+let glPend=null;
+const glBox=(h,btns)=>ov(`<div class="cd dlg nt"><div class="px cdbox"><b>🔗 ${T('ผูกบัญชี Google','Link a Google account')}</b><p>${h}</p>${btns?`<div class="row">${btns}</div>`:''}</div></div>`);
+function gLinkAsk(){if(!FB_CFG||!USER||USER.sub)return;try{fbLoad().catch(()=>{})}catch(e){}
+  glBox(T('ย้ายตัวที่เล่นแบบ Guest อยู่ตอนนี้ (การ์ด เครื่องราง Gold เพชร ด่านที่ผ่าน) เข้าบัญชี Google เซฟจะเก็บบนคลาวด์ เปลี่ยนเครื่องก็เล่นต่อได้<span class="glsm">ใช้ได้กับบัญชี Google ที่ยังไม่เคยเล่นเกมนี้เท่านั้น ถ้าบัญชีนั้นมีเซฟอยู่แล้ว ระบบจะไม่ทับ · ผูกแล้วตัว Guest ในเครื่องนี้จะย้ายเข้าบัญชีไปเลย</span>','Move the player you are using as a guest (cards, amulets, Gold, diamonds, stages) into a Google account. The save then lives in the cloud and follows you to any device.<span class="glsm">Only for a Google account that has never played this game; an account that already has a save is never overwritten · after linking, the guest player on this device moves into the account</span>'),
+   `<button class="btn go" data-gl="go">${T('เลือกบัญชี Google','Choose a Google account')}</button><button class="btn alt" data-gl="no">${T('ยกเลิก','Cancel')}</button>`)}
+function gLinkGo(){glBox(T('กำลังเชื่อมต่อ…','Connecting…'));
+  fbLoad().then(()=>firebase.auth().signInWithPopup(new firebase.auth.GoogleAuthProvider())).then(r=>{const u=r.user,nu={sub:u.uid,name:(u.displayName||'Player').split(' ')[0],email:u.email,pic:u.photoURL};
+    return firebase.firestore().collection('saves').doc(u.uid).get().then(d=>{let has=!!d.exists;try{const c=d.exists&&JSON.parse(d.data().data);if(d.exists)has=!!(c&&c.cards)}catch(e){}
+      try{const l=JSON.parse(localStorage.getItem(KEY+'_'+u.uid));if(l&&l.cards)has=true}catch(e){}
+      if(has){glPend=nu;return glBox(T(`บัญชี <b>${esc(u.email||'')}</b> มีเซฟของเกมนี้อยู่แล้ว จึงผูกไม่ได้ (ระบบไม่ทับข้อมูลเดิม)<span class="glsm">เลือกได้ว่าจะเข้าเล่นบัญชีนั้น หรือกลับไปเล่นตัว Guest ต่อ ตัว Guest ยังอยู่ในเครื่องนี้ครบ</span>`,`The account <b>${esc(u.email||'')}</b> already has a save in this game, so it cannot be linked (nothing is overwritten)<span class="glsm">Play that account instead, or go back to your guest player, which is still on this device</span>`),
+        `<button class="btn go" data-gl="use">${T('เข้าเล่นบัญชีนั้น','Play that account')}</button><button class="btn alt" data-gl="stay">${T('กลับไปเล่น Guest','Back to guest')}</button>`)}
+      save();S.lnk={at:Date.now()};USER=nu;try{localStorage.setItem(SESSION,JSON.stringify(nu))}catch(e){}save();
+      [KEY,KEY+'_bk',KEY+'_rv'].forEach(k=>{try{localStorage.removeItem(k)}catch(e){}});
+      ov('');fx.push(['view',T('ผูกบัญชี Google สำเร็จ เซฟขึ้นคลาวด์แล้ว','Linked to Google: your save is now in the cloud'),'g']);signIn(nu)})})
+   .catch(e=>{try{firebase.auth().signOut()}catch(x){}glBox(T('ผูกบัญชีไม่สำเร็จ ','Linking failed ')+'<span class="glsm">'+esc(String(e&&e.code||e&&e.message||''))+'</span>',`<button class="btn alt" data-gl="no">${T('ปิด','Close')}</button>`)})}
+$('ov').addEventListener('click',e=>{const t=e.target.closest('[data-gl]');if(!t)return;const a=t.dataset.gl;
+  if(a==='go')gLinkGo();else if(a==='use'&&glPend){const u=glPend;glPend=null;ov('');signIn(u)}else{if(a==='stay'){glPend=null;try{firebase.auth().signOut()}catch(x){}}ov('')}});
 function signIn(u){const lang=S&&S.lang;USER=u;try{localStorage.setItem(SESSION,JSON.stringify(u))}catch(e){}
   S=load();if(lang)S.lang=lang;const fin=()=>{ensureMe();if(u.sub&&u.name&&S.me.name==='ผู้เล่น')S.me.name=u.name.slice(0,12);save()};
   if(u.sub){loading(cloudPull().then(fin,fin))}else{fin();loading()}}
