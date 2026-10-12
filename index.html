@@ -120,7 +120,7 @@ p{margin:0}
 .firec{position:absolute;z-index:-1;left:-17.5%;top:-13.7%;width:135%;height:127.4%;image-rendering:pixelated;pointer-events:none}
 .fire.glow{animation:none;box-shadow:0 0 0 2px #ffec27,0 0 16px 5px rgba(255,90,0,.45)}
 .fire.f-LT.glow{box-shadow:0 0 0 2px #bfeeff,0 0 28px 12px rgba(40,140,255,.6)}.fire.f-L.glow{box-shadow:0 0 0 2px #ffe27a,0 0 18px 6px rgba(255,190,30,.5)}
-.firec.k-LT{transform:scale(.96,.95)}.firec.k-L{z-index:3;filter:drop-shadow(0 0 2px rgba(255,200,0,.7))}
+.firec.k-LT{transform:scale(.96,.95)}.firec.k-SLb{filter:drop-shadow(0 0 3px rgba(255,220,60,.9))}.firec.k-L{z-index:3;filter:drop-shadow(0 0 2px rgba(255,200,0,.7))}
 /* rarity banner drawn over the caption strip of the card art */
 .cnm{position:absolute;left:12.5%;right:12.5%;top:5.4%;height:7.4%;display:grid;place-items:center;background:none;color:#fff;font-family:var(--display);font-weight:700;font-size:6.4cqw;text-shadow:.5cqw .5cqw 0 #000;letter-spacing:.04em;line-height:1;white-space:nowrap;text-transform:uppercase;overflow:hidden}
 .chp{position:absolute;top:16.6%;height:6.4%;min-width:22%;padding:0 2cqw;display:grid;place-items:center;background:rgba(8,10,24,.96);color:#fff;font-family:var(--display);font-weight:700;font-size:4.4cqw;line-height:1;white-space:nowrap}
@@ -141,7 +141,17 @@ p{margin:0}
 .amu img{width:94%;image-rendering:auto}
 .amu.ar-L{box-shadow:inset 0 0 0 2px var(--k1),0 0 0 2px #0a0e22,0 0 0 4px #ffd23a,0 0 0 6px #0a0e22,0 0 10px 4px rgba(255,210,58,.75)}.amu.ar-R{box-shadow:inset 0 0 0 2px var(--k1),0 0 0 2px #0a0e22,0 0 0 4px #4aa8ff,0 0 0 6px #0a0e22}
 .amslot .amu.ar-L{box-shadow:inset 0 0 0 .5cqw var(--k1),0 0 0 .6cqw #0a0e22,0 0 0 1.3cqw #ffd23a,0 0 2cqw 1cqw rgba(255,210,58,.7)}.amslot .amu.ar-R{box-shadow:inset 0 0 0 .5cqw var(--k1),0 0 0 .6cqw #0a0e22,0 0 0 1.3cqw #4aa8ff}
-.art-L{color:#ffd23a}.art-R{color:#6cbcff}.glsm{display:block;margin-top:10px;font-family:var(--body);font-weight:500;font-size:13px;line-height:1.45;color:#c9d2f5;text-shadow:none}.art-SL{color:#ff9d1a}
+.art-L{color:#ffd23a}.art-R{color:#6cbcff}
+#fsb{position:absolute;inset:0;z-index:12;display:grid;place-items:center;background:rgba(4,8,24,.55)}#fsb[hidden]{display:none}.fsbox{display:grid;gap:10px;width:min(780px,95%);max-height:90%;overflow:auto;padding:16px 18px;text-align:center;font-size:14px;line-height:1.45}.fsbox p{margin:0}.fsbox .row{justify-content:center}.fsbox .row .btn{min-width:150px}
+.fshd{position:relative;display:grid;gap:7px}.fsx{position:absolute;right:-6px;top:-4px;width:34px;height:34px;font:700 17px/1 var(--body);color:#fff;background:#a8322a;border:2px solid #000;box-shadow:inset 0 0 0 2px #ff8a7a;cursor:pointer}.fshd>b{font-family:var(--display);font-size:21px;color:#ffe45c;text-shadow:2px 2px 0 #000}.fsst{display:flex;flex-wrap:wrap;justify-content:center;gap:6px}.fsst span{padding:2px 9px;font-size:12.5px;font-weight:700;background:#0c1426;border:2px solid #3b4a7a;color:#d6dcea}.fsst .w{border-color:#3fbf63;color:#8dffaa}.fsst .l{border-color:#c0473c;color:#ffaaa0}.fsst .u{border-color:#5aa8ff;color:#a9d6ff}
+.fsg{position:relative;display:flex;align-items:center;justify-content:center;gap:14px;padding:8px 14px;overflow:hidden;background:linear-gradient(180deg,#5a3d06,#2a1c04);border:3px solid #ffd23a;box-shadow:inset 0 0 0 2px #000,0 0 18px rgba(255,210,58,.35)}.fsg::before{content:'';position:absolute;inset:-60% -10%;background:linear-gradient(105deg,transparent 40%,rgba(255,246,192,.28) 50%,transparent 60%);animation:fsshine 3.2s linear infinite;pointer-events:none}@keyframes fsshine{from{transform:translateX(-60%)}to{transform:translateX(60%)}}
+.fsc{display:grid;place-items:center;width:58px;height:58px;flex:none;animation:bobi 2.6s ease-in-out infinite}.fsc img{width:100%;filter:drop-shadow(0 0 8px rgba(255,210,58,.8))}.fsg>div{display:grid;text-align:left;line-height:1.15}.fsbox .fsg small{font-size:12px;color:#ffe9a8;letter-spacing:.5px}.fsg b{font-family:var(--display);font-size:34px;color:#ffe45c;text-shadow:3px 3px 0 #000,0 0 12px rgba(255,210,58,.7)}.fsbox .fsg i{font-style:normal;font-size:12.5px;color:#f5deb0}.fsv{position:absolute;right:8px;top:6px;padding:1px 7px;font-size:11px;font-weight:700;background:#ffd84a;color:#111}
+.fsbd{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(0,1fr);gap:10px;align-items:start}.fsbt{padding:2px 0 0}.fss{display:grid;align-content:start;gap:8px;padding:10px 10px 12px;background:rgba(8,12,28,.55);border:2px solid #2c3866}.fss h4{margin:0;font-family:var(--display);font-size:15px;color:#cfe0ff;text-align:left}.fss h4 i{font-style:normal;font-size:12px;color:#8fa0d0;margin-left:6px}
+.fsgr{display:flex;flex-wrap:wrap;justify-content:center;gap:16px 12px;padding-top:6px}.fsit{position:relative;display:grid;justify-items:center;gap:5px}.fsit .cth{width:70px}.fsbox .fsit em{position:absolute;right:-8px;top:-8px;z-index:6;min-width:26px;padding:1px 5px;font:700 12px/1.3 var(--display);font-style:normal;color:#10131c;background:#ffe45c;border:2px solid #000;box-shadow:2px 2px 0 rgba(0,0,0,.6)}.fsa{width:84px}.fsa .amu{width:52px;height:52px}.fsbox .fsa small{font-size:11px;line-height:1.2;font-weight:700}.fsbox .fsa em{right:6px;top:-6px}
+.fsbox{width:min(380px,92%);max-height:92%;padding:10px 12px;gap:7px}.fshd{gap:5px}.fshd>b{font-size:16px}.fsx{width:26px;height:26px;font-size:13px;right:-4px;top:-3px}.fsst{gap:4px}.fsst span{padding:1px 6px;font-size:11px}
+.fsbox .fsg{gap:10px;padding:5px 12px;border-width:2px}.fsc{width:32px;height:32px}.fsbox .fsg small{font-size:10.5px}.fsbox .fsg b{font-size:22px;text-shadow:2px 2px 0 #000,0 0 8px rgba(255,210,58,.6)}.fsbox .fsg i{font-size:11px}.fsv{right:5px;top:4px;font-size:10px}
+.fsbd{grid-template-columns:1fr;gap:6px}.fss{gap:4px;padding:5px 7px 7px}.fss h4{font-size:12.5px}.fss h4 i{font-size:11px}.fss .sub{font-size:12px}
+.fsgr{gap:9px 7px;padding-top:4px}.fsit .cth{width:44px}.fsbox .fsit em{right:-6px;top:-6px;min-width:20px;padding:0 3px;font-size:10px;border-width:1px}.fsbox .fsa{width:auto}.fsa .amu{width:32px;height:32px}.fsbox .fsa small{display:none}.fsbox .fsa em{right:-7px;top:-7px}.fsbox .row .btn{min-width:110px;min-height:32px;font-size:14px;padding:4px 12px}.rlb{color:#8fe9ff;font-weight:700}.fsrs{margin:0;padding:4px 10px;border-radius:999px;background:rgba(80,200,255,.12);color:#cfefff;font-size:13px}.fsrs b{color:#8fe9ff;font-size:16px}.stars.stbd{overflow:visible}.stars .stb{display:block;width:24%;aspect-ratio:1;margin-top:-9%;padding:0;border:0;background-color:transparent!important;box-shadow:none;background-size:600% 100%!important;background-repeat:no-repeat!important;image-rendering:auto;animation:stbA .9s steps(6) infinite;filter:drop-shadow(0 2px 2px rgba(0,0,0,.6))}.stars .stb.s10{width:27%;margin-top:-11%;animation-duration:.6s}@keyframes stbA{from{background-position:0% 0}to{background-position:120% 0}}.sk.sk4{box-shadow:0 0 0 2px #ff4d6d,0 0 10px rgba(255,60,90,.7)}.sk.lk4{filter:grayscale(1) brightness(.6)}.s4t{font-style:normal;font-size:11px;color:#ff8aa0}.stbox{display:grid;gap:7px;margin:8px 0 4px;padding:10px 12px;background:rgba(255,255,255,.05);border-radius:14px}#zoom .stb{border-radius:12px;overflow:hidden}#zoom .inf{max-height:calc(100% - 16px);padding:12px 14px 28px;background:rgba(18,26,52,.7);border:1.5px solid rgba(242,217,138,.45);border-radius:18px;box-shadow:0 6px 24px rgba(0,0,0,.45);scrollbar-gutter:stable}.sthd{display:flex;align-items:center;gap:8px;flex-wrap:wrap}.sthd b{font-size:14px;font-weight:700;color:#ffe45c}.stnow{font-size:13px;color:#fff;opacity:.85}.stbar{display:flex;gap:2px}.stbar i{width:10px;height:10px;background:#2a3358;clip-path:polygon(50% 0,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%)}.stbar i.on{background:#ffe45c}.stbar i.on2{background:#ff4d6d}.stgain{margin:0;font-size:12px;color:#7dff8a}.stways{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:7px}.stway{display:grid;gap:5px;align-content:start;min-width:0;padding:8px;background:rgba(255,255,255,.04);border-radius:12px}.stwt{margin:0;font-size:12px;font-weight:600;color:#aab8e0}.stm{display:flex;align-items:center;gap:8px;min-width:0;padding:4px 8px;background:rgba(0,0,0,.25);border-radius:999px}.sti{display:grid;place-items:center;width:22px;height:22px;flex:none;font-size:15px}.sti img{width:22px;height:22px!important;border-radius:50%}.ssi{color:#ffe45c}.stn{flex:1;font-size:12.5px;color:#fff;line-height:1.2;min-width:0;overflow:hidden}.stn small{display:block;font-size:10px;color:#8e9cc4;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.stq{font-size:12px;color:#c9d2f5;white-space:nowrap}.stq b{font-size:14px;color:#7dff8a}.stm.no .stq b{color:#ff8a7a}.stgo{margin-top:2px;height:34px;border:0;border-radius:999px;font:700 14px var(--body);color:#1a1200;background:linear-gradient(#ffe98a,#f5b82e);box-shadow:0 2px 0 #a8650a,0 0 10px rgba(255,200,60,.35);cursor:pointer}.stgo:active{transform:translateY(1px)}.stgo.off{background:#3a4266;color:#9aa6cc;box-shadow:none;cursor:default}.stperk{display:grid;gap:4px;padding:8px 10px;background:rgba(255,77,109,.08);border-radius:12px}.stperk p{margin:0;font-size:12px;color:#dfe5ff;line-height:1.4}.stperk .st10 b{color:#ff8aa0}.stperk .st10 span{color:#c9d2f5}.stmax{margin:0;font-size:15px;font-weight:700;color:#ffe45c}.stmax small{display:block;font-size:11px;font-weight:400;color:#c9d2f5}.stnote{margin:0;font-size:11px;color:#8e9cc4}.stbox .strow .btn{border-radius:999px}.stw{display:flex;gap:4px;align-items:center;justify-content:center;margin:2px 0}.stw.sm{justify-content:flex-start;flex-wrap:wrap}.stw i{font-style:normal;font-size:26px;line-height:1;color:#3a4266;text-shadow:0 2px 0 #000}.stw.sm i{font-size:17px}.stw i.on{color:#ffe45c;text-shadow:0 2px 0 #000,0 0 10px #ffb400}.stw small{color:#c9d2f5;font-size:12px}.stars svg.on2{fill:#ff4d6d;stroke:#ffd0d8;filter:drop-shadow(0 0 3px #ff2a5a)}.rlp{color:#c9d2f5;line-height:1.5}.rlp b{color:#8fe9ff}.tagb.lord{background:linear-gradient(#ffe45c,#d9902a);color:#2a1300;box-shadow:0 0 8px #ffd23a}.fsch i{font-style:normal;color:#7dff8a;margin:0 2px}.glsm{display:block;margin-top:10px;font-family:var(--body);font-weight:500;font-size:13px;line-height:1.45;color:#c9d2f5;text-shadow:none}.art-SL{color:#ff9d1a}
 .amu.ar-SL{background:radial-gradient(circle at 50% 35%,#7a3a12,#1a0c08 78%);box-shadow:inset 0 0 0 2px var(--k1),0 0 0 2px #0a0e22,0 0 0 4px #ff9d1a,0 0 0 6px #0a0e22,0 0 12px 5px rgba(255,140,30,.85);animation:slaura 1.8s ease-in-out infinite}
 .amslot .amu.ar-SL{box-shadow:inset 0 0 0 .5cqw var(--k1),0 0 0 .6cqw #0a0e22,0 0 0 1.3cqw #ff9d1a,0 0 2.4cqw 1.2cqw rgba(255,140,30,.8);animation:none}
 @keyframes slaura{50%{filter:brightness(1.25) saturate(1.2)}}
@@ -700,7 +710,7 @@ h1{color:#f2d98a;text-shadow:0 3px 0 #7a4a1c,0 6px 0 #0a1019}h2{color:#f2d98a;te
 @keyframes twpop{from{transform:scale(.6);opacity:0}}
 </style>
 
-<div id="stage"><div id="view"></div><div id="ov"></div><div id="tut"></div><div id="gate" hidden></div><div id="zoom" role="dialog" tabindex="-1" hidden></div></div>
+<div id="stage"><div id="view"></div><div id="ov"></div><div id="fsb" hidden></div><div id="tut"></div><div id="gate" hidden></div><div id="zoom" role="dialog" tabindex="-1" hidden></div></div>
 
 <script>
 const $=id=>document.getElementById(id);
@@ -733,13 +743,15 @@ const C={
  h03:{n:"Zeus",a:108,h:48,d:13,c:20,r:'SL',role:'atk',m:1,st:'cast',pj:'light'},
  h22:{n:"Wukong",a:100,h:53,d:14,c:30,r:'SL',role:'atk',st:'slash'},
  h07:{n:"Seraphina",a:85,h:57,d:26,c:5,r:'SL',role:'sup',m:1,st:'cast',pj:'light'},
- h18:{n:"Aurum Hydra",a:105,h:54,d:15,c:20,r:'LT',role:'atk',m:1,st:'cast',pj:'fire',ls:.2},
+ h18:{n:"Aurum Hydra",a:107,h:54,d:15,c:20,r:'LT',role:'atk',m:1,st:'cast',pj:'fire',ls:.2},
  // b160: five cards that fill the missing roles (a mage at Common and Uncommon, a tank at Uncommon, Legend and SuperLegend)
  h23:{n:"Ember Witch",a:68,h:40,d:10,c:10,r:'C',role:'atk',m:1,st:'cast',pj:'fire'},
  h24:{n:"Storm Shaman",a:80,h:39,d:10,c:15,r:'UC',role:'atk',m:1,st:'cast',pj:'light'},
  h25:{n:"Ironbark Guardian",a:50,h:51,d:26,c:5,r:'UC',role:'tank',st:'smash'},
  h26:{n:"Obsidian Colossus",a:64,h:55,d:34,c:5,r:'L',role:'tank',st:'smash'},
- h27:{n:"Aegis Valkyrie",a:70,h:58,d:40,c:10,r:'SL',role:'tank',st:'slash'}
+ h27:{n:"Aegis Valkyrie",a:70,h:58,d:40,c:10,r:'SL',role:'tank',st:'slash'},
+ // b173 Glacius Rex: Limited tank, only from the first clear of stage 1100 (rw:1 keeps it out of packs, drops and fusion)
+ h28:{n:"Glacius Rex",a:73,h:61,d:42,c:10,r:'LT',role:'tank',st:'smash',ls:.2,rw:1}   // only the first 3 players to clear stage 1100 (firsts/s1100 in Firestore), never sold
 };
 // three skills per card: [name, icon, type, value]; type decides the effect, value is its strength
 const SK={
@@ -769,13 +781,16 @@ const SK={
  h24:[['Spark','bolt','hit',1],['Chain Lightning','bolt','aoe',.8],['Tempest','wind','exec',1.6]],
  h25:[['Thorn Mace','hammer','hit',1],['Bark Shield','taunt','guard',.36],['Root Shockwave','earth','aoe',1.05]],
  h26:[['Obsidian Hammer','hammer','hit',1],['Dragon Guard','taunt','guard',.42],['Cataclysm','earth','aoe',1.3]],
- h27:[['Sun Spear','spear','hit',1],['Aegis','taunt','guard',.5],['Solar Flare','holy','aoe',1.4]]
+ h27:[['Sun Spear','spear','hit',1],['Aegis','taunt','guard',.5],['Solar Flare','holy','aoe',1.4]],
+ h28:[['Frost Bite','bite','hit',1],['Permafrost Hide','taunt','guard',.52],['Glacial Breath','ice','aoe',1.45]]
 };
-const CD=[0,2,4],pc=v=>Math.round(v*100)+'%';
-const skDesc=([,,t,v])=>({hit:`โจมตีศัตรู 1 ตัว ${pc(v)} ของ ATK`,aoe:`โจมตีศัตรูทุกตัว ${pc(v)} ของ ATK`,exec:`โจมตี ${pc(v)} ของ ATK แรงเป็น 2 เท่าถ้าเป้าหมาย HP เหลือไม่ถึงครึ่ง`,
+const CD=[0,2,4,5],pc=v=>Math.round(v*100)+'%';
+const skDesc=([,,t,v,th,en])=>th?T(th,en):({hit:`โจมตีศัตรู 1 ตัว ${pc(v)} ของ ATK`,aoe:`โจมตีศัตรูทุกตัว ${pc(v)} ของ ATK`,exec:`โจมตี ${pc(v)} ของ ATK แรงเป็น 2 เท่าถ้าเป้าหมาย HP เหลือไม่ถึงครึ่ง`,
   drain:`โจมตี ${pc(v)} ของ ATK แล้วฟื้น HP ตัวเองครึ่งหนึ่งของดาเมจ`,sure:`โจมตี ${pc(v)} ของ ATK คริติคอลแน่นอน`,heal:`ฟื้น HP ให้เพื่อนที่เจ็บสุด ${pc(v)} ของ ATK`,healall:`ฟื้น HP ให้ทั้งทีม ${pc(v)} ของ ATK`,
-  guard:`สร้างโล่ให้ตัวเอง ${pc(v)} ของ HP สูงสุด ล่อศัตรูให้ตีตัวเอง 2 รอบ และรับดาเมจลดลง 40%`,shieldall:`สร้างโล่ให้ทั้งทีม ${pc(v)} ของ HP สูงสุดของผู้ใช้`,buff:`พลังโจมตีของตัวเองเพิ่มเป็น ${pc(v)} จนจบด่าน`,rally:`พลังโจมตีของทั้งทีมเพิ่มเป็น ${pc(v)} จนจบด่าน`})[t];
-const needT=sk=>['hit','exec','drain','sure'].includes(sk[2]),isAtk=sk=>['hit','exec','drain','sure','aoe'].includes(sk[2]);
+  guard:`สร้างโล่ให้ตัวเอง ${pc(v)} ของ HP สูงสุด ล่อศัตรูให้ตีตัวเอง 2 รอบ และรับดาเมจลดลง 40% แล้วโจมตี ${pc(SK_HIT.guard)} ของ ATK`,shieldall:`สร้างโล่ให้ทั้งทีม ${pc(v)} ของ HP สูงสุดของผู้ใช้`,buff:`พลังโจมตีของตัวเองเพิ่มเป็น ${pc(v)} จนจบด่าน แล้วโจมตีทันที ${pc(SK_HIT.buff)} ของ ATK`,rally:`พลังโจมตีของทั้งทีมเพิ่มเป็น ${pc(v)} จนจบด่าน แล้วโจมตี ${pc(SK_HIT.rally)} ของ ATK`})[t]+(t==='aoe'?` (เหลือศัตรูตัวเดียว แรง ${AOE_LONE} เท่า)`:t==='heal'||t==='healall'?' (ส่วนที่เกิน HP เต็มกลายเป็นโล่)':'');
+const needT=sk=>['hit','exec','drain','sure','buff','rally','guard','blood'].includes(sk[2]),isAtk=sk=>['hit','exec','drain','sure','aoe','buff','rally','guard','blood','zero','dive','scorch','chain','hydra'].includes(sk[2]);
+// b172 support skills also strike in the same turn (buff 100%, rally 80%, guard 60% of ATK), so no skill costs a turn of damage; an area attack on a lone foe hits 1.5x
+const SK_HIT={buff:1,rally:.8,guard:.6},AOE_LONE=1.5,ULT_CD0=1;
 const IPAL={w:'#ffffff',e:'#cfd6e6',y:'#ffe66b',k:'#0a0e22'};
 function icon(rows){const c=document.createElement('canvas');c.width=12;c.height=12;const x=c.getContext('2d');
   rows.forEach((r,y)=>[...(r.length>6?r:r+[...r].reverse().join(''))].forEach((ch,i)=>{if(IPAL[ch]){x.fillStyle=IPAL[ch];x.fillRect(i,y,1,1)}}));return c.toDataURL()}
@@ -804,7 +819,7 @@ const ICON={
  drop:icon([".....w",".....w","....ww","....ww","...www","..wwww",".wwwww",".wwwww",".wwwww",".wwwww","..wwww","......"])
 };
 ['sword','hammer','claw','exec','shield','heal','healall','drain','buff','fire','ice','dark','bolt','holy','wind','earth','poison','bow','spear','bite','punch','blast','meteor','taunt'].forEach(k=>ICON['k_'+k]='ic/'+k+'.webp');
-const skBtn=(id,k,o={})=>{const sk=SK[id][k];return `<${o.tag||'button'} class="sk t-${sk[2]} ${k===2?'ult':''} ${o.cls||''}" ${o.attr||''} title="${sk[0]}"><img src="${ICON['k_'+sk[1]]}" alt="${sk[0]}">${o.cd?`<span class="cd">${o.cd}</span>`:''}</${o.tag||'button'}>`};
+const skBtn=(id,k,o={})=>{const sk=SK[id][k];return `<${o.tag||'button'} class="sk t-${sk[2]} ${k===2?'ult':''} ${k===3?'ult sk4':''} ${o.cls||''}" ${o.attr||''} title="${sk[0]}"><img src="${ICON['k_'+sk[1]]}" alt="${sk[0]}">${o.cd?`<span class="cd">${o.cd}</span>`:''}</${o.tag||'button'}>`};
 const STAR='<svg viewBox="0 0 24 24"><path d="M12 2.5l2.9 6.3 6.8.8-5 4.7 1.3 6.8-6-3.4-6 3.4 1.3-6.8-5-4.7 6.8-.8z"/></svg>';
 const sprite=(id,cls='',st='',pre='',post='')=>`<span class="spr ${cls}" style="${st}">${pre}<i><img src="spr/${C[id]&&C[id].sp||id}.webp${C[id]&&C[id].mon?'?2':''}" alt="" style="animation-delay:-${(id.charCodeAt(1)*7+id.charCodeAt(2)*3)%8/10}s"></i>${post}</span>`;
 // the same character drawn with its rank aura, so a card's rank shows wherever the avatar walks
@@ -812,7 +827,7 @@ const sprite=(id,cls='',st='',pre='',post='')=>`<span class="spr ${cls}" style="
 const HSPK=[[10,24,0],[90,34,.8],[18,72,1.5],[86,80,.4],[50,6,1.1]].map(([x,y,d])=>`<b class="sp" style="left:${x}%;top:${y}%;animation-delay:${d}s"></b>`).join('');
 const hero=(id,st='')=>{const r=C[id].r,f=RAR[r].fire;
   return sprite(id,'au front r-'+r,st,f==='SL'||f==='LT'?`<canvas class="firec hf k-${f}s" data-k="${f}s" width="80" height="16"></canvas>`:'',(f==='L'?'<canvas class="firec hf k-Ls" data-k="Ls" width="216" height="260"></canvas>':'')+(RAR[r].spk?HSPK:''))};
-const stars=id=>{const n=(S&&S.cards[id]&&S.cards[id].star)||0;return `<span class="stars">${[0,1,2,3,4].map(i=>i<n?STAR.replace('<svg','<svg class="on"'):STAR).join('')}</span>`};
+const stars=id=>{const n=(S&&S.cards[id]&&S.cards[id].star)||0;if(n>=6)return `<span class="stars stbd"><b class="stb${n>=10?' s10':''}" style="background-image:url(ui/st${Math.min(10,n)}.webp)" title="★${n}"></b></span>`;return `<span class="stars">${[0,1,2,3,4].map(i=>i<n-5?STAR.replace('<svg','<svg class="on on2"'):i<n?STAR.replace('<svg','<svg class="on"'):STAR).join('')}</span>`};
 // Stage monsters: fighters that only ever appear as enemies in stages (sheets in spr/, portraits in art/). They sit in C so the battle code can read them,
 // but as non-enumerable entries, so no card list, pack, drop, market or collection ever sees them. Add a line here (and the two image files) to add a monster.
 // b151: stage enemies are monsters only (10 small ones, opening up a few at a time over the first 35 stages) and the 5 bosses take turns on every 10th stage; cards are met as enemies only in PvP.
@@ -829,21 +844,36 @@ const MON={m01:{n:'Ember Imp',a:60,h:30,d:6,c:12},m02:{n:'Hellhound Pup',a:50,h:
  t09:{n:'Seraph Guard',k:'arm',a:58,h:50,d:16,c:10,tw:1},t10:{n:'Star Oracle',k:'ward',a:68,h:32,d:6,c:14,m:1,st:'cast',pj:'light',tw:1},
  tb1:{n:'Gatekeeper Titan',k:'arm',a:62,h:88,d:22,c:8,boss:1,st:'smash',gim:'gate',tw:1},tb2:{n:'Arch-Lich Librarian',k:'ward',a:78,h:72,d:12,c:14,boss:1,m:1,st:'cast',pj:'soul',gim:'raise',tw:1},
  tb3:{n:'Forge Tyrant',k:'arm',a:74,h:80,d:18,c:12,boss:1,st:'smash',gim:'rage',tw:1},tb4:{n:'Blizzard Wyrm',k:'ward',a:80,h:74,d:14,c:14,boss:1,m:1,st:'cast',pj:'moon',gim:'breath',tw:1},
- tb5:{n:'Sky Emperor',a:82,h:76,d:16,c:16,boss:1,m:1,st:'cast',pj:'light',gim:'shift',tw:1}};
+ tb5:{n:'Sky Emperor',a:82,h:76,d:16,c:16,boss:1,m:1,st:'cast',pj:'light',gim:'shift',tw:1},
+ // b173 Chapter 2 (c2:1 keeps them out of stages 1-500): per realm three monsters (xR1-xR3), a boss for every 10th stage (xR4) and the realm lord on the 100th (xR5, lord:1, with a gimmick)
+ x11:{n:'Reef Crab Knight',k:'arm',a:54,h:54,d:16,c:8,st:'smash',c2:1},x12:{n:'Abyss Angler',k:'ward',a:64,h:34,d:6,c:12,m:1,st:'cast',pj:'moon',c2:1},x13:{n:'Drowned Corsair',a:62,h:42,d:10,c:16,c2:1},
+ x14:{n:'Tidecaller Kraken',k:'ward',a:80,h:76,d:14,c:12,boss:1,m:1,st:'cast',pj:'moon',c2:1},x15:{n:'Leviathan Empress',k:'ward',a:86,h:84,d:16,c:14,boss:1,lord:1,m:1,st:'cast',pj:'moon',gim:'breath',c2:1},
+ x21:{n:'Ember Hound',a:64,h:40,d:8,c:16,c2:1},x22:{n:'Cinder Imp',k:'ward',a:66,h:32,d:6,c:14,m:1,st:'cast',pj:'fire',c2:1},x23:{n:'Ash Wyvern',k:'arm',a:58,h:50,d:14,c:10,st:'cast',pj:'fire',c2:1},
+ x24:{n:'Pyroclast Titan',k:'arm',a:76,h:86,d:20,c:10,boss:1,st:'smash',c2:1},x25:{n:'Inferno Phoenix King',k:'ward',a:88,h:80,d:14,c:16,boss:1,lord:1,m:1,st:'cast',pj:'fire',gim:'rage',c2:1},
+ x31:{n:'Frost Yeti',k:'arm',a:58,h:54,d:14,c:10,st:'smash',c2:1},x32:{n:'Ice Wraith',k:'ward',a:66,h:32,d:6,c:14,m:1,st:'cast',pj:'moon',c2:1},x33:{n:'Mammoth Knight',k:'arm',a:56,h:58,d:18,c:8,st:'smash',c2:1},
+ x34:{n:'Rime Witch',k:'ward',a:82,h:72,d:12,c:14,boss:1,m:1,st:'cast',pj:'moon',c2:1},x35:{n:'Frost Titan',k:'arm',a:84,h:92,d:22,c:10,boss:1,lord:1,st:'smash',gim:'gate',c2:1},
+ x41:{n:'Storm Harpy',a:64,h:38,d:8,c:18,c2:1},x42:{n:'Arcane Sentinel',k:'ward',a:66,h:40,d:10,c:12,m:1,st:'cast',pj:'light',c2:1},x43:{n:'Griffin Rider',k:'arm',a:62,h:48,d:14,c:14,c2:1},
+ x44:{n:'Star Archmage',k:'ward',a:84,h:70,d:12,c:16,boss:1,m:1,st:'cast',pj:'light',c2:1},x45:{n:'Seraph Colossus',a:88,h:86,d:18,c:14,boss:1,lord:1,m:1,st:'cast',pj:'light',gim:'shift',c2:1},
+ x51:{n:'Gear Hound',k:'arm',a:60,h:44,d:16,c:14,c2:1},x52:{n:'Steam Knight',k:'arm',a:58,h:56,d:18,c:10,st:'smash',c2:1},x53:{n:'Copter Drone',a:64,h:36,d:10,c:16,st:'shoot',c2:1},
+ x54:{n:'Brass Juggernaut',k:'arm',a:80,h:88,d:22,c:10,boss:1,st:'smash',c2:1},x55:{n:'Clockwork Emperor',k:'arm',a:90,h:86,d:20,c:14,boss:1,lord:1,gim:'raise',c2:1},
+ x61:{n:'Void Stalker',a:68,h:40,d:8,c:18,c2:1},x62:{n:'Rift Eye',k:'ward',a:70,h:34,d:6,c:14,m:1,st:'cast',pj:'soul',c2:1},x63:{n:'Mirror Knight',k:'arm',a:62,h:50,d:16,c:14,c2:1},
+ x64:{n:'Chaos Chimera',k:'ward',a:88,h:80,d:14,c:16,boss:1,m:1,st:'cast',pj:'fire',c2:1},x65:{n:'The Void King',a:94,h:92,d:20,c:16,boss:1,lord:1,gim:'breath',c2:1}};
 Object.keys(MON).forEach(id=>Object.defineProperty(C,id,{value:{r:'C',role:'atk',...MON[id],mon:1},enumerable:false}));
-const MSM=Object.keys(MON).filter(id=>!MON[id].boss&&!MON[id].tw),MBS=Object.keys(MON).filter(id=>MON[id].boss&&!MON[id].tw);
+const MSM=Object.keys(MON).filter(id=>!MON[id].boss&&!MON[id].tw&&!MON[id].c2),MBS=Object.keys(MON).filter(id=>MON[id].boss&&!MON[id].tw&&!MON[id].c2);
 const RORD=['C','UC','R','L','SL','LT'],STARTERS=['h06','h20','h11'],POOL=Object.keys(C).filter(id=>C[id].r!=='ST').sort((x,y)=>RORD.indexOf(C[x].r)-RORD.indexOf(C[y].r));
 // Firebase web config of the live site (null in the preview build = no Google sign-in or cloud save, guests only)
 const FB_CFG={"apiKey": "AIzaSyBxPtaSzWfEWeLUZffrgB5cbr1Mhtdpj7M", "authDomain": "pixeldeck-battle-1a625.firebaseapp.com", "projectId": "pixeldeck-battle-1a625", "storageBucket": "pixeldeck-battle-1a625.firebasestorage.app", "messagingSenderId": "520020450750", "appId": "1:520020450750:web:c54dadd6f487038ab22def", "databaseURL": "https://pixeldeck-battle-1a625-default-rtdb.asia-southeast1.firebasedatabase.app"};
 // stars: each one adds 3% ATK/HP/DEF and raises the card's max level by 3% of its rank cap (at least 1); costs are [Gold, duplicate copies] per star
+// b173 stars 6-10: Legend / SuperLegend / Limited cards at 5 stars go on with Gold + realm crystals (S.rs, from Chapter 2): [Gold, stones]
+const STAR_C2=[[30000,5],[60000,8],[120000,12],[200000,16],[350000,24]],STAR2_R=['L','SL','LT'],star2Cost=id=>{const st=starOf(id);return st>=5&&st<10&&STAR2_R.includes(C[id].r)?STAR_C2[st-5]:null},canStar2=id=>{const c=star2Cost(id);return !!(c&&S.cards[id]&&S.gold>=c[0]&&(S.rs||0)>=c[1])},starMax=id=>STAR2_R.includes(C[id].r)?10:5;
 const STAR_STAT=.03,STAR_COST=[[500,1],[1000,1],[2000,2],[4000,2],[8000,3]],STAR_COST_ST=[[200,0],[400,0],[800,0],[1500,0],[3000,0]];
 const GPACK=5000,GN=3,GODDS={SL:.001,L:.004,R:.03,UC:.22,C:.745};
-const PACK=200,ST_GIVE=['R','R','UC'],DUP=50,MAXST=500,KEY='pdb_save4';
+const PACK=200,ST_GIVE=['R','R','UC'],DUP=50,MAXST=1100,ST1=500,KEY='pdb_save4';   // b173 Chapter 2: stages 501-1100 (ST1 = the end of chapter 1, the tower's scale)
 let S,bt=null,busy=false,fx=[],prepN=1,pull=null,armed=false;
 
 const sleep=ms=>new Promise(r=>setTimeout(r,ms));
 const img=id=>`cards/${id}.webp`,artSrc=id=>`art/${C[id]&&C[id].sp||id}.webp`;
-const need=lv=>20+10*lv;
+const need=lv=>20+10*lv+(lv>EXP_K0?Math.round((lv-EXP_K0)**2*EXP_K):0),EXP_K0=120,EXP_K=1.5,REPLAY_XP=.8;   // b173: the curve steepens above Lv 120
 // amulets: one per card, two rarities (R = Rare, L = Legend, which drops far less often). a = ATK multiplier, d = DEF multiplier, c = added crit chance, x = added crit damage, h = heal and shield multiplier
 const AM={
  tiger:{n:'เขี้ยวเสือ',r:'R',k:['#ffb36b','#c2410c'],a:1.04,d:1,t:'ATK +4%'},
@@ -869,7 +899,8 @@ const AM_LEG=.15,amRoll=()=>{const r=Math.random()<AM_LEG?'L':'R',ks=Object.keys
 const MAGIC={includes:id=>!!(C[id]&&C[id].m)},atkName=id=>MAGIC.includes(id)?'MATK':'ATK';
 const amFit=(k,id)=>!!(AM[k]&&C[id])&&(AM[k].r!=='SL'||C[id].r==='SL'||C[id].r==='LT'),amOf=id=>S&&S.cards[id]&&AM[S.cards[id].am]&&amFit(S.cards[id].am,id)?AM[S.cards[id].am]:null;   // b170: a SuperLegend amulet works only on a Super Legend or Limited card; on any other card it counts as not worn
 const starOf=id=>(S&&S.cards[id]&&S.cards[id].star)||0;
-const stat=(id,lv,o)=>{const m=(1+RAR[C[id].r].g*(lv-1))*(1+STAR_STAT*(o?o.star||0:starOf(id))),am=o?AM[o.am]||null:amOf(id);return{atk:Math.round(C[id].a*m*(am?am.a:1)),hp:Math.round(C[id].h*m*(am?am.d:1)),def:Math.round(C[id].d*m*(am?am.d:1)),crit:C[id].c/100+(am&&am.c||0),cx:+((C[id].x||1.5)+(am&&am.x||0)).toFixed(2),hb:am&&am.h||1}};
+const starMul=st=>1+STAR_STAT*Math.min(st,5)+STAR_STAT2*Math.max(0,st-5),STAR_STAT2=.06;   // b173: stars 6-10 add 6% each
+const stat=(id,lv,o)=>{const m=(1+RAR[C[id].r].g*(lv-1))*starMul(o?o.star||0:starOf(id)),am=o?AM[o.am]||null:amOf(id);return{atk:Math.round(C[id].a*m*(am?am.a:1)),hp:Math.round(C[id].h*m*(am?am.d:1)),def:Math.round(C[id].d*m*(am?am.d:1)),crit:C[id].c/100+(am&&am.c||0),cx:+((C[id].x||1.5)+(am&&am.x||0)).toFixed(2),hb:am&&am.h||1}};
 // amulet icons share one design language so they read as a set: a gold bail on top, a dark outline, three tones and one highlight
 Object.keys(AM).forEach(k=>ICON['am_'+k]='am/'+k+'.webp');
 const amu=k=>AM[k].anim?`<span class="amu ar-${AM[k].r} amx" style="--k1:${AM[k].k[0]};--k2:${AM[k].k[1]}" title="${AM[k].n}"><i style="background-image:url(am/${k}_a.webp)"></i></span>`:`<span class="amu ar-${AM[k].r}" style="--k1:${AM[k].k[0]};--k2:${AM[k].k[1]}" title="${AM[k].n}"><img src="${ICON[AM[k].ic]}" alt="${AM[k].n}"></span>`;
@@ -1124,7 +1155,8 @@ const atMs=v=>v==null?Date.now():v.toMillis?v.toMillis():+v||Date.parse(v)||0,ol
 const TEST=false; // test build: every card of every rank is unlocked
 function unlock(s){s=eraWipe(s);s.am=s.am||{};
   {const old=Object.keys(s.cards).filter(id=>/^c\d\d$/.test(id));if(old.length){const n=old.filter(id=>!['c02','c19','c24'].includes(id)).length;s.gold=(s.gold||0)+n*300;s.cards={};s.team=[];s.cleared=0;s.gift=false;s.mig=n*300;if(s.me)delete s.me.look}}
-  Object.values(s.cards).forEach(c=>{if(c.am&&!AM[c.am])delete c.am});Object.keys(AM).forEach(k=>{const w=Object.values(s.cards).filter(c=>c.am===k).length;if(w>(s.am[k]||0))s.am[k]=w});if(TEST)Object.keys(C).forEach(id=>{if(!s.cards[id])s.cards[id]={lv:1,exp:0}});Object.keys(s.cards).forEach(id=>{if(!C[id])return;const c=s.cards[id],cap=RAR[C[id].r].cap+Math.max(1,Math.round(RAR[C[id].r].cap*.03))*(c.star||0);if(c.lv>=cap){c.lv=cap;c.exp=0}});return s}
+  Object.values(s.cards).forEach(c=>{if(c.am&&!AM[c.am])delete c.am});Object.keys(AM).forEach(k=>{const w=Object.values(s.cards).filter(c=>c.am===k).length;if(w>(s.am[k]||0))s.am[k]=w});if(s.vpd==null&&(s.vip||0)>Date.now()&&Array.isArray(s.pay)&&s.pay.length)s.vpd=s.vip;   // b172: a VIP held by an account that has topped up counts as paid
+  if(TEST)Object.keys(C).forEach(id=>{if(!s.cards[id])s.cards[id]={lv:1,exp:0}});Object.keys(s.cards).forEach(id=>{if(!C[id])return;const c=s.cards[id],cap=RAR[C[id].r].cap+Math.max(1,Math.round(RAR[C[id].r].cap*.03))*(c.star||0);if(c.lv>=cap){c.lv=cap;c.exp=0}});return s}
 const SESSION='pdb_session';let USER=null;try{USER=JSON.parse(localStorage.getItem(SESSION))}catch(e){}
 // each Google account keeps its own save on this device; guests share the device save
 const saveKey=()=>USER&&USER.sub?KEY+'_'+USER.sub:KEY;
@@ -1169,7 +1201,9 @@ const q=(el,t,cls)=>fx.push([el,t,cls]);
 const rib=id=>`<span class="rib">${RAR[C[id].r].n}</span>`;
 const fr=id=>RAR[C[id].r].fire?'fire f-'+RAR[C[id].r].fire:'';
 const SPK=[[2,3,0],[98,2,.7],[100,56,1.3],[3,97,.4],[96,98,1.8],[0,38,1.1]].map(([x,y,d])=>`<i class="sp" style="left:${x}%;top:${y}%;animation-delay:${d}s"></i>`).join('');
-const fxh=id=>(RAR[C[id].r].fire?`<canvas class="firec k-${RAR[C[id].r].fire}" data-k="${RAR[C[id].r].fire}" width="${RAR[C[id].r].fire==='L'?216:108}" height="${RAR[C[id].r].fire==='L'?260:130}"></canvas>`:'')+(RAR[C[id].r].spk?SPK:'');
+const fxh=id=>(RAR[C[id].r].fire?`<canvas class="firec k-${RAR[C[id].r].fire}" data-k="${RAR[C[id].r].fire}" width="${RAR[C[id].r].fire==='L'?216:108}" height="${RAR[C[id].r].fire==='L'?260:130}"></canvas>`:'')+(RAR[C[id].r].spk?SPK:'')+(C[id].r==='SL'&&starOf(id)>=6?SLBOLT:'');
+// b173: a SuperLegend at 6 stars or more keeps its red fire and also crackles with the Legend lightning - two layers (each drawn mirrored differently), so more bolts than a Legend
+const SLBOLT='<canvas class="firec k-L k-SLb" data-k="L" width="216" height="260"></canvas><canvas class="firec k-L k-SLb" data-k="L" width="216" height="260"></canvas>';
 const ban=id=>{const r=RAR[C[id].r],t=r.n.toUpperCase();return `<span class="ban">${r.star?'★ '+t+' ★':t}</span>`};
 function mini(id,lv,attr='',extra=''){const s=stat(id,lv);
   return `<button class="mini r-${C[id].r} glow ${fr(id)}" ${attr}>${fxh(id)}${rib(id)}<div class="art"><img src="${artSrc(id)}" alt=""><span class="nm">${C[id].n} Lv${lv}</span>${stars(id)}</div><div class="st"><span class="a">${atkName(id)} ${s.atk}</span><span class="d">HP ${s.hp} · DEF ${s.def}</span></div>${extra}</button>`}
@@ -1181,11 +1215,37 @@ const full=(id,attr='',cls='')=>`<button class="cf r-${C[id].r} ${cls} ${fr(id)}
 // enemy strength follows LNAT[n], the level a card reaches by clearing every earlier stage once, measured against a Rare card;
 // the first 30 stages ramp up from half strength so the starter team gets through
 const LNAT=[1];{let lv=1,ex=0;for(let n=1;n<=MAXST;n++){LNAT[n]=lv;ex+=10+2*n;while(ex>=20+10*lv){ex-=20+10*lv;lv++}}}
-let DIFF=2.6,EA=.3,EH=1.3,E0=.42,LATE=.003,LATE_N=250,LATE_W=50;   // b160: enemies gain up to +15% between stages 250 and 300 (then it stays), which offsets the new Legend tank so Legend teams still stop near stage 300
+let DIFF=3.0,EA=.3,EH=1.3,E0=.42,LATE=.003,LATE_N=250,LATE_W=50;   // b160: enemies gain up to +15% between stages 250 and 300 (then it stays), which offsets the new Legend tank so Legend teams still stop near stage 300
 // b160 soft walls, only on a stage the player has not cleared: each loss there weakens its enemies by PITY (ATK and HP), up to PITY_MAX, until the stage is won (S.ls = {n, k losses});
 // and every attempt rolls the enemies' strength within +-VARY, so a near miss can become a win on the next try. Cleared stages and the replay loop stay fixed.
 const PITY=.04,PITY_MAX=.12,VARY=.10,lossK=n=>S.ls&&S.ls.n===n?S.ls.k|0:0,softMul=n=>n>(S.cleared||0)?(1-Math.min(PITY_MAX,PITY*lossK(n)))*(1-VARY+2*VARY*Math.random()):1;
-function stageDef(n){
+// b173 Chapter 2: six realms of 100 stages after stage 500. Enemies start from stage 500's strength and grow CH2_G a stage (+ the realm's battlefield rule);
+// every 10th stage is the realm boss with two minions, every 100th the realm lord (bigger, with its own gimmick), x5 is an elite (one big monster), x7 a survival stage (live through 5 rounds).
+let CH2_G=.0012,CH2_K=1.5,CH2_RAMP=100,LORD_M=[1.25,2.4];const RLM=[
+ {n:'Deep Sea',th:'ทะเลลึก',m:['x11','x12','x13'],b:'x14',l:'x15',r:'tide',bg:['r11','r12'],fx:[{glow:'#2ad8ff',p:[['bubble','#9ff3ff',22],['spark','#9ff3ff',18],['fly','#7ae8ff',12]]},{glow:'#3affd8',p:[['bubble','#bff8ff',26],['spark','#ffffff',16],['dust','#bfeaff',20]]}]},
+ {n:'Raging Volcano',th:'ภูเขาไฟคลั่ง',m:['x21','x22','x23'],b:'x24',l:'x25',r:'burn',bg:['r21','r22'],fx:[{glow:'#ff6a1a',volc:[[24,36],[57,22]],p:[['ember','#ffb04a',56],['ash','#c9b0a8',22]]},{glow:'#ff7a2a',p:[['ember','#ffc04a',60],['ash','#bfa8a0',16]]}]},
+ {n:'Eternal Glacier',th:'ธารน้ำแข็งนิรันดร์',m:['x31','x32','x33'],b:'x34',l:'x35',r:'frost',bg:['r31','r32'],fx:[{aur:1,p:[['snow','#ffffff',56],['spark','#bfe6ff',14]]},{fog:'#e8f4ff',p:[['snow','#ffffff',40],['spark','#dff4ff',22]]}]},
+ {n:'Sky Citadel',th:'ป้อมลอยฟ้า',m:['x41','x42','x43'],b:'x44',l:'x45',r:'sky',bg:['r41','r42'],fx:[{glow:'#ffe9a0',p:[['dust','#ffe9a0',36],['spark','#ffffff',16],['petal','#fff3d0',10]]},{glow:'#b9a2ff',p:[['spark','#ffffff',34],['dust','#cfc0ff',26]]}]},
+ {n:'Clockwork City',th:'เมืองจักรกล',m:['x51','x52','x53'],b:'x54',l:'x55',r:'gear',bg:['r51','r52'],fx:[{glow:'#ffb04a',puff:[[3,40],[95,42],[60,44]],p:[['dust','#ffe0a0',30],['spark','#ffd27a',10]]},{glow:'#7dff8a',puff:[[6,30],[94,32],[70,36],[30,38]],p:[['dust','#fff0c0',24],['spark','#c8ffd0',12]]}]},
+ {n:'The Void',th:'ความว่างเปล่า',m:['x61','x62','x63'],b:'x64',l:'x65',r:'void',bg:['r61','r62'],fx:[{glow:'#b05cff',flash:'#c58cff',p:[['spore','#d6a8ff',34],['spark','#ffffff',22]]},{glow:'#c27aff',p:[['spore','#e0b8ff',30],['spark','#ffd8ff',18],['dust','#b9a2ff',18]]}]}];
+const realmOf=n=>n>ST1?Math.min(RLM.length-1,Math.floor((n-ST1-1)/100)):-1,stKind=n=>n<=ST1?'':n%100===0?'lord':n%10===0?'boss':n%10===5?'elite':n%10===7?'surv':'';
+// the battlefield rule of a stage; the Void takes one of the other five, changing from stage to stage
+const RULE_K=['tide','burn','frost','sky','gear'],ruleOf=n=>{const r=realmOf(n);if(r<0)return '';const k=RLM[r].r;return k==='void'?RULE_K[n%5]:k};
+const RULES={tide:['🌊','คลื่นยักษ์','Tidal Wave','ทุก 3 รอบ คลื่นซัดทั้งสองฝ่าย เสียเลือด 8%','every 3rd round a wave hits both sides for 8% life'],
+ burn:['🔥','พื้นลาวา','Lava Floor','ทุกรอบ ทุกตัวทั้งสองฝ่ายเสียเลือด 3%','every round everyone on both sides loses 3% life'],
+ frost:['❄','ลมเยือกแข็ง','Frostbite','การโจมตีแรกของศัตรูแต่ละตัว มีโอกาส 35% ทำให้เป้าหมายแข็ง ข้ามเทิร์นถัดไป','each enemy\'s first hit has a 35% chance to freeze its target for its next turn'],
+ sky:['✨','สนามเวท','Arcane Field','ดาเมจเวท +30% · ดาเมจกายภาพ −20% (ทั้งสองฝ่าย)','magic damage +30% · physical damage −20% (both sides)'],
+ gear:['⚙','เฟืองเร่ง','Overclock','ศัตรู ATK +6% ทุกรอบ (สูงสุด +60%)','enemies gain 6% ATK every round (up to +60%)']};
+const ruleTxt=(k,full)=>{const r=RULES[k];return r?`${r[0]} ${T(r[1],r[2])}${full?': '+T(r[3],r[4]):''}`:''};
+const KIND_T={lord:['เจ้าอาณาจักร','Realm Lord'],boss:['บอส','Boss'],elite:['ศัตรูยักษ์','Elite'],surv:['เอาตัวรอด 5 รอบ','Survive 5 rounds']};
+const stBud=n=>{const ease=Math.min(1,E0+(1-E0)*(n-1)/29);return 135*(1+.09*(LNAT[n]-1))*DIFF*ease*(1+LATE*Math.min(LATE_W,Math.max(0,n-LATE_N)))};
+function stageDef2(n){const R=RLM[realmOf(n)],k=n-ST1,kd=stKind(n),bud=stBud(ST1)*(1+(CH2_K-1)*Math.min(1,k/CH2_RAMP))*(1+CH2_G*k),one=(id,ma,mh,x)=>{const sh=.35+.3*C[id].a/(C[id].a+C[id].h+C[id].d);
+    return{id,boss:!!C[id].boss,atk:Math.round(bud*sh*EA*ma),hp:Math.round(bud*(1-sh)*EH*mh),crit:C[id].c/200,cx:1.5,sh:0,...x}},M=i=>R.m[(k*7+i*5+(k>>2))%3];
+  if(kd==='lord')return[one(M(0),1,1),one(R.l,LORD_M[0],LORD_M[1],{lord:1,gim:C[R.l].gim,gate:C[R.l].gim==='gate'?3:0}),one(M(1),1,1)];
+  if(kd==='boss')return[one(M(0),1,1),one(R.b,1.2,2.2),one(M(2),1,1)];
+  if(kd==='elite')return[one(M(1),1.9,3.2,{elite:1})];
+  return[0,1,2].map(i=>kd==='surv'?one(M(i),.7,1.8):one(M(i),1,1))}   // survival: tougher but softer-hitting, the point is to last 5 rounds
+function stageDef(n){if(n>ST1)return stageDef2(n);
   const ease=Math.min(1,E0+(1-E0)*(n-1)/29),bud=135*(1+.09*(LNAT[n]-1))*DIFF*ease*(1+LATE*Math.min(LATE_W,Math.max(0,n-LATE_N))),cnt=n<=3?1:n<=10?2:3,EP=MSM,size=Math.min(EP.length,3+Math.floor(n/5)),boss=n%10===0;
   return Array.from({length:cnt},(_,i)=>{const b=boss&&i===(cnt>1?1:0),id=b&&MBS.length?MBS[(n/10-1)%MBS.length]:EP[(n*7+i*5+(n>>2))%size],sh=.35+.3*C[id].a/(C[id].a+C[id].h+C[id].d);
     return{id,boss:b,atk:Math.round(bud*sh*EA*(b?1.2:1)),hp:Math.round(bud*(1-sh)*EH*(b?2.2:1)),crit:C[id].c/200,cx:1.5,sh:0}});
@@ -1196,15 +1256,30 @@ const GOLD_UP=1.5,goldRange=n=>{const b=goldBase(n)*GOLD_UP;return n>S.cleared?[
 // b155: the first two bosses pay for a Gold Pack each, so a new free player gets real cards on day one instead of grinding the starter team
 // b157: every first clear of a non-boss stage up to EARLY_N also pays EARLY_G, and the offline farm never earns less than AFK_MIN an hour - new players get cards by moving on and by coming back, not by looping one stage. Both are one-time or time-gated, so they cannot be farmed.
 const EARLY_N=50,EARLY_G=200,AFK_MIN=400,earlyB=n=>n<=EARLY_N&&n%10!==0&&n>S.cleared?EARLY_G:0;
-const BOSS_GIFT={10:5000,20:5000},bossBonus=n=>n%10===0&&n>S.cleared?(BOSS_GIFT[n]||100+5*n):0;
+const VIP_RS=1.5,LORD_DIA=20,STAR_CH=15,CHEST_G=5000,RS_DROP=.012,RS_BOSS=.05,RS_LORD=3,
+  c2Stars=()=>Object.values(S.cs||{}).reduce((a,b)=>a+b,0),chestsLeft=()=>Math.floor(c2Stars()/STAR_CH)-(S.csc||0),
+  starsOf=(my)=>1+(my.al.every(x=>x.hp>0)?1:0)+((my.surv?my.al.reduce((a,x)=>a+Math.max(0,x.hp),0)>=my.al.reduce((a,x)=>a+x.max,0)/2:my.round<=4)?1:0),BOSS_GIFT={10:5000,20:5000},bossBonus=n=>n%10===0&&n>S.cleared?(BOSS_GIFT[n]||100+5*n):0;
 function rollGold(n){const jp=Math.random()<.05,[lo,hi]=goldRange(n);return{g:(lo+Math.floor(Math.random()*(hi-lo+1)))*(jp?4:1),jp}}
 
 /* ---------- screens ---------- */
 // offline farm: Gold builds up while the player is away, at 10 wins' worth per hour of the highest stage cleared, for up to 8 hours
 const AFK_H=8,afkRate=()=>Math.max(AFK_MIN,10*goldBase(Math.max(1,S.cleared)));
-const afkGold=()=>{if(!S.afk)return 0;return Math.floor(Math.min(Date.now()-S.afk,AFK_H*36e5)/36e5*afkRate()*vipP().afk)};
+// b172 the offline farm also rolls drops: OFF_WPH replay wins an hour (x the VIP offline bonus) over the stored hours, each with the replay drop chance of the
+// highest cleared stage (never a boss bonus, never the Lucky Clover roll) - well under a tenth of what playing on screen gives, and rarer ranks much less, so playing still pays more.
+// rare results are thinned offline: a Legend amulet stays Legend only OFF_KEEP_AM of the time, cards step down a rank until they pass OFF_KEEP (never Limited offline)
+// cards offline: at most OFF_CARDS a collect, only Uncommon / Rare / Legend by OFF_CR, and a Super Legend at OFF_SL per card (never Limited)
+const OFF_WPH=8,OFF_KEEP_AM=.5,OFF_AMS=7,OFF_CARDS=3,OFF_CR={L:.02,R:.15},OFF_SL=.0001;
+function afkDrops(ms){if(!vipPaid())return{am:{},cards:[],k:0};const n0=Math.max(1,S.cleared||1),n=n0%10===0?Math.max(1,n0-1):n0,k=Math.floor(Math.min(Math.max(0,ms),afkH()*36e5)/36e5*OFF_WPH*vipP().afk),am={},cards=[];let nAm=0;
+  for(let i=0;i<k;i++){if(nAm<OFF_AMS&&Math.random()<dropP(n,DROP,DROP_BOSS,false)){nAm++;let x=amRoll();if(AM[x].r==='L'&&Math.random()>OFF_KEEP_AM){const rs=Object.keys(AM).filter(k=>AM[k].r==='R');x=rs[Math.floor(Math.random()*rs.length)]}S.am=S.am||{};S.am[x]=(S.am[x]||0)+1;am[x]=(am[x]||0)+1}
+    if(cards.length<OFF_CARDS&&Math.random()<dropP(n,CDROP,CDROP_BOSS,false)){const x=Math.random(),r=Math.random()<OFF_SL?'SL':x<OFF_CR.L?'L':x<OFF_CR.L+OFF_CR.R?'R':'UC';cards.push(giveCard(randOf(r),'afk'))}}
+  const rs=S.cleared>ST1?Math.min(OFF_RS,Math.floor(Math.min(Math.max(0,ms),afkH()*36e5)/36e5/OFF_RS_H)):0;if(rs)S.rs=(S.rs||0)+rs;
+  return{am,cards,k,rs}}
+function afkShow(g,got){if(!got||(!got.cards.length&&!Object.keys(got.am).length&&!got.rs))return;const by={};got.cards.forEach(c=>{by[c.id]=(by[c.id]||0)+1});
+  const b=$('fsb');if(!b)return;fsOpen=false;b.innerHTML=(`${lootHTML({title:'🌙 '+T('ฟาร์มออฟไลน์','Offline farm'),g,now:S.gold,am:got.am,cards:by,tag:vipOn()?`<span class="fsv">VIP ×${vipP().afk}</span>`:'',extra:got.rs?`<p class="fsrs">💠 ${T('ผลึกอาณาจักร','Realm crystals')} <b>+${got.rs}</b></p>`:'',btn:`<button class="btn go" data-fs="close">${T('รับทราบ','OK')}</button>`})}`);b.hidden=false}
+const OFF_RS=2,OFF_RS_H=5,AFK_VIP_H=10,afkH=()=>vipPaid()?AFK_VIP_H:AFK_H;   // b172: a VIP bought in the shop stores 10 hours of offline farm instead of 8
+const afkGold=()=>{if(!S.afk)return 0;return Math.floor(Math.min(Date.now()-S.afk,afkH()*36e5)/36e5*afkRate()*vipP().afk)};
 // daily quests reset at local midnight: [key, label, target, Gold]
-const QUESTS=[['win','ชนะ 10 ด่าน',10,300],['boss','ชนะด่านบอส 1 ครั้ง',1,250],['afk','เก็บ Gold ออฟไลน์ 1 ครั้ง',1,100]];
+const QUESTS=[['win','ชนะ 10 ด่าน',10,300,1],['boss','ชนะด่านบอส 1 ครั้ง',1,250],['afk','เก็บ Gold ออฟไลน์ 1 ครั้ง',1,100]];
 const today=()=>{const d=new Date();return d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate()};
 function qDay(){if(!S.q||S.q.d!==today())S.q={d:today(),n:{},got:{}};return S.q}
 function qAdd(k){const q=qDay();q.n[k]=(q.n[k]||0)+1}
@@ -1226,6 +1301,9 @@ const VIPT=[{dr:1,afk:1,fee:1,day:0},{dr:1.5,afk:1,fee:1,day:0},{dr:1.5,afk:1.5,
 const vipOn=()=>!!S&&(isDev()||(S.vip||0)>Date.now()),VX=()=>vipOn()?2:1,vipLeft=()=>Math.max(0,Math.ceil(((S.vip||0)-Date.now())/864e5));
 // vipOwn = the tier actually bought (what the VIP screen shows, also for Dev); vipTier = the tier in force (Dev always gets Gold)
 const vipOwn=()=>S&&(S.vip||0)>Date.now()?(S.vt||(S.vipk===365?3:S.vipk===30?2:1)):0,vipTier=()=>!S?0:isDev()?3:vipOwn(),vipP=()=>VIPT[vipTier()];
+// b172 S.vpd = end of the VIP span that includes a VIP bought with diamonds in the shop. Only that "paid" VIP gets offline drops and Auto x3;
+// VIP from an admin gift or the arena shop keeps the other perks. Saves from before b172: an active VIP on an account that has topped up counts as paid.
+const vipPaid=()=>!!S&&(isDev()||((S.vpd||0)>Date.now()&&(S.vip||0)>Date.now())),SPD_MAX=()=>vipPaid()?3:2;
 function vipAdd(days,tier){const cur=vipOwn();S.vip=Math.max(Date.now(),S.vip||0)+days*864e5;S.vt=Math.max(cur,tier);S.vipk=days===AS_VIP&&tier===1&&arguments[2]?'a':days}
 function vipDaily(){const n=vipP().day,d=new Date().toDateString();if(!n||S.vd===d)return;S.vd=d;S.dia=(S.dia||0)+n;save();fx.push(['view','VIP +'+n+' 💎','g'])}
 // S.vipk remembers the card bought last (days, or 'a' for the arena-shop card) so the shop can say which card is running and when it ends
@@ -1247,11 +1325,22 @@ const clSync=()=>{try{if(!S||!S.cards)return;const L=clInit();Object.keys(S.card
 const giveCard=(id,src='other')=>{if(S.cards[id]){S.cards[id].cp=(S.cards[id].cp||0)+1;clAdd(id,src,1);return{id,dup:true}}S.cards[id]={lv:1,exp:0};clAdd(id,src);return{id}};
 // first win over these bosses hands out guaranteed cards, so a free player can always reach a Rare (S.bc remembers which were paid; older saves get theirs in the lobby)
 const BOSS_CARD={10:['h24'],20:['R','h25']};   // b160: a mage, then a Rare and a tank, so a new free player holds every role by stage 20
-const randNew=r=>{const ids=Object.keys(C).filter(id=>C[id].r===r),nw=ids.filter(id=>!S.cards[id]),p=nw.length?nw:ids;return p[Math.floor(Math.random()*p.length)]};
+const randNew=r=>{const ids=Object.keys(C).filter(id=>C[id].r===r&&!C[id].rw),nw=ids.filter(id=>!S.cards[id]),p=nw.length?nw:ids;return p[Math.floor(Math.random()*p.length)]};
 const bcTake=()=>{const out=[];S.bc=S.bc||[];for(const k in BOSS_CARD){if(S.cleared>=+k&&!S.bc.includes(+k)){S.bc.push(+k);BOSS_CARD[k].forEach(r=>out.push(giveCard(C[r]?r:randNew(r),'boss')))}}return out};
+// b173 Glacius Rex: the first F1100_N players on the server to clear stage 1100 each get one. The claim is a transaction on firsts/s1100 {n, u:[uid..], nm:[name..]};
+// the Firestore rules only let n go up by one, up to 3, appending the caller's own uid. S.f1100: 'got' | 'full' once settled; 'try' while it still has to reach the server.
+const F1100_N=3,F1100_LATE=10;
+function f1100Claim(){if(!S||S.cleared<1100||S.f1100==='got'||S.f1100==='full')return;S.f1100='try';save();if(!mkOn())return;
+  const db=mkDb(),ref=db.collection('firsts').doc('s1100'),me=USER.sub,nm=String(S.me&&S.me.name||'?').slice(0,24);
+  db.runTransaction(tx=>tx.get(ref).then(d=>{const v=d.exists?d.data():{n:0,u:[],nm:[]};if(v.u.includes(me))return 'got';if(v.n>=F1100_N)return 'full';
+    const nv={n:v.n+1,u:v.u.concat([me]),nm:(v.nm||[]).concat([nm])};tx.set(ref,nv);return 'won:'+nv.n}))
+   .then(r=>{if(S.f1100==='got'||S.f1100==='full')return;if(r==='full'){S.f1100='full';S.rs=(S.rs||0)+F1100_LATE;save();cloudFlush();ov(`<div class="cd dlg nt"><div class="px cdbox"><b>🏆 ${T('พิชิตด่าน 1100!','Stage 1100 conquered!')}</b><p>${T(`การ์ด Glacius Rex มอบให้ ${F1100_N} ท่านแรกครบแล้ว<br>รับ 💠${F1100_LATE} เป็นรางวัลแทน`,`Glacius Rex has gone to the first ${F1100_N} players.<br>You get 💠${F1100_LATE} instead`)}</p><div class="row"><button class="btn go" data-lp="no">${T('รับทราบ','OK')}</button></div></div></div>`);return}
+     S.f1100='got';const c=giveCard('h28','first1100');save();cloudFlush();sfx('win');const k=r==='got'?'':r.split(':')[1];
+     ov(`<div class="cd dlg nt"><div class="px cdbox"><b>🏆 ${T('ผู้พิชิตด่าน 1100','Conqueror of stage 1100')}${k?` #${k}`:''}</b><div style="width:150px">${full('h28')}</div><p>${T(`คุณคือ 1 ใน ${F1100_N} ท่านแรกของเซิร์ฟเวอร์<br>ได้การ์ด Limited <b style="color:#8fe9ff">Glacius Rex</b> (ไม่มีขาย)`,`You are one of the first ${F1100_N} on the server.<br>Limited card <b style="color:#8fe9ff">Glacius Rex</b> is yours (never sold)`)}</p><div class="row"><button class="btn go" data-lp="no">${T('รับการ์ด','Take it')}</button></div></div></div>`)})
+   .catch(()=>{})}
 const bcRow=c=>`<div class="row"><span class="pvc r-${C[c.id].r}" style="width:38px">${art(c.id)}</span><span class="nt">${T('รางวัลชนะบอส','Boss reward')}${c.dup?T(' (ใบซ้ำ)',' (copy)'):''}<br><b class="r-${C[c.id].r}" style="color:var(--gl)">${C[c.id].n}</b> · ${RAR[C[c.id].r].n}</span></div>`;
 const bcLate=()=>{const o=bcTake();if(!o.length)return;save();cloudFlush();setTimeout(()=>{if(!bt)ov(`<div class="cd dlg nt"><div class="px cdbox"><b>🎁 ${T('รางวัลชนะบอส (ย้อนหลัง)','Boss rewards (back-dated)')}</b><p>${T('บอสด่าน 10 และ 20 แจกการ์ดการันตีแล้ว คุณผ่านมาก่อน จึงได้รับย้อนหลัง','Bosses 10 and 20 now give guaranteed cards. You had already beaten them, so here are yours')}</p>${o.map(bcRow).join('')}<div class="row"><button class="btn go" data-lp="no">${T('รับทราบ','OK')}</button></div></div></div>`)},600)};
-const randOf=r=>{const ids=Object.keys(C).filter(id=>C[id].r===r);return ids[Math.floor(Math.random()*ids.length)]};
+const randOf=r=>{const ids=Object.keys(C).filter(id=>C[id].r===r&&!C[id].rw);return ids[Math.floor(Math.random()*ids.length)]};
 // daily login streak, 7 days then it loops: [currency, amount]
 const DAILY=[['g',300],['g',500],['d',5],['g',800],['g',1200],['d',10],['d',25]];
 const dayStr=d=>d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate(),dlCan=()=>!S.dl||S.dl.last!==today();
@@ -1259,13 +1348,13 @@ const dlNext=()=>{const y=dayStr(new Date(Date.now()-864e5));return S.dl&&S.dl.l
 function quests(){const q=qDay(),a=afkGold();
   view(`<div class="cols"><div class="rail"><div class="row"><button class="btn alt sm" data-act="home">กลับ</button><h2>ภารกิจ</h2></div>
     <p class="num gold">Gold ${S.gold.toLocaleString('en')}</p>
-    <div class="pk2 px g"><b>ฟาร์มออฟไลน์</b><small>สะสม <span class="nt">${afkRate()}</span> Gold ต่อชั่วโมง สูงสุด <span class="nt">${AFK_H}</span> ชั่วโมง ยิ่งผ่านด่านสูงยิ่งได้มาก</small>
+    <div class="pk2 px g"><b>ฟาร์มออฟไลน์</b><small>สะสม <span class="nt">${afkRate()}</span> Gold ต่อชั่วโมง สูงสุด <span class="nt">${afkH()}</span> ชั่วโมง ยิ่งผ่านด่านสูงยิ่งได้มาก · VIP ที่ซื้อได้ลุ้นการ์ดและเครื่องรางด้วย</small>
      <button class="btn sm" data-act="afk" ${a<1?'disabled':''}>เก็บ <i class="nt" style="font-style:normal">${a.toLocaleString('en')} Gold</i></button></div>
     <p class="sub">ภารกิจรีเซ็ตทุกวัน</p></div>
    <div class="main"><div class="px" style="margin-bottom:12px"><div class="row" style="justify-content:space-between"><b>ล็อกอินรายวัน</b><button class="btn ${dlCan()?'go':'alt'} sm" data-act="dlget" ${dlCan()?'':'disabled'}>${dlCan()?'รับรางวัลวันนี้':'รับแล้ว'}</button></div>
      <div class="dlrow nt">${DAILY.map(([c,v],i)=>{const cur=dlCan()?dlNext():(S.dl?S.dl.n:0),done=dlCan()?i+1<cur:i+1<=cur;return `<span class="${done?'done':''} ${dlCan()&&i+1===cur?'now':''}"><small>${T('วัน','Day')} ${i+1}</small><b>${v}</b><i>${c==='g'?'Gold':'💎'}</i></span>`}).join('')}</div>
      <p class="sub">ล็อกอินติดต่อกันครบ 7 วันแล้ววนใหม่ ขาดวันจะเริ่มนับ 1</p></div><div class="amlist">${QUESTS.map(([k,l,t,g])=>{const n=Math.min(t,q.n[k]||0),ok=n>=t,got=q.got[k];
-     return `<div class="amrow" style="grid-template-columns:1fr"><span><b>${l}</b><small class="nt">${n}/${t}</small><small class="gold nt">+${g} Gold</small></span><div class="hp xp"><i style="width:${n/t*100}%"></i></div><button class="btn ${ok&&!got?'go':'alt'} sm" data-act="qget" data-k="${k}" ${ok&&!got?'':'disabled'}>${got?'รับแล้ว':ok?'รับรางวัล':'ยังไม่ครบ'}</button></div>`}).join('')}</div></div></div>`)}
+     return `<div class="amrow" style="grid-template-columns:1fr"><span><b>${l}</b><small class="nt">${n}/${t}</small><small class="gold nt">+${g} Gold${QUESTS.find(x=>x[0]===k)[4]?' · <b style="color:#8fe9ff">💠+'+QUESTS.find(x=>x[0]===k)[4]+'</b>':''}</small></span><div class="hp xp"><i style="width:${n/t*100}%"></i></div><button class="btn ${ok&&!got?'go':'alt'} sm" data-act="qget" data-k="${k}" ${ok&&!got?'':'disabled'}>${got?'รับแล้ว':ok?'รับรางวัล':'ยังไม่ครบ'}</button></div>`}).join('')}</div></div></div>`)}
 // developer account: recognised by a hash of its Google e-mail (the address itself is not in the source); it is topped up to everything maxed each time the lobby opens
 const DEVH='38ee325cd572325c',h32=(s,k)=>{let h=k;for(const c of s)h=Math.imul(h^c.charCodeAt(0),16777619)>>>0;return h.toString(16)};
 const isDev=()=>{if(!USER||!USER.sub||!USER.email)return false;const e=String(USER.email).toLowerCase();return h32(e,2166136261)+h32(e,40389)===DEVH};
@@ -1277,7 +1366,7 @@ function devGrant(){if(!isDev())return;let ch=0;
   if(!S.fd||!S.fdg){S.fd=1;S.fdg=1;ch=1}['T1.1','T2.1','T3.1','P5.1','P3.1'].forEach(c=>{if(!(S.sh||[]).includes(c)){shAdd(c);ch=1}});   // b166: the Dev account carries the FOUNDER title too
   if(ch)save()}
 function home(){
-  bt=null;busy=false;if((S.era||1)<ERA){S=unlock(S);save();cloudFlush();return welcome()}devGrant();ensureMe();grantFetch();mkPayCheck();giftTake();compTake();bcLate();twRoll();news167()||news165();vipDaily();if(!S.afk){S.afk=Date.now();save()}const own=Object.keys(S.cards).length,next=Math.min(MAXST,S.cleared+1);
+  bt=null;busy=false;if((S.era||1)<ERA){S=unlock(S);save();cloudFlush();return welcome()}devGrant();ensureMe();grantFetch();mkPayCheck();giftTake();compTake();bcLate();if(S.f1100==='try')f1100Claim();twRoll();news167()||news165();vipDaily();if(!S.afk){S.afk=Date.now();save()}const own=Object.keys(S.cards).length,next=Math.min(MAXST,S.cleared+1);
   const ico=(src,d=0)=>`<span class="ico" style="--m:url(${src});--d:${d}s"><img src="${src}" alt=""></span>`;
   const dk=(act,ic,c,t,sub,dis,d)=>`<button class="dk ${c}" ${dis?'disabled':`data-act="${act}"`}>${ico(ic,d)}<span>${t}<small>${sub}</small></span></button>`;
   view(`<div class="lobby" style="--bg:url(${mapImg(next)})"><div class="lbg"></div>
@@ -1329,8 +1418,8 @@ function prep(){
   view(`<div class="cols"><div class="rail">
     <div class="row"><button class="btn alt sm" data-act="home">กลับ</button><h2>ด่าน ${prepN}</h2></div>
     <div class="row"><button class="btn alt sm" data-act="stg" data-d="-10">-10</button><button class="btn alt sm" data-act="stg" data-d="-1">-1</button><button class="btn alt sm" data-act="stg" data-d="1">+1</button><button class="btn alt sm" data-act="stg" data-d="10">+10</button></div>${isDev()?'<div class="row"><button class="btn alt sm" data-act="stg" data-d="-100">-100</button><button class="btn alt sm" data-act="stg" data-d="100">+100</button><button class="btn alt sm" data-act="stg" data-d="-999">1</button><button class="btn alt sm" data-act="stg" data-d="999">500</button></div>':''}
-    <div class="mapth" style="background-image:url(${mapImg(prepN)})" role="img" aria-label="${MAPS[mapOf(prepN)-1]}"></div>
-    <p class="sub">แผนที่: ${MAPS[mapOf(prepN)-1]}</p>
+    <div class="mapth" style="background-image:url(${mapImg(prepN)})" role="img" aria-label="${mapName(prepN)}"></div>
+    ${prepN>ST1?'':`<p class="sub">แผนที่: ${mapName(prepN)}</p>`}${prepN>ST1?`<p class="sub nt rlp">${T('อาณาจักร','Realm')} ${realmOf(prepN)+1}: <b>${T(RLM[realmOf(prepN)].th,RLM[realmOf(prepN)].n)}</b>${stKind(prepN)?` · <b style="color:#ffe45c">${T(...KIND_T[stKind(prepN)])}</b>`:''}<br>${T('กฎสนาม','Battlefield rule')} ${ruleTxt(ruleOf(prepN),1)}</p>${prepN===1100&&S.f1100!=='got'&&S.f1100!=='full'?`<p class="sub nt" style="color:#8fe9ff">🏆 ${T(`${F1100_N} ท่านแรกของเซิร์ฟเวอร์ที่ผ่านด่านนี้ ได้การ์ด Limited Glacius Rex (ไม่มีขาย)`,`The first ${F1100_N} players on the server to clear this stage get the Limited card Glacius Rex (never sold)`)}</p>`:''}<p class="sub nt stw sm">${[1,2,3].map(i=>`<i class="${i<=((S.cs||{})[prepN]||0)?'on':''}">★</i>`).join('')} <small>${T('ชนะ · ไม่มีใครตาย · ชนะใน 4 รอบ','win · nobody falls · win within 4 rounds')}${stKind(prepN)==='surv'?T(' (ด่านเอาตัวรอด: เลือดทีมเหลือครึ่ง)',' (survival: team keeps half its life)'):''}</small></p><p class="sub nt">${T('ดาวบท 2','Chapter 2 stars')} ★${c2Stars()} · ${T('หีบถัดไป','next chest')} ${c2Stars()%STAR_CH}/${STAR_CH} · 💠 ${S.rs||0}${chestsLeft()>0?` <button class="btn go sm" data-act="schest">🎁 ×${chestsLeft()}</button>`:''}</p>`:''}
     <p class="sub">ศัตรู: ${en.map(e=>(e.boss?'บอส ':'')+C[e.id].n+(weakOf(e.id,prepN)?` <b class="nt" style="color:${weakOf(e.id,prepN)==='m'?'#b9a2ff':'#ffb27a'}">(${weakTxt(weakOf(e.id,prepN))})</b>`:'')).join(', ')}</p>${en.some(e=>weakOf(e.id,prepN))?`<p class="sub nt" style="color:#c9d2f5">${T('ทีมคุณ','Your team')}: ${T('กายภาพ','physical')} ${S.team.filter(id=>!C[id].m).length} · ${T('เวท','magic')} ${S.team.filter(id=>C[id].m).length}</p>`:''}${lossK(prepN)&&prepN>S.cleared?`<p class="sub nt" style="color:#8fe9ff">${T('ศัตรูเหนื่อยล้าลง','Enemies worn down')} ${'●'.repeat(Math.min(3,lossK(prepN)))}${'○'.repeat(3-Math.min(3,lossK(prepN)))} <small style="display:inline">(${T('แพ้ด่านนี้','lost here')} ${lossK(prepN)} ${T('ครั้ง','times')})</small></p>`:''}
     <p class="sub">รางวัล: Gold ${goldRange(prepN).join('–')}${bossBonus(prepN)?' + โบนัสบอส '+bossBonus(prepN):''}${earlyB(prepN)?' + '+T('โบนัสด่านใหม่','new stage bonus')+' '+earlyB(prepN):''}${BOSS_CARD[prepN]&&prepN>S.cleared?' + <b class="nt" style="color:#ffe45c">'+T('การ์ดการันตี: ','guaranteed cards: ')+BOSS_CARD[prepN].map(r=>C[r]?C[r].n:RAR[r].n).join(' + ')+'</b>':''} · Exp ${expOf(prepN)} ต่อใบ${prepN<=S.cleared?' (เล่นซ้ำ)':''}</p>
     ${hasLuck()?`<p class="sub nt" style="color:#7dff8a">Lucky Clover: ${'🍀'.repeat(luckLv(prepN))} ${T(['','โชคเล็กน้อย','โชคพอมี','โชคดี','โชคดีมาก','โชคสูงสุด'][luckLv(prepN)],['','a little luck','some luck','lucky','very lucky','top luck'][luckLv(prepN)])} <small style="display:inline">(${T('ลุ้นการ์ด Legend','a shot at a Legend card')})</small></p>`:''}<p class="sub nt">${T('โอกาสดรอป','Drop chance')}: ${T('เครื่องราง','amulet')} <b style="color:#ffe45c">${P2(dropP(prepN,DROP,DROP_BOSS,prepN>S.cleared))}</b> · ${T('การ์ด','card')} <b style="color:#ffe45c">${P2(dropP(prepN,CDROP,CDROP_BOSS,prepN>S.cleared))}</b></p>
@@ -1561,7 +1650,8 @@ function openPro(cur){if(CBT&&!isDev())return;if(cur==='d'){if((S.dia||0)<PRO.di
 function vip(){const d=S.dia||0,tr=vipOwn(),ck=t=>`<li>${t}</li>`;
   const perks=i=>{const q=VIPT[i];return [T('Exp x2 · Gold x2 · เหรียญอารีน่า x2','Exp x2 · Gold x2 · arena coins x2'),T('โอกาสดรอป +'+Math.round((q.dr-1)*100)+'%','Drop chance +'+Math.round((q.dr-1)*100)+'%'),
     q.day?T('เพชรฟรีวันละ '+q.day+' 💎 (รวม '+(q.day*VIPS[i-1][0]).toLocaleString('en')+')',q.day+' free 💎 every day ('+(q.day*VIPS[i-1][0]).toLocaleString('en')+' in total)'):'',
-    q.afk>1?T('Gold ออฟไลน์ '+(q.afk===2?'x2':'+50%'),'Offline Gold '+(q.afk===2?'x2':'+50%')):'',
+    T(`ฟาร์มออฟไลน์สะสม ${AFK_VIP_H} ชม. ได้เครื่องรางสูงสุด ${OFF_AMS} ชิ้น การ์ดสูงสุด ${OFF_CARDS} ใบ · ออโต้เร่งได้ x3 · โอกาสดรอปผลึกอาณาจักร 💠 x${VIP_RS} · ฟาร์มออฟไลน์ได้ผลึก 💠 ทุก ${OFF_RS_H} ชม. (สูงสุด ${OFF_RS} ก้อน เมื่อผ่านด่าน ${ST1} แล้ว)`,`Offline farm stores ${AFK_VIP_H} h and drops up to ${OFF_AMS} amulets and ${OFF_CARDS} cards · Auto speed up to x3 · realm crystal 💠 drops x${VIP_RS} · the offline farm gives 1 crystal per ${OFF_RS_H} h (up to ${OFF_RS}, once past stage ${ST1})`),
+    q.afk>1?T('ฟาร์มออฟไลน์ (Gold + ดรอป) '+(q.afk===2?'x2':'+50%'),'Offline farm (Gold + drops) '+(q.afk===2?'x2':'+50%')):'',
     q.fee<1?(q.fee?T('ค่าลงขายตลาดลด 50%','Market listing fee -50%'):T('ลงขายตลาดฟรี ไม่มีค่าธรรมเนียม','Free market listings')):'',
     i===3?T('ชื่อ VIP สีทองในล็อบบี้','Gold VIP name in the lobby'):''].filter(Boolean).map(ck).join('')};
   view(`<div class="shopv2 nt">${shopTop('vip')}<div class="vpbody"><div class="vpinfo">
@@ -1588,13 +1678,13 @@ function zoom(id){const o=S.cards[id],v=stat(id,o?o.lv:1),mx=stat(id,capOf(id)),
   z.innerHTML=`${full(id,'','glow').replace('<button','<span').replace('</button>','</span>')}<div class="inf"><h2>${C[id].n}</h2><span class="rib r-${C[id].r}">${RAR[C[id].r].n} · ${ROLE[C[id].role]}</span>
    <div class="stb nt"><span><img src="${ICON[MAGIC.includes(id)?'orb':'sword']}" alt=""><b>${atkName(id)}</b><i>${v.atk}</i><u>▸ +${gr(C[id].a,id)} / Lv</u></span><span><img src="${ICON.heart}" alt=""><b>HP</b><i>${v.hp}</i><u>▸ +${gr(C[id].h,id)} / Lv</u></span><span><img src="${ICON.shield}" alt=""><b>DEF</b><i>${v.def}</i><u>▸ +${gr(C[id].d,id)} / Lv</u></span><span><b class="k">CRIT</b><i>${Math.round(v.crit*100)}%</i><u>CRIT DMG x${v.cx}</u></span>
     <span><b class="k">LEVEL</b><i>${o?o.lv:1}<small> / ${capOf(id)}</small></i><u>EXP ${o&&maxed(id)?'MAX':(o?o.exp:0)+'/'+need(o?o.lv:1)}</u></span></div>
-   ${o?(()=>{const c=starCost(id),st=starOf(id);return `<div class="strow"><span class="nt">★ ${st}/5${C[id].r==='ST'?'':` · <span class="tx">ใบซ้ำ</span> ${o.cp||0}`}</span>${c?`<span class="btn sm ${canStar(id)?'':'off'}" data-star="${id}">อัปดาว <i class="nt">${c[0].toLocaleString('en')} Gold${c[1]?' + '+c[1]:''}</i>${c[1]?' ใบซ้ำ':''}</span>${stoneCost(id)?`<span class="btn sm alt ${canStone(id)?'':'off'} nt" data-stone="${id}">${T('ใช้หินดาว','Use Star Stones')} <i>${c[0].toLocaleString('en')} Gold + ★${stoneCost(id)}</i> <small style="display:inline;flex:none;margin:0">(${T('มี','have')} ${S.ss||0})</small></span>`:''}`:'<span class="gold nt">MAX ★</span>'}${st>0?(p=>canUnstar(id)?`<span class="btn sm ${unstarArm===id?'warn':'alt'} nt" data-unstar="${id}">${unstarArm===id?T('แตะอีกครั้งเพื่อยืนยัน','Tap again to confirm'):T('รีเซ็ตดาว','Reset stars')} <i>+${p.g.toLocaleString('en')} Gold${p.c?' · '+T('ใบซ้ำ','copies')+' +'+p.c:''}${p.sn?' · ★+'+p.sn:''}</i></span>`:`<small class="tx nt" style="color:#ffb14a">${T(`รีเซ็ตดาวไม่ได้: เลเวลเกิน ${RAR[C[id].r].cap} (เพดานตอนไม่มีดาว)`,`Stars cannot be reset: level is above ${RAR[C[id].r].cap} (the cap with no stars)`)}</small>`)(starPaid(id)):''}<small class="tx">ดาวละ ATK/HP/DEF +3% · เลเวลสูงสุด +${capBonus(C[id].r)}</small></div>`})():''}
+   ${o?starPanel(id):''}
    <p class="sub nt" style="margin:6px 0 0">${T('สาย','Class')}: <b style="color:#fff;background:${CLS[clsOf(id)][3]};padding:1px 9px;border-radius:999px">${CLS[clsOf(id)][0]} ${T(CLS[clsOf(id)][1],CLS[clsOf(id)][2])}</b> <span style="color:#c9d2f5">${({phys:T('โจมตีด้วย ATK ตีแรงกับศัตรูที่แพ้กายภาพ','attacks with ATK, strong against enemies weak to physical'),mage:T('โจมตีด้วย MATK ตีแรงกับศัตรูที่แพ้เวท','attacks with MATK, strong against enemies weak to magic'),tank:T('ตั้งโล่และล่อศัตรูให้ตีตัวเองแทนเพื่อน','shields up and draws enemy attacks away from the team'),sup:T('ฮีลและสร้างโล่ให้ทีม','heals and shields the team')})[clsOf(id)]}</span></p>
    ${resKind(id)?`<p class="sub nt" style="margin:6px 0 0;color:#c9d2f5">🛡 ${resKind(id)==='tank'?T('เกราะหนัก: รับดาเมจกายภาพ −15% · รับดาเมจเวท +20%','Heavy armour: physical damage taken −15% · magic damage taken +20%'):T('เกราะเวท: รับดาเมจเวท −20% · รับดาเมจกายภาพ +10%','Warded: magic damage taken −20% · physical damage taken +10%')}</p>`:''}
    ${o&&swOk(id)?`<div class="strow"><span class="btn sm alt nt" data-swap="${id}">🎟 ${T('สลับการ์ด','Swap card')} <i>${T('ตั๋วฟรีเหลือ','free tickets left')} ${swLeft()}</i></span><small class="tx nt">${T('เปลี่ยนเป็นการ์ดระดับเดียวกันที่ยังไม่มี เลเวลตามไป ดาวคืนทอง','Trade it for a card of the same rank you do not own. The level moves over and stars are refunded')}</small></div>`:''}
    ${o&&C[id].r!=='ST'?`<div class="strow"><span class="btn sm ${isLock(id)?'':'alt'}" data-lock="${id}"><span class="nt">${isLock(id)?T('🔒 ล็อคอยู่ · แตะเพื่อปลดล็อค','🔒 Locked · tap to unlock'):T('🔓 ล็อคการ์ดใบนี้','🔓 Lock this card')}</span></span><small class="tx nt">${T('การ์ดที่ล็อคจะขาย เทรด และย่อยไม่ได้','A locked card cannot be sold, traded or dismantled')}</small></div>`:''}
    <p class="sub">เครื่องราง: ${amOf(id)?amOf(id).n+' ('+amOf(id).t+')':'ยังไม่ได้ใส่'}</p>
-   <div class="skl">${[0,1,2].map(k=>`${skBtn(id,k,{tag:'span'})}<p><b>${SK[id][k][0]}</b>${CD[k]?` · พัก ${CD[k]} ตา`:''}<br>${skDesc(SK[id][k]).replace(/ATK/g,atkName(id))}</p>`).join('')}</div>
+   <div class="skl">${(SK[id][3]?[0,1,2,3]:[0,1,2]).map(k=>`${skBtn(id,k,{tag:'span',cls:k===3&&starOf(id)<10?'lk4':''})}<p><b>${SK[id][k][0]}</b>${k===3?` <i class="s4t">${starOf(id)>=10?T('สกิลที่ 4','Skill 4'):T('🔒 ปลดล็อคที่ ★10','🔒 unlocks at ★10')}</i>`:''}${CD[k]?` · พัก ${CD[k]} ตา`:''}<br>${skDesc(SK[id][k]).replace(/ATK/g,atkName(id))}</p>`).join('')}</div>
    ${C[id].ls?`<p class="sub nt" style="margin-top:8px;color:#8fe9ff"><b>★ ${T('พลังติดตัว Limited','Limited passive')}: Golden Hunger</b><br>${T(`ทุกการโจมตีฟื้น HP ตัวเอง ${Math.round(C[id].ls*100)}% ของดาเมจที่ทำได้ (สกิลดูดเลือดยังฟื้นครึ่งหนึ่งตามเดิม)`,`Every attack restores ${Math.round(C[id].ls*100)}% of the damage dealt as HP (the drain skill still restores half)`)}</p>`:''}
    </div>`;z.hidden=false;const inf=z.querySelector('.inf');z.insertAdjacentHTML('beforeend','<span class="zx nt">✕</span>');if(inf){const y=zoomKeep===id?zoomY:0;zoomKeep=id;inf.scrollTop=y;inf.onscroll=()=>{zoomY=inf.scrollTop;const m=z.querySelector('.zmore');if(m)m.hidden=inf.scrollTop+inf.clientHeight>=inf.scrollHeight-8};if(inf.scrollHeight>inf.clientHeight+8){z.insertAdjacentHTML('beforeend',`<span class="zmore nt">▼ ${T('เลื่อนดูเพิ่ม','scroll for more')}</span>`);inf.onscroll()}}}
 let zoomKeep=null,zoomY=0;
@@ -1632,9 +1722,13 @@ const VAR=[
 const NSTAGE=VAR.length-1;
 const MAPS=VAR.map(v=>v[1]),FX={};VAR.forEach((v,i)=>FX[i+1]=v[2]);
 // stage order: a fixed pseudo-random walk over the variants that never shows the same picture twice in a row
-const MAPSEQ=[0];{let x=20261009,prev=0;for(let n=1;n<=MAXST;n++){let k;do{x=(Math.imul(x,1103515245)+12345)>>>0;k=(x>>>8)%NSTAGE}while(VAR[k][0]===prev);prev=VAR[k][0];MAPSEQ[n]=k+1}}
-const mapOf=n=>n===0?VAR.length:MAPSEQ[Math.max(1,Math.min(MAXST,n))],mapImg=n=>`bg/m${VAR[mapOf(n)-1][0]}.webp`;
+const MAPSEQ=[0];{let x=20261009,prev=0;for(let n=1;n<=ST1;n++){let k;do{x=(Math.imul(x,1103515245)+12345)>>>0;k=(x>>>8)%NSTAGE}while(VAR[k][0]===prev);prev=VAR[k][0];MAPSEQ[n]=k+1}}
+const MAPSEQ_N=ST1; // chapter 1 walks the 50 old pictures; a chapter 2 realm alternates its two pictures every 10 stages and its lord fights on the second (throne) one
+const rlmPic=n=>{const r=realmOf(n),i=n%100===0?1:Math.floor((n-ST1-1)/10)%2;return[r,i]};
+RLM.forEach((R,r)=>R.bg.forEach((b,i)=>{FX[201+r*2+i]=R.fx[i];MAPS[200+r*2+i]=R.n}));
+const mapOf=n=>n===0?VAR.length:n>ST1?(([r,i])=>201+r*2+i)(rlmPic(n)):MAPSEQ[Math.max(1,Math.min(ST1,n))],mapImg=n=>n>ST1?(([r,i])=>`bg/${RLM[r].bg[i]}.webp`)(rlmPic(n)):`bg/m${VAR[mapOf(n)-1][0]}.webp`;
 function bgLayers(n){return bgCore(mapOf(n),mapImg(n))}
+const mapName=n=>n>ST1?T(RLM[realmOf(n)].th,RLM[realmOf(n)].n):MAPS[mapOf(n)-1];
 function bgCore(m,src){const f=FX[m]||{},u=`style="background-image:url(${src})"`,d=k=>`animation-delay:-${((performance.now()/1000)%k).toFixed(2)}s`;
   return `<div class="bgl ${f.sway?'lowr':''}" ${u}></div>${f.sway?`<div class="bgl top" style="background-image:url(${src});${d(5.6)}"></div>`:''}
    ${f.aur?`<div class="baur" style="${d(10)}"></div>`:''}${f.glow?`<div class="bglow" style="--gc:${f.glow};${d(13.2)}"></div>`:''}${f.fog?`<div class="bfog" style="${f.fog===1?'':'--fc:'+f.fog+';'}${d(32)}"></div>`:''}<canvas id="bgfx" data-m="${m}"></canvas>`}
@@ -1662,6 +1756,8 @@ function fxStep(c,t){
     if(t>fxNext){fxNext=t+1800+R()*2600;const [vx,vy]=f.volc[Math.floor(R()*f.volc.length)];for(let i=0;i<22;i++)fxB.push({x:vx/100*W,y:vy/100*H,vx:(R()-.5)*2.4,vy:-1.2-R()*2.6,l:1,k:0})}
     if(R()<.35){const [vx,vy]=f.volc[Math.floor(R()*f.volc.length)];fxB.push({x:vx/100*W+(R()-.5)*6,y:vy/100*H,vx:.15+R()*.2,vy:-.35-R()*.3,l:1,k:1})}
     fxB=fxB.filter(b=>b.l>0);for(const b of fxB){b.x+=b.vx;b.y+=b.vy;if(b.k){b.l-=.012;x.globalAlpha=b.l*.5;x.fillStyle='#3a3038';const r=2+(1-b.l)*7;x.fillRect(b.x-r/2,b.y-r/2,r,r)}else{b.vy+=.07;b.l-=.016;x.globalAlpha=b.l;x.fillStyle=b.l>.6?'#fff3a0':b.l>.3?'#ff9a2a':'#ff2a00';x.fillRect(b.x,b.y,2,2)}}}
+  if(f.puff){if(R()<.3){const [vx,vy]=f.puff[Math.floor(R()*f.puff.length)];fxB.push({x:vx/100*W+(R()-.5)*4,y:vy/100*H,vx:(R()-.5)*.25,vy:-.3-R()*.35,l:1,k:2})}
+    fxB=fxB.filter(b=>b.l>0);for(const b of fxB){if(b.k!==2)continue;b.x+=b.vx;b.y+=b.vy;b.l-=.01;x.globalAlpha=b.l*.45;x.fillStyle='#f4f0ea';const r=2+(1-b.l)*9;x.fillRect(b.x-r/2,b.y-r/2,r,r)}}
   if(f.flash){if(t>fxFlashAt){fxFlash=1;fxFlashAt=t+3500+R()*5500}if(fxFlash>0){x.globalAlpha=fxFlash*.55;x.fillStyle=f.flash===1?'#ffffff':f.flash;x.fillRect(0,0,W,H);fxFlash-=.09}}
   x.globalAlpha=1}
 if(!RM)(function loop(t){const c=$('bgfx');if(c){const w=Math.max(1,c.clientWidth>>1),h=Math.max(1,c.clientHeight>>1);if(c.width!==w||c.height!==h){c.width=w;c.height=h;fxM=0}fxStep(c,t)}requestAnimationFrame(loop)})(0);
@@ -1672,20 +1768,21 @@ let ret=null,quake=false;const hits=new Set();
 async function banner(t,cls=''){ov(`<div class="bn ${cls}"><span>${t}</span></div>`);await W(RM?400:850);ov('')}
 async function vsIntro(){const P=u=>`<div class="vp">${art(u.id)}</div>`;
   ov(`<div class="vs"><div class="vl">${bt.al.map(P).join('')}</div><b>VS</b><div class="vr">${bt.en.map(P).join('')}</div>${bt.pvp?`<div class="vsn nt"><span>${shBadge(shMine(),30)}${S.fd?fdBadge():''}${esc(S.me.name)}</span><span>${shBadge(bt.pvp.sh,30)}${bt.pvp.fd?fdBadge():''}${esc(bt.pvp.name)}</span></div>`:''}</div>`);await W(RM?500:1150);ov('')}
-async function cutin(a,k){const sk=SK[a.id][k];if(k===2)sfx('ult');
-  ov(`<div class="dim"></div><div class="cut t-${sk[2]} ${k===2?'ult':''}"><div class="cutart">${art(a.id)}</div><div class="cutname">${sk[0]}<small>${C[a.id].n}</small></div></div>`);
-  await W(RM?300:k===2?1000:750);ov('')}
+async function cutin(a,k){const sk=SK[a.id][k];if(k>=2)sfx('ult');
+  ov(`<div class="dim"></div><div class="cut t-${sk[2]} ${k>=2?'ult':''} ${k===3?'s4':''}"><div class="cutart">${art(a.id)}</div><div class="cutname">${sk[0]}<small>${C[a.id].n}</small></div></div>`);
+  await W(RM?300:k>=2?1000:750);ov('')}
 function off(el){let x=0,y=0;while(el&&el.id!=='stage'){x+=el.offsetLeft;y+=el.offsetTop;el=el.offsetParent}return{x,y}}
 // the attacker dashes across the lane to its target; the hit lands when it arrives, then it slides home
 async function lunge(from,to,dir){const f=$(from);if(!f||RM)return;let dx=dir*140,dy=0;
   if(to&&$(to)){const A=off(f),B=off($(to));dx=B.x-A.x-dir*f.offsetWidth*.85;dy=B.y-A.y}
   f.style.transition=`transform ${170/(S.spd||1)}ms cubic-bezier(.5,0,.2,1)`;f.style.zIndex=6;f.style.transform=`translate(${dx}px,${dy}px) scale(1.12)`;ret={id:from,dx,dy};await W(180)}
-const fighter=(id,lv,o)=>{const v=stat(id,lv,o);return{id,lv,atk:v.atk,base:v.atk,hp:v.hp,max:v.hp,def:v.def,crit:v.crit,cx:v.cx,hb:v.hb,sh:0,done:false,cds:[0,0,2]}};
+const fighter=(id,lv,o)=>{const v=stat(id,lv,o),s4=!!(SK[id]&&SK[id][3]&&(o?o.star||0:starOf(id))>=10);return{id,lv,atk:v.atk,base:v.atk,hp:v.hp,max:v.hp,def:v.def,crit:v.crit,cx:v.cx,hb:v.hb,sh:0,done:false,sk4:s4,s4l:s4Lv(id,o),cds:s4?[0,0,ULT_CD0,SK4_CD0]:[0,0,ULT_CD0]}};
 // opp = an arena opponent {name,pts,team:[{id,lv,star,am}]}: its cards fight with their own skills instead of stage monsters
 async function startBattle(n,opp){
   bt={n,round:1,sel:0,log:'',pvp:opp||null,farm:!opp&&loop===2,first:!opp&&n>(S.cleared||0),
     al:(opp?pvTeam():S.team).map(id=>fighter(id,S.cards[id].lv)),
-    en:opp?opp.team.map(c=>fighter(c.id,c.lv,c)):(m=>stageDef(n).map(e=>{const hp=Math.max(1,Math.round(e.hp*m));return{...e,atk:Math.max(1,Math.round(e.atk*m)),hp,max:hp}}))(softMul(n))};
+    en:opp?opp.team.map(c=>fighter(c.id,c.lv,c)):(m=>stageDef(n).map(e=>{const hp=Math.max(1,Math.round(e.hp*m)),atk=Math.max(1,Math.round(e.atk*m));return{...e,atk,base:atk,hp,max:hp}}))(softMul(n))};
+  if(!opp){bt.rule=ruleOf(n);bt.surv=stKind(n)==='surv'}
   if(opp)[...bt.al,...bt.en].forEach(f=>{f.hp=f.max=f.max*PV_HP}); // cards hit each other far harder than stage monsters do, so arena fights give everyone more life
   const my=bt;busy=true;draw();await vsIntro();if(bt!==my)return;
   if(opp)for(const n of[3,2,1]){beep();ov(`<div class="bn cd"><span>${n}</span></div>`);await sleep(RM?600:1000);if(bt!==my)return}
@@ -1694,14 +1791,31 @@ async function startBattle(n,opp){
 }
 const actor=()=>bt.al.find(a=>a.hp>0&&!a.done);
 function autoT(){const tn=bt.en.findIndex(e=>e.hp>0&&e.taunt);if(tn>=0)return tn;let b=-1;bt.en.forEach((e,i)=>{if(e.hp>0&&(b<0||e.hp<bt.en[b].hp))b=i});return b}
-function autoPick(a,mine=true){const A=mine?bt.al:bt.en,hurtAlly=A.some(x=>x.hp>0&&x.hp<x.max*.6);
-  for(const j of[2,1]){const t=SK[a.id][j][2];if(a.cds[j])continue;
-    if(t==='heal'||t==='healall'){if(hurtAlly)return j}
-    else if(t==='guard'){if(!(a.sh>a.max*.1))return j}
-    else if(t==='shieldall'){if(A.some(x=>x.hp>0&&!(x.sh>x.max*.1)))return j}
-    else if(t==='buff'){if(a.atk<a.base*2)return j}
-    else if(t==='rally'){if(A.some(x=>x.hp>0&&x.atk<x.base*2))return j}
-    else return j}
+// b172 auto: a skill is used only when it does something now. Basic attack when it finishes the target and nothing better is ready; area attacks on 2+ foes;
+// finishers on a wounded target; heals when an ally is under half (the tank under 60%); a taunt only when nobody is taunting; buffs while the fight still has turns left.
+function autoPick(a,mine=true){const A=mine?bt.al:bt.en,F=mine?bt.en:bt.al,nF=F.filter(x=>x.hp>0).length;if(!nF)return 0;
+  const ti=mine?autoT():foePick(),t=F[ti];if(!t)return 0;const dmg=v=>a.atk*v*a.atk/(a.atk+(t.def||0)),kills=v=>dmg(v)>=t.hp+(t.sh||0),long=nF>=2||!kills(2.2);
+  const low=A.some(x=>x.hp>0&&(x.hp<x.max*.5||(x.taunt&&x.hp<x.max*.6)));
+  if(a.sk4&&!a.cds[3]){const ty=SK[a.id][3][2],dead=A.some(x=>x.hp<=0),hp=x=>x.hp/x.max,act=A.filter(x=>x.hp>0);
+    if(ty==='zero'&&(nF>=2||!kills(2)))return 3;
+    if(ty==='blood'&&a.hp>a.max*.45&&!kills(1))return 3;
+    if(ty==='dive'||ty==='chain'||ty==='hydra')if(nF>=2||!kills(1))return 3;
+    if(ty==='scorch'&&(nF>=2||!kills(3)))return 3;
+    if(ty==='rebirth'&&dead&&!a.reb)return 3;
+    if(ty==='forms'&&!a.forms&&long)return 3;
+    if(ty==='halo'&&long&&!act.some(x=>x.halo>0)&&(low||bt.round<=3))return 3;
+    if(ty==='reflect'&&!a.reflect&&long&&!A.some(x=>x.hp>0&&x.taunt&&x!==a))return 3;
+    if(ty==='fort'&&(long||low)&&!A.some(x=>x.hp>0&&x.taunt&&x!==a))return 3;
+    if(ty==='stand'&&act.some(x=>hp(x)<.35&&!x.stand))return 3}
+  for(const j of[2,1]){if(a.cds[j])continue;const [, ,ty,v]=SK[a.id][j];
+    if(ty==='heal'||ty==='healall'){if(low)return j}
+    else if(ty==='shieldall'){if(A.filter(x=>x.hp>0&&!(x.sh>x.max*.1)).length>=2&&(bt.round<=2||low))return j}
+    else if(ty==='guard'){if(!A.some(x=>x.hp>0&&x.taunt))return j}
+    else if(ty==='buff'){if(a.atk<a.base*1.99&&long)return j}
+    else if(ty==='rally'){if(A.some(x=>x.hp>0&&x.atk<x.base*1.99)&&long)return j}
+    else if(ty==='aoe'){if(nF>=2||!kills(1))return j}
+    else if(ty==='exec'){if(t.hp<=t.max/2||!kills(1))return j}
+    else if(!kills(1))return j}
   return 0}
 function autoAct(){const a=actor();if(!a)return;bt.sel=autoPick(a);act(autoT())}
 const FACE_R=[];
@@ -1739,26 +1853,26 @@ async function strike(from,id,tos,dir){
   await W(130)}
 async function pose(from,tos){const f=$(from);if(!f||RM)return;
   f.querySelector('.spr').animate([{transform:'none'},{transform:'translateY(-14px) scale(1.06)'},{transform:'none'}],{duration:380/(S.spd||1)});await W(200);sfx('heal');const fk=FK;FK=null;const ty=fk&&fk[0][2];if(ty==='heal'){const L=from[0]==='a'?bt.al:bt.en;let b=-1;L.forEach((x,j)=>{if(x.hp>0&&(b<0||x.hp/x.max<L[b].hp/L[b].max))b=j});tos=b<0?tos:[from[0]+b]}
-  tos.forEach(t=>ty==='guard'||ty==='shieldall'?fxAt(t,'shield'):ty==='heal'||ty==='healall'?fxAt(t,'heal'):ty==='buff'||ty==='rally'?fxAt(t,'buff'):addFx(t,'aur'));await W(150)} // sprites drawn facing right; mirrored when they fight on the enemy side
+  tos.forEach(t=>['guard','shieldall','stand','reflect'].includes(ty)?fxAt(t,'shield'):['heal','healall','halo','rebirth'].includes(ty)?fxAt(t,ty==='halo'?'holy':'heal'):ty==='buff'||ty==='rally'||ty==='forms'?fxAt(t,'buff'):addFx(t,'aur'));await W(150)} // sprites drawn facing right; mirrored when they fight on the enemy side
 // where each fighter stands on the floor: [x %, feet y %, size]; the back row is higher up, smaller and nearer the middle, the front row lower and larger
-const SPOT=[[37,44,.8],[24,62,.92],[10,81,1.04]],spots=n=>n===1?[SPOT[1]]:n===2?[SPOT[0],SPOT[2]]:SPOT;
-function unit(u,el,cls,attr,sp,side){const p=Math.max(0,u.hp/u.max*100),mon=u.boss!==undefined,k=sp[2]*(u.boss?1.18:1);
+const SPOT=[[19,47,.86],[34,63,.96],[17,80,1.04]],spots=n=>n===1?[[30,63,.96]]:n===2?[[24,50,.88],[24,77,1.02]]:SPOT;   // b173: triangle formation, the tip (middle fighter) nearest the enemy
+function unit(u,el,cls,attr,sp,side){const p=Math.max(0,u.hp/u.max*100),mon=u.boss!==undefined,k=sp[2]*(u.lord?1.3:u.elite?1.5:u.boss?1.18:1);
   return `<div class="pos ${side?'r':'l'}" style="left:calc(${side?100-sp[0]:sp[0]}% - var(--bw)*${(k*.65).toFixed(3)});bottom:${100-sp[1]}%;--cw:calc(var(--bw)*${k.toFixed(3)});z-index:${Math.round(sp[1])}"><button class="fig ${u.boss?'boss':''} ${u.hp<=0?'dead':''} ${cls}" id="${el}" ${attr} title="${C[u.id].n}">
-    <span class="plate">${u.boss?'<b class="tagb">BOSS</b>':''}${u.taunt&&u.hp>0?`<b class="tnt">TAUNT${u.taunt>1?' '+u.taunt:''}</b>`:''}${u.gate>0&&u.hp>0?`<b class="tnt gtg nt">🛡 ×${u.gate}</b>`:''}${el[0]==='e'&&u.hp>0&&wkU(u)?`<b class="wkt ${wkU(u)} nt">${weakTxt(wkU(u))}</b>`:''}<span class="fhp"><i style="width:${p}%"></i>${u.sh>0&&u.hp>0?`<b style="width:${Math.min(100,u.sh/u.max*100)}%"></b>`:''}</span>
+    <span class="plate">${u.lord?'<b class="tagb lord">LORD</b>':u.boss?'<b class="tagb">BOSS</b>':u.elite?'<b class="tagb">ELITE</b>':''}${u.taunt&&u.hp>0?`<b class="tnt">TAUNT${u.taunt>1?' '+u.taunt:''}</b>`:''}${u.gate>0&&u.hp>0?`<b class="tnt gtg nt">🛡 ×${u.gate}</b>`:''}${el[0]==='e'&&u.hp>0&&wkU(u)?`<b class="wkt ${wkU(u)} nt">${weakTxt(wkU(u))}</b>`:''}<span class="fhp"><i style="width:${p}%"></i>${u.sh>0&&u.hp>0?`<b style="width:${Math.min(100,u.sh/u.max*100)}%"></b>`:''}</span>
      <span class="st"><span class="a ${C[u.id].m?'m':''}"><img src="${ICON[MAGIC.includes(u.id)?'orb':'sword']}" alt="${atkName(u.id)}">${u.atk}</span><span class="d"><img src="${ICON.heart}" alt="HP">${Math.max(0,u.hp)}${u.sh>0&&u.hp>0?`<b class="shv">+${u.sh}</b>`:''}</span>${u.def>0?`<span class="f"><img src="${ICON.shield}" alt="DEF">${u.def}</span>`:''}</span></span>
     <span class="sw ${side?'':'flip'}">${sprite(u.id,(u.walk?'walk':'')+(C[u.id].gl?' glw':''))}</span></button></div>`}
 function draw(){
   const ac=busy?null:actor(),ord=[...bt.al.filter(a=>a.hp>0&&!a.done).map(a=>[a,'al']),...bt.en.filter(e=>e.hp>0).map(e=>[e,'en'])];
   view(`<div class="arena px ${bt.tw&&bt.in?'twin':''}">${bt.tw?twBg(bt.tw):bgLayers(bt.n)}
-    <div class="atop"><span class="num">${bt.pvp?`<span class="nt">PvP · vs ${esc(bt.pvp.name)}${bt.pvp.fd?' '+fdBadge(78):''}</span>`:bt.tw?`<span class="nt">TOWER · ${T('ชั้น','Floor')} ${bt.tw} · ${T(TWZ[twZone(bt.tw)].th,TWZ[twZone(bt.tw)].n)}</span>`:`ด่าน ${bt.n} · ${MAPS[mapOf(bt.n)-1]}`} · รอบ ${bt.round}</span><span class="alog" aria-live="polite">${bt.log}</span>
-      <span class="row"><button class="btn sm ${S.auto?'on':'alt'}" data-act="auto">ออโต้</button><button class="btn alt sm" data-act="spd">x${S.spd||1}</button>${!bt.pvp&&loop?`<button class="btn on sm nt" data-act="lpstop">${loop===2?'🔁':'⏩'} ${T('หยุดวน','Stop loop')}</button>`:''}<button class="btn red sm" data-act="prep">ถอย</button></span></div>
+    <div class="atop"><span class="num">${bt.pvp?`<span class="nt">PvP · vs ${esc(bt.pvp.name)}${bt.pvp.fd?' '+fdBadge(78):''}</span>`:bt.tw?`<span class="nt">TOWER · ${T('ชั้น','Floor')} ${bt.tw} · ${T(TWZ[twZone(bt.tw)].th,TWZ[twZone(bt.tw)].n)}</span>`:`ด่าน ${bt.n} · ${mapName(bt.n)}${ruleOf(bt.n)?` · <b class="rlb">${ruleTxt(ruleOf(bt.n))}</b>`:''}${bt.surv?` · <b class="rlb">⏳ ${Math.max(0,6-bt.round)}</b>`:''}`} · รอบ ${bt.round}</span><span class="alog" aria-live="polite">${bt.log}</span>
+      <span class="row"><button class="btn sm ${S.auto?'on':'alt'}" data-act="auto">ออโต้</button><button class="btn alt sm" data-act="spd">x${S.spd||1}</button>${!bt.pvp&&loop&&fs?`<button class="btn alt sm nt fsch" data-act="fsview" title="${T('ฟาร์มรอบนี้ได้อะไรบ้าง','This farm run so far')}">💰 ${S.gold.toLocaleString('en')} <i>+${fs.g.toLocaleString('en')}</i> 📊</button>`:''}${!bt.pvp&&loop?`<button class="btn on sm nt" data-act="lpstop">${loop===2?'🔁':'⏩'} ${T('หยุดวน','Stop loop')}</button>`:''}<button class="btn red sm" data-act="prep">ถอย</button></span></div>
     <div class="field">
       <div class="order">${ord.map(([u,sd],i)=>`<span class="op ${sd} ${i?'':'now'}">${art(u.id)}</span>`).join('')}</div>
       ${bt.al.map((a,i)=>unit(a,'a'+i,a===ac?'act':'','disabled',spots(bt.al.length)[i],0)).join('')}
       ${bt.en.map((e,i)=>unit(e,'e'+i,'',`data-act="tgt" data-i="${i}" ${busy||e.hp<=0||S.auto?'disabled':''}`,spots(bt.en.length)[i],1)).join('')}
       ${(()=>{const a=ac||actor()||bt.al.find(x=>x.hp>0);if(!a)return '';const live=a===ac&&!S.auto;
         return `<div class="abar ${live?'':'wait'}"><span class="aport r-${C[a.id].r}">${art(a.id)}</span><span class="anm"><b class="nt">${C[a.id].n}</b><small>${live?(needT(SK[a.id][bt.sel])?'แตะศัตรูเพื่อใช้ ':'')+`<i class="nt">${SK[a.id][bt.sel][0]}</i>`:S.auto?'ออโต้':'รอ…'}</small></span>
-         ${[0,1,2].map(k=>skBtn(a.id,k,{attr:`data-act="sk" data-k="${k}" ${live&&a.cds[k]===0?'':'disabled'}`,cls:(live&&bt.sel===k?'pick ':'')+(a.cds[k]?'off':''),cd:a.cds[k]?a.cds[k]:''})).join('')}</div>`})()}
+         ${(a.sk4?[0,1,2,3]:[0,1,2]).map(k=>skBtn(a.id,k,{attr:`data-act="sk" data-k="${k}" ${live&&a.cds[k]===0?'':'disabled'}`,cls:(live&&bt.sel===k?'pick ':'')+(a.cds[k]?'off':''),cd:a.cds[k]?a.cds[k]:''})).join('')}</div>`})()}
     </div></div>`);
   if(ret){const e=$(ret.id);if(e&&!RM)e.animate([{transform:`translate(${ret.dx}px,${ret.dy}px) scale(1.12)`},{transform:'none'}],{duration:230/(S.spd||1),easing:'ease-out'});ret=null}
   if(hits.size)sfx('hit');
@@ -1776,13 +1890,18 @@ const resRamp=n=>Math.max(0,Math.min(1,(n-30)/30));
 const resMul=(id,magic,n)=>{const k=resKind(id);if(!k)return 1;return 1+(RESV[k][magic?1:0]-1)*(C[id].mon?resRamp(n):1)};
 const weakOf=(id,n)=>{const k=resKind(id);if(!k||(C[id].mon&&resRamp(n)<=0))return '';return RESV[k][1]>1?'m':'p'},weakTxt=w=>w==='m'?T('แพ้เวท','weak to magic'):w==='p'?T('แพ้กายภาพ','weak to physical'):'';
 let hitM=false,hitA=0; // hitA = ATK of whoever is hitting right now, used by DEF // is the current attacker a magic user
-function hurt(list,pre,i,d,cls='d',cr){const t=list[i],k=d<0?'g':(hitM?'m':'p')+(cr?'c':'');let wk='';if(d>0&&t.gate>0){t.gate--;q(pre+i,'BLOCK','s');hits.add(pre+i);return}if(d>0){const rm=t.gim==='shift'?((bt.round%2===1)===!hitM?.5:1.3):resMul(t.id,hitM,bt.n);if(rm!==1){d=Math.max(1,Math.round(d*rm));wk=rm>1.01?'▲':rm<.99?'▼':''}}if(d>0&&t.taunt)d=Math.round(d*.6);if(d>0&&hitA>0&&t.def>0)d=Math.max(1,Math.round(d*hitA/(hitA+t.def)));
+let HIT_SRC=null,S4NEST=0;
+function hurt(list,pre,i,d,cls='d',cr){const t=list[i],k=d<0?'g':(hitM?'m':'p')+(cr?'c':'');let wk='';
+  if(d>0&&t.forms>0&&t.hp>0&&!S4NEST&&Math.random()<(t.formsP||SK4E.h22[1])){q(pre+i,T('หลบ!','DODGE'),'s');const src=HIT_SRC;if(src&&src[0][src[2]]&&src[0][src[2]].hp>0){S4NEST=1;const [cd,cc]=roll(t,.8),ka=hitA,km=hitM;hitA=t.atk;hitM=!!C[t.id].m;hurt(src[0],src[1],src[2],cd,'d',cc);hitA=ka;hitM=km;S4NEST=0}return}if(d>0&&t.gate>0){t.gate--;q(pre+i,'BLOCK','s');hits.add(pre+i);return}if(d>0){const rm=t.gim==='shift'?((bt.round%2===1)===!hitM?.5:1.3):resMul(t.id,hitM,bt.n);if(rm!==1){d=Math.max(1,Math.round(d*rm));wk=rm>1.01?'▲':rm<.99?'▼':''}}if(d>0&&bt&&bt.rule==='sky')d=Math.max(1,Math.round(d*(hitM?1.3:.8)));if(d>0&&t.taunt)d=Math.round(d*.6);if(d>0&&hitA>0&&t.def>0)d=Math.max(1,Math.round(d*hitA/(hitA+t.def)));
   if(d>0&&t.sh>0){const ab=Math.min(t.sh,d);t.sh-=ab;d-=ab;if(d<=0){q(pre+i,'🛡 -'+ab,'s');hits.add(pre+i);return}}
+  if(d>0&&t.stand>0&&t.hp>0&&t.hp-d<1)d=Math.max(0,t.hp-1);
   t.hp-=d;q(pre+i,(d<0?'+':'-')+Math.abs(d)+(cr?'!':'')+wk,k);if(d>0)hits.add(pre+i);
+  if(d>0&&t.halo>0&&t.hp>0){const h=Math.min(Math.round(d*(t.haloP||SK4E.h07[1])),t.max-t.hp);if(h>0){t.hp+=h;q(pre+i,'+'+h,'g')}}
+  if(d>0&&t.reflect>0&&!S4NEST){const src=HIT_SRC;if(src&&src[0][src[2]]&&src[0][src[2]].hp>0){S4NEST=1;const ka=hitA;hitA=0;hurt(src[0],src[1],src[2],Math.max(1,Math.round(d*(t.reflectP||SK4E.h26[1]))),'d');hitA=ka;S4NEST=0}}
   if(d>0&&t.gim==='rage'&&t.hp>0){const a=Math.round(t.base*(2-Math.max(0,t.hp)/t.max));if(a>t.atk){t.atk=a;q(pre+i,'ATK ↑','g')}}}
 // SD = whose turn the skill is cast for: A its own side, F the other side, with the id prefixes of their figures (a0.. / e0..)
 let SD=null;const sideOf=mine=>mine?{A:bt.al,F:bt.en,ap:'a',fp:'e'}:{A:bt.en,F:bt.al,ap:'e',fp:'a'};
-function mend(j,amt){const x=SD.A[j],h=Math.min(Math.round(amt),x.max-x.hp);if(h>0)hurt(SD.A,SD.ap,j,-h,'g')}
+function mend(j,amt,over){const x=SD.A[j],h=Math.min(Math.round(amt),x.max-x.hp);if(h>0)hurt(SD.A,SD.ap,j,-h,'g');if(over&&Math.round(amt)-Math.max(0,h)>0)ward(j,Math.round(amt)-Math.max(0,h))}   // over: healing past full HP becomes shield (heal skills only)
 function ward(j,amt){const x=SD.A[j],v=Math.min(x.max,Math.round((x.sh||0)+amt))-(x.sh||0);x.sh=(x.sh||0)+v;q(SD.ap+j,'🛡 +'+v,'s')}
 const roll=(a,v,sure)=>{const cr=sure||Math.random()<a.crit;return[Math.round(a.atk*v*(cr?a.cx:1)),cr]};
 const pump=(x,j,v)=>{const n=Math.min(x.base*2,Math.round(x.atk*v));if(n>x.atk){x.atk=n;q(SD.ap+j,'ATK ↑','g')}};
@@ -1790,42 +1909,80 @@ const pump=(x,j,v)=>{const n=Math.min(x.base*2,Math.round(x.atk*v));if(n>x.atk){
 const TAUNT_N=2,tauntTick=x=>{x.taunt=Math.max(0,(+x.taunt||0)-1)};
 function cast(a,k,ti,mine=true){SD=sideOf(mine);
   const sk=SK[a.id][k],[name,,type,v]=sk,ai=SD.A.indexOf(a),t=SD.F[ti];hitM=!!C[a.id].m;hitA=a.atk;bt.log=`${C[a.id].n} ใช้ ${name}`;
-  if(needT(sk)){
+  if(['hit','exec','drain','sure'].includes(type)){
     const [d,cr]=roll(a,v*(type==='exec'&&t.hp<=t.max/2?2:1),type==='sure');hurt(SD.F,SD.fp,ti,d,'d',cr);
     if(type==='drain')mend(ai,d/2);else if(C[a.id].ls&&a.hp>0)mend(ai,d*C[a.id].ls)}
-  else if(type==='aoe'){let sum=0;SD.F.forEach((e,j)=>{if(e.hp>0){const [d,cr]=roll(a,v);sum+=d;hurt(SD.F,SD.fp,j,d,'d',cr)}});if(C[a.id].ls&&a.hp>0)mend(ai,sum*C[a.id].ls)}
-  else if(type==='heal'){let b=-1;SD.A.forEach((x,j)=>{if(x.hp>0&&(b<0||x.hp/x.max<SD.A[b].hp/SD.A[b].max))b=j});mend(b,a.atk*v*a.hb)}
-  else if(type==='healall')SD.A.forEach((x,j)=>{if(x.hp>0)mend(j,a.atk*v*a.hb)});
+  else if(type==='aoe'){let sum=0;const lone=SD.F.filter(e=>e.hp>0).length===1?AOE_LONE:1;SD.F.forEach((e,j)=>{if(e.hp>0){const [d,cr]=roll(a,v*lone);sum+=d;hurt(SD.F,SD.fp,j,d,'d',cr)}});if(C[a.id].ls&&a.hp>0)mend(ai,sum*C[a.id].ls)}
+  else if(type==='heal'){let b=-1;SD.A.forEach((x,j)=>{if(x.hp>0&&(b<0||x.hp/x.max<SD.A[b].hp/SD.A[b].max))b=j});mend(b,a.atk*v*a.hb,1)}
+  else if(type==='healall')SD.A.forEach((x,j)=>{if(x.hp>0)mend(j,a.atk*v*a.hb,1)});
   else if(type==='guard'){ward(ai,a.max*v*a.hb);a.taunt=TAUNT_N}
   else if(type==='shieldall')SD.A.forEach((x,j)=>{if(x.hp>0)ward(j,a.max*v*a.hb)});
   else if(type==='buff')pump(a,ai,v);
   else if(type==='rally')SD.A.forEach((x,j)=>{if(x.hp>0)pump(x,j,v)});
+  else if(S4T.includes(type))cast4(a,ai,type,type==='stand'?v:v*(1+S4_K*((a.s4l||1)-1)),ti);
+  if(SK_HIT[type]&&t&&t.hp>0&&a.hp>0){hitA=a.atk;const [d,cr]=roll(a,SK_HIT[type]);hurt(SD.F,SD.fp,ti,d,'d',cr);if(C[a.id].ls)mend(ai,d*C[a.id].ls)}
   a.cds=a.cds.map((c,j)=>j===k?CD[k]:Math.max(0,c-1));
 }
+// b173 skill 4 (k=3). SD is set by cast(); HIT_SRC lets dodge-counters and reflections find the caster.
+const S4T=['fort','zero','blood','dive','scorch','rebirth','chain','forms','halo','hydra','reflect','stand'];
+function cast4(a,ai,type,v,ti){const F=SD.F,live=()=>F.map((x,j)=>x.hp>0?j:-1).filter(j=>j>=0),rnd=()=>{const L=live();return L.length?L[Math.floor(Math.random()*L.length)]:-1},
+  hit=(j,m,sure)=>{if(j<0||!F[j]||F[j].hp<=0)return 0;hitA=a.atk;hitM=!!C[a.id].m;const [d,cr]=roll(a,m,sure);hurt(F,SD.fp,j,d,'d',cr);return d},
+  lowest=()=>{const L=live();return L.length?L.reduce((b,j)=>F[j].hp<F[b].hp?j:b):-1};HIT_SRC=[SD.A,SD.ap,ai];
+  if(type==='zero'){live().forEach(j=>{hit(j,v);if(F[j].hp>0){F[j].frz=1;q(SD.fp+j,'❄','s')}})}
+  else if(type==='blood'){const c=Math.min(a.hp-1,Math.round(a.max*.15));if(c>0){a.hp-=c;q(SD.ap+ai,'-'+c,'d')}const t=F[ti]&&F[ti].hp>0?ti:lowest();hit(t,v);if(t>=0&&F[t].hp<=0)mend(ai,a.max*.3)}
+  else if(type==='dive'){let t=lowest();hit(t,v);if(t>=0&&F[t].hp<=0){t=lowest();if(t>=0)hit(t,v*.6)}}
+  else if(type==='scorch'){live().forEach(j=>{F[j].burn={d:Math.round(a.atk*v),n:3};hit(j,v)})}
+  else if(type==='rebirth'){const dead=SD.A.map((x,j)=>x.hp<=0?j:-1).filter(j=>j>=0);if(dead.length&&!a.reb){const j=dead.reduce((b,k)=>SD.A[k].max>SD.A[b].max?k:b);const x=SD.A[j];x.hp=Math.round(x.max*v);x.sh=0;x.done=true;x.taunt=0;a.reb=1;q(SD.ap+j,T('ฟื้น!','RISE!'),'g')}
+    else{let b=-1;SD.A.forEach((x,j)=>{if(x.hp>0&&(b<0||x.hp/x.max<SD.A[b].hp/SD.A[b].max))b=j});if(b>=0)mend(b,a.atk*1.2*a.hb,1)}}
+  else if(type==='chain'){const n=live().length>1?5:3;for(let i=0;i<n;i++){const j=rnd();if(j<0)break;hit(j,v*(1+.1*i))}}
+  else if(type==='forms'){a.forms=2;a.formsP=v;q(SD.ap+ai,T('72 ร่าง','72 FORMS'),'s')}
+  else if(type==='halo'){SD.A.forEach((x,j)=>{if(x.hp>0){x.halo=2;x.haloP=v;q(SD.ap+j,'✨','g')}})}
+  else if(type==='hydra'){let sum=0;for(let i=0;i<3;i++)sum+=hit(rnd(),v);if(a.hp>0&&sum>0)mend(ai,sum*.5)}
+  else if(type==='reflect'){a.reflect=2;a.reflectP=v;a.taunt=TAUNT_N;ward(ai,a.max*.2*a.hb)}
+  else if(type==='fort'){a.taunt=TAUNT_N;SD.A.forEach((x,j)=>{if(x.hp>0)ward(j,a.max*v*a.hb)})}
+  else if(type==='stand'){SD.A.forEach((x,j)=>{if(x.hp>0){x.stand=(a.s4l||1)>=3?2:1;q(SD.ap+j,'🛡','s')}})}
+  HIT_SRC=null}
+// start of every round: burns tick (they can kill), frozen allies lose their turn, timed skill-4 effects count down
+function s4Round(b){[[b.al,'a'],[b.en,'e']].forEach(([L,p])=>L.forEach((x,i)=>{if(x.hp<=0)return;
+    if(x.burn&&x.burn.n>0){const d=Math.min(x.hp,x.burn.d);x.hp-=d;x.burn.n--;q(p+i,'🔥-'+d,'d');hits.add(p+i)}
+    ['forms','halo','reflect','stand'].forEach(k=>{if(x[k]>0)x[k]--})}));
+  b.al.forEach((x,i)=>{if(x.frz&&x.hp>0&&!b.rule){x.done=true;x.frz=0;q('a'+i,'❄','s')}});
+  if(!b.al.some(x=>x.hp>0&&!x.done)){const x=b.al.find(x=>x.hp>0);if(x)x.done=false}}
 // an enemy hits whoever is taunting, otherwise a random fighter (an arena opponent goes for the weakest instead)
 function foePick(){const live=bt.al.map((x,j)=>j).filter(j=>bt.al[j].hp>0);if(!live.length)return -1;const tn=live.filter(j=>bt.al[j].taunt);if(tn.length)return tn[0];
   return bt.pvp?live.reduce((b,j)=>bt.al[j].hp<bt.al[b].hp?j:b):live[Math.floor(Math.random()*live.length)]}
-function foeHit(e,j){hitM=!!C[e.id].m;hitA=e.atk;const [d,cr]=roll(e,1);hurt(bt.al,'a',j,d,'d',cr)}
+function foeHit(e,j){hitM=!!C[e.id].m;hitA=e.atk;HIT_SRC=[bt.en,'e',bt.en.indexOf(e)];const [d,cr]=roll(e,1);hurt(bt.al,'a',j,d,'d',cr);HIT_SRC=null;
+  if(bt.rule==='frost'&&!e.fz0){e.fz0=1;const t=bt.al[j];if(t.hp>0&&Math.random()<FROST_P){t.frz=1;q('a'+j,'❄ FROZEN','s')}}}
+// b173 realm rules, run at the start of every round (draw() follows). Rule damage goes through shields and never kills (it leaves at least 1 life).
+const FROST_P=.35,TIDE=.08,BURN=.03,GEAR=.06,GEAR_MAX=.6;
+function rlmChip(L,pre,f){L.forEach((x,i)=>{if(x.hp<=1)return;let d=Math.max(1,Math.round(x.max*f));if(x.sh>0){const a=Math.min(x.sh,d);x.sh-=a;d-=a}d=Math.min(d,x.hp-1);if(d>0){x.hp-=d;q(pre+i,'-'+d,'d');hits.add(pre+i)}})}
+function rlmRound(b){const r=b.rule;
+  if(r==='tide'&&b.round%3===0){b.log=ruleTxt('tide');rlmChip(b.al,'a',TIDE);rlmChip(b.en,'e',TIDE);quake=true}
+  if(r==='burn'){rlmChip(b.al,'a',BURN);rlmChip(b.en,'e',BURN)}
+  if(r==='gear')b.en.forEach((e,i)=>{if(e.hp<=0)return;const a=Math.round(e.base*(1+Math.min(GEAR_MAX,GEAR*(b.round-1))));if(a>e.atk){e.atk=a;q('e'+i,'ATK ↑','g')}});
+  b.al.forEach((x,i)=>{if(x.frz&&x.hp>0){x.done=true;x.frz=0;q('a'+i,'❄','s')}});
+  if(!b.al.some(x=>x.hp>0&&!x.done)){const x=b.al.find(x=>x.hp>0);if(x)x.done=false}}
 async function act(ti){
-  const my=bt;if(busy||!my)return;const a=actor();if(!a)return;const k=a.cds[my.sel]?0:my.sel,sk=SK[a.id][k],ai=my.al.indexOf(a);
+  const my=bt;if(busy||!my)return;const a=actor();if(!a)return;const k=(my.sel===3&&!a.sk4)||a.cds[my.sel]?0:my.sel,sk=SK[a.id][k],ai=my.al.indexOf(a);
   if(needT(sk)){const tn=my.en.findIndex(e=>e.hp>0&&e.taunt);if(tn>=0)ti=tn}
   if(needT(sk)&&(ti<0||!my.en[ti]||my.en[ti].hp<=0))return;
   busy=true;my.log=`${C[a.id].n} ใช้ ${sk[0]}`;draw();
   if(k>0){await cutin(a,k);if(bt!==my)return}
   FK=[sk,k];if(isAtk(sk))await strike('a'+ai,a.id,needT(sk)?['e'+ti]:my.en.map((e,j)=>e.hp>0?'e'+j:null).filter(Boolean),1);
-  else await pose('a'+ai,['healall','shieldall','rally'].includes(sk[2])?my.al.map((x,j)=>x.hp>0?'a'+j:null).filter(Boolean):['a'+ai]);
+  else await pose('a'+ai,['healall','shieldall','rally','halo','stand'].includes(sk[2])?my.al.map((x,j)=>x.hp>0?'a'+j:null).filter(Boolean):['a'+ai]);
   if(bt!==my)return;const big=quake;if(sk[2]==='drain')fxAt('a'+ai,'drain');
   tauntTick(a);cast(a,k,ti);a.done=true;my.sel=0;quake=big||k===2;draw();await W(540);if(bt!==my)return;
   if(my.en.every(e=>e.hp<=0))return finish(true);
   // arena: turns alternate, so after each of my fighters one of theirs answers with a skill of its own
-  const foeGo=async i=>{const e=my.en[i];tauntTick(e);e.done=true;const k=autoPick(e,false),sk=SK[e.id][k],j=foePick();if(j<0)return true;
+  const foeGo=async i=>{const e=my.en[i];tauntTick(e);e.done=true;if(e.frz){e.frz=0;q('e'+i,'❄','s');draw();await W(300);return bt===my}const k=autoPick(e,false),sk=SK[e.id][k],j=foePick();if(j<0)return true;
     const liveA=my.al.map((x,q)=>x.hp>0?'a'+q:null).filter(Boolean),liveE=my.en.map((x,q)=>x.hp>0?'e'+q:null).filter(Boolean);
     my.log=`${C[e.id].n} ใช้ ${sk[0]}`;draw();
-    FK=[sk,k];if(isAtk(sk))await strike('e'+i,e.id,needT(sk)?['a'+j]:liveA,-1);else await pose('e'+i,['healall','shieldall','rally'].includes(sk[2])?liveE:['e'+i]);
+    FK=[sk,k];if(isAtk(sk))await strike('e'+i,e.id,needT(sk)?['a'+j]:liveA,-1);else await pose('e'+i,['healall','shieldall','rally','halo','stand'].includes(sk[2])?liveE:['e'+i]);
     if(bt!==my)return false;cast(e,k,j,false);draw();await W(440);return bt===my};
   if(my.pvp){const i=my.en.findIndex(x=>x.hp>0&&!x.done);if(i>=0){if(!await foeGo(i))return;if(my.al.every(x=>x.hp<=0))return finish(false)}}
   if(!actor()){
     for(let i=0;i<my.en.length;i++){const e=my.en[i];if(e.hp<=0)continue;
+      if(e.frz){e.frz=0;q('e'+i,'❄','s');e.done=true;continue}
       if(my.pvp){if(e.done)continue;if(!await foeGo(i))return;if(my.al.every(x=>x.hp<=0))break;continue}
       if(e.gim==='breath'&&my.round%3===0){const L=my.al.map((x,k)=>x.hp>0?k:-1).filter(k=>k>=0);if(!L.length)break;my.log=`${C[e.id].n}: ${T(GIM.breath[0],GIM.breath[1])}`;draw();FK=null;await strike('e'+i,e.id,L.map(k=>'a'+k),-1);if(bt!==my)return;
         hitM=!!C[e.id].m;hitA=e.atk;L.forEach(k=>{const [d,cr]=roll(e,.6);hurt(my.al,'a',k,d,'d',cr)});quake=true;draw();await W(440);if(bt!==my)return;continue}
@@ -1834,6 +1991,9 @@ async function act(ti){
     if(my.al.every(x=>x.hp<=0))return finish(false);
     if(my.pvp&&my.round>=PV_CAP){const fr=l=>l.reduce((t,x)=>t+Math.max(0,x.hp),0)/l.reduce((t,x)=>t+x.max,0);return finish(fr(my.al)>fr(my.en))}
     my.round++;my.al.forEach(x=>{x.done=false});my.en.forEach(x=>{x.done=false});twRound(my);
+    if(my.surv&&my.round>5)return finish(true);
+    s4Round(my);if(my.en.every(e=>e.hp<=0))return finish(true);if(my.al.every(x=>x.hp<=0))return finish(false);
+    if(my.rule){rlmRound(my);draw();if(my.rule==='tide'&&my.round%3===0)await W(520);if(bt!==my)return}
   }
   busy=false;if(!S.auto)my.log='เลือกสกิล แล้วแตะศัตรู';draw();if(S.auto)autoAct();
 }
@@ -1844,7 +2004,28 @@ async function act(ti){
 //   loop 2 "replay"     - play the same stage again and again; since b151 amulets and cards drop here too, at the stage's drop chance (see dropMul)
 // Either one turns Auto on, shows a full-screen 3-2-1 before every battle, and ends on a defeat, at the last stage, on a tap during the countdown, or with the Stop button in battle.
 let loop=0,loopT=0;
-function loopStop(){loop=0;clearTimeout(loopT);loopT=0;ov('')}
+// b172 farm session: from the moment a loop starts (auto next / replay) everything it earns is counted in fs, shown live in the battle bar (Gold now and
+// Gold gained) with a 📊 button for the full list, and as a summary when the loop ends (a defeat, Stop loop, a tap on the countdown, or leaving the battle).
+// The panel is #fsb, beside #ov, so it never fights the skill cut-ins that use #ov.
+let fs=null,fsOpen=false;
+const fsStart=()=>{if(!fs)fs={t0:Date.now(),w:0,l:0,g:0,am:{},cards:{},up:0}},fsAdd=(won,g,am,card,up)=>{if(!fs)return;won?fs.w++:fs.l++;fs.g+=g||0;if(am)fs.am[am]=(fs.am[am]||0)+1;if(card)fs.cards[card]=(fs.cards[card]||0)+1;fs.up+=up||0};
+// b172: shared loot view (farm summary + offline farm) with real mini cards, amulet icons with their aura and a big Gold banner
+function lootHTML(o){const ams=byRank0(Object.keys(o.am||{}).filter(k=>AM[k])),cs=byRank(Object.keys(o.cards||{}).filter(id=>C[id])),nc=cs.reduce((a,id)=>a+o.cards[id],0),na=ams.reduce((a,k)=>a+o.am[k],0);
+  const mc=id=>full(id,'','cth').replace('<button','<span').replace('</button>','</span>');
+  return `<div class="px fsbox nt"><div class="fshd"><b>${o.title}</b><button class="fsx" data-fs="close" aria-label="${T('ปิด','Close')}">✕</button>${o.chips&&o.chips.length?`<div class="fsst">${o.chips.join('')}</div>`:''}</div>
+   <div class="fsg"><span class="fsc"><img src="ic2/coin.webp" alt=""></span><div><small>${T('Gold ที่ได้','Gold earned')}</small><b>+${(o.g||0).toLocaleString('en')}</b>${o.now!=null?`<i>${T('มีตอนนี้','Total')} ${o.now.toLocaleString('en')}</i>`:''}</div>${o.tag||''}</div>${o.extra||''}
+   <div class="fsbd"><div class="fss"><h4>${T('การ์ดที่ได้','Cards')} <i>${nc} ${T('ใบ','')}</i></h4>${cs.length?`<div class="fsgr">${cs.map(id=>`<span class="fsit">${mc(id)}${o.cards[id]>1?`<em>×${o.cards[id]}</em>`:''}</span>`).join('')}</div>`:`<p class="sub">${T('ยังไม่มี','None yet')}</p>`}</div>
+   <div class="fss"><h4>${T('เครื่องรางที่ได้','Amulets')} <i>${na} ${T('ชิ้น','')}</i></h4>${ams.length?`<div class="fsgr am">${ams.map(k=>`<span class="fsit fsa">${amu(k)}<small class="art-${AM[k].r}">${AM[k].n}</small>${o.am[k]>1?`<em>×${o.am[k]}</em>`:''}</span>`).join('')}</div>`:`<p class="sub">${T('ยังไม่มี','None yet')}</p>`}</div></div>
+   <div class="row fsbt">${o.btn}</div></div>`}
+const byRank0=ks=>{const o={LT:0,SL:1,L:2,R:3,UC:4,C:5};return ks.sort((a,b)=>(o[AM[a].r]??9)-(o[AM[b].r]??9))};
+function fsPanel(final){const b=$('fsb');if(!b)return;if(!fs||(!final&&!fsOpen)){b.hidden=true;b.innerHTML='';return}
+  const m=Math.max(1,Math.round((Date.now()-fs.t0)/6e4));
+  b.innerHTML=lootHTML({title:`📊 ${final?T('สรุปการฟาร์ม','Farm summary'):T('ฟาร์มรอบนี้ได้อะไรบ้าง','This farm run so far')}`,
+   chips:[`<span>⏱ ${m} ${T('นาที','min')}</span>`,`<span class="w">${T('ชนะ','Won')} ${fs.w}</span>`,`<span class="l">${T('แพ้','Lost')} ${fs.l}</span>`].concat(fs.up?[`<span class="u">⬆ ${T('เลเวลขึ้น','Level-ups')} ${fs.up}</span>`]:[]),
+   g:fs.g,now:S.gold,am:fs.am,cards:fs.cards,btn:`<button class="btn ${final?'go':'alt'}" data-fs="close">${final?T('รับทราบ','OK'):T('ปิด','Close')}</button>`});b.hidden=false}
+function fsEnd(){if(fs&&(fs.w+fs.l)>0){fsOpen=false;fsPanel(true)}fs=null}
+$('fsb').addEventListener('click',e=>{if(!e.target.closest('[data-fs]'))return;fsOpen=false;const b=$('fsb');b.hidden=true;b.innerHTML=''});
+function loopStop(){loop=0;clearTimeout(loopT);loopT=0;ov('');fsEnd()}
 function loopCount(n,info){clearTimeout(loopT);let k=3;const tick=()=>{if(!loop)return ov('');if(k<=0){ov('');S.auto=true;prepN=n;return startBattle(n)}
   ov(`<div class="cd nt" data-lp="stop"><small>${loop===2?T('เล่นซ้ำด่าน ','Replaying stage ')+n:T('ไปด่าน ','Next: stage ')+n}</small><b>${k}</b>${info?`<em>${info}</em>`:''}<i>${T('แตะจอเพื่อหยุด','Tap the screen to stop')}</i></div>`);try{sfx('tap')}catch(e){}k--;loopT=setTimeout(tick,1000)};tick()}
 function loopAsk(n){ov(`<div class="cd dlg nt"><div class="px cdbox"><b>🔁 ${T('เล่นซ้ำด่านเดิม','Replay this stage')}</b><p>${T('โหมดเล่นซ้ำด่านเดิม <u>ไม่มีสิทธิ์ลุ้นเครื่องรางและการ์ด</u><br>ได้เฉพาะ Gold และ Exp','Replay mode has <u>no chance of an amulet or a card</u>.<br>It gives Gold and Exp only')}</p><div class="row"><button class="btn go" data-lp="go" data-n="${n}">${T('เข้าใจแล้ว เริ่มเลย','Got it, start')}</button><button class="btn alt" data-lp="no">${T('ยกเลิก','Cancel')}</button></div></div></div>`)}
@@ -1853,23 +2034,26 @@ async function finish(won){
   if(bt&&bt.tw)return twFinish(won);
   const my=bt;busy=true;sfx(won?'win':'lose');await banner(won?'FINISH':'DEFEAT',won?'':'lose');if(bt!==my)return;
   if(my.pvp){bt=null;busy=false;return pvpResult(won,my.pvp)}
-  const n=bt.n,team=bt.al.map(a=>a.id),farm=!!bt.farm,first=!!bt.first;bt=null;busy=false;let rows='',g=0,drop=null,jp=false,bb=0,eb=0,cdrop=null,bcs=[];
+  const n=bt.n,team=bt.al.map(a=>a.id),farm=!!bt.farm,first=!!bt.first,sw=won&&n>ST1?starsOf(bt):0;bt=null;let rsg=0,swNew=0;busy=false;let rows='',g=0,drop=null,jp=false,bb=0,eb=0,cdrop=null,bcs=[];
   if(won){const rg=rollGold(n);g=rg.g*VX();jp=rg.jp;bb=bossBonus(n);eb=earlyB(n);S.gold+=g+bb+eb;lg('stage',g);lg('boss',bb);lg('early',eb);qAdd('win');if(n%10===0)qAdd('boss');if(Math.random()<dropP(n,DROP,DROP_BOSS,first)){drop=amRoll();S.am=S.am||{};S.am[drop]=(S.am[drop]||0)+1}
     if(Math.random()<dropP(n,CDROP,CDROP_BOSS,first))cdrop=giveCard(randOf(cardDropRank(n)),'drop');
-    if(!cdrop&&hasLuck()&&Math.random()<luckP(n)){cdrop=giveCard(randOf('L'),'lucky');cdrop.lucky=1}const x0=expOf(n)*VX();
-    rows=team.map(id=>{const x=Math.round(x0*(amOf(id)&&amOf(id).xp||1)),was=S.cards[id].lv,wasMax=maxed(id),up=addExp(id,x),c=S.cards[id];
+    if(!cdrop&&hasLuck()&&Math.random()<luckP(n)){cdrop=giveCard(randOf('L'),'lucky');cdrop.lucky=1}const x0=Math.round(expOf(n)*VX()*(first?1:REPLAY_XP));
+    let ups=0;rows=team.map(id=>{const x=Math.round(x0*(amOf(id)&&amOf(id).xp||1)),was=S.cards[id].lv,wasMax=maxed(id),up=addExp(id,x),c=S.cards[id];ups+=up;
       return `<div class="mini r-${C[id].r} glow ${fr(id)}">${fxh(id)}${rib(id)}<div class="art"><img src="${artSrc(id)}" alt=""></div></div><div><b>${C[id].n}</b> ${wasMax?'<span class="gold">Lv MAX</span>':'Exp +'+x} ${up?`<span class="gold">Lv ${was} → ${c.lv}</span>`:`· Lv ${c.lv}`}<div class="hp xp"><i style="width:${maxed(id)?100:c.exp/need(c.lv)*100}%"></i></div></div>`}).join('');
-    if(n>S.cleared)S.cleared=n;if(S.ls)delete S.ls;bcs=bcTake();save()}
+    if(sw){S.cs=S.cs||{};if(sw>(S.cs[n]||0)){swNew=sw-(S.cs[n]||0);S.cs[n]=sw}rsg=(n>S.cleared&&stKind(n)==='lord'?RS_LORD:0)+(Math.random()<dropP(n,RS_DROP,RS_BOSS,first)/vipP().dr*(vipPaid()?VIP_RS:1)?1:0);if(rsg)S.rs=(S.rs||0)+rsg}
+    if(n>S.cleared&&stKind(n)==='lord'){S.dia=(S.dia||0)+LORD_DIA;fx.push(['view','+'+LORD_DIA+' 💎','g'])}
+    if(n>S.cleared)S.cleared=n;if(S.ls)delete S.ls;if(n===1100&&first)setTimeout(f1100Claim,1800);bcs=bcTake();save();if(loop)fsAdd(true,g+bb+eb,drop,cdrop&&cdrop.id,ups)}
+  else if(loop)fsAdd(false)
   else if(first){S.ls={n,k:lossK(n)+1};save()}
   const next=Math.min(MAXST,n+1);
   view(`<div class="cols"><div class="rail">
     <h1>${won?'ชนะ!':'แพ้'}</h1><p class="num">ด่าน ${n}</p>
-    ${won?`<p class="num gold">Gold +${g}${jp?' <b class="nt">JACKPOT x4</b>':''}</p>${bb?`<p class="num gold">โบนัสชนะบอสครั้งแรก +${bb}</p>`:''}${eb?`<p class="num gold nt">${T('โบนัสผ่านด่านใหม่','New stage bonus')} +${eb}</p>`:''}${vipOn()?'<p class="sub nt" style="color:#f2d98a">VIP · Exp x2 · Gold x2</p>':''}${bcs.map(bcRow).join('')}${cdrop?`<div class="row"><span class="pvc r-${C[cdrop.id].r}" style="width:38px">${art(cdrop.id)}</span><span>${cdrop.lucky?'<b class="nt" style="color:#7dff8a;text-shadow:0 0 8px #2fff6a">🍀 LUCKY DROP!</b> ':''}ได้การ์ด${cdrop.dup?' (ใบซ้ำ)':''}<br><b class="nt r-${C[cdrop.id].r}" style="color:var(--gl)">${C[cdrop.id].n}</b></span></div>`:''}${drop?`<div class="row"><span style="width:38px">${amu(drop)}</span><span>ได้เครื่องราง<br><b>${AM[drop].n}</b></span></div>`:''}`:`<p class="sub">ลองเก็บเลเวลจากด่านก่อนหน้า หรือเปิดแพ็คหาการ์ดใหม่</p>${first?`<p class="sub nt" style="color:#8fe9ff">${T('ศัตรูในด่านนี้เหนื่อยล้าลงเล็กน้อย ลองอีกครั้งมีโอกาสผ่านมากขึ้น','The enemies here are a little worn down. Another try has a better chance')}</p>`:''}`}
+    ${won?`${sw?`<p class="stw nt">${[1,2,3].map(i=>`<i class="${i<=sw?'on':''}">★</i>`).join('')}${swNew?` <small>+${swNew}</small>`:''}</p>`:''}<p class="num gold">Gold +${g}${jp?' <b class="nt">JACKPOT x4</b>':''}</p>${rsg?`<p class="num nt" style="color:#8fe9ff">💠 ${T('ผลึกอาณาจักร','Realm crystal')} +${rsg}</p>`:''}${n>ST1&&stKind(n)==='lord'&&first?`<p class="num nt" style="color:#8fe9ff">💎 +${LORD_DIA}</p>`:''}${chestsLeft()>0?`<button class="btn go sm nt" data-act="schest">🎁 ${T('เปิดหีบดาว','Open star chest')} ×${chestsLeft()}</button>`:''}${bb?`<p class="num gold">โบนัสชนะบอสครั้งแรก +${bb}</p>`:''}${eb?`<p class="num gold nt">${T('โบนัสผ่านด่านใหม่','New stage bonus')} +${eb}</p>`:''}${vipOn()?'<p class="sub nt" style="color:#f2d98a">VIP · Exp x2 · Gold x2</p>':''}${bcs.map(bcRow).join('')}${cdrop?`<div class="row"><span class="pvc r-${C[cdrop.id].r}" style="width:38px">${art(cdrop.id)}</span><span>${cdrop.lucky?'<b class="nt" style="color:#7dff8a;text-shadow:0 0 8px #2fff6a">🍀 LUCKY DROP!</b> ':''}ได้การ์ด${cdrop.dup?' (ใบซ้ำ)':''}<br><b class="nt r-${C[cdrop.id].r}" style="color:var(--gl)">${C[cdrop.id].n}</b></span></div>`:''}${drop?`<div class="row"><span style="width:38px">${amu(drop)}</span><span>ได้เครื่องราง<br><b>${AM[drop].n}</b></span></div>`:''}`:`<p class="sub">ลองเก็บเลเวลจากด่านก่อนหน้า หรือเปิดแพ็คหาการ์ดใหม่</p>${first?`<p class="sub nt" style="color:#8fe9ff">${T('ศัตรูในด่านนี้เหนื่อยล้าลงเล็กน้อย ลองอีกครั้งมีโอกาสผ่านมากขึ้น','The enemies here are a little worn down. Another try has a better chance')}</p>`:''}`}
     ${won&&n<MAXST?`<button class="btn go" data-act="go" data-n="${next}">ด่าน ${next}</button>`:''}
     ${won?'':`<button class="btn go" data-act="go" data-n="${n}">เล่นด่านนี้อีก</button>`}
     <button class="btn alt sm" data-act="home">หน้าหลัก</button>
   </div><div class="main">${won&&S.tut==null?`<div class="lprow">${n<MAXST?`<button class="btn lpb nt" data-act="lpnext" data-n="${next}"><b>⏩ ${T('เปลี่ยนด่านอัตโนมัติ','Auto next stage')}</b><small>${T('ชนะแล้วไปด่านถัดไปเอง · ดรอปตามปกติ','Wins lead to the next stage · normal drops')}</small></button>`:''}<button class="btn lpb rp nt" data-act="lprep" data-n="${n}"><b>🔁 ${T('เล่นซ้ำด่านเดิม','Replay this stage')}</b><small>${T('วนด่านนี้เอง · ได้ Gold, Exp และลุ้นดรอป','Loops this stage · Gold, Exp and drops')}</small></button></div>`:''}${won?`<div class="res">${rows}</div>`:''}</div></div>`);
-  if(loop){const nx=!won?0:loop===2?n:n<MAXST?next:0;if(!nx)loop=0;else loopCount(nx,'Gold +'+(g+bb+eb).toLocaleString('en'))}
+  if(loop){const nx=!won?0:loop===2?n:n<MAXST?next:0;if(!nx){loop=0;fsEnd()}else{loopCount(nx,'Gold +'+(g+bb+eb).toLocaleString('en'));fsPanel(false)}}
 }
 
 
@@ -2034,7 +2218,8 @@ $('view').onclick=ev=>{{const w=ev.target.closest('.dk,.ibtn,.pill,.row2 .btn');
   const t=ev.target.closest('[data-act]');if(!t||t.disabled)return;const a=t.dataset.act,id=t.dataset.id;
   if(a!=='reset')armed=false;
   if(a==='home')home();
-  else if(a==='prep'){loop=0;if(bt&&bt.tw)return twLeave();if(bt&&bt.pvp){const o=bt.pvp;bt=null;busy=false;ov('');pvpResult(false,o);return}prepN=bt?bt.n:Math.min(MAXST,S.cleared+1);bt=null;busy=false;ov('');prep()}
+  else if(a==='schest'){const k=chestsLeft();if(k<=0)return;S.csc=(S.csc||0)+k;S.rs=(S.rs||0)+k;S.gold+=k*CHEST_G;lg('chest',k*CHEST_G);save();cloudFlush();sfx('win');fx.push(['view',`🎁 💠+${k} · Gold +${(k*CHEST_G).toLocaleString('en')}`,'g']);t.remove();return}
+  else if(a==='prep'){loop=0;fsEnd();if(bt&&bt.tw)return twLeave();if(bt&&bt.pvp){const o=bt.pvp;bt=null;busy=false;ov('');pvpResult(false,o);return}prepN=bt?bt.n:Math.min(MAXST,S.cleared+1);bt=null;busy=false;ov('');prep()}
   else if(a==='pvp'){pv.tab='hub';arena();pvpFetch(1)}
   else if(a==='pvtab'){pv.tab=t.dataset.t;pv.got=null;arena()}
   else if(a==='asbuy')asBuy(t.dataset.k);
@@ -2094,10 +2279,11 @@ $('view').onclick=ev=>{{const w=ev.target.closest('.dk,.ibtn,.pill,.row2 .btn');
   else if(a==='go'){prepN=+t.dataset.n;startBattle(prepN)}
   else if(a==='tgt')act(+t.dataset.i);
   else if(a==='sk'){bt.sel=+t.dataset.k;const ac=actor();if(ac&&!needT(SK[ac.id][bt.sel]))act(-1);else{bt.log=`${SK[ac.id][bt.sel][0]}: แตะศัตรูที่จะโจมตี`;draw()}}
-  else if(a==='spd'){S.spd=S.spd===2?1:2;save();if(!busy&&bt)draw()}
-  else if(a==='lpnext'){loop=1;loopCount(+t.dataset.n)}
-  else if(a==='lprep'){loop=2;loopCount(+t.dataset.n)}
-  else if(a==='lpstop'){loop=0;clearTimeout(loopT);if(!busy)draw();else t.remove()}
+  else if(a==='spd'){S.spd=(S.spd||1)>=SPD_MAX()?1:(S.spd||1)+1;save();if(!busy&&bt)draw()}
+  else if(a==='lpnext'){loop=1;fsStart();loopCount(+t.dataset.n)}
+  else if(a==='fsview'){fsOpen=!fsOpen;fsPanel(false)}
+  else if(a==='lprep'){loop=2;fsStart();loopCount(+t.dataset.n)}
+  else if(a==='lpstop'){loop=0;clearTimeout(loopT);if(!busy)draw();else t.remove();fsEnd()}
   else if(a==='auto'){S.auto=!S.auto;save();if(!busy){draw();if(S.auto)autoAct()}}
   else if(a==='coll')coll();
   else if(a==='tower'){twTab=twTab==='team'?'board':twTab;tower()}
@@ -2118,8 +2304,8 @@ $('view').onclick=ev=>{{const w=ev.target.closest('.dk,.ibtn,.pill,.row2 .btn');
   else if(a==='shopsel')shopPick(+t.dataset.i,1);
   else if(a==='shoparr')shopPick(shopSel+ +t.dataset.d,1);
   else if(a==='quests')quests()
-  else if(a==='afk'){const g=afkGold();if(g>0){S.gold+=g;lg('afk',g);S.afk=Date.now();qAdd('afk');save();sfx('win');fx.push(['view','+'+g.toLocaleString('en')+' Gold','g'])}document.querySelector('.lobby')?home():quests()}
-  else if(a==='qget'){const q=qDay(),k=t.dataset.k,d=QUESTS.find(x=>x[0]===k);if(d&&(q.n[k]||0)>=d[2]&&!q.got[k]){q.got[k]=1;S.gold+=d[3];lg('quest',d[3]);save();sfx('win');fx.push(['view','+'+d[3]+' Gold','g'])}quests()}
+  else if(a==='afk'){const g=afkGold(),ms=S.afk?Date.now()-S.afk:0;if(g>0){S.gold+=g;lg('afk',g);const got=afkDrops(ms);S.afk=Date.now();qAdd('afk');save();cloudFlush();sfx('win');fx.push(['view','+'+g.toLocaleString('en')+' Gold','g']);document.querySelector('.lobby')?home():quests();afkShow(g,got);return}document.querySelector('.lobby')?home():quests()}
+  else if(a==='qget'){const q=qDay(),k=t.dataset.k,d=QUESTS.find(x=>x[0]===k);if(d&&(q.n[k]||0)>=d[2]&&!q.got[k]){q.got[k]=1;S.gold+=d[3];lg('quest',d[3]);if(d[4])S.rs=(S.rs||0)+d[4];save();sfx('win');fx.push(['view','+'+d[3]+' Gold'+(d[4]?' · 💠+'+d[4]:''),'g'])}quests()}
   else if(a==='exg'){exN=EX_DIA;exDone=0;exchange()}
   else if(a==='exadj'){exN=exClamp(exN+ +t.dataset.d);exDone=0;exchange()}
   else if(a==='exmax'){exN=exClamp(exMax());exDone=0;exchange()}
@@ -2170,7 +2356,7 @@ $('view').onclick=ev=>{{const w=ev.target.closest('.dk,.ibtn,.pill,.row2 .btn');
   else if(a==='disask'){disArm=disS.size>0;dis()}
   else if(a==='disgo'){let g=0;if(disArm)[...disS].forEach(k=>{g+=disDo(k,1e9)});disS=new Set();disArm=false;if(g){save();sfx('win');fx.push(['view','+'+g,'g'])}dis()}
   else if(a==='vip')vip();
-  else if(a==='vipbuy'){const v=VIPS[+t.dataset.i];if(v&&(S.dia||0)>=v[1]){S.dia-=v[1];vipAdd(v[0],+t.dataset.i+1);save();sfx('win');fx.push(['view','VIP +'+v[0]+'d','g'])}vip()}
+  else if(a==='vipbuy'){const v=VIPS[+t.dataset.i];if(v&&(S.dia||0)>=v[1]){S.dia-=v[1];vipAdd(v[0],+t.dataset.i+1);S.vpd=S.vip;save();sfx('win');fx.push(['view','VIP +'+v[0]+'d','g'])}vip()}
   else if(a==='dlget'){if(dlCan()){const n=dlNext(),[c,v]=DAILY[n-1];if(c==='g'){S.gold+=v;lg('daily',v)}else S.dia=(S.dia||0)+v;S.dl={last:today(),n};save();sfx('win');fx.push(['view','+'+v+(c==='g'?' Gold':' 💎'),'g'])}quests()}
   else if(a==='mktab'){mkTab=t.dataset.t;mkSel=null;market()}
   else if(a==='mkmode'){mkMode=t.dataset.m;mkSel=null;market()}
@@ -2184,6 +2370,8 @@ $('zoom').onclick=ev=>{const lk=ev.target.closest('[data-lock]');if(lk){const id
   const sb=ev.target.closest('[data-stone]');
   if(sb){const id=sb.dataset.stone,c=starCost(id),n=stoneCost(id),o=S.cards[id];if(canStone(id)){S.gold-=c[0];lg('star',-c[0]);S.ss-=n;o.sn=(o.sn||0)+n;o.star=starOf(id)+1;unstarArm=null;save();sfx('win');if(document.querySelector('.tab'))coll();zoom(id)}return}
   const b=ev.target.closest('[data-star]');
+  const b4=ev.target.closest('[data-s4up]');if(b4){const id=b4.dataset.s4up,c=s4Cost(id),o=S.cards[id];if(canS4(id)){S.gold-=c[0];lg('star',-c[0]);S.rs-=c[1];o.s4=s4Lv(id)+1;save();sfx('win');zoom(id)}return}
+  const b2=ev.target.closest('[data-star2]');if(b2){const id=b2.dataset.star2,c=star2Cost(id),o=S.cards[id];if(canStar2(id)){S.gold-=c[0];lg('star',-c[0]);S.rs-=c[1];o.star=starOf(id)+1;save();sfx('win');if(document.querySelector('.tab'))coll();zoom(id)}return}
   if(b){const id=b.dataset.star,c=starCost(id),o=S.cards[id];if(canStar(id)){S.gold-=c[0];lg('star',-c[0]);o.cp=(o.cp||0)-c[1];o.star=starOf(id)+1;unstarArm=null;save();sfx('win');if(document.querySelector('.tab'))coll();zoom(id)}return}
   $('zoom').hidden=true};
 /* ---------- pixel fire for the fire frame ---------- */
@@ -2309,14 +2497,14 @@ const starRow=st=>{const r=rankOf(st);return `<span class="rst big" style="color
 // 3x as many stones as a Rare one. A star is paid either all in copies or all in stones (Gold is paid either way). S.ss = stones owned.
 // Star reset (b157): takes every star off a card and gives back all the Gold, the copies and the Star Stones that paid for them (o.sn = stones spent on this card;
 // stones come back as stones, never as copies). Not allowed while the card's level is above the level cap it would have with no stars.
-const starPaid=id=>{const o=S.cards[id],st=starOf(id),tb=C[id].r==='ST'?STAR_COST_ST:STAR_COST;let g=0,c=0;for(let i=0;i<st;i++){g+=tb[i][0];c+=tb[i][1]}const sn=Math.min(o.sn||0,c*(STONE_N[C[id].r]||1));return{g,sn,c:c-Math.floor(sn/(STONE_N[C[id].r]||1))}};
+const starPaid=id=>{const o=S.cards[id],st=starOf(id),tb=C[id].r==='ST'?STAR_COST_ST:STAR_COST;let g=0,c=0,rs=0;for(let i=0;i<Math.min(st,5);i++){g+=tb[i][0];c+=tb[i][1]}for(let i=5;i<st;i++){g+=STAR_C2[i-5][0];rs+=STAR_C2[i-5][1]}for(let i=1;i<s4Lv(id);i++){g+=S4_UP[i-1][0];rs+=S4_UP[i-1][1]}const sn=Math.min(o.sn||0,c*(STONE_N[C[id].r]||1));return{g,sn,rs,c:c-Math.floor(sn/(STONE_N[C[id].r]||1))}};
 // b160 swap tickets: SWAP_N free swaps per account (S.swu = used). One owned card becomes another card of the same rank that the player does not own:
 // the level and Exp move over (capped at the rank's plain level cap, because the new card starts with no stars), everything paid for the old card's stars comes back
 // (Gold, copies, Star Stones), spare copies move too, the amulet goes back to the bag, and the card keeps its place in the teams. Starter and Limited cards cannot be swapped, nor locked ones.
 const SWAP_N=2,swLeft=()=>Math.max(0,SWAP_N-(S.swu|0)),swTo=id=>POOL.filter(x=>C[x].r===C[id].r&&x!==id&&!S.cards[x]),swOk=id=>!!S.cards[id]&&swLeft()>0&&!['ST','LT'].includes(C[id].r);
-const swPlan=id=>{const o=S.cards[id],p=starPaid(id),cap=RAR[C[id].r].cap,lv=Math.min(o.lv,cap);return{lv,cut:o.lv-lv,exp:lv<o.lv?0:o.exp|0,g:p.g,sn:p.sn,cp:(o.cp|0)+p.c,back:p.c,am:o.am||''}};
+const swPlan=id=>{const o=S.cards[id],p=starPaid(id),cap=RAR[C[id].r].cap,lv=Math.min(o.lv,cap);return{lv,cut:o.lv-lv,exp:lv<o.lv?0:o.exp|0,g:p.g,sn:p.sn,rs:p.rs,cp:(o.cp|0)+p.c,back:p.c,am:o.am||''}};
 function swapDo(id,to){if(!swOk(id)||isLock(id)||!swTo(id).includes(to))return false;const o=S.cards[id],p=swPlan(id);
-  if(p.g){S.gold+=p.g;lg('unstar',p.g)}if(p.sn)S.ss=(S.ss||0)+p.sn;
+  if(p.g){S.gold+=p.g;lg('unstar',p.g)}if(p.sn)S.ss=(S.ss||0)+p.sn;if(p.rs)S.rs=(S.rs||0)+p.rs;
   const n={lv:p.lv,exp:p.exp};if(p.cp)n.cp=p.cp;delete S.cards[id];S.cards[to]=n;clAdd(to,'swap');
   S.team=S.team.map(x=>x===id?to:x);if(S.pvt)S.pvt=S.pvt.map(x=>x===id?to:x);if(S.me&&S.me.look===id)S.me.look=to;
   S.swu=(S.swu|0)+1;save();cloudFlush();return true}
@@ -2359,7 +2547,44 @@ $('ov').addEventListener('click',e=>{const t=e.target.closest('[data-sw]');if(!t
   if(a==='pick'){swSel=t.dataset.to;sfx('tap');return swapDraw(id)}
   if(a==='go'&&swSel){const to=swSel;swSel=null;if(swapDo(id,to)){ov('');sfx('win');fx.push(['view',C[to].n,'g']);if(document.querySelector('.tab'))coll();zoom(to)}else ov('')}});
 const canUnstar=id=>!!(S.cards[id]&&starOf(id)>0&&S.cards[id].lv<=RAR[C[id].r].cap);let unstarArm=null;
-function unstar(id){if(!canUnstar(id))return;const p=starPaid(id),o=S.cards[id];S.gold+=p.g;lg('unstar',p.g);if(p.c)o.cp=(o.cp||0)+p.c;if(p.sn)S.ss=(S.ss||0)+p.sn;delete o.star;delete o.sn;save()}
+function unstar(id){if(!canUnstar(id))return;const p=starPaid(id),o=S.cards[id];S.gold+=p.g;lg('unstar',p.g);if(p.c)o.cp=(o.cp||0)+p.c;if(p.sn)S.ss=(S.ss||0)+p.sn;if(p.rs)S.rs=(S.rs||0)+p.rs;delete o.s4;delete o.star;delete o.sn;save()}
+// b173 star panel on the big card view: one box that says which star comes next, what it gives, exactly which materials THIS card uses (with have / need
+// and a tick or cross for each), and one big button per way to pay. Stars 1-5: copies of this card, or arena star stones ★; stars 6-10 (Legend+): realm crystals 💠.
+// b173 skill 4 engine values: [type, value]. Unlocked only on a fighter whose card has 10 stars (f.sk4); first usable on its 3rd action (cooldown starts at 2), then every 5 actions.
+const S4ART={s4zero:1,s4blood:1,s4dive:1,s4scorch:1,s4chain:1,s4forms:1,s4halo:1,s4hydra:1,s4reflect:1,s4stand:1,s4rebirth:1};   // skill-4 icons that exist in ic/ (filled in when the art arrives)
+const SK4E={h15:['zero',.6],h13:['blood',2.6],h14:['dive',2.2],h19:['scorch',.35],h04:['rebirth',.4],h03:['chain',.5],h22:['forms',.35],h07:['halo',.3],h18:['hydra',.9],h26:['reflect',.5],h27:['stand',1],h28:['fort',.25]},
+  SK4_CD0=2,S4_UP=[[150000,15],[300000,25]],S4_K=.15,s4Lv=(id,o)=>Math.min(3,Math.max(1,((o||S.cards[id]||{}).s4)|0||1)),s4Cost=id=>{const o=S.cards[id];return o&&starOf(id)>=10&&SK[id][3]&&s4Lv(id)<3?S4_UP[s4Lv(id)-1]:null},canS4=id=>{const c=s4Cost(id);return !!(c&&S.gold>=c[0]&&(S.rs||0)>=c[1])},S4ICO={s4fort:'shield',s4zero:'ice',s4blood:'drain',s4dive:'claw',s4scorch:'meteor',s4rebirth:'healall',s4chain:'bolt',s4forms:'buff',s4halo:'holy',s4hydra:'bite',s4reflect:'shield',s4stand:'taunt'};
+// b173 skill 4: unlocked at 10 stars on Legend / SuperLegend / Limited cards. [name, icon file (ic/), Thai text, English text]
+const SK4={h15:['Absolute Zero','s4zero','แช่แข็งศัตรูทุกตัว ข้ามการโจมตีรอบถัดไป 1 ครั้ง และโจมตีทุกตัว 60%','freezes every enemy so each skips its next attack, and hits all for 60%'],
+ h13:['Blood Price','s4blood','แลกเลือดตัวเอง 15% โจมตีศัตรู 1 ตัว 260% ถ้าฆ่าได้ได้เลือดคืน 30%','pays 15% of its own life to hit one enemy for 260%; a kill heals it 30%'],
+ h14:['Skyfall Dive','s4dive','พุ่งใส่ศัตรูที่เลือดน้อยที่สุด 220% ถ้าฆ่าได้ได้ตีอีกครั้งทันที','dives at the weakest enemy for 220%; a kill gives another strike at once'],
+ h19:['Scorched Earth','s4scorch','เผาศัตรูทุกตัว เสียเลือด 35% ของ ATK ทุกรอบ 3 รอบ','sets every enemy burning for 35% of ATK each round for 3 rounds'],
+ h04:['Winter Rebirth','s4rebirth','ชุบเพื่อนที่ตายกลับมาพร้อมเลือด 40% (ใช้ได้ 1 ครั้งต่อด่าน)','brings a fallen ally back with 40% life (once per battle)'],
+ h03:['Chain of Heaven','s4chain','สายฟ้ากระโดด 5 ครั้งใส่ศัตรูแบบสุ่ม ครั้งละ 50% แรงขึ้นครั้งละ 10% (เหลือศัตรูตัวเดียว กระโดด 3 ครั้ง)','lightning jumps 5 times between random enemies, 50% each and 10% stronger every jump (3 jumps on a lone enemy)'],
+ h22:['Seventy-Two Forms','s4forms','2 รอบ หลบการโจมตีได้ 35% และสวนกลับ 80% ทุกครั้งที่หลบ','for 2 rounds dodges 35% of attacks and strikes back for 80% after every dodge'],
+ h07:['Halo of Return','s4halo','2 รอบ ทั้งทีมได้เลือดคืน 30% ของดาเมจที่โดน','for 2 rounds the whole team heals 30% of the damage it takes'],
+ h18:['Hydra Regrowth','s4hydra','สามหัวกัดศัตรูแบบสุ่ม 3 ครั้ง ครั้งละ 90% ดูดเลือด 50%','three heads bite random enemies 3 times for 90% each, draining 50%'],
+ h26:['Obsidian Reflect','s4reflect','ล่อศัตรู 2 รอบ และสะท้อนดาเมจที่โดน 50% กลับใส่คนตี','taunts for 2 rounds and reflects 50% of the damage it takes back at the attacker'],
+ h28:['Glacial Fortress','s4fort','ล่อศัตรู 2 รอบ และสร้างโล่น้ำแข็งให้ทั้งทีม 25% ของ HP สูงสุดตัวเอง','taunts for 2 rounds and gives the whole team an ice shield of 25% of its own max HP'],
+ h27:['Last Stand','s4stand','1 รอบ ไม่มีใครในทีมตาย (เลือดค้างที่ 1)','for 1 round nobody in the team can fall (life stops at 1)']};
+Object.keys(SK4).forEach(id=>{const [n,ic,th,en]=SK4[id],[t,v]=SK4E[id];SK[id][3]=[n,ic,t,v,th,en];ICON['k_'+ic]=S4ART[ic]?'ic/'+ic+'.webp':ICON['k_'+S4ICO[ic]]});
+function starPanel(id){const o=S.cards[id],st=starOf(id),mx=starMax(id),c=starCost(id),c2=star2Cost(id),N=v=>(+v).toLocaleString('en'),rn=C[id].r==='ST'?T('การ์ดเริ่มต้น','Starter'):RAR[C[id].r].n;
+  const row=(ic,name,need,have,sub)=>`<div class="stm ${have>=need?'ok':'no'}" ${sub?`title="${sub}"`:''}><span class="sti">${ic}</span><span class="stn">${name}${sub?`<small>${sub}</small>`:''}</span><span class="stq"><b>${N(have)}</b>/${N(need)}</span></div>`;
+  const gold=n=>row('<img src="ic2/coin.webp" alt="">','Gold',n,S.gold);
+  const way=(title,rows,ok,attr,btn)=>`<div class="stway"><p class="stwt">${title}</p>${rows}<button class="stgo ${ok?'':'off'} nt" ${attr} ${ok?'':'aria-disabled="true"'}>${btn}</button></div>`;
+  let body='';
+  if(c){const nm=`★${st+1}`;
+    body=way(C[id].r==='ST'?T('จ่ายด้วย Gold','Pay with Gold'):T('ทางที่ 1 · ใช้ใบซ้ำของการ์ดใบนี้','Way 1 · copies of this card'),gold(c[0])+(c[1]?row(`<img src="${artSrc(id)}" alt="" style="width:26px;height:26px;object-fit:cover;border:1px solid #f2d98a">`,T('ใบซ้ำ ','Copies of ')+C[id].n,c[1],o.cp||0,T('ได้จากเปิดแพ็คแล้วได้การ์ดตัวนี้ซ้ำ','from opening packs and pulling this card again')):''),canStar(id),`data-star="${id}"`,`${T('อัปดาว','Star up')} ${nm}`)
+     +(stoneCost(id)?way(T('ทางที่ 2 · ใช้หินดาว ★ แทนใบซ้ำ','Way 2 · Star Stones ★ instead of copies'),gold(c[0])+row('<span class="ssi">★</span>',T('หินดาว','Star Stones'),stoneCost(id),S.ss||0,T(`แลกจากร้านค้าอารีน่า · การ์ด ${rn} ใช้ ${STONE_N[C[id].r]||1} ก้อนต่อใบซ้ำ 1 ใบ`,`from the arena shop · ${rn} cards use ${STONE_N[C[id].r]||1} per copy`)),canStone(id),`data-stone="${id}"`,`${T('อัปดาว','Star up')} ${nm}`):'')}
+  else if(c2)body=way(T('ใช้ผลึกอาณาจักร 💠 (ดาว 6–10)','Realm crystals 💠 (stars 6–10)'),gold(c2[0])+row('💠',T('ผลึกอาณาจักร','Realm crystals'),c2[1],S.rs||0,T('ดรอปจากด่านบท 2 (501–1100) และหีบดาว','drops in Chapter 2 (501–1100) and star chests')),canStar2(id),`data-star2="${id}"`,`${T('อัปดาว','Star up')} ★${st+1}`);
+  else if(SK[id][3]&&st>=10)body=(L=>`<p class="stmax nt">MAX ★${st}</p>`+(s4Cost(id)?way(T(`สกิลที่ 4 ${SK[id][3][0]} · Lv ${L} → ${L+1} (แรงขึ้น ${Math.round(S4_K*100)}%${L+1>=3&&SK[id][3][2]==='stand'?'':''})`,`Skill 4 ${SK[id][3][0]} · Lv ${L} → ${L+1} (+${Math.round(S4_K*100)}%)`)+(SK[id][3][2]==='stand'?`<small class="stnote">${T('Last Stand: Lv 3 อยู่ได้ 2 รอบ','Last Stand: lasts 2 rounds at Lv 3')}</small>`:''),gold(s4Cost(id)[0])+row('💠',T('ผลึกอาณาจักร','Realm crystals'),s4Cost(id)[1],S.rs||0,T('ดรอปจากด่านบท 2 และหีบดาว','drops in Chapter 2 and star chests')),canS4(id),`data-s4up="${id}"`,`${T('อัปสกิลที่ 4','Upgrade skill 4')} Lv ${L+1}`):`<p class="stnote">${T('สกิลที่ 4','Skill 4')} ${SK[id][3][0]} Lv ${L} (MAX)</p>`))(s4Lv(id));
+  else body=`<p class="stmax nt">MAX ★${st}${mx===5&&STAR2_R.length&&!STAR2_R.includes(C[id].r)?`<small>${T('ดาว 6–10 อัปได้เฉพาะการ์ด Legend, SuperLegend และ Limited','Stars 6–10 are only for Legend, SuperLegend and Limited cards')}</small>`:''}</p>`;
+  const gain=st<mx?`${T('ดาวถัดไปได้','Next star gives')}: ATK/HP/DEF +${Math.round((st>=5?STAR_STAT2:STAR_STAT)*100)}% · ${T('เลเวลสูงสุด','level cap')} +${capBonus(C[id].r)}`:'';
+  const reset=st>0?(p=>canUnstar(id)?`<span class="btn sm ${unstarArm===id?'warn':'alt'} nt" data-unstar="${id}">${unstarArm===id?T('แตะอีกครั้งเพื่อยืนยัน','Tap again to confirm'):T('รีเซ็ตดาว','Reset stars')} <i>+${N(p.g)} Gold${p.c?' · '+T('ใบซ้ำ','copies')+' +'+p.c:''}${p.sn?' · ★+'+p.sn:''}${p.rs?' · 💠+'+p.rs:''}</i></span>`:`<small class="tx nt" style="color:#ffb14a">${T(`รีเซ็ตดาวไม่ได้: เลเวลเกิน ${RAR[C[id].r].cap} (เพดานตอนไม่มีดาว)`,`Stars cannot be reset: level is above ${RAR[C[id].r].cap} (the cap with no stars)`)}</small>`)(starPaid(id)):'';
+  const perk=mx>5?`<div class="stperk"><p class="stwt">${T('ดาว 6–10 ได้อะไร','What stars 6–10 give')}</p><p>★6–9 · ${T(`ดาวละ ATK/HP/DEF +${Math.round(STAR_STAT2*100)}% · เลเวลสูงสุด +${capBonus(C[id].r)} · ดาวบนการ์ดเปลี่ยนเป็นดาวทองมีเลขและออร่า`,`each +${Math.round(STAR_STAT2*100)}% ATK/HP/DEF · level cap +${capBonus(C[id].r)} · the card shows a numbered gold star with an aura`)}${C[id].r==='SL'?T(' · การ์ด SL ได้สายฟ้าเพิ่มบนไฟแดง',' · a SuperLegend also gains lightning over its red fire'):''}</p>${SK4[id]?`<p class="st10">★10 · ${T('ดาวแดงไฟลุก และปลดล็อคสกิลที่ 4','red flaming star, and unlocks skill 4')}: <b>${SK4[id][0]}</b><br><span>${T(SK4[id][2],SK4[id][3])}</span></p>`:''}</div>`:'';
+  return `<div class="stbox nt"><div class="sthd"><b>★ ${T('อัปดาว','Stars')}</b><span class="stnow">${st}/${mx}</span><span class="stbar">${Array.from({length:mx},(_,i)=>`<i class="${i<st?(i>=5?'on2':'on'):''}"></i>`).join('')}</span></div>
+   ${gain?`<p class="stgain">${gain}</p>`:''}<div class="stways">${body}</div>${perk}
+   <p class="stnote">${T(`วัตถุดิบของการ์ดใบนี้ (${rn}): ดาว 1–5 ใช้ Gold + ใบซ้ำ หรือ Gold + หินดาว ★`,`This card (${rn}) uses: stars 1–5 Gold + copies, or Gold + Star Stones ★`)}${mx>5?T(' · ดาว 6–10 ใช้ Gold + ผลึกอาณาจักร 💠',' · stars 6–10 Gold + realm crystals 💠'):''}</p>${reset?`<div class="strow">${reset}</div>`:''}</div>`}
 const STONE_N={C:1,UC:1,R:1,L:2,SL:3,LT:3},stoneCost=id=>{const c=starCost(id);return c&&c[1]?c[1]*(STONE_N[C[id].r]||1):0},canStone=id=>{const c=starCost(id),n=stoneCost(id);return !!(c&&n&&S.cards[id]&&S.gold>=c[0]&&(S.ss||0)>=n)};
 const AS_COST={pack:600,gem:200,vip:3000,stone:250},AS_PACK={SL:.005,L:.08,R:.45},AS_GEM=[[1,5,.5],[6,10,.28],[11,20,.15],[21,35,.055],[36,50,.015]],AS_VIP=7;
 function asBuy(k){const c=AS_COST[k];if(!c||(S.ac||0)<c)return;S.ac-=c;let got;
@@ -2438,7 +2663,7 @@ const TWZ=[
  {n:'Storm Spire',th:'ยอดหอพายุน้ำแข็ง',bg:'bg/t4.webp',fx:{fog:'#e8f4ff',flash:1,p:[['bliz']]},m:['t07','t08'],b:'tb4'},
  {n:'Throne above the Clouds',th:'บัลลังก์เหนือเมฆ',bg:'bg/t5.webp',fx:{glow:'#ffe9a0',p:[['spark','#ffffff',26],['dust','#ffe9a0',34]]},m:['t09','t10'],b:'tb5'}];
 TWZ.forEach((z,i)=>FX[101+i]=z.fx);
-const twZone=f=>Math.floor((Math.max(1,f)-1)/20)%TWZ.length,twBg=f=>bgCore(101+twZone(f),TWZ[twZone(f)].bg),twEq=f=>Math.max(1,Math.min(MAXST,Math.round(f*TW_K)));
+const twZone=f=>Math.floor((Math.max(1,f)-1)/20)%TWZ.length,twBg=f=>bgCore(101+twZone(f),TWZ[twZone(f)].bg),twEq=f=>Math.max(1,Math.min(ST1,Math.round(f*TW_K)));
 // what each tower boss does (C[boss].gim): shown on the tower screen and in the guide, enforced in hurt() / act() / twRound()
 const GIM={gate:['ประตูเหล็ก','Iron Gate','กันการโจมตี 3 ครั้งแรกทั้งหมด','blocks the first 3 hits completely'],
  raise:['ชุบชีวิต','Raise Dead','ตั้งแต่รอบ 3 ชุบลูกน้องที่ตายขึ้นมา 1 ครั้ง (เลือด 50%)','from round 3, raises its fallen minions once (50% life)'],
@@ -2446,12 +2671,12 @@ const GIM={gate:['ประตูเหล็ก','Iron Gate','กันกา�
  breath:['ลมหายใจพายุ','Storm Breath','ทุกรอบที่ 3 โจมตีทั้งทีม 60%','every 3rd round it hits your whole team for 60%'],
  shift:['สลับเกราะ','Shifting Aegis','รอบคี่กันกายภาพ (แพ้เวท) รอบคู่กันเวท (แพ้กายภาพ)','odd rounds it resists physical (weak to magic), even rounds the reverse']};
 const gimT=id=>{const g=GIM[C[id].gim];return g?`<b>${T(g[0],g[1])}</b>: ${T(g[2],g[3])}`:''};
-function twDef(f){const s=twEq(f),z=TWZ[twZone(f)],ease=Math.min(1,E0+(1-E0)*(s-1)/29),top=MAXST/TW_K,over=f>top?Math.pow(TW_GROW,f-top):1,
+function twDef(f){const s=twEq(f),z=TWZ[twZone(f)],ease=Math.min(1,E0+(1-E0)*(s-1)/29),top=ST1/TW_K,over=f>top?Math.pow(TW_GROW,f-top):1,
   bud=135*(1+.09*(LNAT[s]-1))*DIFF*ease*(1+LATE*Math.min(LATE_W,Math.max(0,s-LATE_N)))*over,cnt=f<=2?1:f<=5?2:3,boss=f%10===0,lord=f%20===0;
   return Array.from({length:cnt},(_,i)=>{const b=boss&&i===(cnt>1?1:0),id=b?z.b:z.m[(f+i+(f>>1))%2],sh=.35+.3*C[id].a/(C[id].a+C[id].h+C[id].d),atk=Math.round(bud*sh*EA*(b?1.2:1)),hp=Math.round(bud*(1-sh)*EH*(b?2.2*(lord?1.15:1):1));
     return{id,boss:b,atk,base:atk,hp,max:hp,crit:C[id].c/200,cx:1.5,sh:0,gim:b?C[id].gim:'',gate:b&&C[id].gim==='gate'?3:0}})}
 const wkU=u=>u.gim==='shift'?(bt.round%2===1?'m':'p'):weakOf(u.id,bt.n);
-function twRound(b){if(!b.tw)return;b.en.forEach(e=>{if(e.gim!=='raise'||e.hp<=0||e.used||b.round<3)return;const dead=b.en.map((x,j)=>x!==e&&x.hp<=0?j:-1).filter(j=>j>=0);if(!dead.length)return;
+function twRound(b){if(!b.tw&&!(b.n>ST1))return;b.en.forEach(e=>{if(e.gim!=='raise'||e.hp<=0||e.used||b.round<3)return;const dead=b.en.map((x,j)=>x!==e&&x.hp<=0?j:-1).filter(j=>j>=0);if(!dead.length)return;
   e.used=1;dead.forEach(j=>{const x=b.en[j];x.hp=Math.round(x.max*.5);x.done=false;q('e'+j,T('ฟื้น!','RISE!'),'g')});b.log=`${C[e.id].n}: ${T(GIM.raise[0],GIM.raise[1])}`})}
 // rewards. A floor pays about half of what the stage of the same strength pays (Gold, Exp and drop chance), every boss floor adds a fixed bonus, and a few floors hand out a one-off prize;
 // each floor is cleared once a week, so none of this can be farmed.
@@ -2639,7 +2864,7 @@ function guide(){
      T('หยุดการวนได้โดยแตะจอระหว่างนับถอยหลัง หรือกดปุ่ม "หยุดวน" บนแถบบนระหว่างสู้ · แพ้แล้วหยุดเอง','Stop a loop by tapping the screen during the countdown or with "Stop loop" on the top bar in battle · a defeat ends it'),
      T('ฝั่งเราเดินก่อนทีละตัว จากนั้นศัตรูที่เหลือโจมตีคนละครั้ง แล้วขึ้นรอบใหม่','Your fighters act first, one at a time; then every surviving enemy attacks once and a new round begins'),
      T('<b>ATK / MATK</b> คือพลังโจมตี (MATK = สายเวท) · <b>HP</b> คือเลือด หมดแล้วตาย','<b>ATK / MATK</b> is attack power (MATK = magic users) · <b>HP</b> is life; at 0 the fighter falls'),T('<b>DEF</b> คือพลังป้องกัน ลดดาเมจที่รับ: ดาเมจที่โดน = ดาเมจ × ATK ผู้ตี ÷ (ATK ผู้ตี + DEF ของเรา) เช่น DEF เท่ากับ ATK ของผู้ตี จะโดนครึ่งเดียว · ยิ่งผู้ตีแรง DEF ยิ่งกันได้น้อยลง · มอนสเตอร์ในด่านไม่มี DEF','<b>DEF</b> is defence and cuts damage taken: damage = damage × attacker ATK ÷ (attacker ATK + your DEF). DEF equal to the attacker\'s ATK halves the hit · the harder the hitter, the less DEF blocks · stage monsters have no DEF'),
-     T(`แต่ละใบมี 3 สกิล: สกิล 1 ใช้ได้ทุกตา สกิล 2 พัก ${CD[1]} ตา สกิล 3 พัก ${CD[2]} ตา และสกิล 3 เริ่มด่านด้วยการพัก 2 ตา`,`Each card has 3 skills: skill 1 every turn, skill 2 rests ${CD[1]} turns, skill 3 rests ${CD[2]} turns, and skill 3 starts each stage on a 2-turn rest`),
+     T(`แต่ละใบมี 3 สกิล: สกิล 1 ใช้ได้ทุกตา สกิล 2 ใช้ได้ตั้งแต่ตาแรกแล้วพัก ${CD[1]} ตา สกิล 3 ใช้ได้ตั้งแต่ตาที่ ${ULT_CD0+1} แล้วพัก ${CD[2]} ตา`,`Each card has 3 skills: skill 1 every turn, skill 2 is ready from the first turn and then rests ${CD[1]} turns, skill 3 is ready from turn ${ULT_CD0+1} and then rests ${CD[2]} turns`)+'</li><li>'+T(`ทุกสกิลมีผลทันที: สกิลบัฟ ${pc(SK_HIT.buff)} / บัฟทีม ${pc(SK_HIT.rally)} / ยั่วและโล่ ${pc(SK_HIT.guard)} โจมตีศัตรูในตาเดียวกันด้วย · สกิลตีหมู่ใส่ศัตรูที่เหลือตัวเดียวแรง ${AOE_LONE} เท่า · ฮีลส่วนที่เกิน HP เต็มกลายเป็นโล่ · โหมดออโต้เลือกสกิลตามสถานการณ์ (ตีหมู่เมื่อศัตรู 2 ตัวขึ้นไป ฮีลเมื่อเพื่อนเลือดต่ำ ยั่วเมื่อยังไม่มีใครยั่ว)`,`Every skill acts at once: buffs ${pc(SK_HIT.buff)} / team buffs ${pc(SK_HIT.rally)} / taunts and guards ${pc(SK_HIT.guard)} also strike a foe in the same turn · an area attack on a lone foe hits ${AOE_LONE}x · healing past full HP becomes a shield · Auto picks skills by the situation (area attacks on 2+ foes, heals when an ally is low, a taunt when nobody is taunting)`),
      T('<b>CRIT</b>: แต่ละใบมีโอกาสคริของตัวเอง ดาเมจคริ x1.5 (Shadow Ninja x1.75) · ศัตรูมีโอกาสคริครึ่งหนึ่งของการ์ดใบนั้น','<b>CRIT</b>: each card has its own crit chance; crit damage is x1.5 (Shadow Ninja x1.75) · enemies crit half as often as the card they copy'),
      T('<b>สายของการ์ด</b>: การ์ดทุกใบมีป้ายสายที่มุมบนของภาพ · ⚔ กายภาพ (โจมตีด้วย ATK) · ✦ เมจ (โจมตีด้วย MATK) · 🛡 แท้งค์ (ตั้งโล่ ล่อศัตรู) · ✚ ซัพพอร์ต (ฮีล สร้างโล่ให้ทีม) · หน้า การ์ดของฉัน มีแถบด้านบนให้กดดูทีละสาย','<b>Card classes</b>: every card carries a class badge at the top of its picture · ⚔ Physical (attacks with ATK) · ✦ Mage (attacks with MATK) · 🛡 Tank (shields up, taunts) · ✚ Support (heals and shields the team) · My Cards has a bar at the top to filter by class'),
      T('<b>เกราะ 2 ชนิด</b>: ศัตรูเกราะหนัก (Tar Ooze, Clockwork Scarab, Citadel Crab, Magma Colossus) รับดาเมจกายภาพลดลงแต่<b>แพ้เวท</b> · ศัตรูสายเวท (Sporecap Stalker, Storm Jelly, Wraith Lantern, Obsidian Dragon) รับดาเมจเวทลดลงแต่<b>แพ้กายภาพ</b> · เริ่มมีผลหลังด่าน 30 และเต็มที่ตั้งแต่ด่าน 60 · หน้าเตรียมด่านและป้ายเหนือหัวศัตรูบอกจุดอ่อน · เลขดาเมจมี ▲ เมื่อตีโดนจุดอ่อน และ ▼ เมื่อโดนเกราะ · การ์ดแท้งค์รับกายภาพ −15% เวท +20% · การ์ดเมจสายโจมตีรับเวท −20% กายภาพ +10%','<b>Two kinds of armour</b>: plated enemies (Tar Ooze, Clockwork Scarab, Citadel Crab, Magma Colossus) take less physical damage but are <b>weak to magic</b> · spirit and caster enemies (Sporecap Stalker, Storm Jelly, Wraith Lantern, Obsidian Dragon) take less magic damage but are <b>weak to physical</b> · this starts after stage 30 and is at full strength from stage 60 · the stage screen and the tag over each enemy show the weakness · a damage number carries ▲ on a weak spot and ▼ against armour · tank cards take −15% physical and +20% magic · attacking mage cards take −20% magic and +10% physical'),
@@ -2658,12 +2883,24 @@ function guide(){
      byRank(Object.keys(C)).map(id=>[`<b>${C[id].n}</b>`,`<span class="r-${C[id].r}" style="color:var(--gl)">${rn(C[id].r)}</span>`,T(ROLE[C[id].role],{atk:'Attacker',tank:'Tank',sup:'Support'}[C[id].role]),(C[id].m?'MATK ':'ATK ')+C[id].a,C[id].h,C[id].d,C[id].c+'%',SK[id].map(k=>k[0]).join(' · ')])).replace('class="gt"','class="gt c"')
      +`<p>${T('ค่าที่เห็นเป็นค่าที่เลเวล 1 แตะการ์ดในหน้า "การ์ดของฉัน" เพื่ออ่านรายละเอียดสกิล','Values are at level 1. Tap a card in My Cards to read what each skill does')}</p>`],
    grow:[T('เลเวลและดาว','Levels and stars'),()=>ul([
-     T('ชนะด่าน n ได้ Exp '+'10 + 2×n'+' ต่อใบ เฉพาะการ์ดที่อยู่ในทีม','Winning stage n gives 10 + 2×n Exp to each card in the team'),
-     T('เลเวลถัดไปใช้ Exp 20 + 10×เลเวลปัจจุบัน','The next level costs 20 + 10×current level Exp'),
+     T(`ชนะด่าน n ได้ Exp 10 + 2×n ต่อใบ เฉพาะการ์ดที่อยู่ในทีม · เล่นซ้ำด่านที่ผ่านแล้วได้ ${P(REPLAY_XP)}`,`Winning stage n gives 10 + 2×n Exp to each card in the team · replaying a cleared stage gives ${P(REPLAY_XP)}`),
+     T(`เลเวลถัดไปใช้ Exp 20 + 10×เลเวลปัจจุบัน · ตั้งแต่ Lv ${EXP_K0} ขึ้นไป บวกเพิ่ม ${EXP_K}×(เลเวล − ${EXP_K0})² เลเวลสูงจึงขึ้นช้าลงมาก`,`The next level costs 20 + 10×current level Exp · from Lv ${EXP_K0} up it adds ${EXP_K}×(level − ${EXP_K0})², so high levels come much slower`),
      T(`อัปดาวได้สูงสุด 5 ดาว ดาวละ ATK/HP/DEF +${P(STAR_STAT)} และเพิ่มเลเวลสูงสุด`,`Up to 5 stars; each adds +${P(STAR_STAT)} ATK/HP/DEF and raises the level cap`),
+     T(`ดาว 6–10 (เฉพาะ Legend, SuperLegend, Limited ที่ครบ 5 ดาว): ใช้ Gold + ผลึกอาณาจักร 💠 จากบท 2 · ดาวละ ATK/HP/DEF +${P(STAR_STAT2)} และเพิ่มเลเวลสูงสุดเท่าดาวปกติ · ดาว 6–10 แสดงเป็นดาวสีแดงทับดาวทอง`,`Stars 6–10 (Legend, SuperLegend and Limited cards at 5 stars): Gold + realm crystals 💠 from Chapter 2 · each adds +${P(STAR_STAT2)} ATK/HP/DEF and raises the level cap like a normal star · stars 6–10 show as red stars over the gold ones`),
+     T(`ดาว 10 ปลดล็อคสกิลที่ 4 (ปุ่มที่ 4 มีขอบแดง) ใช้ได้ตั้งแต่การกระทำครั้งที่ 3 แล้วพัก ${CD[3]} ตา · ออโต้ใช้เมื่อมีผลจริงเท่านั้น (เช่น ชุบเมื่อมีเพื่อนตาย, Last Stand เมื่อมีคนเลือดต่ำ) · อัปสกิลที่ 4 ได้ถึง Lv 3 ด้วย Gold + 💠 (Lv 2: ${N(S4_UP[0][0])} + 💠${S4_UP[0][1]} · Lv 3: ${N(S4_UP[1][0])} + 💠${S4_UP[1][1]}) เลเวลละแรงขึ้น ${Math.round(S4_K*100)}%`,`10 stars unlock skill 4 (the 4th button, red rim), usable from the 3rd action and then every ${CD[3]} · Auto uses it only when it does something (a revive when an ally is down, Last Stand when someone is low) · skill 4 levels up to Lv 3 with Gold + 💠 (Lv 2: ${N(S4_UP[0][0])} + 💠${S4_UP[0][1]} · Lv 3: ${N(S4_UP[1][0])} + 💠${S4_UP[1][1]}), +${Math.round(S4_K*100)}% per level`),
+     ...Object.keys(SK4).map(id=>`<b>${C[id].n}</b> · ${SK4[id][0]}: ${T(SK4[id][2],SK4[id][3])}`),
      T('ใบซ้ำจากแพ็คเก็บไว้ใช้อัปดาวของการ์ดใบนั้น · หน้า การ์ดของฉัน มีป้าย +N ที่มุมการ์ดบอกจำนวนใบซ้ำ ป้ายสีทองทึบคือครบจำนวนฟิวชั่นได้','Duplicate pulls are kept as copies for that card\'s stars · in My Cards a +N corner tag shows the spare copies; a solid gold tag means enough to fuse'),
      T(`ฟิวชั่นการ์ด (เมนู การ์ดของฉัน): ใช้ใบซ้ำของการ์ดตัวเดียวกัน + Gold แลกการ์ดระดับสูงขึ้น 1 ขั้น 1 ใบ (สุ่มตัว โดยออกใบที่ยังไม่มีก่อน) · ${Object.keys(FUSE.up).map(r=>RAR[r].n+' → '+RAR[FUSE.up[r]].n+' '+FUSE.n[r]+' ใบ + '+FUSE.gold[r].toLocaleString('en')+' Gold').join(' · ')} · การ์ดตัวจริง เลเวล ดาว ไม่หาย · Starter, Super Legend, Limited และการ์ดที่ล็อค ฟิวชั่นไม่ได้`,`Card Fusion (My Cards menu): spare copies of the same card + Gold give 1 random card one rank higher (cards you do not own come first) · ${Object.keys(FUSE.up).map(r=>RAR[r].n+' → '+RAR[FUSE.up[r]].n+' '+FUSE.n[r]+' copies + '+FUSE.gold[r].toLocaleString('en')+' Gold').join(' · ')} · your card, its level and stars stay · Starter, Super Legend, Limited and locked cards cannot be fused`)])
-     +tb([T('ดาวที่','Star'),'1','2','3','4','5'],[[T('การ์ดทั่วไป','Normal cards'),...STAR_COST.map(([g,c])=>N(g)+' Gold + '+c+T(' ใบซ้ำ',' copies'))],[T('การ์ดเริ่มต้น','Starter cards'),...STAR_COST_ST.map(([g])=>N(g)+' Gold')]])],
+     +tb([T('ดาวที่','Star'),'1','2','3','4','5'],[[T('การ์ดทั่วไป','Normal cards'),...STAR_COST.map(([g,c])=>N(g)+' Gold + '+c+T(' ใบซ้ำ',' copies'))],[T('การ์ดเริ่มต้น','Starter cards'),...STAR_COST_ST.map(([g])=>N(g)+' Gold')]])
+     +tb([T('ดาวที่','Star'),'6','7','8','9','10'],[[T('Legend ขึ้นไป','Legend and up'),...STAR_C2.map(([g,c])=>N(g)+' Gold + 💠'+c)]])],
+   ch2:[T('บท 2 (501–1100)','Chapter 2 (501–1100)'),()=>ul([
+     T(`ผ่านด่าน ${ST1} แล้วเข้าบท 2: 6 อาณาจักร อาณาจักรละ 100 ด่าน ศัตรูเริ่มแรงกว่าด่าน ${ST1} และแรงขึ้นทีละด่าน`,`After stage ${ST1} comes Chapter 2: 6 realms of 100 stages each. Enemies start stronger than stage ${ST1} and grow stage by stage`),
+     ...RLM.map((R,i)=>T(`<b>${ST1+1+i*100}–${ST1+100+i*100} ${R.th}</b> · กฎสนาม ${ruleTxt(R.r==='void'?'':R.r,1)||'สลับกฎของทุกอาณาจักรทีละด่าน'} · เจ้าอาณาจักร ${C[R.l].n} (${gimT(R.l)})`,`<b>${ST1+1+i*100}–${ST1+100+i*100} ${R.n}</b> · rule ${ruleTxt(R.r==='void'?'':R.r,1)||'each stage takes one of the other realms\' rules'} · lord ${C[R.l].n} (${gimT(R.l)})`)),
+     T('ชนิดด่าน: ด่านลงท้าย 0 = บอส · ด่านลงท้าย 00 = เจ้าอาณาจักร (ตัวใหญ่ ป้าย LORD มีท่าพิเศษ) · ลงท้าย 5 = ศัตรูยักษ์ตัวเดียว (ELITE) · ลงท้าย 7 = ด่านเอาตัวรอด ศัตรูอึดแต่ตีเบา อยู่รอดครบ 5 รอบก็ชนะ','Stage kinds: ending in 0 = boss · ending in 00 = realm lord (big, LORD tag, a special trick) · ending in 5 = one giant elite enemy · ending in 7 = survival: tough but soft-hitting enemies, live through 5 rounds to win'),
+     T('ดาวด่าน 3 ดวง: ★ ชนะ · ★ ไม่มีใครในทีมตาย · ★ ชนะภายใน 4 รอบ (ด่านเอาตัวรอด: เลือดรวมทีมเหลืออย่างน้อยครึ่ง) · เก็บดาวที่ดีที่สุดของแต่ละด่าน เล่นซ้ำเพื่อเก็บดาวที่ขาดได้','Stage stars: ★ win · ★ nobody in the team falls · ★ win within 4 rounds (survival: the team keeps at least half its life) · the best result per stage counts, replay to fill the missing stars'),
+     T(`หีบดาว: ทุก ${STAR_CH} ดาวเปิดหีบได้ 1 ใบ ได้ผลึกอาณาจักร 💠1 + ${N(CHEST_G)} Gold (ปุ่ม 🎁 ในหน้าเลือกด่านและหน้าผลด่าน)`,`Star chests: every ${STAR_CH} stars opens a chest with 1 realm crystal 💠 + ${N(CHEST_G)} Gold (the 🎁 button on the stage and result screens)`),
+     T(`ผลึกอาณาจักร 💠 ยังดรอปจากด่านบท 2: ด่านปกติ ${P(RS_DROP)} ด่านบอส ${P(RS_BOSS)} (คูณโอกาสดรอปของด่าน · VIP ที่ซื้อจากร้าน ×${VIP_RS} · VIP แจกไม่มีผล) · ชนะเจ้าอาณาจักรครั้งแรกได้ 💠${RS_LORD} + 💎${LORD_DIA} · ภารกิจรายวัน "ชนะ 10 ด่าน" ได้ 💠1 ทุกวัน (ด่านไหนก็ได้ เก็บได้ก่อนเข้าบท 2) · ด่าน 501–600 ความยากค่อยๆ ไต่ขึ้น · 🏆 ${F1100_N} ท่านแรกของเซิร์ฟเวอร์ที่ผ่านด่าน 1100 ได้การ์ด Limited Glacius Rex (ไม่มีขาย) คนถัดไปได้ 💠${F1100_LATE}`,`Realm crystals 💠 also drop in Chapter 2: ${P(RS_DROP)} on normal stages, ${P(RS_BOSS)} on bosses (times the stage drop bonus; a VIP bought in the shop ×${VIP_RS}, gifted VIP does not count) · a realm lord's first defeat gives 💠${RS_LORD} + 💎${LORD_DIA} · the daily quest "win 10 stages" gives 💠1 every day (any stages, so you can collect before Chapter 2) · stages 501–600 ramp up gradually · 🏆 the first ${F1100_N} players on the server to clear stage 1100 get the Limited card Glacius Rex (never sold), later ones get 💠${F1100_LATE}`),
+     T('การจัดทัพ: ทั้งสองฝ่ายยืนเป็นทรงสามเหลี่ยม ตัวที่ 2 ในทีมยืนหน้าสุดตรงกลาง ตัวที่ 1 และ 3 ยืนหลังซ้ายขวา (ตำแหน่งยืนไม่มีผลต่อดาเมจ)','Formation: both sides stand in a triangle, the 2nd card in front in the middle, the 1st and 3rd behind on either side (where a fighter stands does not change damage)')])],
    packs:[T('แพ็คการ์ด','Packs'),()=>tb([T('แพ็ค','Pack'),T('ราคา','Price'),T('ได้','Gives'),...['C','UC','R','L','SL'].map(rn)],
      [['Gold Pack',N(GPACK)+' Gold',GN+T(' ใบ',' cards'),...['C','UC','R','L','SL'].map(r=>P(GODDS[r]))],['Starter Pack',PACK+T(' เพชร',' diamonds'),T('3 ใบ','3 cards'),'–',T('1 ใบ','1 card'),T('2 ใบ','2 cards'),'–','–'],['Pro Pack',N(PRO.dia)+T(' เพชร หรือ ',' diamonds or ')+N(PRO.gold)+' Gold',PRO.n+T(' ใบ',' cards'),'–','–',...['R','L','SL'].map(r=>P(PRO.odds[r]))]])
      +`<p>${T('การ์ดดรอปจากด่านได้ด้วย: โอกาส ','Cards also drop from stages: ')}${P(CDROP)}${T(' ต่อการชนะ ด่านบอส ',' per win, boss stages ')}${P(CDROP_BOSS)} · ${CD_ODDS.slice().reverse().map(([r,pr,min])=>rn(r)+' '+P(pr)+(min>1?T(' (ด่าน ',' (stage ')+min+'+)':'')).join(' · ')}${T(' ที่เหลือเป็น Common',', the rest Common')}</p>`
@@ -2677,8 +2914,8 @@ function guide(){
      T('<b>การ์ดการันตีจากบอส</b>: ชนะบอสด่าน 10 ครั้งแรกได้ Storm Shaman (เมจ) · ชนะบอสด่าน 20 ครั้งแรกได้ Rare 1 ใบ (สุ่มจากใบที่ยังไม่มีก่อน) + Ironbark Guardian (แท้งค์) · คนที่ผ่านไปแล้วได้รับย้อนหลังตอนเข้าล็อบบี้ · บอสด่าน 30 ควรมี Rare 1 ใบและเลเวลราว 20–25','<b>Guaranteed boss cards</b>: the first win over the stage 10 boss gives Storm Shaman (a mage) · the stage 20 boss gives one Rare (cards you do not own come first) and Ironbark Guardian (a tank) · players already past them receive theirs in the lobby · for the stage 30 boss bring a Rare at about level 20–25'),
      T('<b>รีเซ็ตดาว</b>: หน้าดูการ์ดใบใหญ่มีปุ่มรีเซ็ตดาว ได้ Gold ใบซ้ำ และหินดาวที่ใช้ไปคืนทั้งหมด (แตะ 2 ครั้งเพื่อยืนยัน) · รีเซ็ตไม่ได้ถ้าเลเวลการ์ดเกินเพดานตอนไม่มีดาว','<b>Reset stars</b>: a card\'s detail screen can take its stars off and return all the Gold, copies and Star Stones spent (tap twice to confirm) · not possible while the card\'s level is above the cap it has with no stars'),
      T('ชนะบอสครั้งแรก: โบนัส 100 + 5×ด่าน · บอสด่าน 10 และด่าน 20 ให้ 5,000 Gold (พอเปิด Gold Pack 1 แพ็ค) · 30 ด่านแรกความยากค่อยๆ ไต่ขึ้น ทีมการ์ดเริ่มต้นผ่านได้ถึงราวด่าน 15','First boss win: bonus of 100 + 5×stage · the bosses of stages 10 and 20 give 5,000 Gold (one Gold Pack) · the first 30 stages ramp up gently; the starter team can reach about stage 15'),
-     T(`ฟาร์มออฟไลน์: ชั่วโมงละ 10×ค่าฐานของด่านสูงสุดที่ผ่าน สะสมได้ ${AFK_H} ชั่วโมง กดเก็บที่ล็อบบี้`,`Offline farm: 10×the base of your highest cleared stage per hour, stored up to ${AFK_H} hours; collect in the lobby`),
-     T('ภารกิจรายวัน: ','Daily quests: ')+QUESTS.map(([,n,,g])=>`${n} (${g} Gold)`).join(' · '),
+     T(`ฟาร์มออฟไลน์: ชั่วโมงละ 10×ค่าฐานของด่านสูงสุดที่ผ่าน สะสมได้ ${AFK_H} ชั่วโมง (VIP ที่ซื้อ ${AFK_VIP_H} ชั่วโมง) กดเก็บที่ล็อบบี้ · VIP ที่ซื้อในร้านค้าได้ลุ้นเครื่องรางสูงสุด ${OFF_AMS} ชิ้น และการ์ดสูงสุด ${OFF_CARDS} ใบต่อครั้ง (Uncommon / Rare / Legend · Super Legend ${OFF_SL*100}%)`,`Offline farm: 10×the base of your highest cleared stage per hour, stored up to ${AFK_H} hours (${AFK_VIP_H} with a VIP bought in the shop); collect in the lobby · with a VIP bought in the shop it also rolls up to ${OFF_AMS} amulets and ${OFF_CARDS} cards a collect (Uncommon / Rare / Legend · Super Legend ${OFF_SL*100}%)`),
+     T('วนด่านอัตโนมัติ (เปลี่ยนด่านเอง / เล่นซ้ำ): ระหว่างวนมีปุ่ม 💰 บอก Gold ที่มีตอนนี้กับ Gold ที่ได้เพิ่ม แตะเพื่อดูของทั้งหมดที่ได้ในรอบนี้ · จบการวน (แพ้ กดหยุด หรือถอย) จะขึ้นสรุปให้','Auto loops (next stage / replay): the 💰 button shows your Gold and what the loop has earned; tap it for everything won so far · when a loop ends (a defeat, Stop or Retreat) a summary pops up')+'</li><li>'+T('ภารกิจรายวัน: ','Daily quests: ')+QUESTS.map(([,n,,g])=>`${n} (${g} Gold)`).join(' · '),
      T(`แลก Gold เป็นเพชรที่ปุ่ม ⇄ แลกเพชร บนแถบบนของล็อบบี้: ${N(EX_GOLD)} Gold ต่อ ${EX_DIA} เพชร เลือกจำนวนได้ทีละ ${EX_DIA} เพชร (10, 20, 30 …) แลกได้ไม่จำกัด`,`Trade Gold for diamonds with the ⇄ Exchange button on the lobby bar: ${N(EX_GOLD)} Gold per ${EX_DIA} diamonds, chosen in lots of ${EX_DIA} (10, 20, 30 …), no limit`),
      T('การเติมเพชรด้วยเงินจริงยังไม่เปิดในช่วงทดสอบ','Buying diamonds with real money is closed during the test')])],
    amulet:[T('เครื่องราง','Amulets'),()=>tb([T('เครื่องราง','Amulet'),T('ระดับ','Rank'),T('ผล','Effect')],Object.keys(AM).map(k=>[`<span class="row" style="gap:8px"><span style="width:26px">${amu(k)}</span><b>${AM[k].n}</b></span>`,`<b class="art-${AM[k].r}">${RAR[AM[k].r].n}</b>`,AM[k].t]))
@@ -2703,8 +2940,9 @@ function guide(){
      T('บัตร VIP ซื้อด้วยเพชรในร้านค้า: ','VIP cards are bought with diamonds in the shop: ')+VIPS.map(([d,c])=>(d===365?T('1 ปี','1 year'):d+T(' วัน',' days'))+' '+N(c)+' 💎').join(' · ')+T(' · หน้าบัตร VIP แสดงบัตรที่กำลังใช้ วันเวลาหมดอายุ และเวลาที่เหลือ',' · the VIP screen shows the card in use, when it ends and the time left'),
      T('ทุกระดับ: Exp จากด่าน x2 · Gold จากด่านและ PvP x2 · เหรียญอารีน่า x2','Every tier: stage Exp x2 · Gold from stages and PvP x2 · arena coins x2'),
      T('VIP Bronze (7 วัน): โอกาสดรอปเครื่องรางและการ์ด +50%','VIP Bronze (7 days): amulet and card drop chance +50%'),
-     T(`VIP Silver (30 วัน): ดรอป +50% · เพชรฟรีวันละ ${VIPT[2].day} · Gold ออฟไลน์ +50% · ค่าลงขายตลาดลด 50%`,`VIP Silver (30 days): drops +50% · ${VIPT[2].day} free diamonds a day · offline Gold +50% · market listing fee -50%`),
-     T(`VIP Gold (1 ปี): ดรอป +100% · เพชรฟรีวันละ ${VIPT[3].day} · Gold ออฟไลน์ x2 · ลงขายตลาดฟรี · ชื่อ VIP สีทอง`,`VIP Gold (1 year): drops +100% · ${VIPT[3].day} free diamonds a day · offline Gold x2 · free market listings · gold VIP name`),
+     T('VIP ที่ซื้อในร้านค้าทุกระดับ: ฟาร์มออฟไลน์สะสมได้ 10 ชั่วโมง ได้ลุ้นเครื่องรางสูงสุด 7 ชิ้นและการ์ด (สูงสุด 3 ใบ: Uncommon / Rare / Legend · Super Legend 0.01%) และเร่งความเร็วออโต้ได้ x3 (VIP ที่ได้จากของแจกหรือร้านอารีน่าไม่ได้สิทธิ์สองข้อนี้)','Every VIP bought in the shop: the offline farm stores 10 hours and rolls up to 7 amulets and cards (up to 3: Uncommon / Rare / Legend · Super Legend 0.01%), and Auto speeds up to x3 (VIP from gifts or the arena shop does not get these two)'),
+     T(`VIP Silver (30 วัน): ดรอป +50% · เพชรฟรีวันละ ${VIPT[2].day} · ฟาร์มออฟไลน์ (Gold + ดรอป) +50% · ค่าลงขายตลาดลด 50%`,`VIP Silver (30 days): drops +50% · ${VIPT[2].day} free diamonds a day · offline farm (Gold + drops) +50% · market listing fee -50%`),
+     T(`VIP Gold (1 ปี): ดรอป +100% · เพชรฟรีวันละ ${VIPT[3].day} · ฟาร์มออฟไลน์ (Gold + ดรอป) x2 · ลงขายตลาดฟรี · ชื่อ VIP สีทอง`,`VIP Gold (1 year): drops +100% · ${VIPT[3].day} free diamonds a day · offline farm (Gold + drops) x2 · free market listings · gold VIP name`),
      T('ซื้อซ้ำเป็นการต่ออายุ ระดับสิทธิ์ใช้ของบัตรสูงสุดที่ซื้อไว้ตราบที่ VIP ไม่ขาดช่วง · เพชรรายวันเข้าเองเมื่อเปิดล็อบบี้ วันละครั้ง · บัตร VIP จากร้านอารีน่าเป็นระดับ Bronze · Gold จากภารกิจและโบนัสบอสไม่คูณ','Buying again adds days; you keep the perks of the highest card bought while VIP does not lapse · daily diamonds arrive when you open the lobby, once a day · the arena-shop VIP card is Bronze · quest and boss-bonus Gold are not doubled'),
      T('ล็อกอินรายวัน 7 วัน: ','7-day login streak: ')+DAILY.map(([c,v])=>v+(c==='g'?' Gold':' 💎')).join(' → ')])],
    pvp:['PvP',()=>ul([
@@ -2723,7 +2961,7 @@ function guide(){
      T(`หอคอยไร้ที่สิ้นสุด (ปุ่ม TOWER ในล็อบบี้ เปิดเมื่อผ่านด่าน ${TW_OPEN}): ชั้นไม่มีที่สิ้นสุด ใช้ทีมเดียวกับด่านปกติ กติกาสู้เหมือนด่านปกติ เลือดเต็มทุกชั้น`,`The Endless Tower (TOWER button in the lobby, open after stage ${TW_OPEN}): floors never end. It uses the same team and the same battle rules as normal stages, with full life on every floor`),
      T('ชนะแล้วทีมวิ่งขึ้นชั้นถัดไปเอง ไม่กลับหน้าผลด่าน · กด หยุดพัก ระหว่างวิ่ง หรือ ถอย ระหว่างสู้ เพื่อออกไปจัดทีม · แพ้แล้วจบรอบ เข้าใหม่เริ่มที่ชั้นที่แพ้ ไม่ต้องไต่ใหม่ · เข้าได้ไม่จำกัดรอบ','After a win the team runs on to the next floor by itself · tap Stop while running, or Retreat in a fight, to leave and change your team · a defeat ends the run and the next one starts on that same floor · runs are unlimited'),
      T(`ทุก 10 ชั้นเป็นบอส · ทุก 20 ชั้นเปลี่ยนโซน มี ${TWZ.length} โซนวนไป: ${TWZ.map(z=>z.th).join(' → ')}`,`Every 10th floor is a boss · the zone changes every 20 floors, ${TWZ.length} zones in a loop: ${TWZ.map(z=>z.n).join(' → ')}`),
-     T(`ความแรง: ชั้น f แรงเท่าด่าน f × ${TW_K} (ชั้น ${MAXST/TW_K} = ด่าน ${MAXST}) หลังจากนั้นศัตรูแรงขึ้นชั้นละ ${+((TW_GROW-1)*100).toFixed(1)}% ไม่มีเพดาน · เกราะ 2 ชนิดของศัตรูมีผลเต็มตั้งแต่ชั้น ${Math.ceil(60/TW_K)}`,`Strength: floor f equals stage f × ${TW_K} (floor ${MAXST/TW_K} = stage ${MAXST}); after that enemies gain ${+((TW_GROW-1)*100).toFixed(1)}% per floor with no limit · the two kinds of enemy armour are at full effect from floor ${Math.ceil(60/TW_K)}`),
+     T(`ความแรง: ชั้น f แรงเท่าด่าน f × ${TW_K} (ชั้น ${ST1/TW_K} = ด่าน ${ST1}) หลังจากนั้นศัตรูแรงขึ้นชั้นละ ${+((TW_GROW-1)*100).toFixed(1)}% ไม่มีเพดาน · เกราะ 2 ชนิดของศัตรูมีผลเต็มตั้งแต่ชั้น ${Math.ceil(60/TW_K)}`,`Strength: floor f equals stage f × ${TW_K} (floor ${ST1/TW_K} = stage ${ST1}); after that enemies gain ${+((TW_GROW-1)*100).toFixed(1)}% per floor with no limit · the two kinds of enemy armour are at full effect from floor ${Math.ceil(60/TW_K)}`),
      T('ทุกวันจันทร์ 00:00 น. ทุกคนกลับไปเริ่มชั้น 1 และเริ่มซีซั่นใหม่ ระบบตัดรอบเอง','Every Monday 00:00 (Bangkok) everyone goes back to floor 1 and a new season begins, automatically'),
      T(`อันดับ: วัดจากชั้นสูงสุดที่ผ่านในสัปดาห์นั้น ชั้นเท่ากันคนที่ถึงก่อนอยู่สูงกว่า แสดง ${TW_TOP} อันดับแรก · ต้องล็อกอิน Google จึงขึ้นตาราง`,`Ranking: by the highest floor cleared that week; on equal floors whoever got there first ranks higher. The top ${TW_TOP} are shown · sign in with Google to be ranked`),
      T(`รางวัลตามชั้น ได้ทันที สัปดาห์ละครั้ง: ทุกชั้นบอส Gold 500 + 50 × เลขชั้น · ${Object.keys(TW_MS).map(k=>'ชั้น '+k+': '+itText(TW_MS[k])).join(' · ')}`,`Floor rewards, at once, once a week: every boss floor Gold 500 + 50 × floor · ${Object.keys(TW_MS).map(k=>'floor '+k+': '+itText(TW_MS[k])).join(' · ')}`),
@@ -2776,7 +3014,7 @@ function titleScreen(){
    <p class="cfoot nt">PixelDeckBattle · CBT build ${BUILD}</p></div>`);
 }
 // ---------- Firebase: Google sign-in and one cloud save document per account (saves/{uid}) ----------
-const BUILD='b171';
+const BUILD='b173';
 // The game moved to its own address. Anyone opening the old address is sent on, but only once the new site answers, so a broken move cannot lock players out.
 const DISCORD='https://discord.gg/dHDzRyPG9',DC_SVG='<svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="currentColor" d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.4189-2.1568 2.4189Z"/></svg>';
 const NEW_HOME='https://pixeldeckbattle.github.io/';
