@@ -734,7 +734,9 @@ const C={
  h24:{n:"Storm Shaman",a:80,h:39,d:10,c:15,r:'UC',role:'atk',m:1,st:'cast',pj:'light'},
  h25:{n:"Ironbark Guardian",a:50,h:51,d:26,c:5,r:'UC',role:'tank',st:'smash'},
  h26:{n:"Obsidian Colossus",a:64,h:55,d:34,c:5,r:'L',role:'tank',st:'smash'},
- h27:{n:"Aegis Valkyrie",a:70,h:58,d:40,c:10,r:'SL',role:'tank',st:'slash'}
+ h27:{n:"Aegis Valkyrie",a:70,h:58,d:40,c:10,r:'SL',role:'tank',st:'slash'},
+ // b173 Glacius Rex: Limited tank, only from the first clear of stage 1100 (rw:1 keeps it out of packs, drops and fusion)
+ h28:{n:"Glacius Rex",a:73,h:61,d:42,c:10,r:'LT',role:'tank',st:'smash',ls:.2,rw:1}   // only the first 3 players to clear stage 1100 (firsts/s1100 in Firestore), never sold
 };
 // three skills per card: [name, icon, type, value]; type decides the effect, value is its strength
 const SK={
@@ -764,7 +766,8 @@ const SK={
  h24:[['Spark','bolt','hit',1],['Chain Lightning','bolt','aoe',.8],['Tempest','wind','exec',1.6]],
  h25:[['Thorn Mace','hammer','hit',1],['Bark Shield','taunt','guard',.36],['Root Shockwave','earth','aoe',1.05]],
  h26:[['Obsidian Hammer','hammer','hit',1],['Dragon Guard','taunt','guard',.42],['Cataclysm','earth','aoe',1.3]],
- h27:[['Sun Spear','spear','hit',1],['Aegis','taunt','guard',.5],['Solar Flare','holy','aoe',1.4]]
+ h27:[['Sun Spear','spear','hit',1],['Aegis','taunt','guard',.5],['Solar Flare','holy','aoe',1.4]],
+ h28:[['Frost Bite','bite','hit',1],['Permafrost Hide','taunt','guard',.52],['Glacial Breath','ice','aoe',1.45]]
 };
 const CD=[0,2,4,5],pc=v=>Math.round(v*100)+'%';
 const skDesc=([,,t,v,th,en])=>th?T(th,en):({hit:`โจมตีศัตรู 1 ตัว ${pc(v)} ของ ATK`,aoe:`โจมตีศัตรูทุกตัว ${pc(v)} ของ ATK`,exec:`โจมตี ${pc(v)} ของ ATK แรงเป็น 2 เท่าถ้าเป้าหมาย HP เหลือไม่ถึงครึ่ง`,
@@ -1307,11 +1310,22 @@ const clSync=()=>{try{if(!S||!S.cards)return;const L=clInit();Object.keys(S.card
 const giveCard=(id,src='other')=>{if(S.cards[id]){S.cards[id].cp=(S.cards[id].cp||0)+1;clAdd(id,src,1);return{id,dup:true}}S.cards[id]={lv:1,exp:0};clAdd(id,src);return{id}};
 // first win over these bosses hands out guaranteed cards, so a free player can always reach a Rare (S.bc remembers which were paid; older saves get theirs in the lobby)
 const BOSS_CARD={10:['h24'],20:['R','h25']};   // b160: a mage, then a Rare and a tank, so a new free player holds every role by stage 20
-const randNew=r=>{const ids=Object.keys(C).filter(id=>C[id].r===r),nw=ids.filter(id=>!S.cards[id]),p=nw.length?nw:ids;return p[Math.floor(Math.random()*p.length)]};
+const randNew=r=>{const ids=Object.keys(C).filter(id=>C[id].r===r&&!C[id].rw),nw=ids.filter(id=>!S.cards[id]),p=nw.length?nw:ids;return p[Math.floor(Math.random()*p.length)]};
 const bcTake=()=>{const out=[];S.bc=S.bc||[];for(const k in BOSS_CARD){if(S.cleared>=+k&&!S.bc.includes(+k)){S.bc.push(+k);BOSS_CARD[k].forEach(r=>out.push(giveCard(C[r]?r:randNew(r),'boss')))}}return out};
+// b173 Glacius Rex: the first F1100_N players on the server to clear stage 1100 each get one. The claim is a transaction on firsts/s1100 {n, u:[uid..], nm:[name..]};
+// the Firestore rules only let n go up by one, up to 3, appending the caller's own uid. S.f1100: 'got' | 'full' once settled; 'try' while it still has to reach the server.
+const F1100_N=3,F1100_LATE=10;
+function f1100Claim(){if(!S||S.cleared<1100||S.f1100==='got'||S.f1100==='full')return;S.f1100='try';save();if(!mkOn())return;
+  const db=mkDb(),ref=db.collection('firsts').doc('s1100'),me=USER.sub,nm=String(S.me&&S.me.name||'?').slice(0,24);
+  db.runTransaction(tx=>tx.get(ref).then(d=>{const v=d.exists?d.data():{n:0,u:[],nm:[]};if(v.u.includes(me))return 'got';if(v.n>=F1100_N)return 'full';
+    const nv={n:v.n+1,u:v.u.concat([me]),nm:(v.nm||[]).concat([nm])};tx.set(ref,nv);return 'won:'+nv.n}))
+   .then(r=>{if(S.f1100==='got'||S.f1100==='full')return;if(r==='full'){S.f1100='full';S.rs=(S.rs||0)+F1100_LATE;save();cloudFlush();ov(`<div class="cd dlg nt"><div class="px cdbox"><b>🏆 ${T('พิชิตด่าน 1100!','Stage 1100 conquered!')}</b><p>${T(`การ์ด Glacius Rex มอบให้ ${F1100_N} ท่านแรกครบแล้ว<br>รับ 💠${F1100_LATE} เป็นรางวัลแทน`,`Glacius Rex has gone to the first ${F1100_N} players.<br>You get 💠${F1100_LATE} instead`)}</p><div class="row"><button class="btn go" data-lp="no">${T('รับทราบ','OK')}</button></div></div></div>`);return}
+     S.f1100='got';const c=giveCard('h28','first1100');save();cloudFlush();sfx('win');const k=r==='got'?'':r.split(':')[1];
+     ov(`<div class="cd dlg nt"><div class="px cdbox"><b>🏆 ${T('ผู้พิชิตด่าน 1100','Conqueror of stage 1100')}${k?` #${k}`:''}</b><div style="width:150px">${full('h28')}</div><p>${T(`คุณคือ 1 ใน ${F1100_N} ท่านแรกของเซิร์ฟเวอร์<br>ได้การ์ด Limited <b style="color:#8fe9ff">Glacius Rex</b> (ไม่มีขาย)`,`You are one of the first ${F1100_N} on the server.<br>Limited card <b style="color:#8fe9ff">Glacius Rex</b> is yours (never sold)`)}</p><div class="row"><button class="btn go" data-lp="no">${T('รับการ์ด','Take it')}</button></div></div></div>`)})
+   .catch(()=>{})}
 const bcRow=c=>`<div class="row"><span class="pvc r-${C[c.id].r}" style="width:38px">${art(c.id)}</span><span class="nt">${T('รางวัลชนะบอส','Boss reward')}${c.dup?T(' (ใบซ้ำ)',' (copy)'):''}<br><b class="r-${C[c.id].r}" style="color:var(--gl)">${C[c.id].n}</b> · ${RAR[C[c.id].r].n}</span></div>`;
 const bcLate=()=>{const o=bcTake();if(!o.length)return;save();cloudFlush();setTimeout(()=>{if(!bt)ov(`<div class="cd dlg nt"><div class="px cdbox"><b>🎁 ${T('รางวัลชนะบอส (ย้อนหลัง)','Boss rewards (back-dated)')}</b><p>${T('บอสด่าน 10 และ 20 แจกการ์ดการันตีแล้ว คุณผ่านมาก่อน จึงได้รับย้อนหลัง','Bosses 10 and 20 now give guaranteed cards. You had already beaten them, so here are yours')}</p>${o.map(bcRow).join('')}<div class="row"><button class="btn go" data-lp="no">${T('รับทราบ','OK')}</button></div></div></div>`)},600)};
-const randOf=r=>{const ids=Object.keys(C).filter(id=>C[id].r===r);return ids[Math.floor(Math.random()*ids.length)]};
+const randOf=r=>{const ids=Object.keys(C).filter(id=>C[id].r===r&&!C[id].rw);return ids[Math.floor(Math.random()*ids.length)]};
 // daily login streak, 7 days then it loops: [currency, amount]
 const DAILY=[['g',300],['g',500],['d',5],['g',800],['g',1200],['d',10],['d',25]];
 const dayStr=d=>d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate(),dlCan=()=>!S.dl||S.dl.last!==today();
@@ -1337,7 +1351,7 @@ function devGrant(){if(!isDev())return;let ch=0;
   if(!S.fd||!S.fdg){S.fd=1;S.fdg=1;ch=1}['T1.1','T2.1','T3.1','P5.1','P3.1'].forEach(c=>{if(!(S.sh||[]).includes(c)){shAdd(c);ch=1}});   // b166: the Dev account carries the FOUNDER title too
   if(ch)save()}
 function home(){
-  bt=null;busy=false;if((S.era||1)<ERA){S=unlock(S);save();cloudFlush();return welcome()}devGrant();ensureMe();grantFetch();mkPayCheck();giftTake();compTake();bcLate();twRoll();news167()||news165();vipDaily();if(!S.afk){S.afk=Date.now();save()}const own=Object.keys(S.cards).length,next=Math.min(MAXST,S.cleared+1);
+  bt=null;busy=false;if((S.era||1)<ERA){S=unlock(S);save();cloudFlush();return welcome()}devGrant();ensureMe();grantFetch();mkPayCheck();giftTake();compTake();bcLate();if(S.f1100==='try')f1100Claim();twRoll();news167()||news165();vipDaily();if(!S.afk){S.afk=Date.now();save()}const own=Object.keys(S.cards).length,next=Math.min(MAXST,S.cleared+1);
   const ico=(src,d=0)=>`<span class="ico" style="--m:url(${src});--d:${d}s"><img src="${src}" alt=""></span>`;
   const dk=(act,ic,c,t,sub,dis,d)=>`<button class="dk ${c}" ${dis?'disabled':`data-act="${act}"`}>${ico(ic,d)}<span>${t}<small>${sub}</small></span></button>`;
   view(`<div class="lobby" style="--bg:url(${mapImg(next)})"><div class="lbg"></div>
@@ -1390,7 +1404,7 @@ function prep(){
     <div class="row"><button class="btn alt sm" data-act="home">กลับ</button><h2>ด่าน ${prepN}</h2></div>
     <div class="row"><button class="btn alt sm" data-act="stg" data-d="-10">-10</button><button class="btn alt sm" data-act="stg" data-d="-1">-1</button><button class="btn alt sm" data-act="stg" data-d="1">+1</button><button class="btn alt sm" data-act="stg" data-d="10">+10</button></div>${isDev()?'<div class="row"><button class="btn alt sm" data-act="stg" data-d="-100">-100</button><button class="btn alt sm" data-act="stg" data-d="100">+100</button><button class="btn alt sm" data-act="stg" data-d="-999">1</button><button class="btn alt sm" data-act="stg" data-d="999">500</button></div>':''}
     <div class="mapth" style="background-image:url(${mapImg(prepN)})" role="img" aria-label="${mapName(prepN)}"></div>
-    ${prepN>ST1?'':`<p class="sub">แผนที่: ${mapName(prepN)}</p>`}${prepN>ST1?`<p class="sub nt rlp">${T('อาณาจักร','Realm')} ${realmOf(prepN)+1}: <b>${T(RLM[realmOf(prepN)].th,RLM[realmOf(prepN)].n)}</b>${stKind(prepN)?` · <b style="color:#ffe45c">${T(...KIND_T[stKind(prepN)])}</b>`:''}<br>${T('กฎสนาม','Battlefield rule')} ${ruleTxt(ruleOf(prepN),1)}</p><p class="sub nt stw sm">${[1,2,3].map(i=>`<i class="${i<=((S.cs||{})[prepN]||0)?'on':''}">★</i>`).join('')} <small>${T('ชนะ · ไม่มีใครตาย · ชนะใน 4 รอบ','win · nobody falls · win within 4 rounds')}${stKind(prepN)==='surv'?T(' (ด่านเอาตัวรอด: เลือดทีมเหลือครึ่ง)',' (survival: team keeps half its life)'):''}</small></p><p class="sub nt">${T('ดาวบท 2','Chapter 2 stars')} ★${c2Stars()} · ${T('หีบถัดไป','next chest')} ${c2Stars()%STAR_CH}/${STAR_CH} · 💠 ${S.rs||0}${chestsLeft()>0?` <button class="btn go sm" data-act="schest">🎁 ×${chestsLeft()}</button>`:''}</p>`:''}
+    ${prepN>ST1?'':`<p class="sub">แผนที่: ${mapName(prepN)}</p>`}${prepN>ST1?`<p class="sub nt rlp">${T('อาณาจักร','Realm')} ${realmOf(prepN)+1}: <b>${T(RLM[realmOf(prepN)].th,RLM[realmOf(prepN)].n)}</b>${stKind(prepN)?` · <b style="color:#ffe45c">${T(...KIND_T[stKind(prepN)])}</b>`:''}<br>${T('กฎสนาม','Battlefield rule')} ${ruleTxt(ruleOf(prepN),1)}</p>${prepN===1100&&S.f1100!=='got'&&S.f1100!=='full'?`<p class="sub nt" style="color:#8fe9ff">🏆 ${T(`${F1100_N} ท่านแรกของเซิร์ฟเวอร์ที่ผ่านด่านนี้ ได้การ์ด Limited Glacius Rex (ไม่มีขาย)`,`The first ${F1100_N} players on the server to clear this stage get the Limited card Glacius Rex (never sold)`)}</p>`:''}<p class="sub nt stw sm">${[1,2,3].map(i=>`<i class="${i<=((S.cs||{})[prepN]||0)?'on':''}">★</i>`).join('')} <small>${T('ชนะ · ไม่มีใครตาย · ชนะใน 4 รอบ','win · nobody falls · win within 4 rounds')}${stKind(prepN)==='surv'?T(' (ด่านเอาตัวรอด: เลือดทีมเหลือครึ่ง)',' (survival: team keeps half its life)'):''}</small></p><p class="sub nt">${T('ดาวบท 2','Chapter 2 stars')} ★${c2Stars()} · ${T('หีบถัดไป','next chest')} ${c2Stars()%STAR_CH}/${STAR_CH} · 💠 ${S.rs||0}${chestsLeft()>0?` <button class="btn go sm" data-act="schest">🎁 ×${chestsLeft()}</button>`:''}</p>`:''}
     <p class="sub">ศัตรู: ${en.map(e=>(e.boss?'บอส ':'')+C[e.id].n+(weakOf(e.id,prepN)?` <b class="nt" style="color:${weakOf(e.id,prepN)==='m'?'#b9a2ff':'#ffb27a'}">(${weakTxt(weakOf(e.id,prepN))})</b>`:'')).join(', ')}</p>${en.some(e=>weakOf(e.id,prepN))?`<p class="sub nt" style="color:#c9d2f5">${T('ทีมคุณ','Your team')}: ${T('กายภาพ','physical')} ${S.team.filter(id=>!C[id].m).length} · ${T('เวท','magic')} ${S.team.filter(id=>C[id].m).length}</p>`:''}${lossK(prepN)&&prepN>S.cleared?`<p class="sub nt" style="color:#8fe9ff">${T('ศัตรูเหนื่อยล้าลง','Enemies worn down')} ${'●'.repeat(Math.min(3,lossK(prepN)))}${'○'.repeat(3-Math.min(3,lossK(prepN)))} <small style="display:inline">(${T('แพ้ด่านนี้','lost here')} ${lossK(prepN)} ${T('ครั้ง','times')})</small></p>`:''}
     <p class="sub">รางวัล: Gold ${goldRange(prepN).join('–')}${bossBonus(prepN)?' + โบนัสบอส '+bossBonus(prepN):''}${earlyB(prepN)?' + '+T('โบนัสด่านใหม่','new stage bonus')+' '+earlyB(prepN):''}${BOSS_CARD[prepN]&&prepN>S.cleared?' + <b class="nt" style="color:#ffe45c">'+T('การ์ดการันตี: ','guaranteed cards: ')+BOSS_CARD[prepN].map(r=>C[r]?C[r].n:RAR[r].n).join(' + ')+'</b>':''} · Exp ${expOf(prepN)} ต่อใบ${prepN<=S.cleared?' (เล่นซ้ำ)':''}</p>
     ${hasLuck()?`<p class="sub nt" style="color:#7dff8a">Lucky Clover: ${'🍀'.repeat(luckLv(prepN))} ${T(['','โชคเล็กน้อย','โชคพอมี','โชคดี','โชคดีมาก','โชคสูงสุด'][luckLv(prepN)],['','a little luck','some luck','lucky','very lucky','top luck'][luckLv(prepN)])} <small style="display:inline">(${T('ลุ้นการ์ด Legend','a shot at a Legend card')})</small></p>`:''}<p class="sub nt">${T('โอกาสดรอป','Drop chance')}: ${T('เครื่องราง','amulet')} <b style="color:#ffe45c">${P2(dropP(prepN,DROP,DROP_BOSS,prepN>S.cleared))}</b> · ${T('การ์ด','card')} <b style="color:#ffe45c">${P2(dropP(prepN,CDROP,CDROP_BOSS,prepN>S.cleared))}</b></p>
@@ -1776,6 +1790,7 @@ function autoPick(a,mine=true){const A=mine?bt.al:bt.en,F=mine?bt.en:bt.al,nF=F.
     if(ty==='forms'&&!a.forms&&long)return 3;
     if(ty==='halo'&&long&&!act.some(x=>x.halo>0)&&(low||bt.round<=3))return 3;
     if(ty==='reflect'&&!a.reflect&&long&&!A.some(x=>x.hp>0&&x.taunt&&x!==a))return 3;
+    if(ty==='fort'&&(long||low)&&!A.some(x=>x.hp>0&&x.taunt&&x!==a))return 3;
     if(ty==='stand'&&act.some(x=>hp(x)<.35&&!x.stand))return 3}
   for(const j of[2,1]){if(a.cds[j])continue;const [, ,ty,v]=SK[a.id][j];
     if(ty==='heal'||ty==='healall'){if(low)return j}
@@ -1894,7 +1909,7 @@ function cast(a,k,ti,mine=true){SD=sideOf(mine);
   a.cds=a.cds.map((c,j)=>j===k?CD[k]:Math.max(0,c-1));
 }
 // b173 skill 4 (k=3). SD is set by cast(); HIT_SRC lets dodge-counters and reflections find the caster.
-const S4T=['zero','blood','dive','scorch','rebirth','chain','forms','halo','hydra','reflect','stand'];
+const S4T=['fort','zero','blood','dive','scorch','rebirth','chain','forms','halo','hydra','reflect','stand'];
 function cast4(a,ai,type,v,ti){const F=SD.F,live=()=>F.map((x,j)=>x.hp>0?j:-1).filter(j=>j>=0),rnd=()=>{const L=live();return L.length?L[Math.floor(Math.random()*L.length)]:-1},
   hit=(j,m,sure)=>{if(j<0||!F[j]||F[j].hp<=0)return 0;hitA=a.atk;hitM=!!C[a.id].m;const [d,cr]=roll(a,m,sure);hurt(F,SD.fp,j,d,'d',cr);return d},
   lowest=()=>{const L=live();return L.length?L.reduce((b,j)=>F[j].hp<F[b].hp?j:b):-1};HIT_SRC=[SD.A,SD.ap,ai];
@@ -1909,6 +1924,7 @@ function cast4(a,ai,type,v,ti){const F=SD.F,live=()=>F.map((x,j)=>x.hp>0?j:-1).f
   else if(type==='halo'){SD.A.forEach((x,j)=>{if(x.hp>0){x.halo=2;x.haloP=v;q(SD.ap+j,'✨','g')}})}
   else if(type==='hydra'){let sum=0;for(let i=0;i<3;i++)sum+=hit(rnd(),v);if(a.hp>0&&sum>0)mend(ai,sum*.5)}
   else if(type==='reflect'){a.reflect=2;a.reflectP=v;a.taunt=TAUNT_N;ward(ai,a.max*.2*a.hb)}
+  else if(type==='fort'){a.taunt=TAUNT_N;SD.A.forEach((x,j)=>{if(x.hp>0)ward(j,a.max*v*a.hb)})}
   else if(type==='stand'){SD.A.forEach((x,j)=>{if(x.hp>0){x.stand=(a.s4l||1)>=3?2:1;q(SD.ap+j,'🛡','s')}})}
   HIT_SRC=null}
 // start of every round: burns tick (they can kill), frozen allies lose their turn, timed skill-4 effects count down
@@ -2011,7 +2027,7 @@ async function finish(won){
       return `<div class="mini r-${C[id].r} glow ${fr(id)}">${fxh(id)}${rib(id)}<div class="art"><img src="${artSrc(id)}" alt=""></div></div><div><b>${C[id].n}</b> ${wasMax?'<span class="gold">Lv MAX</span>':'Exp +'+x} ${up?`<span class="gold">Lv ${was} → ${c.lv}</span>`:`· Lv ${c.lv}`}<div class="hp xp"><i style="width:${maxed(id)?100:c.exp/need(c.lv)*100}%"></i></div></div>`}).join('');
     if(sw){S.cs=S.cs||{};if(sw>(S.cs[n]||0)){swNew=sw-(S.cs[n]||0);S.cs[n]=sw}rsg=(n>S.cleared&&stKind(n)==='lord'?RS_LORD:0)+(Math.random()<dropP(n,RS_DROP,RS_BOSS,first)/vipP().dr*(vipPaid()?VIP_RS:1)?1:0);if(rsg)S.rs=(S.rs||0)+rsg}
     if(n>S.cleared&&stKind(n)==='lord'){S.dia=(S.dia||0)+LORD_DIA;fx.push(['view','+'+LORD_DIA+' 💎','g'])}
-    if(n>S.cleared)S.cleared=n;if(S.ls)delete S.ls;bcs=bcTake();save();if(loop)fsAdd(true,g+bb+eb,drop,cdrop&&cdrop.id,ups)}
+    if(n>S.cleared)S.cleared=n;if(S.ls)delete S.ls;if(n===1100&&first)setTimeout(f1100Claim,1800);bcs=bcTake();save();if(loop)fsAdd(true,g+bb+eb,drop,cdrop&&cdrop.id,ups)}
   else if(loop)fsAdd(false)
   else if(first){S.ls={n,k:lossK(n)+1};save()}
   const next=Math.min(MAXST,n+1);
@@ -2521,8 +2537,8 @@ function unstar(id){if(!canUnstar(id))return;const p=starPaid(id),o=S.cards[id];
 // and a tick or cross for each), and one big button per way to pay. Stars 1-5: copies of this card, or arena star stones ★; stars 6-10 (Legend+): realm crystals 💠.
 // b173 skill 4 engine values: [type, value]. Unlocked only on a fighter whose card has 10 stars (f.sk4); first usable on its 3rd action (cooldown starts at 2), then every 5 actions.
 const S4ART={s4zero:1,s4blood:1,s4dive:1,s4scorch:1,s4chain:1,s4forms:1,s4halo:1,s4hydra:1,s4reflect:1,s4stand:1,s4rebirth:1};   // skill-4 icons that exist in ic/ (filled in when the art arrives)
-const SK4E={h15:['zero',.6],h13:['blood',2.6],h14:['dive',2.2],h19:['scorch',.35],h04:['rebirth',.4],h03:['chain',.5],h22:['forms',.35],h07:['halo',.3],h18:['hydra',.9],h26:['reflect',.5],h27:['stand',1]},
-  SK4_CD0=2,S4_UP=[[150000,15],[300000,25]],S4_K=.15,s4Lv=(id,o)=>Math.min(3,Math.max(1,((o||S.cards[id]||{}).s4)|0||1)),s4Cost=id=>{const o=S.cards[id];return o&&starOf(id)>=10&&SK[id][3]&&s4Lv(id)<3?S4_UP[s4Lv(id)-1]:null},canS4=id=>{const c=s4Cost(id);return !!(c&&S.gold>=c[0]&&(S.rs||0)>=c[1])},S4ICO={s4zero:'ice',s4blood:'drain',s4dive:'claw',s4scorch:'meteor',s4rebirth:'healall',s4chain:'bolt',s4forms:'buff',s4halo:'holy',s4hydra:'bite',s4reflect:'shield',s4stand:'taunt'};
+const SK4E={h15:['zero',.6],h13:['blood',2.6],h14:['dive',2.2],h19:['scorch',.35],h04:['rebirth',.4],h03:['chain',.5],h22:['forms',.35],h07:['halo',.3],h18:['hydra',.9],h26:['reflect',.5],h27:['stand',1],h28:['fort',.25]},
+  SK4_CD0=2,S4_UP=[[150000,15],[300000,25]],S4_K=.15,s4Lv=(id,o)=>Math.min(3,Math.max(1,((o||S.cards[id]||{}).s4)|0||1)),s4Cost=id=>{const o=S.cards[id];return o&&starOf(id)>=10&&SK[id][3]&&s4Lv(id)<3?S4_UP[s4Lv(id)-1]:null},canS4=id=>{const c=s4Cost(id);return !!(c&&S.gold>=c[0]&&(S.rs||0)>=c[1])},S4ICO={s4fort:'shield',s4zero:'ice',s4blood:'drain',s4dive:'claw',s4scorch:'meteor',s4rebirth:'healall',s4chain:'bolt',s4forms:'buff',s4halo:'holy',s4hydra:'bite',s4reflect:'shield',s4stand:'taunt'};
 // b173 skill 4: unlocked at 10 stars on Legend / SuperLegend / Limited cards. [name, icon file (ic/), Thai text, English text]
 const SK4={h15:['Absolute Zero','s4zero','แช่แข็งศัตรูทุกตัว ข้ามการโจมตีรอบถัดไป 1 ครั้ง และโจมตีทุกตัว 60%','freezes every enemy so each skips its next attack, and hits all for 60%'],
  h13:['Blood Price','s4blood','แลกเลือดตัวเอง 15% โจมตีศัตรู 1 ตัว 260% ถ้าฆ่าได้ได้เลือดคืน 30%','pays 15% of its own life to hit one enemy for 260%; a kill heals it 30%'],
@@ -2534,6 +2550,7 @@ const SK4={h15:['Absolute Zero','s4zero','แช่แข็งศัตรู�
  h07:['Halo of Return','s4halo','2 รอบ ทั้งทีมได้เลือดคืน 30% ของดาเมจที่โดน','for 2 rounds the whole team heals 30% of the damage it takes'],
  h18:['Hydra Regrowth','s4hydra','สามหัวกัดศัตรูแบบสุ่ม 3 ครั้ง ครั้งละ 90% ดูดเลือด 50%','three heads bite random enemies 3 times for 90% each, draining 50%'],
  h26:['Obsidian Reflect','s4reflect','ล่อศัตรู 2 รอบ และสะท้อนดาเมจที่โดน 50% กลับใส่คนตี','taunts for 2 rounds and reflects 50% of the damage it takes back at the attacker'],
+ h28:['Glacial Fortress','s4fort','ล่อศัตรู 2 รอบ และสร้างโล่น้ำแข็งให้ทั้งทีม 25% ของ HP สูงสุดตัวเอง','taunts for 2 rounds and gives the whole team an ice shield of 25% of its own max HP'],
  h27:['Last Stand','s4stand','1 รอบ ไม่มีใครในทีมตาย (เลือดค้างที่ 1)','for 1 round nobody in the team can fall (life stops at 1)']};
 Object.keys(SK4).forEach(id=>{const [n,ic,th,en]=SK4[id],[t,v]=SK4E[id];SK[id][3]=[n,ic,t,v,th,en];ICON['k_'+ic]=S4ART[ic]?'ic/'+ic+'.webp':ICON['k_'+S4ICO[ic]]});
 function starPanel(id){const o=S.cards[id],st=starOf(id),mx=starMax(id),c=starCost(id),c2=star2Cost(id),N=v=>(+v).toLocaleString('en'),rn=C[id].r==='ST'?T('การ์ดเริ่มต้น','Starter'):RAR[C[id].r].n;
@@ -2867,7 +2884,7 @@ function guide(){
      T('ชนิดด่าน: ด่านลงท้าย 0 = บอส · ด่านลงท้าย 00 = เจ้าอาณาจักร (ตัวใหญ่ ป้าย LORD มีท่าพิเศษ) · ลงท้าย 5 = ศัตรูยักษ์ตัวเดียว (ELITE) · ลงท้าย 7 = ด่านเอาตัวรอด ศัตรูอึดแต่ตีเบา อยู่รอดครบ 5 รอบก็ชนะ','Stage kinds: ending in 0 = boss · ending in 00 = realm lord (big, LORD tag, a special trick) · ending in 5 = one giant elite enemy · ending in 7 = survival: tough but soft-hitting enemies, live through 5 rounds to win'),
      T('ดาวด่าน 3 ดวง: ★ ชนะ · ★ ไม่มีใครในทีมตาย · ★ ชนะภายใน 4 รอบ (ด่านเอาตัวรอด: เลือดรวมทีมเหลืออย่างน้อยครึ่ง) · เก็บดาวที่ดีที่สุดของแต่ละด่าน เล่นซ้ำเพื่อเก็บดาวที่ขาดได้','Stage stars: ★ win · ★ nobody in the team falls · ★ win within 4 rounds (survival: the team keeps at least half its life) · the best result per stage counts, replay to fill the missing stars'),
      T(`หีบดาว: ทุก ${STAR_CH} ดาวเปิดหีบได้ 1 ใบ ได้ผลึกอาณาจักร 💠1 + ${N(CHEST_G)} Gold (ปุ่ม 🎁 ในหน้าเลือกด่านและหน้าผลด่าน)`,`Star chests: every ${STAR_CH} stars opens a chest with 1 realm crystal 💠 + ${N(CHEST_G)} Gold (the 🎁 button on the stage and result screens)`),
-     T(`ผลึกอาณาจักร 💠 ยังดรอปจากด่านบท 2: ด่านปกติ ${P(RS_DROP)} ด่านบอส ${P(RS_BOSS)} (คูณโอกาสดรอปของด่าน · VIP ที่ซื้อจากร้าน ×${VIP_RS} · VIP แจกไม่มีผล) · ชนะเจ้าอาณาจักรครั้งแรกได้ 💠${RS_LORD} + 💎${LORD_DIA} · ภารกิจรายวัน "ชนะ 10 ด่าน" ได้ 💠1 ทุกวัน (ด่านไหนก็ได้ เก็บได้ก่อนเข้าบท 2) · ด่าน 501–600 ความยากค่อยๆ ไต่ขึ้น`,`Realm crystals 💠 also drop in Chapter 2: ${P(RS_DROP)} on normal stages, ${P(RS_BOSS)} on bosses (times the stage drop bonus; a VIP bought in the shop ×${VIP_RS}, gifted VIP does not count) · a realm lord's first defeat gives 💠${RS_LORD} + 💎${LORD_DIA} · the daily quest "win 10 stages" gives 💠1 every day (any stages, so you can collect before Chapter 2) · stages 501–600 ramp up gradually`),
+     T(`ผลึกอาณาจักร 💠 ยังดรอปจากด่านบท 2: ด่านปกติ ${P(RS_DROP)} ด่านบอส ${P(RS_BOSS)} (คูณโอกาสดรอปของด่าน · VIP ที่ซื้อจากร้าน ×${VIP_RS} · VIP แจกไม่มีผล) · ชนะเจ้าอาณาจักรครั้งแรกได้ 💠${RS_LORD} + 💎${LORD_DIA} · ภารกิจรายวัน "ชนะ 10 ด่าน" ได้ 💠1 ทุกวัน (ด่านไหนก็ได้ เก็บได้ก่อนเข้าบท 2) · ด่าน 501–600 ความยากค่อยๆ ไต่ขึ้น · 🏆 ${F1100_N} ท่านแรกของเซิร์ฟเวอร์ที่ผ่านด่าน 1100 ได้การ์ด Limited Glacius Rex (ไม่มีขาย) คนถัดไปได้ 💠${F1100_LATE}`,`Realm crystals 💠 also drop in Chapter 2: ${P(RS_DROP)} on normal stages, ${P(RS_BOSS)} on bosses (times the stage drop bonus; a VIP bought in the shop ×${VIP_RS}, gifted VIP does not count) · a realm lord's first defeat gives 💠${RS_LORD} + 💎${LORD_DIA} · the daily quest "win 10 stages" gives 💠1 every day (any stages, so you can collect before Chapter 2) · stages 501–600 ramp up gradually · 🏆 the first ${F1100_N} players on the server to clear stage 1100 get the Limited card Glacius Rex (never sold), later ones get 💠${F1100_LATE}`),
      T('การจัดทัพ: ทั้งสองฝ่ายยืนเป็นทรงสามเหลี่ยม ตัวที่ 2 ในทีมยืนหน้าสุดตรงกลาง ตัวที่ 1 และ 3 ยืนหลังซ้ายขวา (ตำแหน่งยืนไม่มีผลต่อดาเมจ)','Formation: both sides stand in a triangle, the 2nd card in front in the middle, the 1st and 3rd behind on either side (where a fighter stands does not change damage)')])],
    packs:[T('แพ็คการ์ด','Packs'),()=>tb([T('แพ็ค','Pack'),T('ราคา','Price'),T('ได้','Gives'),...['C','UC','R','L','SL'].map(rn)],
      [['Gold Pack',N(GPACK)+' Gold',GN+T(' ใบ',' cards'),...['C','UC','R','L','SL'].map(r=>P(GODDS[r]))],['Starter Pack',PACK+T(' เพชร',' diamonds'),T('3 ใบ','3 cards'),'–',T('1 ใบ','1 card'),T('2 ใบ','2 cards'),'–','–'],['Pro Pack',N(PRO.dia)+T(' เพชร หรือ ',' diamonds or ')+N(PRO.gold)+' Gold',PRO.n+T(' ใบ',' cards'),'–','–',...['R','L','SL'].map(r=>P(PRO.odds[r]))]])

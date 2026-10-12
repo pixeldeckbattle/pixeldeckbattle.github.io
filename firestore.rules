@@ -73,6 +73,20 @@ service cloud.firestore {
         && request.resource.data.at == request.time;
       allow delete: if owner();
     }
+    // b173 first players to clear stage 1100 (Glacius Rex): one document, n goes up by exactly one up to 3 and the caller appends only their own uid and name
+    match /firsts/{id} {
+      allow read: if request.auth != null;
+      allow create: if request.auth != null && id == 's1100'
+        && request.resource.data.n == 1 && request.resource.data.u == [request.auth.uid]
+        && request.resource.data.nm is list && request.resource.data.nm.size() == 1;
+      allow update: if request.auth != null && id == 's1100'
+        && resource.data.n < 3 && !(request.auth.uid in resource.data.u)
+        && request.resource.data.n == resource.data.n + 1
+        && request.resource.data.u == resource.data.u.concat([request.auth.uid])
+        && request.resource.data.nm is list && request.resource.data.nm.size() == request.resource.data.u.size()
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['n','u','nm']);
+      allow delete: if owner();
+    }
     // live game settings (maintenance, notice, top-up hours, end of CBT, suspended accounts): everyone reads, only the owner writes
     match /config/{id} {
       allow read: if true;
