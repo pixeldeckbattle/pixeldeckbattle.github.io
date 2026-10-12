@@ -1203,7 +1203,7 @@ let DIFF=3.0,EA=.3,EH=1.3,E0=.42,LATE=.003,LATE_N=250,LATE_W=50;   // b160: enem
 const PITY=.04,PITY_MAX=.12,VARY=.10,lossK=n=>S.ls&&S.ls.n===n?S.ls.k|0:0,softMul=n=>n>(S.cleared||0)?(1-Math.min(PITY_MAX,PITY*lossK(n)))*(1-VARY+2*VARY*Math.random()):1;
 // b173 Chapter 2: six realms of 100 stages after stage 500. Enemies start from stage 500's strength and grow CH2_G a stage (+ the realm's battlefield rule);
 // every 10th stage is the realm boss with two minions, every 100th the realm lord (bigger, with its own gimmick), x5 is an elite (one big monster), x7 a survival stage (live through 5 rounds).
-let CH2_G=.0012,CH2_K=1.5,LORD_M=[1.25,2.4];const RLM=[
+let CH2_G=.0012,CH2_K=1.5,CH2_RAMP=100,LORD_M=[1.25,2.4];const RLM=[
  {n:'Deep Sea',th:'ทะเลลึก',m:['x11','x12','x13'],b:'x14',l:'x15',r:'tide',bg:['r11','r12'],fx:[{glow:'#2ad8ff',p:[['bubble','#9ff3ff',22],['spark','#9ff3ff',18],['fly','#7ae8ff',12]]},{glow:'#3affd8',p:[['bubble','#bff8ff',26],['spark','#ffffff',16],['dust','#bfeaff',20]]}]},
  {n:'Raging Volcano',th:'ภูเขาไฟคลั่ง',m:['x21','x22','x23'],b:'x24',l:'x25',r:'burn',bg:['r21','r22'],fx:[{glow:'#ff6a1a',volc:[[24,36],[57,22]],p:[['ember','#ffb04a',56],['ash','#c9b0a8',22]]},{glow:'#ff7a2a',p:[['ember','#ffc04a',60],['ash','#bfa8a0',16]]}]},
  {n:'Eternal Glacier',th:'ธารน้ำแข็งนิรันดร์',m:['x31','x32','x33'],b:'x34',l:'x35',r:'frost',bg:['r31','r32'],fx:[{aur:1,p:[['snow','#ffffff',56],['spark','#bfe6ff',14]]},{fog:'#e8f4ff',p:[['snow','#ffffff',40],['spark','#dff4ff',22]]}]},
@@ -1221,7 +1221,7 @@ const RULES={tide:['🌊','คลื่นยักษ์','Tidal Wave','ทุ�
 const ruleTxt=(k,full)=>{const r=RULES[k];return r?`${r[0]} ${T(r[1],r[2])}${full?': '+T(r[3],r[4]):''}`:''};
 const KIND_T={lord:['เจ้าอาณาจักร','Realm Lord'],boss:['บอส','Boss'],elite:['ศัตรูยักษ์','Elite'],surv:['เอาตัวรอด 5 รอบ','Survive 5 rounds']};
 const stBud=n=>{const ease=Math.min(1,E0+(1-E0)*(n-1)/29);return 135*(1+.09*(LNAT[n]-1))*DIFF*ease*(1+LATE*Math.min(LATE_W,Math.max(0,n-LATE_N)))};
-function stageDef2(n){const R=RLM[realmOf(n)],k=n-ST1,kd=stKind(n),bud=stBud(ST1)*CH2_K*(1+CH2_G*k),one=(id,ma,mh,x)=>{const sh=.35+.3*C[id].a/(C[id].a+C[id].h+C[id].d);
+function stageDef2(n){const R=RLM[realmOf(n)],k=n-ST1,kd=stKind(n),bud=stBud(ST1)*(1+(CH2_K-1)*Math.min(1,k/CH2_RAMP))*(1+CH2_G*k),one=(id,ma,mh,x)=>{const sh=.35+.3*C[id].a/(C[id].a+C[id].h+C[id].d);
     return{id,boss:!!C[id].boss,atk:Math.round(bud*sh*EA*ma),hp:Math.round(bud*(1-sh)*EH*mh),crit:C[id].c/200,cx:1.5,sh:0,...x}},M=i=>R.m[(k*7+i*5+(k>>2))%3];
   if(kd==='lord')return[one(M(0),1,1),one(R.l,LORD_M[0],LORD_M[1],{lord:1,gim:C[R.l].gim,gate:C[R.l].gim==='gate'?3:0}),one(M(1),1,1)];
   if(kd==='boss')return[one(M(0),1,1),one(R.b,1.2,2.2),one(M(2),1,1)];
@@ -1261,7 +1261,7 @@ function afkShow(g,got){if(!got||(!got.cards.length&&!Object.keys(got.am).length
 const OFF_RS=2,OFF_RS_H=5,AFK_VIP_H=10,afkH=()=>vipPaid()?AFK_VIP_H:AFK_H;   // b172: a VIP bought in the shop stores 10 hours of offline farm instead of 8
 const afkGold=()=>{if(!S.afk)return 0;return Math.floor(Math.min(Date.now()-S.afk,afkH()*36e5)/36e5*afkRate()*vipP().afk)};
 // daily quests reset at local midnight: [key, label, target, Gold]
-const QUESTS=[['win','ชนะ 10 ด่าน',10,300],['boss','ชนะด่านบอส 1 ครั้ง',1,250],['afk','เก็บ Gold ออฟไลน์ 1 ครั้ง',1,100]];
+const QUESTS=[['win','ชนะ 10 ด่าน',10,300,1],['boss','ชนะด่านบอส 1 ครั้ง',1,250],['afk','เก็บ Gold ออฟไลน์ 1 ครั้ง',1,100]];
 const today=()=>{const d=new Date();return d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate()};
 function qDay(){if(!S.q||S.q.d!==today())S.q={d:today(),n:{},got:{}};return S.q}
 function qAdd(k){const q=qDay();q.n[k]=(q.n[k]||0)+1}
@@ -1325,7 +1325,7 @@ function quests(){const q=qDay(),a=afkGold();
    <div class="main"><div class="px" style="margin-bottom:12px"><div class="row" style="justify-content:space-between"><b>ล็อกอินรายวัน</b><button class="btn ${dlCan()?'go':'alt'} sm" data-act="dlget" ${dlCan()?'':'disabled'}>${dlCan()?'รับรางวัลวันนี้':'รับแล้ว'}</button></div>
      <div class="dlrow nt">${DAILY.map(([c,v],i)=>{const cur=dlCan()?dlNext():(S.dl?S.dl.n:0),done=dlCan()?i+1<cur:i+1<=cur;return `<span class="${done?'done':''} ${dlCan()&&i+1===cur?'now':''}"><small>${T('วัน','Day')} ${i+1}</small><b>${v}</b><i>${c==='g'?'Gold':'💎'}</i></span>`}).join('')}</div>
      <p class="sub">ล็อกอินติดต่อกันครบ 7 วันแล้ววนใหม่ ขาดวันจะเริ่มนับ 1</p></div><div class="amlist">${QUESTS.map(([k,l,t,g])=>{const n=Math.min(t,q.n[k]||0),ok=n>=t,got=q.got[k];
-     return `<div class="amrow" style="grid-template-columns:1fr"><span><b>${l}</b><small class="nt">${n}/${t}</small><small class="gold nt">+${g} Gold</small></span><div class="hp xp"><i style="width:${n/t*100}%"></i></div><button class="btn ${ok&&!got?'go':'alt'} sm" data-act="qget" data-k="${k}" ${ok&&!got?'':'disabled'}>${got?'รับแล้ว':ok?'รับรางวัล':'ยังไม่ครบ'}</button></div>`}).join('')}</div></div></div>`)}
+     return `<div class="amrow" style="grid-template-columns:1fr"><span><b>${l}</b><small class="nt">${n}/${t}</small><small class="gold nt">+${g} Gold${QUESTS.find(x=>x[0]===k)[4]?' · <b style="color:#8fe9ff">💠+'+QUESTS.find(x=>x[0]===k)[4]+'</b>':''}</small></span><div class="hp xp"><i style="width:${n/t*100}%"></i></div><button class="btn ${ok&&!got?'go':'alt'} sm" data-act="qget" data-k="${k}" ${ok&&!got?'':'disabled'}>${got?'รับแล้ว':ok?'รับรางวัล':'ยังไม่ครบ'}</button></div>`}).join('')}</div></div></div>`)}
 // developer account: recognised by a hash of its Google e-mail (the address itself is not in the source); it is topped up to everything maxed each time the lobby opens
 const DEVH='38ee325cd572325c',h32=(s,k)=>{let h=k;for(const c of s)h=Math.imul(h^c.charCodeAt(0),16777619)>>>0;return h.toString(16)};
 const isDev=()=>{if(!USER||!USER.sub||!USER.email)return false;const e=String(USER.email).toLowerCase();return h32(e,2166136261)+h32(e,40389)===DEVH};
@@ -2274,7 +2274,7 @@ $('view').onclick=ev=>{{const w=ev.target.closest('.dk,.ibtn,.pill,.row2 .btn');
   else if(a==='shoparr')shopPick(shopSel+ +t.dataset.d,1);
   else if(a==='quests')quests()
   else if(a==='afk'){const g=afkGold(),ms=S.afk?Date.now()-S.afk:0;if(g>0){S.gold+=g;lg('afk',g);const got=afkDrops(ms);S.afk=Date.now();qAdd('afk');save();cloudFlush();sfx('win');fx.push(['view','+'+g.toLocaleString('en')+' Gold','g']);document.querySelector('.lobby')?home():quests();afkShow(g,got);return}document.querySelector('.lobby')?home():quests()}
-  else if(a==='qget'){const q=qDay(),k=t.dataset.k,d=QUESTS.find(x=>x[0]===k);if(d&&(q.n[k]||0)>=d[2]&&!q.got[k]){q.got[k]=1;S.gold+=d[3];lg('quest',d[3]);save();sfx('win');fx.push(['view','+'+d[3]+' Gold','g'])}quests()}
+  else if(a==='qget'){const q=qDay(),k=t.dataset.k,d=QUESTS.find(x=>x[0]===k);if(d&&(q.n[k]||0)>=d[2]&&!q.got[k]){q.got[k]=1;S.gold+=d[3];lg('quest',d[3]);if(d[4])S.rs=(S.rs||0)+d[4];save();sfx('win');fx.push(['view','+'+d[3]+' Gold'+(d[4]?' · 💠+'+d[4]:''),'g'])}quests()}
   else if(a==='exg'){exN=EX_DIA;exDone=0;exchange()}
   else if(a==='exadj'){exN=exClamp(exN+ +t.dataset.d);exDone=0;exchange()}
   else if(a==='exmax'){exN=exClamp(exMax());exDone=0;exchange()}
@@ -2867,7 +2867,7 @@ function guide(){
      T('ชนิดด่าน: ด่านลงท้าย 0 = บอส · ด่านลงท้าย 00 = เจ้าอาณาจักร (ตัวใหญ่ ป้าย LORD มีท่าพิเศษ) · ลงท้าย 5 = ศัตรูยักษ์ตัวเดียว (ELITE) · ลงท้าย 7 = ด่านเอาตัวรอด ศัตรูอึดแต่ตีเบา อยู่รอดครบ 5 รอบก็ชนะ','Stage kinds: ending in 0 = boss · ending in 00 = realm lord (big, LORD tag, a special trick) · ending in 5 = one giant elite enemy · ending in 7 = survival: tough but soft-hitting enemies, live through 5 rounds to win'),
      T('ดาวด่าน 3 ดวง: ★ ชนะ · ★ ไม่มีใครในทีมตาย · ★ ชนะภายใน 4 รอบ (ด่านเอาตัวรอด: เลือดรวมทีมเหลืออย่างน้อยครึ่ง) · เก็บดาวที่ดีที่สุดของแต่ละด่าน เล่นซ้ำเพื่อเก็บดาวที่ขาดได้','Stage stars: ★ win · ★ nobody in the team falls · ★ win within 4 rounds (survival: the team keeps at least half its life) · the best result per stage counts, replay to fill the missing stars'),
      T(`หีบดาว: ทุก ${STAR_CH} ดาวเปิดหีบได้ 1 ใบ ได้ผลึกอาณาจักร 💠1 + ${N(CHEST_G)} Gold (ปุ่ม 🎁 ในหน้าเลือกด่านและหน้าผลด่าน)`,`Star chests: every ${STAR_CH} stars opens a chest with 1 realm crystal 💠 + ${N(CHEST_G)} Gold (the 🎁 button on the stage and result screens)`),
-     T(`ผลึกอาณาจักร 💠 ยังดรอปจากด่านบท 2: ด่านปกติ ${P(RS_DROP)} ด่านบอส ${P(RS_BOSS)} (คูณโอกาสดรอปของด่าน · VIP ที่ซื้อจากร้าน ×${VIP_RS} · VIP แจกไม่มีผล) · ชนะเจ้าอาณาจักรครั้งแรกได้ 💠${RS_LORD} + 💎${LORD_DIA}`,`Realm crystals 💠 also drop in Chapter 2: ${P(RS_DROP)} on normal stages, ${P(RS_BOSS)} on bosses (times the stage drop bonus; a VIP bought in the shop ×${VIP_RS}, gifted VIP does not count) · a realm lord's first defeat gives 💠${RS_LORD} + 💎${LORD_DIA}`),
+     T(`ผลึกอาณาจักร 💠 ยังดรอปจากด่านบท 2: ด่านปกติ ${P(RS_DROP)} ด่านบอส ${P(RS_BOSS)} (คูณโอกาสดรอปของด่าน · VIP ที่ซื้อจากร้าน ×${VIP_RS} · VIP แจกไม่มีผล) · ชนะเจ้าอาณาจักรครั้งแรกได้ 💠${RS_LORD} + 💎${LORD_DIA} · ภารกิจรายวัน "ชนะ 10 ด่าน" ได้ 💠1 ทุกวัน (ด่านไหนก็ได้ เก็บได้ก่อนเข้าบท 2) · ด่าน 501–600 ความยากค่อยๆ ไต่ขึ้น`,`Realm crystals 💠 also drop in Chapter 2: ${P(RS_DROP)} on normal stages, ${P(RS_BOSS)} on bosses (times the stage drop bonus; a VIP bought in the shop ×${VIP_RS}, gifted VIP does not count) · a realm lord's first defeat gives 💠${RS_LORD} + 💎${LORD_DIA} · the daily quest "win 10 stages" gives 💠1 every day (any stages, so you can collect before Chapter 2) · stages 501–600 ramp up gradually`),
      T('การจัดทัพ: ทั้งสองฝ่ายยืนเป็นทรงสามเหลี่ยม ตัวที่ 2 ในทีมยืนหน้าสุดตรงกลาง ตัวที่ 1 และ 3 ยืนหลังซ้ายขวา (ตำแหน่งยืนไม่มีผลต่อดาเมจ)','Formation: both sides stand in a triangle, the 2nd card in front in the middle, the 1st and 3rd behind on either side (where a fighter stands does not change damage)')])],
    packs:[T('แพ็คการ์ด','Packs'),()=>tb([T('แพ็ค','Pack'),T('ราคา','Price'),T('ได้','Gives'),...['C','UC','R','L','SL'].map(rn)],
      [['Gold Pack',N(GPACK)+' Gold',GN+T(' ใบ',' cards'),...['C','UC','R','L','SL'].map(r=>P(GODDS[r]))],['Starter Pack',PACK+T(' เพชร',' diamonds'),T('3 ใบ','3 cards'),'–',T('1 ใบ','1 card'),T('2 ใบ','2 cards'),'–','–'],['Pro Pack',N(PRO.dia)+T(' เพชร หรือ ',' diamonds or ')+N(PRO.gold)+' Gold',PRO.n+T(' ใบ',' cards'),'–','–',...['R','L','SL'].map(r=>P(PRO.odds[r]))]])
