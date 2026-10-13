@@ -17,6 +17,20 @@ service cloud.firestore {
         && request.resource.data.p >= 100 && request.resource.data.p <= 5000000;
       allow delete: if request.auth != null;
     }
+    // market trade log (b175): the buyer adds one entry after a purchase; everyone signed in reads it; nobody edits it, the owner may delete
+    match /trades/{id} {
+      allow read: if request.auth != null;
+      allow create: if request.auth != null
+        && request.resource.data.b == request.auth.uid
+        && request.resource.data.p is int
+        && request.resource.data.p >= 100 && request.resource.data.p <= 5000000
+        && request.resource.data.k is string && request.resource.data.k.size() <= 12
+        && request.resource.data.sn is string && request.resource.data.sn.size() <= 12
+        && request.resource.data.bn is string && request.resource.data.bn.size() <= 12
+        && request.resource.data.at == request.time
+        && request.resource.data.keys().hasOnly(['k','p','sn','bn','b','at']);
+      allow delete: if owner();
+    }
     // PvP arena: everyone signed in can read the teams, each player writes only their own entry
     match /arena/{uid} {
       allow read: if request.auth != null;
