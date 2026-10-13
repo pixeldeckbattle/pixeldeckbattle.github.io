@@ -1,6 +1,6 @@
 # Pixeldeck Battle — handoff for a new Claude session
 
-Live build: **b177** (13 Oct 2026). Talk to the owner (Toey) in Thai, never call them "ต้อย". The game name stays English; the in-game credit is "PixelDeckBattle".
+Live build: **b178** (13 Oct 2026). Talk to the owner (Toey) in Thai, never call them "ต้อย". The game name stays English; the in-game credit is "PixelDeckBattle".
 
 ## Where things are
 - Game source (single file): `src/game.src.html`. Admin page source: `tools/admin.src.html`.
@@ -27,11 +27,12 @@ Live build: **b177** (13 Oct 2026). Talk to the owner (Toey) in Thai, never call
 - Prefer admin-side fixes over forcing players to reload.
 - Never handle secrets (Thunder API key, service-account JSON, card numbers, 2FA codes).
 
-## State of the game (b177)
+## State of the game (b178)
 - Stages 1–1100. Chapter 2 (501–1100): 6 realms `RLM`, monsters `x11..x65`, maps `bg/r11..r62`, realm rules, lords every 100, stage stars + star chests, realm crystals `S.rs` (💠 ผลึกอาณาจักร).
 - Stars 6–10 for L/SL/LT (`STAR_C2`, badges `ui/st6..st10.webp`), skill 4 at 10 stars (`SK4`, `SK4E`, `cast4`, icons `ic/s4*.webp`), skill-4 Lv 2–3.
 - Glacius Rex `h28` (Limited tank): only the first 3 players to clear stage 1100 (Firestore `firsts/s1100`), later ones get 💠10.
 - VIP: every active VIP (gifted, arena, bought) gets Auto x3, 10 h offline farm with amulet/card/crystal drops, crystal x1.5, plus Exp/Gold x2.
+- b178: diamond ledger `S.ld` (same shape as the Gold ledger `S.lg`): `ld(key,±n)` at every diamond change, untagged changes booked as `unk` in `save()`; started by `ldInit(0)` when the lobby opens. Admin Finance tab shows the economy card (Gold + diamond sources/uses, in/out per day, status สมดุล/เริ่มเฟ้อ/เฟ้อ/ฝืด). New diamond sources or sinks must call `ld()` and get a label in admin `LDI`/`LDO`.
 - b177: diamond market CLOSED by the owner (tab removed, popup off, VIP/guide lines removed). `dmRefundAll()` in the lobby cancels the player's own open `dmo` orders once and refunds them, and collects `dmpay`. The dm code and rules are kept so it can come back.
 - (history) Diamond market (b176): Market → 💎 tab, `dmView()`. Firestore `dmo` orders, `dmpay` maker payouts (`{order}_{q left}`), `dmt` trades, `dmc/{yyyymmdd}` 15-min candles. Price 1,000–2,000 (shop ceiling), any diamond sellable, stage 30, 100/day each way (VIP 200), tax 5% (VIP 3%); `CFG.dm` overrides from admin Switches. Tests `tools/t176*.js`. Admin Players tab has an economy card.
 - Market: Buy / Sell / History modes. History reads Firestore `trades/` (buyer writes it after a purchase, best-effort; rule block in `firestore.rules`). Test: `tools/t175.js`.
