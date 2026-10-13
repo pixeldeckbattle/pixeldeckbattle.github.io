@@ -1,6 +1,6 @@
 # Pixeldeck Battle — handoff for a new Claude session
 
-Live build: **b174** (13 Oct 2026). Talk to the owner (Toey) in Thai, never call them "ต้อย". The game name stays English; the in-game credit is "PixelDeckBattle".
+Live build: **b175** (13 Oct 2026). Talk to the owner (Toey) in Thai, never call them "ต้อย". The game name stays English; the in-game credit is "PixelDeckBattle".
 
 ## Where things are
 - Game source (single file): `src/game.src.html`. Admin page source: `tools/admin.src.html`.
@@ -27,11 +27,12 @@ Live build: **b174** (13 Oct 2026). Talk to the owner (Toey) in Thai, never call
 - Prefer admin-side fixes over forcing players to reload.
 - Never handle secrets (Thunder API key, service-account JSON, card numbers, 2FA codes).
 
-## State of the game (b174)
+## State of the game (b175)
 - Stages 1–1100. Chapter 2 (501–1100): 6 realms `RLM`, monsters `x11..x65`, maps `bg/r11..r62`, realm rules, lords every 100, stage stars + star chests, realm crystals `S.rs` (💠 ผลึกอาณาจักร).
 - Stars 6–10 for L/SL/LT (`STAR_C2`, badges `ui/st6..st10.webp`), skill 4 at 10 stars (`SK4`, `SK4E`, `cast4`, icons `ic/s4*.webp`), skill-4 Lv 2–3.
 - Glacius Rex `h28` (Limited tank): only the first 3 players to clear stage 1100 (Firestore `firsts/s1100`), later ones get 💠10.
 - VIP: every active VIP (gifted, arena, bought) gets Auto x3, 10 h offline farm with amulet/card/crystal drops, crystal x1.5, plus Exp/Gold x2.
+- Market: Buy / Sell / History modes. History reads Firestore `trades/` (buyer writes it after a purchase, best-effort; rule block in `firestore.rules`). Test: `tools/t175.js`.
 - Balance sim: `tools/simc2.js` (Chapter 2), `tools/simst.js` (stages 1–500).
 
 ## Open / noted for later
