@@ -31,6 +31,59 @@ service cloud.firestore {
         && request.resource.data.keys().hasOnly(['k','p','sn','bn','b','at']);
       allow delete: if owner();
     }
+    // b176 diamond market. dmo = open orders: the maker creates their own; a taker may only lower q (or delete at 0) in the same write that creates the maker's payout dmpay/{order}_{q left}
+    match /dmo/{id} {
+      allow read: if request.auth != null;
+      allow create: if request.auth != null
+        && request.resource.data.u == request.auth.uid
+        && request.resource.data.s in ['a', 'b']
+        && request.resource.data.p is int && request.resource.data.p >= 1000 && request.resource.data.p <= 2000
+        && request.resource.data.q is int && request.resource.data.q >= 1 && request.resource.data.q <= 1000
+        && request.resource.data.t is int && request.resource.data.t >= 0 && request.resource.data.t <= 10
+        && request.resource.data.nm is string && request.resource.data.nm.size() <= 12
+        && request.resource.data.at == request.time
+        && request.resource.data.keys().hasOnly(['u','nm','s','p','q','t','at']);
+      allow update: if request.auth != null
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['q'])
+        && request.resource.data.q is int && request.resource.data.q >= 1 && request.resource.data.q < resource.data.q
+        && existsAfter(/databases/$(database)/documents/dmpay/$(id + '_' + string(request.resource.data.q)));
+      allow delete: if request.auth != null
+        && (resource.data.u == request.auth.uid || existsAfter(/databases/$(database)/documents/dmpay/$(id + '_0')));
+    }
+    // what a filled order pays its maker: Gold (after the maker's tax) for a sell order, the diamonds for a buy order
+    match /dmpay/{id} {
+      function ord() { return get(/databases/$(database)/documents/dmo/$(request.resource.data.o)).data; }
+      function left() { return existsAfter(/databases/$(database)/documents/dmo/$(request.resource.data.o)) ? getAfter(/databases/$(database)/documents/dmo/$(request.resource.data.o)).data.q : 0; }
+      allow create: if request.auth != null
+        && request.resource.data.keys().hasOnly(['to','o','g','d','at'])
+        && request.resource.data.to == ord().u && ord().u != request.auth.uid
+        && id == request.resource.data.o + '_' + string(left())
+        && request.resource.data.g is int && request.resource.data.d is int
+        && ((ord().s == 'a' && request.resource.data.d == 0
+              && request.resource.data.g * 100 <= (ord().q - left()) * ord().p * (100 - ord().t)
+              && request.resource.data.g * 100 + 100 > (ord().q - left()) * ord().p * (100 - ord().t))
+         || (ord().s == 'b' && request.resource.data.g == 0 && request.resource.data.d == ord().q - left()));
+      allow read, delete: if request.auth != null && resource.data.to == request.auth.uid;
+    }
+    // trade log and day candles for the chart (written by the taker in the fill transaction)
+    match /dmt/{id} {
+      allow read: if request.auth != null;
+      allow create: if request.auth != null
+        && request.resource.data.b == request.auth.uid
+        && request.resource.data.p is int && request.resource.data.p >= 1000 && request.resource.data.p <= 2000
+        && request.resource.data.q is int && request.resource.data.q >= 1 && request.resource.data.q <= 1000
+        && request.resource.data.s in ['a', 'b']
+        && request.resource.data.at == request.time
+        && request.resource.data.keys().hasOnly(['p','q','s','bn','sn','b','at']);
+      allow delete: if owner();
+    }
+    match /dmc/{day} {
+      allow read: if request.auth != null;
+      allow create, update: if request.auth != null
+        && request.resource.data.d == day
+        && request.resource.data.keys().hasOnly(['d','c']);
+      allow delete: if owner();
+    }
     // PvP arena: everyone signed in can read the teams, each player writes only their own entry
     match /arena/{uid} {
       allow read: if request.auth != null;

@@ -90,12 +90,19 @@ function swDraw(){const p=cfg.pay||{},h=Array.isArray(p.h)?p.h:[17,24],hs=v=>Arr
    <p class="mu" style="margin:6px 0 0;font-size:13px">ผู้เล่นที่ล็อกอิน Google แล้วเข้าล็อบบี้ในช่วงเวลานี้ได้ VIP 1 ครั้งต่อรอบ · บันทึกใหม่ = รอบใหม่ คนที่รับรอบเก่าแล้วจะได้อีก · ยกเลิกแล้วไม่ดึงคืนจากคนที่รับไปแล้ว</p></div>`})()}
   <div class="card"><h3>💎 ระบบเติมเพชร</h3><div class="sw"><span>เปิดรับเติมเพชรด้วยสลิป</span><button class="tg ${p.on===false?'':'on'}" id="tpay"><i></i></button></div>
    <label>เวลาเปิดรับ (เวลาไทย)</label><div class="row"><select id="h0">${hs(h[0])}</select><span class="fx">ถึง</span><select id="h1">${hs(h[1])}</select></div><button class="b" data-a="ph" style="margin-top:8px">บันทึกเวลา</button></div>
+  ${(()=>{const d=Object.assign({on:true,lim:100,tax:5,vtax:3,st:30},cfg.dm||{});return `<div class="card"><h3>📈 ตลาดเพชร</h3><div class="sw"><span>เปิดตลาดเพชร (ซื้อขายเพชรด้วย Gold)<br><small class="mu">ปิดแล้วผู้เล่นซื้อขายใหม่ไม่ได้ คำสั่งที่ค้างอยู่ยังยกเลิกคืนได้ตอนเปิดอีกครั้ง</small></span><button class="tg ${d.on===false?'':'on'}" id="tdm"><i></i></button></div>
+   <label>ซื้อได้ต่อวัน และขายได้ต่อวัน ต่อบัญชี (เพชร) · VIP ได้ 2 เท่า</label><input id="dml" type="number" min="1" max="1000" value="${+d.lim||100}">
+   <div class="row"><div style="flex:1"><label>ภาษีผู้ขาย %</label><input id="dmt" type="number" min="0" max="10" value="${+d.tax}"></div><div style="flex:1"><label>ภาษี VIP %</label><input id="dmv" type="number" min="0" max="10" value="${+d.vtax}"></div></div>
+   <label>ผ่านด่านขั้นต่ำก่อนใช้ตลาดเพชร</label><input id="dms" type="number" min="0" max="1100" value="${+d.st}">
+   <button class="b" data-a="dm" style="margin-top:8px">บันทึกตลาดเพชร</button>
+   <p class="mu" style="margin:6px 0 0;font-size:13px">ราคาซื้อขายอยู่ระหว่าง 1,000–2,000 Gold ต่อเพชร (เพดานเท่าราคาแลกในร้าน) · ภาษีหักจาก Gold ของผู้ขายแล้วหายออกจากเกม · เพิ่มลิมิตได้ทีละน้อยเมื่อเห็นว่าตลาดคึกคัก</p></div>`})()}
   <div class="card" style="border-color:var(--rd)"><h3 class="er" style="color:var(--rd)">🧹 จบ CBT และล้างข้อมูลทั้งเกม</h3><p style="margin:0 0 6px">ตอนนี้: <b>เฟสที่ ${N(cfg.era||1)}</b>${cfg.eraAt?' · ล้างครั้งล่าสุด '+dt(cfg.eraAt):''}</p>
    <p class="mu" style="margin:0 0 6px;font-size:13px">ทุกบัญชีจะถูกเริ่มใหม่ตอนเข้าเกมครั้งถัดไป เหลือเฉพาะการ์ด Limited (กลับเป็น Lv 1) ชื่อ และการตั้งค่า · ของในตลาด เงินขายค้างรับ อันดับอารีน่า และเพชรค้างรับก่อนเวลานี้ถูกยกเลิก · <b class="er">ย้อนกลับไม่ได้</b></p>
    <label>พิมพ์คำว่า <b class="er">ล้าง CBT</b> เพื่อยืนยัน</label><input id="wipe" autocomplete="off"><button class="b r" data-a="wipe" style="margin-top:8px">ล้างข้อมูลทั้งเกมเดี๋ยวนี้</button></div>
   <p class="mu" style="font-size:13px">สวิตช์มีผลกับผู้เล่นภายในประมาณ 10 นาที (เกมตรวจการตั้งค่าเป็นรอบ) คนที่เปิดเกมใหม่จะได้ค่าใหม่ทันที</p>`);
   const setC=(o,note)=>db.collection('config').doc('main').set(o,{merge:true}).then(()=>{Object.assign(cfg,o);logIt({t:'cfg',note});say('บันทึกแล้ว: '+note);return loadCfg()}).catch(fail);
   $('tmt').onclick=()=>{const v=!cfg.maint;if(v&&!confirm('ปิดปรับปรุงเกมเดี๋ยวนี้? ผู้เล่นทุกคนจะเล่นไม่ได้'))return;setC({maint:v,maintMsg:$('mmsg').value.trim()},v?'เปิดโหมดปิดปรับปรุง':'เปิดเกมตามปกติ').then(swDraw)};
+  $('tdm').onclick=()=>{const on=(cfg.dm||{}).on===false;if(!on&&!confirm('ปิดตลาดเพชร? ผู้เล่นจะซื้อขายเพชรไม่ได้จนกว่าจะเปิดอีกครั้ง'))return;setC({dm:{...(cfg.dm||{}),on}},on?'เปิดตลาดเพชร':'ปิดตลาดเพชร').then(swDraw)};
   $('tpay').onclick=()=>{const on=(cfg.pay||{}).on===false;setC({pay:{...(cfg.pay||{}),on}},on?'เปิดรับเติมเพชร':'ปิดรับเติมเพชร').then(swDraw)};
   $('main').onclick=e=>{const a=e.target.dataset.a;if(!a)return;
     if(a==='mt')setC({maintMsg:$('mmsg').value.trim()},'ข้อความปิดปรับปรุง');
@@ -105,6 +112,9 @@ function swDraw(){const p=cfg.pay||{},h=Array.isArray(p.h)?p.h:[17,24],hs=v=>Arr
       if(!(tier>=1&&tier<=3)||!(days>=1&&days<=60))return say('จำนวนวันต้องอยู่ระหว่าง 1–60','er');if(!(from>0)||!(to>from))return say('เวลาสิ้นสุดต้องอยู่หลังเวลาเริ่ม','er');if(to<Date.now())return say('เวลาสิ้นสุดผ่านไปแล้ว','er');
       const cur=cfg.gift;if(cur&&cur.id&&Date.now()<(+cur.to||0)&&!confirm('มีการแจกตั้งไว้อยู่แล้ว บันทึกใหม่จะนับเป็นรอบใหม่ คนที่รับรอบเก่าแล้วจะได้อีก ยืนยัน?'))return;
       setC({gift:{id:'g'+Date.now().toString(36),days,tier,from,to}},'ตั้งแจก VIP '+days+' วัน').then(swDraw)}
+    else if(a==='dm'){const lim=Math.floor(+$('dml').value),tax=Math.floor(+$('dmt').value),vtax=Math.floor(+$('dmv').value),st=Math.floor(+$('dms').value);
+      if(!(lim>=1&&lim<=1000))return say('ลิมิตต่อวันต้องอยู่ระหว่าง 1–1,000 เพชร','er');if(!(tax>=0&&tax<=10)||!(vtax>=0&&vtax<=tax))return say('ภาษีต้องอยู่ระหว่าง 0–10% และภาษี VIP ต้องไม่สูงกว่าภาษีปกติ','er');if(!(st>=0&&st<=1100))return say('ด่านขั้นต่ำต้องอยู่ระหว่าง 0–1100','er');
+      setC({dm:{...(cfg.dm||{}),lim,tax,vtax,st}},`ตลาดเพชร: วันละ ${lim} เพชร · ภาษี ${tax}% (VIP ${vtax}%) · ด่าน ${st}`).then(swDraw)}
     else if(a==='goff'){if(!confirm('ยกเลิกการแจก VIP? คนที่รับไปแล้วไม่ถูกดึงคืน'))return;setC({gift:null},'ยกเลิกการแจก VIP').then(swDraw)}
     else if(a==='wipe'){if($('wipe').value.trim()!=='ล้าง CBT')return say('พิมพ์คำยืนยันไม่ตรง ยังไม่ได้ล้าง','er');if(!confirm('ยืนยันครั้งสุดท้าย: ล้างข้อมูลผู้เล่นทั้งเกม เหลือเฉพาะการ์ด Limited ย้อนกลับไม่ได้'))return;
       setC({era:(cfg.era||1)+1,eraAt:Date.now()},'ล้างข้อมูลทั้งเกม (จบเฟส '+(cfg.era||1)+')').then(swDraw)}}}
