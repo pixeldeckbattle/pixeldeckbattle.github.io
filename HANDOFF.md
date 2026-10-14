@@ -43,6 +43,7 @@ Live build: **b181** (14 Oct 2026). Talk to the owner (Toey) in Thai, never call
 
 ## Open / noted for later
 - NEXT (planned with the owner, 15 Oct): Chapter 3, stages 1101–2000. Tank SL amulets (already live since b180) work ONLY on stages 1101–2000: มรกตพฤกษา `grove`, หัวใจราชสีห์ `lion`, ดาราพิทักษ์ `gstar` (all SL, fusion-only; art already in `am/` and `tools/am_in/`). Owner's design: on a tank they are strong (thick HP, taunt cut / shield / one last stand per battle), on any other card almost nothing (~HP/DEF +3%). Concept: tanks have visibly thick HP and stand long enough to cast skill 4. Tune the numbers against the real Chapter 3 monsters with the sims (target: walls barely move, Glacius Rex stays strongest). Gold is "starting to inflate": owner also wants a Gold sink (proposal: amulet upgrade +1..+10).
+- NEXT also (15 Oct, owner's order): auto-retry on defeat while looping a stage — VIP only. Today a loss ends the loop (`loop` handler after battle: `nx=!won?0:...`). Proposed shape: a toggle on the loop screen; replay mode retries the same stage after the 3s countdown; next-stage mode falls back to looping the last won stage; stop after 5 losses in a row; farm summary counts wins/losses.
 - Team presets; relax room / card-flex; party boss; weekly world boss; market reference price.
 - Clearer skill-4 wording in game ("ใช้ได้ตั้งแต่รอบ 3 · ใช้แล้วพัก 5 รอบ") — offered, not ordered.
 - Slip top-up outside 17:00–00:00: offered either queueing slips or a big warning — not ordered.
