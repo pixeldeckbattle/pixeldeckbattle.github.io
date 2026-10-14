@@ -672,6 +672,7 @@ h1{color:#f2d98a;text-shadow:0 3px 0 #7a4a1c,0 6px 0 #0a1019}h2{color:#f2d98a;te
 .pill.exb{cursor:pointer;padding:2px 9px 3px;color:#8fe9ff;border-color:#3a8fc8;font-size:14px;white-space:nowrap}.pill.exb b{font-size:11.5px;color:#fff;margin-left:2px}@media(max-width:820px){.pill.exb b{display:none}}
 .exbody{display:grid;place-items:center}.exbox{display:grid;justify-items:center;gap:8px;padding:14px 22px 16px;width:min(100%,560px);background:rgba(20,27,64,.92);text-align:center}
 .exrate{margin:0;font-size:13px;color:#dfe5ff}.exrow{display:flex;align-items:center;justify-content:center;gap:8px}.exrow .btn{min-width:62px}
+.kpad{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin:4px 0}.kpad .kpk{min-height:40px;padding:4px 0;font-size:20px}.kpad .kpf{background:#3a2a50;color:#ffd0d8}.exkp{grid-template-columns:repeat(6,1fr);width:min(440px,100%);margin:6px auto}.mkkp .kpk{min-height:36px;font-size:18px}.kpv{min-width:150px;padding:2px 10px;border:2px dashed #3b4a7a;border-radius:10px}
 .exn{display:flex;align-items:baseline;gap:5px;min-width:130px;justify-content:center;font-family:var(--display)}.exn b{font-size:40px;line-height:1;color:#6fd8ff;text-shadow:0 3px 0 #0a0e22}.exn small{font-size:20px}
 .excost{margin:0;font-size:13.5px}.excost b{font-size:14px}.exgo{min-width:260px}.exok{margin:0;font-family:var(--display);font-size:17px;color:#6cf586}
 /* b167 tower, mailbox, shields */
@@ -1097,7 +1098,7 @@ function mkFetch(soft){if(!mkOn())return;if(soft&&mk.state==='ok'&&Date.now()-(m
    .then(([q,pay])=>{mk.list=q.docs.map(d=>({id:d.id,...d.data()})).filter(l=>!oldEra(l.at)&&(AM[l.k]||(C[l.k]&&C[l.k].r!=='ST'))&&l.p>0);const [got,dels]=mkPayIn(pay.docs);
      if(got>0){save();mk.msg='sold:'+got}mk.state='ok';mk.at=Date.now();return Promise.all(dels)})
    .catch(e=>{mk.state='err';mk.msg='err:'+(e&&e.code||e&&e.message||'')}).then(()=>{if(document.querySelector('[data-mk]'))market()})}
-function mkList(){const k=mkSel,p=mkPrice,fee=mkFee(p);if(!mkOn()||!(mkHave(k)>0)||isLock(k)||S.gold<fee||mk.busy)return;mk.busy=true;
+function mkList(){const k=mkSel,p=Math.floor(mkPrice),fee=mkFee(p);if(!(p>=100&&p<=MK_MAX)||!mkOn()||!(mkHave(k)>0)||isLock(k)||S.gold<fee||mk.busy)return;mk.busy=true;
   mkDb().collection('market').add({seller:USER.sub,name:(S.me&&S.me.name||'').slice(0,12),k,p,at:firebase.firestore.FieldValue.serverTimestamp()})
    .then(ref=>{const sv=mkTake(k);if(sv&&ref&&ref.id){S.mks=S.mks||{};S.mks[ref.id]=sv;const ks=Object.keys(S.mks);if(ks.length>40)delete S.mks[ks[0]]}mkSel=null;S.gold-=fee;lg('mkfee',-fee);save();cloudFlush();mk.msg='listed'},e=>{mk.msg='err:'+(e&&e.code||'')}).then(()=>{mk.busy=false;mkFetch()})}
 function mkCancel(id){const l=mk.list.find(x=>x.id===id);if(!l||l.seller!==USER.sub||mk.busy)return;mk.busy=true;
@@ -1137,10 +1138,10 @@ function market(){if(mkTab==='dm')mkTab='am';
     <p class="num gold nt">Gold ${S.gold.toLocaleString('en')}</p>
     ${on?`<div class="mkmode"><button class="btn sm ${buy?'on':'alt'}" data-act="mkmode" data-m="buy" aria-pressed="${buy}"><span class="nt">${T('ซื้อ','Buy')}</span></button><button class="btn sm ${mkMode==='sell'?'on':'alt'}" data-act="mkmode" data-m="sell" aria-pressed="${mkMode==='sell'}"><span class="nt">${T('ขาย','Sell')}${buy&&S.mkn?` <i style="font-style:normal;color:#10131c;background:#6cf586;padding:0 6px;border-radius:8px">${S.mkn}</i>`:''}</span></button><button class="btn sm ${hist?'on':'alt'}" data-act="mkmode" data-m="hist" aria-pressed="${hist}"><span class="nt">${T('ประวัติ','History')}</span></button></div>
     ${mkMode==='sell'&&mkSel&&mkHave(mkSel)>0?`<div class="px dissum"><span class="sub nt">${T('ราคาขาย','Price')} · ${AM[mkSel]?T(AM[mkSel].n,EN[AM[mkSel].n]||AM[mkSel].n):mkName(mkSel)}</span><b class="nt" style="color:#ffd84a">${mkPrice.toLocaleString('en')} Gold</b>
-      <div class="mkpr">${[-10000,-1000,-100,100,1000,10000].map(d=>`<button class="btn alt sm nt" data-act="mkp" data-d="${d}">${d>0?'+':''}${Math.abs(d)>=1000?d/1000+'k':d}</button>`).join('')}</div>
+      ${kp('mk','mkkp')}${mkPrice<100||mkPrice>MK_MAX?`<span class="sub nt" style="color:#ff8a7a">${T(`ตั้งราคาได้ ${(100).toLocaleString('en')}–${MK_MAX.toLocaleString('en')} Gold`,`Price must be ${(100).toLocaleString('en')}–${MK_MAX.toLocaleString('en')} Gold`)}</span>`:''}
       ${mkSelf(mkSel)?`<span class="sub nt" style="color:#ff8a7a">${T('ไม่มีใบซ้ำ: จะขายการ์ดตัวจริง ถ้าขายออก เลเวลและดาวหายไปกับการ์ด (ยกเลิกการขายจะได้คืนเหมือนเดิม)','No duplicate: the card itself is sold. If it sells, its level and stars go with it (cancelling returns it unchanged)')}</span>`:''}
       <span class="sub nt">${T('ค่าวางขาย','Listing fee')} ${mkFee(mkPrice).toLocaleString('en')} Gold · ${T('ขายได้จะได้รับ','you receive')} ${Math.floor(mkPrice*(1-TAX)).toLocaleString('en')} Gold</span></div>
-    <button class="btn go sm" data-act="mklist" ${S.gold<mkFee(mkPrice)?'disabled':''}><span class="nt">${T('ตั้งขาย','List for sale')}</span></button>`:''}
+    <button class="btn go sm" data-act="mklist" ${S.gold<mkFee(mkPrice)||mkPrice<100||mkPrice>MK_MAX?'disabled':''}><span class="nt">${T('ตั้งขาย','List for sale')}</span></button>`:''}
     <button class="btn alt sm" data-act="mkref"><span class="nt">${hist?T('รีเฟรชประวัติ','Refresh history'):T('รีเฟรชตลาด','Refresh market')}</span></button>
     <p class="sub nt">${T(`ผู้เล่นตั้งราคากันเอง จ่ายด้วย Gold · ค่าวางขาย ${MK_FEE*100}% ของราคา (ขั้นต่ำ 50 ไม่คืน) · ภาษี ${TAX*100}% เมื่อขายได้`,`Players set their own prices in Gold · listing fee ${MK_FEE*100}% of the price (min 50, not refunded) · ${TAX*100}% tax on a sale`)}</p>`:`<p class="sub nt" style="color:#ffe45c">${T('ต้องล็อกอินด้วย Google ก่อนจึงใช้ตลาดได้','Sign in with Google to use the market')}</p>`}
     ${mkMsg()?`<p class="sub" style="color:#6cf586">${mkMsg()}</p>`:''}
@@ -2426,7 +2427,7 @@ $('view').onclick=ev=>{{const w=ev.target.closest('.dk,.ibtn,.pill,.row2 .btn');
   else if(a==='tdec'){const n=tn();if(n&&n.gid&&rt){room.seen[n.gid]=1;rt.me.update({dec:n.gid}).catch(()=>{});n.item=null;n.el.classList.remove('gift')}room.menu=null;$('tui').innerHTML=''}
   else if(a==='tok'){const n=tn();if(n&&rt&&!S.pg&&trGive&&trOK(trGive)&&!isLock(trGive)&&trHave(trGive)>0&&!(trSelf(trGive)&&S.me.look===trGive)&&S.gold>=TRADE_TAX){const g={to:n.uid,k:trGive,id:Date.now().toString(36)+Math.random().toString(36).slice(2,6)};S.gold-=TRADE_TAX;lg('trade',-TRADE_TAX);const sv=trTake(trGive);S.pg=sv?{...g,sv}:g;trGive=null;save();cloudFlush();rt.me.update({gift:g}).catch(()=>refundGift('err'));room.menu=null;enterRoom();$('tlog').innerHTML=`ส่ง ${trName(g.k)} ให้ <b class="nt">${String(n.name).replace(/</g,'&lt;')}</b> · รอผู้รับยืนยัน`}}
   else if(a==='trok'){const n=tn();if(n&&n.item&&rt){const got=n.item;room.seen[n.gid]=1;trGet(got);save();cloudFlush();rt.me.update({ack:n.gid}).catch(()=>{});n.item=null;n.el.classList.remove('gift');room.menu=null;$('tui').innerHTML='';sfx('win');$('tlog').innerHTML=`รับแล้ว: ${trName(got)} ← <b class="nt">${String(n.name).replace(/</g,'&lt;')}</b>`}}
-  else if(a==='mksel'){mkSel=t.dataset.k;market()}
+  else if(a==='mksel'){mkSel=t.dataset.k;if(!mkRaw)mkRaw=String(mkPrice);market()}
   else if(a==='mkp'){mkPrice=Math.max(100,Math.min(MK_MAX,mkPrice+ +t.dataset.d));market()}
   else if(a==='mklist')mkList()
   else if(a==='mkcancel')mkCancel(t.dataset.id)
@@ -2467,10 +2468,10 @@ $('view').onclick=ev=>{{const w=ev.target.closest('.dk,.ibtn,.pill,.row2 .btn');
   else if(a==='quests')quests()
   else if(a==='afk'){const g=afkGold(),ms=S.afk?Date.now()-S.afk:0;if(g>0){S.gold+=g;lg('afk',g);const got=afkDrops(ms);S.afk=Date.now();qAdd('afk');save();cloudFlush();sfx('win');fx.push(['view','+'+g.toLocaleString('en')+' Gold','g']);document.querySelector('.lobby')?home():quests();afkShow(g,got);return}document.querySelector('.lobby')?home():quests()}
   else if(a==='qget'){const q=qDay(),k=t.dataset.k,d=QUESTS.find(x=>x[0]===k);if(d&&(q.n[k]||0)>=d[2]&&!q.got[k]){q.got[k]=1;S.gold+=d[3];lg('quest',d[3]);if(d[4])S.rs=(S.rs||0)+d[4];save();sfx('win');fx.push(['view','+'+d[3]+' Gold'+(d[4]?' · 💠+'+d[4]:''),'g'])}quests()}
-  else if(a==='exg'){exN=EX_DIA;exDone=0;exchange()}
-  else if(a==='exadj'){exN=exClamp(exN+ +t.dataset.d);exDone=0;exchange()}
-  else if(a==='exmax'){exN=exClamp(exMax());exDone=0;exchange()}
-  else if(a==='exgo'){const n=exClamp(exN),c=n/EX_DIA*EX_GOLD;if(n>=EX_DIA&&n<=exMax()&&S.gold>=c){S.gold-=c;lg('exch',-c);S.dia=(S.dia||0)+n;ld('exch',n);save();sfx('win');exDone=n;exN=exClamp(Math.min(exN,exMax())||EX_DIA)}exchange()}
+  else if(a==='exg'){exN=EX_DIA;exRaw=String(EX_DIA);exDone=0;exchange()}
+  else if(a==='kp')kpKey(t.dataset.c,t.dataset.k);
+  else if(a==='exmax'){exRaw=String(exMax());exDone=0;exchange()}
+  else if(a==='exgo'){const n=exN,c=n/EX_DIA*EX_GOLD;if(n>=EX_DIA&&n%EX_DIA===0&&n<=exMax()&&S.gold>=c){S.gold-=c;lg('exch',-c);S.dia=(S.dia||0)+n;ld('exch',n);save();sfx('win');exDone=n;exRaw=String(Math.min(n,exMax())||EX_DIA)}exchange()}
   else if(a==='exch'){if(S.gold>=EX_GOLD){S.gold-=EX_GOLD;lg('exch',-EX_GOLD);S.dia=(S.dia||0)+EX_DIA;ld('exch',EX_DIA);save();sfx('win');fx.push(['view','+'+EX_DIA+' 💎','g'])}topup()}
   else if(a==='topup'){dSel=null;topup()}
   else if(a==='tpick'){dSel=+t.dataset.i;if(!slip.busy)slip.msg='';topup()}
@@ -3019,14 +3020,18 @@ addEventListener('pagehide',()=>{try{if(S&&S.tw)twPush(1)}catch(e){}});
 
 /* ---------- b168 Gold -> diamonds, its own screen (button on the lobby bar). The amount is always a whole number of lots (EX_DIA diamonds for EX_GOLD Gold):
    it is changed only with the step buttons and clamped again when the exchange is made, so an odd amount such as 11 or 23 cannot be entered. ---------- */
-let exN=10,exDone=0;
+let exN=10,exDone=0,exRaw='10',mkRaw='';
+const KP_MAX={ex:6,mk:7},kp=(c,cls='')=>`<div class="kpad ${cls}">${['1','2','3','4','5','6','7','8','9','cl','0','bs'].map(k=>`<button class="btn alt kpk nt${k.length>1?' kpf':''}" data-act="kp" data-c="${c}" data-k="${k}" aria-label="${k==='bs'?T('ลบ','Delete'):k==='cl'?T('ล้าง','Clear'):k}">${k==='bs'?'⌫':k==='cl'?'C':k}</button>`).join('')}</div>`;
+function kpKey(c,k){let r=c==='ex'?exRaw:mkRaw;if(k==='bs')r=r.slice(0,-1);else if(k==='cl')r='';else if(r.length<KP_MAX[c])r=(r==='0'?'':r)+k;
+  if(c==='ex'){exRaw=r;exDone=0;exchange()}else{mkRaw=r;mkPrice=+r||0;market()}}
 const exMax=()=>Math.floor(S.gold/EX_GOLD)*EX_DIA,exClamp=n=>{n=Math.floor((+n||0)/EX_DIA)*EX_DIA;return Math.max(EX_DIA,Math.min(Math.max(EX_DIA,exMax()),n))};
-function exchange(){exN=exClamp(exN);const mx=exMax(),cost=exN/EX_DIA*EX_GOLD,ok=mx>=EX_DIA&&exN<=mx,N=v=>(+v).toLocaleString('en'),st=(d,l)=>`<button class="btn alt" data-act="exadj" data-d="${d}" ${(d<0?exN+d<EX_DIA:exN+d>mx)?'disabled':''}>${l}</button>`;
+function exchange(){const mx=exMax(),raw=+exRaw||0;exN=Math.min(mx,Math.floor(raw/EX_DIA)*EX_DIA);const cost=exN/EX_DIA*EX_GOLD,ok=exN>=EX_DIA&&exN<=mx,N=v=>(+v).toLocaleString('en'),st=(d,l)=>`<button class="btn alt" data-act="exadj" data-d="${d}" ${(d<0?exN+d<EX_DIA:exN+d>mx)?'disabled':''}>${l}</button>`;
   view(`<div class="pvhub list nt exv"><div class="pvtop"><button class="btn alt sm" data-act="home">${T('กลับ','Back')}</button><h2>${T('แลก Gold เป็นเพชร','Gold to diamonds')}</h2><span class="hgap" style="flex:1"></span><span class="shcur"><span class="num gold">Gold ${N(S.gold)}</span><span class="num dia">💎 ${N(S.dia||0)}</span></span></div>
    <div class="pvlist exbody"><div class="exbox px">
     <p class="exrate">${T('อัตราแลก','Rate')}: <b class="gold">${N(EX_GOLD)} Gold</b> → <b style="color:#6fd8ff">${EX_DIA} 💎</b> · ${T(`แลกได้ทีละ ${EX_DIA} เพชร`,`in lots of ${EX_DIA} diamonds`)}</p>
-    <div class="exrow">${st(-10*EX_DIA,'−'+10*EX_DIA)}${st(-EX_DIA,'−'+EX_DIA)}<span class="exn"><b>${N(exN)}</b><small>💎</small></span>${st(EX_DIA,'+'+EX_DIA)}${st(10*EX_DIA,'+'+10*EX_DIA)}</div>
-    <div class="exrow"><button class="btn alt sm" data-act="exmax" ${mx<EX_DIA||exN===mx?'disabled':''}>${T('สูงสุด','Max')} (${N(mx)} 💎)</button></div>
+    <div class="exrow"><span class="exn kpv"><b>${exRaw?N(raw):'0'}</b><small>💎</small></span><button class="btn alt sm" data-act="exmax" ${mx<EX_DIA?'disabled':''}>${T('สูงสุด','Max')} (${N(mx)})</button></div>
+    ${raw&&exN!==raw?`<p class="excost" style="color:#ffd84a">${raw>mx?(mx>=EX_DIA?T(`Gold พอแลกได้สูงสุด ${N(mx)} เพชร · จะแลก ${N(exN)} เพชร`,`Your Gold covers ${N(mx)} at most · you will get ${N(exN)}`):T('Gold ไม่พอ','Not enough Gold')):exN>=EX_DIA?T(`แลกได้ทีละ ${EX_DIA} · จะแลก ${N(exN)} เพชร`,`Lots of ${EX_DIA} · you will get ${N(exN)} diamonds`):T(`ขั้นต่ำ ${EX_DIA} เพชร`,`Minimum ${EX_DIA} diamonds`)}</p>`:''}
+    ${kp('ex','exkp')}
     <p class="excost">${ok?`${T('ใช้','Costs')} <b class="gold">${N(cost)} Gold</b> · ${T('เหลือ','leaves')} <b>${N(S.gold-cost)} Gold</b>`:`${T('คุณมี','You have')} <b class="gold">${N(S.gold)} Gold</b>`}</p>
     <button class="btn go exgo" data-act="exgo" ${ok?'':'disabled'}>${ok?T(`แลก ${N(exN)} เพชร`,`Exchange for ${N(exN)} diamonds`):T(`Gold ไม่พอ ต้องมีอย่างน้อย ${N(EX_GOLD)}`,`Not enough Gold: ${N(EX_GOLD)} needed`)}</button>
     ${exDone?`<p class="exok">✓ ${T('แลกแล้ว','Exchanged')} +${N(exDone)} 💎</p>`:''}
@@ -3204,7 +3209,7 @@ function titleScreen(){
    <p class="cfoot nt">PixelDeckBattle · CBT build ${BUILD}</p></div>`);
 }
 // ---------- Firebase: Google sign-in and one cloud save document per account (saves/{uid}) ----------
-const BUILD='b178';
+const BUILD='b179';
 // The game moved to its own address. Anyone opening the old address is sent on, but only once the new site answers, so a broken move cannot lock players out.
 const DISCORD='https://discord.gg/dHDzRyPG9',DC_SVG='<svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="currentColor" d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.4189-2.1568 2.4189Z"/></svg>';
 const NEW_HOME='https://pixeldeckbattle.github.io/';
