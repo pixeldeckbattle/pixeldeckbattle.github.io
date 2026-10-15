@@ -91,6 +91,10 @@ pre{white-space:pre-wrap;font:12px/1.5 ui-monospace,Menlo,monospace;color:#d6d0f
 .layer b{font-size:15px}
 .nudge .btn{min-width:40px}
 .off{font-variant-numeric:tabular-nums}
+.busy{position:fixed;inset:0;background:rgba(10,8,18,.82);display:grid;place-items:center;z-index:20;padding:24px}
+.busy div{background:var(--panel);border:2px solid var(--gold);border-radius:8px;padding:18px 20px;max-width:340px;display:grid;gap:10px;text-align:center}
+.busy b{font-family:var(--fd);color:var(--gold);font-weight:400}
+.busy i{display:block;height:8px;background:#0f0c1a;border-radius:4px;overflow:hidden}.busy i span{display:block;height:100%;width:0;background:var(--gold)}
 @media (prefers-reduced-motion:reduce){.toast{transition:none}.btn:active{transform:none}}
 </style>
 </head>
@@ -163,16 +167,17 @@ pre{white-space:pre-wrap;font:12px/1.5 ui-monospace,Menlo,monospace;color:#d6d0f
           <div><span class="big" id="pkCount">0</span><span class="hint">รูปในแพ็ก</span></div>
           <div><span class="big" id="pkCombos">0</span><span class="hint">แบบที่ประกอบได้</span></div>
         </div>
-        <p class="hint">กด “+ เพิ่มรูป” ในชั้นที่ตรงกับรูปจาก GPT (เลือกหลายรูปพร้อมกันได้) หรือนำเข้า ZIP ทั้งแพ็ก แอปจำรูปไว้ในเครื่อง ปิดแอปแล้วยังอยู่</p>
+        <p class="hint">กด “+ เพิ่มรูป” ในชั้นที่ตรงกับรูปจาก GPT (เลือกหลายรูปพร้อมกันได้) หรือนำเข้า ZIP ทั้งแพ็ก (ถ้าใน ZIP มีโฟลเดอร์ parts แอปจะใช้เฉพาะโฟลเดอร์นั้น) แอปจำรูปไว้ในเครื่อง ปิดแอปแล้วยังอยู่</p>
         <div class="row">
-          <label class="btn">นำเข้า ZIP<input class="vh" type="file" id="inZip" accept=".zip,application/zip"></label>
+          <label class="btn go">นำเข้า ZIP<input class="vh" type="file" id="inZip" accept=".zip,application/zip"></label>
+          <label class="btn">เลือกรูปหลายชั้นพร้อมกัน<input class="vh" type="file" id="inMany" accept="image/*" multiple></label>
           <button class="btn sm" id="pkRand">สุ่มชิ้นส่วน</button>
           <button class="btn sm" id="pkAuto">จัดตำแหน่งอัตโนมัติทุกรูป</button>
           <button class="btn sm go" id="pkUse" hidden>กลับมาใช้แพ็กชิ้นส่วน</button>
         </div>
+        <div class="stat" id="impStat"></div>
         <label class="f" style="max-width:320px">เลื่อนครั้งละ<select id="pkStep"></select></label>
         <div class="sec" id="layers"></div>
-        <div class="stat" id="impStat"></div>
         <div class="fields">
           <label class="chk"><input type="checkbox" id="optKey" checked> ลบพื้นหลังที่ติดขอบรูป</label>
           <label class="f">ความไวลบพื้นหลัง<input type="range" id="optTol" min="0" max="120" value="40"></label>
@@ -260,6 +265,7 @@ pre{white-space:pre-wrap;font:12px/1.5 ui-monospace,Menlo,monospace;color:#d6d0f
   </div>
 </div>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
+<div class="busy" id="busy" hidden><div><b>กำลังทำงาน</b><span id="busyMsg"></span><i><span id="busyBar"></span></i></div></div>
 
 <script src="jszip.min.js"></script>
 <script>
@@ -292,7 +298,9 @@ const GUIDE={neck:[.47,.41],hand:[.62,.58],head:[.33,.14,.64,.44],feet:.97};
 const LAYDEF=[
   {dir:'1_body',key:'body',th:'ร่างกาย'},{dir:'2_head',key:'head',th:'หัว'},{dir:'3_hair',key:'hair',th:'ผม'},
   {dir:'4_hat',key:'hat',th:'หมวก',none:1},{dir:'5_weapon',key:'weapon',th:'อาวุธ',weapon:1}];
-const layDef=name=>{const n=name.toLowerCase();return LAYDEF.find(d=>n.includes(d.key))||null};
+const SYN=[['hat',['hat','helmet','helm','cap','hood','crown','headgear','headwear','หมวก']],['weapon',['weapon','sword','staff','bow','axe','spear','blade','อาวุธ']],['hair',['hair','ผม']],['body',['body','torso','armor','armour','outfit','cloth','suit','costume','ร่างกาย','ตัว']],['head',['head','face','หัว','หน้า']]];
+const layDef=name=>{const n=name.toLowerCase();for(const[k,w]of SYN)if(w.some(s=>n.includes(s)))return LAYDEF.find(d=>d.key===k);return null};
+const prefixOf=f=>f.replace(/\.\w+$/,'').replace(/^\d+[_\-\s.]*/,'').replace(/[_\-\s.]*\d+$/,'').toLowerCase();
 
 /* ============ GPT prompts (each one complete on its own: one prompt = one picture) ============ */
 const GP={
@@ -463,7 +471,10 @@ function alignFrames(list){const bx=list.map(alphaBox);const mw=Math.max(1,...bx
 function prep(list,allowAlign=true){const o=opt();if(o.key)list.forEach(c=>keyOut(c,o.tol));list=list.filter(c=>alphaBox(c));if(!list.length)return list;if(o.align&&allowAlign)list=alignFrames(list);return list}
 function opt(){return{key:$('optKey').checked,tol:+$('optTol').value,align:$('optAlign').checked}}
 function sizeOf(list){return{fw:Math.max(...list.map(c=>c.width)),fh:Math.max(...list.map(c=>c.height))}}
-function impStat(s,err){const e=$('impStat');e.textContent=s;e.classList.toggle('err',!!err)}
+function impStat(s,err){const e=$('impStat');e.textContent=s;e.classList.toggle('err',!!err);if(err)toast(s)}
+function busy(msg,frac){const b=$('busy');if(msg==null){b.hidden=true;return}b.hidden=false;$('busyMsg').textContent=msg;$('busyBar').style.width=frac==null?'0':Math.round(clamp(frac,0,1)*100)+'%'}
+window.addEventListener('error',e=>{busy(null);toast('เกิดข้อผิดพลาด: '+(e.message||''))});
+window.addEventListener('unhandledrejection',e=>{busy(null);toast('เกิดข้อผิดพลาด: '+((e.reason&&e.reason.message)||e.reason||''))});
 async function useImport(o){IMP=o;st.anim=impAnims()[0][0];st.f=0;$('pkUse').hidden=o.type==='pack'||!PK.count();buildLayers();buildExScale();refreshAll()}
 
 /* ============ the parts pack (kept on the phone between sessions) ============ */
@@ -487,9 +498,9 @@ async function restorePack(){const m=store.get('pack',null);PK.reset();if(!m||!m
     PK.size()}catch(e){PK.reset()}}
 async function addItem(L,name,cv,off){const it={id:uid(),name,cv,dx:off?off[0]:0,dy:off?off[1]:0,sc:off&&off[2]?off[2]:1};L.items.push(it);try{await idb.put(it.id,await blobOf(cv))}catch(e){}return it}
 async function addParts(li,files){const L=PK.layers[li],o=opt();let n=0;impStat('กำลังเพิ่มรูป …');
-  for(const f of[...files].sort((a,b)=>nat(a.name,b.name))){const cv=await loadCanvas(f);if(o.key)keyOut(cv,o.tol);if(!alphaBox(cv))continue;await addItem(L,f.name.replace(/\.\w+$/,''),cv);n++;await tick()}
+  for(const f of[...files].sort((a,b)=>nat(a.name,b.name))){const cv=await loadCanvas(f);if(o.key)keyOut(cv,o.tol);if(!alphaBox(cv))continue;await addItem(L,f.name.replace(/\.\w+$/,''),cv);n++;busy(`กำลังเพิ่มรูป ${n}/${files.length} …`,n/files.length);await tick()}busy(null);
   if(!n)return impStat('ไม่มีรูปที่ใช้ได้ (รูปว่างหลังลบพื้นหลัง)',1);
-  L.sel=L.items.length-1;PK.size();savePack();impStat(`เพิ่ม ${n} รูปในชั้น${layLabel(L)}แล้ว`);showPack()}
+  L.sel=L.items.length-1;PK.size();savePack();impStat(`เพิ่ม ${n} รูปในชั้น${layLabel(L)}แล้ว`);toast(`เพิ่ม ${n} รูปในชั้น${layLabel(L)}แล้ว`);showPack()}
 async function delItem(li){const L=PK.layers[li],it=L.items[L.sel];if(!it||!it.cv)return;L.items.splice(L.sel,1);try{await idb.del(it.id)}catch(e){}L.sel=clamp(L.sel,0,Math.max(0,L.items.length-1));PK.size();savePack();showPack()}
 function showPack(){if(PK.count()){if(!IMP||IMP.type==='pack'){IMP=PK;$('pkUse').hidden=true}}else if(IMP===PK)IMP=null;buildLayers();buildExScale();refreshAll()}
 const layLabel=L=>{const d=layDef(L.name);return d?d.th:L.name};
@@ -520,34 +531,58 @@ function buildLayers(){const box=$('layers');box.innerHTML='';const stepSel=$('p
       offTxt();savePack();refreshFrame(true)});
     offTxt();box.appendChild(el)})}
 
+const MAXIMG=800;
 async function importZip(file){
   if(!window.JSZip){impStat('อ่าน ZIP ไม่ได้ เพราะตัวอ่าน ZIP โหลดไม่สำเร็จ',1);return}
-  impStat('กำลังอ่าน '+file.name+' …');
-  const z=await JSZip.loadAsync(file);const ents=[];let metaF=null;
-  z.forEach((p,e)=>{if(e.dir||/__MACOSX|(^|\/)\./.test(p))return;if(/\.(png|webp|gif|jpe?g)$/i.test(p))ents.push(p);else if(/(^|\/)(pack|meta)\.json$/i.test(p))metaF=e});
-  if(!ents.length){impStat('ไม่พบรูปภาพใน ZIP นี้',1);return}
+  busy(`กำลังเปิด ${file.name} (${(file.size/1048576).toFixed(1)} MB) …`);await tick();
+  try{
+  const z=await JSZip.loadAsync(file);let ents=[];let metaF=null;
+  z.forEach((p,e)=>{if(e.dir||/__MACOSX|(^|\/)\./.test(p))return;if(/\.(png|webp|gif|jpe?g)$/i.test(p))ents.push(p);else if(/(^|\/)pack\.json$/i.test(p))metaF=e});
+  if(!ents.length){busy(null);impStat('ไม่พบรูปภาพใน ZIP นี้',1);return}
+  // a big bundle (e.g. GPT's: characters/ parts/ source/ …): use only its parts folder
+  const dirsOf=p=>{const a=p.split('/'),o=[];for(let i=1;i<a.length;i++)o.push(a.slice(0,i).join('/'));return o};
+  const partDirs=[...new Set(ents.flatMap(dirsOf))].filter(d=>/^(\d+[_\-\s.]*)?(parts?|ชิ้นส่วน)$/i.test(d.split('/').pop())).sort((a,b)=>a.length-b.length);
+  if(partDirs.length){const pr=partDirs[0]+'/';ents=ents.filter(p=>p.startsWith(pr));const m=metaF&&metaF.name.startsWith(pr)?metaF:null;metaF=m||metaF}
+  if(ents.length>MAXIMG){const top={};ents.forEach(p=>{const t=p.split('/').slice(0,-1).join('/')||'(นอกโฟลเดอร์)';top[t]=(top[t]||0)+1});
+    busy(null);impStat(`ZIP นี้มีรูป ${ents.length.toLocaleString('en')} รูป มากเกินจะเป็นแพ็กชิ้นส่วน และหาโฟลเดอร์ parts ไม่เจอ · ${Object.entries(top).sort((a,b)=>b[1]-a[1]).slice(0,4).map(([k,v])=>k+' '+v).join(' · ')}`,1);return}
   let meta={};if(metaF)try{meta=JSON.parse(await metaF.async('string'))}catch(e){}
   const parts=ents.map(p=>p.split('/'));let root=0;while(parts.every(a=>a.length>root+1&&a[root]===parts[0][root]))root++;
   const groups={};parts.forEach((a,i)=>{const g=a.length>root+1?a[root]:'';(groups[g]=groups[g]||[]).push(ents[i])});
   const dirs=Object.keys(groups).filter(g=>g);
-  const read=async list=>{const out=[];for(const p of list.sort(nat))out.push(await loadCanvas(await z.file(p).async('blob')));return out};
-  if(!dirs.length){const fr=prep(await read(groups['']));if(!fr.length)return impStat('รูปใน ZIP ว่างทั้งหมด',1);await useImport({type:'frames',frames:fr,...sizeOf(fr),name:file.name});return impStat(`นำเข้าแล้ว ${fr.length} เฟรม · ${IMP.fw}×${IMP.fh} พิกเซล`)}
+  const file1=p=>p.split('/').pop();
+  const read=async list=>{const out=[];for(const p of list.sort(nat)){out.push(await loadCanvas(await z.file(p).async('blob')));busy(`กำลังอ่านรูป ${out.length}/${list.length} …`,out.length/list.length);await tick()}return out};
+  // flat files named body_01, head_02 … → a parts pack grouped by name
+  const flat=groups['']||[],byPre={};flat.forEach(p=>{const d=layDef(prefixOf(file1(p)));const k=d?d.dir:'';(byPre[k]=byPre[k]||[]).push(p)});
+  if(!dirs.length&&Object.keys(byPre).filter(k=>k).length>=2){busy(null);return packFrom(Object.entries(byPre).map(([d,list])=>({dir:d||'9_other',list})),z,meta,file.name)}
+  if(!dirs.length){const fr=prep(await read(flat));busy(null);if(!fr.length)return impStat('รูปใน ZIP ว่างทั้งหมด',1);await useImport({type:'frames',frames:fr,...sizeOf(fr),name:file.name});return impStat(`นำเข้าแล้ว ${fr.length} เฟรม · ${IMP.fw}×${IMP.fh} พิกเซล`)}
   const animDirs=dirs.filter(d=>animKey(d));
   if(animDirs.length&&animDirs.length>=dirs.length/2){const anims={};let all=[];
     for(const d of animDirs){const k=animKey(d);if(anims[k])continue;anims[k]=await read(groups[d]);all=all.concat(anims[k])}
     const o=opt();if(o.key)all.forEach(c=>keyOut(c,o.tol));
     if(o.align){const al=alignFrames(all);let i=0;for(const k in anims)anims[k]=anims[k].map(()=>al[i++])}
-    const s=sizeOf(all);await useImport({type:'anims',anims,...s,name:file.name});
+    const s=sizeOf(all);busy(null);await useImport({type:'anims',anims,...s,name:file.name});
     return impStat(`นำเข้าแล้ว ${Object.keys(anims).length} ท่า · ${s.fw}×${s.fh} พิกเซล`)}
-  // a parts pack: replaces the current pack
-  const rank=d=>{const m=d.match(/^(\d+)/);if(m)return+m[1];const n=d.toLowerCase();const i=PARTRANK.findIndex(k=>n.includes(k));return i<0?50:i+10};
-  try{await idb.clear()}catch(e){}PK.layers=[];PK.name=file.name.replace(/\.zip$/i,'');PK.pivotSet=Array.isArray(meta.pivot);PK.pivot=PK.pivotSet?meta.pivot:null;
+  busy(null);return packFrom(dirs.map(d=>({dir:d,list:groups[d]})).concat(flat.length?[{dir:'9_other',list:flat}]:[]),z,meta,file.name)
+  }catch(e){busy(null);throw e}}
+/* build the parts pack from groups of zip entries (replaces the current pack) */
+async function packFrom(groups,z,meta,fname){
+  const rank=d=>{const m=d.match(/^(\d+)/);if(m)return+m[1];const def=layDef(d);if(def)return+def.dir[0];const n=d.toLowerCase();const i=PARTRANK.findIndex(k=>n.includes(k));return i<0?50:i+10};
+  const total=groups.reduce((a,g)=>a+g.list.length,0);
+  try{await idb.clear()}catch(e){}PK.layers=[];PK.name=fname.replace(/\.zip$/i,'');PK.pivotSet=Array.isArray(meta.pivot);PK.pivot=PK.pivotSet?meta.pivot:null;
   const offs=meta.offsets||{},o=opt();let n=0;
-  for(const d of dirs.sort((a,b)=>rank(a)-rank(b)||nat(a,b))){const name=d.replace(/^\d+[_\-\s.]*/,'').toLowerCase()||d,def=layDef(name),L={dir:d,name,weapon:/weapon|อาวุธ/i.test(d),sel:0,items:[]};
+  try{
+  for(const g of groups.sort((a,b)=>rank(a.dir)-rank(b.dir)||nat(a.dir,b.dir))){const d=g.dir,raw=d.replace(/^\d+[_\-\s.]*/,'').toLowerCase()||d,def=layDef(raw),name=def?def.key:raw,L={dir:def&&!/^\d/.test(d)?def.dir:d,name,weapon:!!(def&&def.weapon)||/weapon|อาวุธ/i.test(d),sel:0,items:[]};
     if(def&&def.none||/^(back|cape|front)/i.test(name))L.items.push({name:'(ไม่ใส่)',cv:null});PK.layers.push(L);
-    for(const p of groups[d].sort(nat)){const cv=await loadCanvas(await z.file(p).async('blob'));if(o.key)keyOut(cv,o.tol);const nm=p.split('/').pop().replace(/\.\w+$/,'');await addItem(L,nm,cv,offs[d+'/'+nm]);n++;if(n%5===0){impStat(`กำลังนำเข้า ${n}/${ents.length} …`);await tick()}}}
+    for(const p of g.list.sort(nat)){const cv=await loadCanvas(await z.file(p).async('blob'));if(o.key)keyOut(cv,o.tol);const nm=p.split('/').pop().replace(/\.\w+$/,'');await addItem(L,nm,cv,offs[d+'/'+nm]||offs[L.dir+'/'+nm]);n++;busy(`กำลังนำเข้าชิ้นส่วน ${n}/${total} …`,n/total);await tick()}}
+  }finally{busy(null)}
   PK.size();savePack();IMP=PK;showPack();
-  impStat(`นำเข้าแพ็กชิ้นส่วนแล้ว ${PK.layers.length} ชั้น ${n} รูป · ประกอบได้ ${PK.combos().toLocaleString('en')} แบบ`)}
+  impStat(`นำเข้าแพ็กชิ้นส่วนแล้ว ${PK.layers.length} ชั้น ${n} รูป · ประกอบได้ ${PK.combos().toLocaleString('en')} แบบ`);toast(`นำเข้าแล้ว ${n} รูป`)}
+/* many pictures at once: each goes to the layer its file name says (body_01 → ร่างกาย) */
+async function addMany(files){const o=opt(),list=[...files].sort((a,b)=>nat(a.name,b.name)),miss=[];let n=0;
+  try{for(const f of list){const d=layDef(prefixOf(f.name));if(!d){miss.push(f.name);continue}const L=PK.layers.find(l=>l.name===d.key);if(!L){miss.push(f.name);continue}
+    const cv=await loadCanvas(f);if(o.key)keyOut(cv,o.tol);if(!alphaBox(cv))continue;await addItem(L,f.name.replace(/\.\w+$/,''),cv);n++;busy(`กำลังเพิ่มรูป ${n}/${list.length} …`,n/list.length);await tick()}}finally{busy(null)}
+  PK.size();savePack();showPack();
+  impStat(`เพิ่ม ${n} รูป${miss.length?` · ไม่รู้ว่าเป็นชั้นไหน ${miss.length} รูป (${miss.slice(0,3).join(', ')}${miss.length>3?' …':''}) ใช้ “+ เพิ่มรูป” ในชั้นนั้นแทน`:''}`,!n);if(n)toast(`เพิ่มแล้ว ${n} รูป`)}
 
 /* ============ app state ============ */
 const st={anim:'idle',n:8,fps:10,f:0,playing:true,fx:'auto',fxAuto:true,fxColor:'#58d9ff',flip:false,bg:'checker',tab:'gpt',guide:true,gk:'body'};
@@ -720,8 +755,9 @@ $('guide').checked=st.guide;$('guide').onchange=()=>{st.guide=$('guide').checked
 $('exScale').onchange=exSize;
 document.querySelectorAll('[data-ex]').forEach(b=>b.onclick=async()=>{b.disabled=true;try{await doExport(b.dataset.ex)}catch(e){$('exStat').textContent='สร้างไฟล์ไม่สำเร็จ: '+(e.message||e);$('exStat').classList.add('err')}exSize()});
 $('shareBtn').onclick=()=>{try{if(lastSaved&&window.Android&&Android.share)Android.share(lastSaved)}catch(e){toast('แชร์ไม่ได้')}};
-const guard=fn=>async e=>{const fl=e.target.files;if(!fl||!fl.length)return;try{await fn(fl)}catch(err){impStat('นำเข้าไม่สำเร็จ: '+(err.message||err),1)}e.target.value=''};
+const guard=fn=>async e=>{const fl=e.target.files;if(!fl||!fl.length)return;try{await fn(fl)}catch(err){busy(null);impStat('นำเข้าไม่สำเร็จ: '+(err.message||err),1)}e.target.value=''};
 $('inZip').onchange=guard(async fl=>importZip(fl[0]));
+$('inMany').onchange=guard(async fl=>addMany(fl));
 $('pkRand').onclick=()=>{if(!PK.count())return toast('ยังไม่มีรูปในแพ็ก');PK.layers.forEach(L=>{if(L.items.length)L.sel=Math.floor(Math.random()*L.items.length)});IMP=PK;savePack();buildLayers();refreshAll()};
 $('pkAuto').onclick=()=>{let n=0;PK.layers.forEach(L=>L.items.forEach(it=>{if(autoPlace(L,it))n++}));if(!n)return toast('ยังไม่มีรูปร่างกายหรือหัวให้จัด');savePack();buildLayers();refreshFrame(true);toast(`จัดตำแหน่งแล้ว ${n} รูป (ร่างกาย + หัว)`)};
 $('pkUse').onclick=()=>{IMP=PK;$('pkUse').hidden=true;buildExScale();buildLayers();refreshAll()};
