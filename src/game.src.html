@@ -585,6 +585,7 @@ h2{color:#ffe45c;text-shadow:0 2px 0 #080b1f}
 .askp{margin-top:6px;padding:8px 10px;border-radius:12px;background:rgba(255,255,255,.05)}.askp .row{display:flex;gap:6px;margin-bottom:4px}.askp .tx{display:block;color:#c9d2f5;font-size:12px;margin:2px 0 6px}
 .askr{display:flex;align-items:center;gap:6px;padding:4px 0;border-top:1px solid rgba(255,255,255,.08)}.askr>i{width:18px;text-align:center;color:#ffe45c;font-style:normal;font-weight:700}.askr>b{flex:1;color:#fff;font-size:13px}.askr>b small{color:#9aa5cf;font-weight:400}.askr.off>b{opacity:.45;text-decoration:line-through}.askr .btn.sm{min-width:34px;padding:3px 8px}
 #pdbt{position:absolute;left:50%;top:12px;transform:translate(-50%,-30px);opacity:0;z-index:99;background:rgba(14,18,40,.94);color:#ffe9a0;border:1px solid #f2d98a;border-radius:999px;padding:7px 16px;font-size:14px;pointer-events:none;transition:.25s}#pdbt.on{opacity:1;transform:translate(-50%,0)}.lprb small{color:#f2d98a}
+#fxl{position:absolute;inset:0;pointer-events:none;z-index:8;overflow:hidden}.fx8{position:absolute;pointer-events:none;background-size:800% 100%;background-repeat:no-repeat;image-rendering:pixelated;animation:fx8 var(--fd,.8s) steps(8,jump-none) forwards}@keyframes fx8{from{background-position:0 0}to{background-position:100% 0}}#fxl .ghost{pointer-events:none;filter:brightness(1.7) saturate(.4) drop-shadow(0 0 6px rgba(140,200,255,.9))}
 .strow{display:flex;align-items:center;gap:10px;flex-wrap:wrap;font-family:var(--display);font-weight:700;font-size:15px;color:#ffe45c}.strow .tx{font-family:var(--body);font-size:12px;color:#c8d2ff}
 .strow .btn{display:inline-block;font-size:13px}.strow .btn i{font-style:normal}.strow .btn.off{--b1:#5a6082;--b2:#3d4260;--tx:#aab0cc;opacity:.85}
 /* upright name editor: the phone keyboard always follows the device, so when the stage is rotated the text field is shown unrotated above it */
@@ -1959,7 +1960,7 @@ function off(el){let x=0,y=0;while(el&&el.id!=='stage'){x+=el.offsetLeft;y+=el.o
 // the attacker dashes across the lane to its target; the hit lands when it arrives, then it slides home
 async function lunge(from,to,dir){const f=$(from);if(!f||RM)return;let dx=dir*140,dy=0;
   if(to&&$(to)){const A=off(f),B=off($(to));dx=B.x-A.x-dir*f.offsetWidth*.85;dy=B.y-A.y}
-  f.style.transition=`transform ${170/(S.spd||1)}ms cubic-bezier(.5,0,.2,1)`;f.style.zIndex=6;f.style.transform=`translate(${dx}px,${dy}px) scale(1.12)`;ret={id:from,dx,dy};await W(180)}
+  ghost(f,dx*.2,dy*.2);setTimeout(()=>ghost(f,dx*.55,dy*.55),70/(S.spd||1));f.style.transition=`transform ${170/(S.spd||1)}ms cubic-bezier(.5,0,.2,1)`;f.style.zIndex=6;f.style.transform=`translate(${dx}px,${dy}px) scale(1.12)`;ret={id:from,dx,dy};await W(180)}
 const fighter=(id,lv,o)=>{const v=stat(id,lv,o),s4=!!(SK[id]&&SK[id][3]&&(o?o.star||0:starOf(id))>=10);return{id,lv,atk:v.atk,base:v.atk,hp:v.hp,max:v.hp,def:v.def,crit:v.crit,cx:v.cx,hb:v.hb,sh:0,done:false,sk4:s4,s4l:s4Lv(id,o),cds:s4?[0,0,ULT_CD0,SK4_CD0]:[0,0,ULT_CD0]}};
 // opp = an arena opponent {name,pts,team:[{id,lv,star,am}]}: its cards fight with their own skills instead of stage monsters
 async function startBattle(n,opp){
@@ -2023,6 +2024,18 @@ let FK=null; // skill being played right now: [skill, index], set by the turn co
 function fxAt(id,name,flip){const e=$(id),d=FXS[name];if(!e||!d||RM)return;const b=document.createElement('span'),sp=S.spd||1,dur=Math.max(.2,.44/sp);b.className='fxs';
   b.style.cssText=`width:${d[2]}%;aspect-ratio:${d[0]}/${d[1]};background-image:url(fx/${name}.webp);--fd:${dur}s;`+(d[3]==='b'?'bottom:2%;':'top:50%;')+`transform:translate(-50%,${d[3]==='b'?'0':'-50%'})${flip?' scaleX(-1)':''}`;
   e.append(b);setTimeout(()=>b.remove(),dur*1000+60)}
+// b182 big effects: 8-frame strips drawn on their own layer over the battle (#fxl in #stage), so a redraw of the arena does not cut them off.
+// FX8[name] = [strip cell w, h, size x the fighter's width, 'b' feet-anchored | 'c' centred]. Skill 4 of each card has its own strip ('ult-'+type).
+const FX8={'ult-zero':[220,218,2.1,'b'],'ult-blood':[219,220,2,'c'],'ult-dive':[220,220,2.1,'b'],'ult-scorch':[220,209,2.3,'b'],'ult-rebirth':[220,219,2,'b'],'ult-chain':[217,220,2.1,'b'],
+ 'ult-forms':[219,220,2,'b'],'ult-halo':[220,219,2,'b'],'ult-hydra':[220,216,2.2,'c'],'ult-reflect':[220,205,1.8,'b'],'ult-stand':[220,215,2,'b'],'ult-fort':[220,202,2.2,'b'],'fx-crit':[170,168,1.15,'c'],'fx-ko':[170,169,1.3,'c']};
+function fxLayer(){let l=$('fxl');if(!l){const st=$('stage');if(!st)return null;l=document.createElement('div');l.id='fxl';st.appendChild(l)}return l}
+function fx8(id,name,o={}){const e=$(id),d=FX8[name];if(!e||!d||RM||!bt)return;const L=fxLayer();if(!L)return;const p=off(e),w=e.offsetWidth*d[2],h=w*d[1]/d[0],cx=p.x+e.offsetWidth/2,sp=S.spd||1,dur=Math.max(.3,(o.t||.8)/sp);
+  const b=document.createElement('span');b.className='fx8';b.style.cssText=`left:${cx-w/2}px;top:${(d[3]==='b'?p.y+e.offsetHeight*.98-h:p.y+e.offsetHeight*.55-h/2)}px;width:${w}px;height:${h}px;background-image:url(fx/${name}.webp);--fd:${dur}s;${o.flip?'transform:scaleX(-1);':''}`;
+  L.append(b);setTimeout(()=>b.remove(),dur*1000+80)}
+// skill 4: a short zoom and flash of the whole battle; a dash leaves two fading afterimages
+function ultCam(){if(RM)return;const v=$('view');if(v)v.animate([{transform:'scale(1)',filter:'brightness(1)'},{transform:'scale(1.06)',filter:'brightness(1.5)',offset:.25},{transform:'scale(1.03)',filter:'brightness(1.1)',offset:.6},{transform:'scale(1)',filter:'brightness(1)'}],{duration:700/(S.spd||1),easing:'ease-out'})}
+function ghost(f,ox=0,oy=0){if(RM||!f)return;const s=f.querySelector('.sw'),L=fxLayer();if(!s||!L)return;const p=off(s),g=s.cloneNode(true);g.classList.add('ghost');g.style.cssText+=`position:absolute;left:${p.x+ox}px;top:${p.y+oy}px;width:${s.offsetWidth}px;height:${s.offsetHeight}px;`;L.append(g);
+  g.animate([{opacity:.5},{opacity:0}],{duration:300/(S.spd||1)}).onfinish=()=>g.remove()}
 function addFx(id,cls){const e=$(id);if(!e)return;const b=document.createElement('span');b.className=cls;e.append(b);setTimeout(()=>b.remove(),520)}
 function shoot(from,to,type){const f=$(from),t=$(to);if(!f||!t)return;const A=mid(f),B=mid(t),d=document.createElement('div'),sp=S.spd||1;
   const pn=PJS[type]?type:PJMAP[type],pd=PJS[pn],ang=Math.atan2(B.y-A.y,B.x-A.x);
@@ -2032,15 +2045,16 @@ function shoot(from,to,type){const f=$(from),t=$(to);if(!f||!t)return;const A=mi
 async function strike(from,id,tos,dir){
   const f=$(from);if(!f||RM)return;const spr=f.querySelector('.spr'),st=C[id].st||'slash',sp=S.spd||1;
   const swing=()=>{spr.style.setProperty('--ad',(.5/sp)+'s');spr.classList.remove('atk');void spr.offsetWidth;spr.classList.add('atk')};
-  const fk=FK;FK=null;const ic=fk&&fk[0][1],pj=C[id].pj||'fire';
+  const fk=FK;FK=null;const ic=fk&&fk[0][1],pj=C[id].pj||'fire',u4=fk&&fk[1]===3&&FX8['ult-'+fk[0][2]]?'ult-'+fk[0][2]:null,ult=()=>{if(u4)fx8(tos[Math.floor(tos.length/2)],u4,{flip:from[0]==='e'})};
   // the painted hit effect: by the skill's icon, else by how this fighter attacks
   const hitFx=(ic&&FXI[ic])||(st==='smash'?'smash':st==='cast'||st==='shoot'?({fire:'boom',moon:'ice',light:'hit',arrow:'hit',soul:'hit'})[pj]:C[id].mon?'claw':'slash'),land=()=>tos.forEach(t=>fxAt(t,hitFx,dir!==1));
-  if(st==='shoot'||st==='cast'){swing();await W(300);sfx(st==='shoot'?'arrow':'magic');tos.forEach(t=>shoot(from,t,st==='shoot'&&fk&&fk[1]>0?'farrow':pj));await W(255);land();return}
+  if(st==='shoot'||st==='cast'){swing();await W(300);sfx(st==='shoot'?'arrow':'magic');tos.forEach(t=>shoot(from,t,st==='shoot'&&fk&&fk[1]>0?'farrow':pj));await W(255);land();ult();if(u4){quake=true;await W(260)}return}
   await lunge(from,tos.length===1?tos[0]:null,dir);swing();await W(240);
-  if(st==='smash'||hitFx==='smash'){sfx('smash');quake=true}else sfx('slash');land();
-  await W(130)}
+  if(st==='smash'||hitFx==='smash'){sfx('smash');quake=true}else sfx('slash');land();ult();
+  await W(u4?380:130);if(u4)quake=true}
 async function pose(from,tos){const f=$(from);if(!f||RM)return;
   f.querySelector('.spr').animate([{transform:'none'},{transform:'translateY(-14px) scale(1.06)'},{transform:'none'}],{duration:380/(S.spd||1)});await W(200);sfx('heal');const fk=FK;FK=null;const ty=fk&&fk[0][2];if(ty==='heal'){const L=from[0]==='a'?bt.al:bt.en;let b=-1;L.forEach((x,j)=>{if(x.hp>0&&(b<0||x.hp/x.max<L[b].hp/L[b].max))b=j});tos=b<0?tos:[from[0]+b]}
+  if(fk&&fk[1]===3&&FX8['ult-'+ty]){fx8(from,'ult-'+ty,{flip:from[0]==='e'});await W(300)}
   tos.forEach(t=>['guard','shieldall','stand','reflect'].includes(ty)?fxAt(t,'shield'):['heal','healall','halo','rebirth'].includes(ty)?fxAt(t,ty==='halo'?'holy':'heal'):ty==='buff'||ty==='rally'||ty==='forms'?fxAt(t,'buff'):addFx(t,'aur'));await W(150)} // sprites drawn facing right; mirrored when they fight on the enemy side
 // where each fighter stands on the floor: [x %, feet y %, size]; the back row is higher up, smaller and nearer the middle, the front row lower and larger
 const SPOT=[[19,47,.86],[34,63,.96],[17,80,1.04]],spots=n=>n===1?[[30,63,.96]]:n===2?[[24,50,.88],[24,77,1.02]]:SPOT;   // b173: triangle formation, the tip (middle fighter) nearest the enemy
@@ -2083,7 +2097,7 @@ function hurt(list,pre,i,d,cls='d',cr){const t=list[i],k=d<0?'g':(hitM?'m':'p')+
   if(d>0&&t.forms>0&&t.hp>0&&!S4NEST&&Math.random()<(t.formsP||SK4E.h22[1])){q(pre+i,T('หลบ!','DODGE'),'s');const src=HIT_SRC;if(src&&src[0][src[2]]&&src[0][src[2]].hp>0){S4NEST=1;const [cd,cc]=roll(t,.8),ka=hitA,km=hitM;hitA=t.atk;hitM=!!C[t.id].m;hurt(src[0],src[1],src[2],cd,'d',cc);hitA=ka;hitM=km;S4NEST=0}return}if(d>0&&t.gate>0){t.gate--;q(pre+i,'BLOCK','s');hits.add(pre+i);return}if(d>0){const rm=t.gim==='shift'?((bt.round%2===1)===!hitM?.5:1.3):resMul(t.id,hitM,bt.n);if(rm!==1){d=Math.max(1,Math.round(d*rm));wk=rm>1.01?'▲':rm<.99?'▼':''}}if(d>0&&bt&&bt.rule==='sky')d=Math.max(1,Math.round(d*(hitM?1.3:.8)));if(d>0&&t.taunt){const ta=c3Am(bt,t);d=Math.round(d*(ta&&ta.tc?ta.tc:.6))};if(d>0&&hitA>0&&t.def>0)d=Math.max(1,Math.round(d*hitA/(hitA+t.def)));
   if(d>0&&t.sh>0){const ab=Math.min(t.sh,d);t.sh-=ab;d-=ab;if(d<=0){q(pre+i,'🛡 -'+ab,'s');hits.add(pre+i);return}}
   if(d>0&&t.stand>0&&t.hp>0&&t.hp-d<1)d=Math.max(0,t.hp-1);if(d>0&&!t.ls&&t.hp>0&&t.hp-d<1){const ga=c3Am(bt,t);if(ga&&ga.ls){d=t.hp-1;t.ls=1;t.taunt=0;q(pre+i,T('รอดตาย!','LAST STAND'),'s')}}
-  t.hp-=d;q(pre+i,(d<0?'+':'-')+Math.abs(d)+(cr?'!':'')+wk,k);if(d>0)hits.add(pre+i);
+  const was=t.hp;t.hp-=d;q(pre+i,(d<0?'+':'-')+Math.abs(d)+(cr?'!':'')+wk,k);if(d>0){hits.add(pre+i);if(cr)fx8(pre+i,'fx-crit',{t:.45});if(was>0&&t.hp<=0)fx8(pre+i,'fx-ko',{t:.75})}
   if(d>0&&t.halo>0&&t.hp>0){const h=Math.min(Math.round(d*(t.haloP||SK4E.h07[1])),t.max-t.hp);if(h>0){t.hp+=h;q(pre+i,'+'+h,'g')}}
   if(d>0&&t.reflect>0&&!S4NEST){const src=HIT_SRC;if(src&&src[0][src[2]]&&src[0][src[2]].hp>0){S4NEST=1;const ka=hitA;hitA=0;hurt(src[0],src[1],src[2],Math.max(1,Math.round(d*(t.reflectP||SK4E.h26[1]))),'d');hitA=ka;S4NEST=0}}
   if(d>0&&t.gim==='rage'&&t.hp>0){const a=Math.round(t.base*(2-Math.max(0,t.hp)/t.max));if(a>t.atk){t.atk=a;q(pre+i,'ATK ↑','g')}}}
@@ -2159,7 +2173,7 @@ async function act(ti){
   if(needT(sk)){const tn=my.en.findIndex(e=>e.hp>0&&e.taunt);if(tn>=0)ti=tn}
   if(needT(sk)&&(ti<0||!my.en[ti]||my.en[ti].hp<=0))return;
   busy=true;my.log=`${C[a.id].n} ใช้ ${sk[0]}`;draw();
-  if(k>0){await cutin(a,k);if(bt!==my)return}
+  if(k>0){await cutin(a,k);if(bt!==my)return;if(k===3)ultCam()}
   FK=[sk,k];if(isAtk(sk))await strike('a'+ai,a.id,needT(sk)?['e'+ti]:my.en.map((e,j)=>e.hp>0?'e'+j:null).filter(Boolean),1);
   else await pose('a'+ai,['healall','shieldall','rally','halo','stand'].includes(sk[2])?my.al.map((x,j)=>x.hp>0?'a'+j:null).filter(Boolean):['a'+ai]);
   if(bt!==my)return;const big=quake;if(sk[2]==='drain')fxAt('a'+ai,'drain');
