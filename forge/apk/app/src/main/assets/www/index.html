@@ -1,0 +1,741 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>PixelDeck Forge</title>
+<style>@font-face{font-family:'Silkscreen';src:url(silkscreen.ttf) format('truetype');font-display:swap}</style>
+<style>
+/* Layout: a workbench — the stage (live preview) sticks on the left, tool panels switch by tab on the right; stacks on phones */
+:root{
+  --bg:#14111f; --panel:#1d1930; --panel2:#272143; --line:#3a3262; --fg:#f1ecff; --mute:#a69ec6;
+  --gold:#ffc83d; --goldD:#8a5a00; --cyan:#58d9ff; --bad:#ff6b7d; --ok:#72f290;
+  --fd:'Silkscreen','Courier New',monospace; --fb:system-ui,-apple-system,'Segoe UI','Noto Sans Thai',sans-serif;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html,body{background:var(--bg)}
+body{margin:0;color:var(--fg);font:15px/1.55 var(--fb);-webkit-tap-highlight-color:transparent;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:14px 48px}
+.app{max-width:1180px;margin:0 auto;display:grid;gap:16px}
+header{display:flex;align-items:baseline;gap:6px 14px;flex-wrap:wrap}
+.logo{font-family:var(--fd);font-weight:700;font-size:clamp(22px,5vw,30px);color:var(--gold);letter-spacing:1px;text-shadow:3px 3px 0 #7a2a10;line-height:1.1}
+.logo b{color:var(--cyan);text-shadow:3px 3px 0 #123a6a}
+.sub{color:var(--mute);font-size:14px}
+.main{display:grid;grid-template-columns:minmax(0,1fr);gap:16px}
+@media (min-width:920px){.main{grid-template-columns:minmax(0,430px) minmax(0,1fr)}.stagecol{position:sticky;top:12px;align-self:start}}
+.card{background:var(--panel);border:2px solid var(--line);border-radius:6px;padding:14px;min-width:0}
+.sec{display:grid;gap:12px;align-content:start;min-width:0}
+.stage{position:relative;border:2px solid #0a0812;border-radius:4px;overflow:hidden;background:#0f0c1a}
+.empty{position:absolute;inset:0;display:grid;place-content:center;text-align:center;gap:6px;padding:20px;pointer-events:none}
+.empty b{font-family:var(--fd);color:var(--gold);font-size:16px;font-weight:400}
+.empty span{color:var(--mute);font-size:13px;max-width:260px}
+canvas.pix{image-rendering:pixelated;image-rendering:crisp-edges;display:block;max-width:100%}
+#cv{width:100%;height:auto}
+.name{font-family:var(--fd);font-size:17px;color:var(--gold);line-height:1.2;overflow-wrap:anywhere}
+.idtag{font-family:var(--fd);font-size:12px;color:var(--cyan)}
+.hint{color:var(--mute);font-size:13px}
+.row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.between{justify-content:space-between}
+.grow{flex:1 1 140px}
+h3{font-family:var(--fd);font-size:14px;color:var(--cyan);margin:0;letter-spacing:.5px;font-weight:400}
+p{margin:0}
+.btn{font:600 14px/1.2 var(--fb);color:var(--fg);background:var(--panel2);border:2px solid var(--line);border-bottom-width:4px;border-radius:5px;padding:8px 12px;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:6px;user-select:none;min-height:38px}
+.btn:active{transform:translateY(2px);border-bottom-width:2px}
+.btn.go{background:var(--gold);border-color:var(--goldD);color:#2a1800}
+.btn.on{border-color:var(--gold);color:var(--gold)}
+.btn.sm{padding:5px 10px;font-size:13px;min-height:34px}
+.btn.done{border-color:var(--ok);color:var(--ok)}
+.btn.warn{border-color:#8a2a3a;color:var(--bad)}
+.btn:disabled{opacity:.4;cursor:not-allowed}
+:focus-visible{outline:2px solid var(--cyan);outline-offset:2px}
+.tabs{display:flex;gap:6px;overflow-x:auto;padding-bottom:2px;scrollbar-width:thin}
+.tab{white-space:nowrap;flex:none}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+label.f{display:grid;gap:4px;font-size:13px;color:var(--mute);min-width:0}
+select,input[type=number],input[type=text]{background:#0f0c1a;color:var(--fg);border:2px solid var(--line);border-radius:5px;padding:6px 8px;font:14px var(--fb);width:100%;min-width:0;min-height:38px}
+input[type=range]{width:100%;accent-color:var(--gold)}
+input[type=color]{width:44px;height:34px;border:2px solid var(--line);border-radius:5px;background:#0f0c1a;padding:2px}
+input[type=checkbox]{accent-color:var(--gold);width:18px;height:18px}
+.chk{display:flex;gap:8px;align-items:center;font-size:14px}
+.fields{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px}
+.tl{display:flex;gap:4px;overflow-x:auto;padding-bottom:2px}
+.tl canvas{width:54px;height:auto;border:2px solid var(--line);border-radius:3px;background:#0f0c1a;cursor:pointer;flex:none}
+.tl canvas.cur{border-color:var(--gold)}
+.sw{width:30px;height:30px;border-radius:4px;border:2px solid var(--line);cursor:pointer;padding:0}
+.sw.on{border-color:var(--gold)}
+.imp{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px}
+.box{background:var(--panel2);border:2px solid var(--line);border-radius:6px;padding:12px;display:grid;gap:8px;align-content:start;min-width:0}
+.box b{font-size:15px}
+.vh{position:absolute;width:1px;height:1px;opacity:0;overflow:hidden}
+.stat{font-size:13px;color:var(--ok);min-height:1.2em;overflow-wrap:anywhere}
+.stat.err{color:var(--bad)}
+.exp{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:10px}
+details{background:#0f0c1a;border:2px solid var(--line);border-radius:6px;padding:10px 12px}
+summary{cursor:pointer;font-weight:600}
+pre{white-space:pre-wrap;font:12px/1.5 ui-monospace,Menlo,monospace;color:#d6d0f0;margin:8px 0 0;overflow-wrap:anywhere}
+.uiwrap{background:repeating-conic-gradient(#221d38 0 25%,#1a1630 0 50%) 0 0/16px 16px;border:2px solid #0a0812;border-radius:4px;padding:18px;display:grid;place-items:center;overflow:auto;min-height:140px}
+.toast{position:fixed;left:50%;bottom:calc(18px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:#0a0812;border:2px solid var(--gold);color:var(--fg);padding:9px 16px;border-radius:6px;opacity:0;transition:opacity .2s;pointer-events:none;max-width:calc(100vw - 40px);z-index:9;font-size:14px}
+.toast.show{opacity:1}
+.big{font-family:var(--fd);font-size:26px;color:var(--gold);line-height:1}
+.stats{display:flex;gap:18px;flex-wrap:wrap}
+.stats div{display:grid}
+.steps{margin:0;padding-left:22px;display:grid;gap:4px;font-size:14px}
+.tplrow{display:grid;grid-template-columns:120px minmax(0,1fr);gap:12px;align-items:center}
+.tplrow canvas{width:120px;height:120px;border:2px solid var(--line);border-radius:4px}
+.pc{background:var(--panel2);border:2px solid var(--line);border-radius:6px;padding:10px 12px;display:grid;gap:6px;min-width:0}
+.pc pre{max-height:150px;overflow:auto;margin:0;background:#0f0c1a;border-radius:4px;padding:8px}
+.pc b{font-size:14px}
+.layer{background:var(--panel2);border:2px solid var(--line);border-radius:6px;padding:10px 12px;display:grid;gap:8px;min-width:0}
+.layer b{font-size:15px}
+.nudge .btn{min-width:40px}
+.off{font-variant-numeric:tabular-nums}
+@media (prefers-reduced-motion:reduce){.toast{transition:none}.btn:active{transform:none}}
+</style>
+</head>
+<body>
+<div class="app">
+  <header>
+    <div class="logo">PIXELDECK <b>FORGE</b></div>
+    <div class="sub">ประกอบตัวละครจากชิ้นส่วนที่ GPT วาด · ใส่ท่าและเอฟเฟกต์ · ส่งออกเข้าเกม</div>
+  </header>
+
+  <div class="main">
+    <div class="stagecol card sec">
+      <div class="row between">
+        <div style="min-width:0"><div class="name" id="mname">—</div><div class="hint" id="minfo"></div></div>
+        <span class="idtag" id="mid"></span>
+      </div>
+      <div class="stage" id="stage"><canvas id="cv" class="pix" width="420" height="360"></canvas>
+        <div class="empty" id="empty"><b>ยังไม่มีตัวละคร</b><span>ขอคำสั่งในแท็บ “คำสั่ง GPT” ให้ GPT วาดชิ้นส่วน แล้วเอารูปมาใส่ในแท็บ “ชิ้นส่วน”</span></div></div>
+      <div class="chips" id="animChips" role="group" aria-label="ท่าทาง"></div>
+      <div class="row">
+        <button class="btn sm" id="play">หยุด</button>
+        <span class="hint" id="flab" style="font-variant-numeric:tabular-nums">เฟรม 1/8</span>
+        <label class="f grow" style="grid-template-columns:auto 1fr;align-items:center">ความเร็ว <input type="range" id="fps" min="2" max="24" value="10"></label>
+        <span class="hint" id="fpsl" style="font-variant-numeric:tabular-nums">10 fps</span>
+      </div>
+      <div class="tl" id="tl"></div>
+      <div class="row">
+        <span class="hint">พื้นหลัง</span>
+        <button class="sw on" data-bg="checker" title="ลายตาราง" style="background:repeating-conic-gradient(#3a3460 0 25%,#262043 0 50%) 0 0/10px 10px"></button>
+        <button class="sw" data-bg="dark" title="มืด" style="background:#0f0c1a"></button>
+        <button class="sw" data-bg="light" title="สว่าง" style="background:#e9e6f2"></button>
+        <button class="sw" data-bg="arena" title="สนามรบ" style="background:linear-gradient(#5a7fd6 55%,#4f8a3c 55%)"></button>
+        <button class="sw" data-bg="green" title="เขียวกรีนสกรีน" style="background:#00b140"></button>
+      </div>
+      <div class="row">
+        <label class="chk"><input type="checkbox" id="guide" checked> เส้นนำตำแหน่ง</label>
+        <label class="chk"><input type="checkbox" id="flip"> หันซ้าย</label>
+      </div>
+    </div>
+
+    <div class="sec">
+      <div class="tabs" role="tablist">
+        <button class="btn tab on" data-tab="gpt">คำสั่ง GPT</button>
+        <button class="btn tab" data-tab="parts">ชิ้นส่วน</button>
+        <button class="btn tab" data-tab="anim">ท่า &amp; เอฟเฟกต์</button>
+        <button class="btn tab" data-tab="exp">ส่งออก</button>
+        <button class="btn tab" data-tab="ui">ทำ UI</button>
+      </div>
+
+      <section class="card sec panel" id="p-gpt">
+        <h3>ขั้นตอน</h3>
+        <ol class="steps">
+          <li>บันทึกรูปแม่แบบ แล้วแนบให้ GPT ทุกครั้งที่ส่งคำสั่ง ชิ้นส่วนจะได้ลงตำแหน่งเดียวกัน</li>
+          <li>เลือกหมวดด้านล่าง กด “คัดลอก” แล้ววางใน GPT · 1 คำสั่ง = 1 รูป</li>
+          <li>บันทึกรูปจาก GPT ลงเครื่อง</li>
+          <li>ไปแท็บ “ชิ้นส่วน” กด “+ เพิ่มรูป” ในชั้นที่ตรงกับหมวด</li>
+          <li>เปิดเส้นนำตำแหน่งเพื่อตรวจ แล้วส่งออก “ภาพรวม 12 แบบ” ส่งให้ Claude ดู</li>
+        </ol>
+        <div class="tplrow">
+          <canvas id="tplCv" class="pix" width="1024" height="1024" aria-label="รูปแม่แบบตำแหน่ง"></canvas>
+          <div class="sec" style="gap:6px"><button class="btn go" id="tplSave">บันทึกรูปแม่แบบ</button><span class="hint">pixeldeck_template.png · 1024×1024 · บอกตำแหน่งคอ หัว มือ และเท้า</span><span class="stat" id="tplStat"></span></div>
+        </div>
+        <div class="chips" id="gChips" role="group" aria-label="หมวดชิ้นส่วน"></div>
+        <p class="hint" id="gNote"></p>
+        <div class="sec" id="gList"></div>
+      </section>
+
+      <section class="card sec panel" id="p-parts" hidden>
+        <div class="stats">
+          <div><span class="big" id="pkCount">0</span><span class="hint">รูปในแพ็ก</span></div>
+          <div><span class="big" id="pkCombos">0</span><span class="hint">แบบที่ประกอบได้</span></div>
+        </div>
+        <p class="hint">กด “+ เพิ่มรูป” ในชั้นที่ตรงกับรูปจาก GPT (เลือกหลายรูปพร้อมกันได้) หรือนำเข้า ZIP ทั้งแพ็ก แอปจำรูปไว้ในเครื่อง ปิดแอปแล้วยังอยู่</p>
+        <div class="row">
+          <label class="btn">นำเข้า ZIP<input class="vh" type="file" id="inZip" accept=".zip,application/zip"></label>
+          <button class="btn sm" id="pkRand">สุ่มชิ้นส่วน</button>
+          <button class="btn sm" id="pkAuto">จัดตำแหน่งอัตโนมัติทุกรูป</button>
+          <button class="btn sm go" id="pkUse" hidden>กลับมาใช้แพ็กชิ้นส่วน</button>
+        </div>
+        <label class="f" style="max-width:320px">เลื่อนครั้งละ<select id="pkStep"></select></label>
+        <div class="sec" id="layers"></div>
+        <div class="stat" id="impStat"></div>
+        <div class="fields">
+          <label class="chk"><input type="checkbox" id="optKey" checked> ลบพื้นหลังที่ติดขอบรูป</label>
+          <label class="f">ความไวลบพื้นหลัง<input type="range" id="optTol" min="0" max="120" value="40"></label>
+        </div>
+        <div class="row"><button class="btn sm warn" id="pkClear">ล้างแพ็กทั้งหมด</button></div>
+        <details><summary>นำเข้าแบบอื่น (เฟรม · sprite sheet · รูปเดียว)</summary>
+          <div class="sec" style="margin-top:10px">
+            <div class="imp">
+              <div class="box"><b>รูปหลายเฟรม</b><span class="hint">เลือก PNG หลายรูปพร้อมกัน เรียงตามชื่อไฟล์</span>
+                <label class="btn">เลือกรูป<input class="vh" type="file" id="inFrames" accept="image/*" multiple></label></div>
+              <div class="box"><b>Sprite sheet</b><span class="hint">รูปเดียวที่มีหลายเฟรมเรียงเป็นตาราง</span>
+                <div class="row"><label class="f grow">คอลัมน์<input type="number" id="shCols" min="1" max="64" value="4"></label><label class="f grow">แถว<input type="number" id="shRows" min="1" max="64" value="1"></label></div>
+                <label class="btn">เลือก Sprite sheet<input class="vh" type="file" id="inSheet" accept="image/*"></label></div>
+              <div class="box"><b>รูปตัวละครรูปเดียว</b><span class="hint">แอปทำท่าให้เอง: ยืน เดิน โจมตี ร่ายเวท โดนตี ตาย ชนะ</span>
+                <label class="btn">เลือกรูป<input class="vh" type="file" id="inOne" accept="image/*"></label></div>
+            </div>
+            <label class="chk"><input type="checkbox" id="optAlign" checked> จัดตัวละครให้ตรงกลางทุกเฟรม</label>
+          </div>
+        </details>
+        <details><summary>โครงสร้าง ZIP ที่รองรับ</summary>
+<pre>แพ็กชิ้นส่วน — รูปสี่เหลี่ยมจัตุรัสขนาดเท่ากัน พื้นโปร่งใส
+   parts.zip
+   ├─ 1_body/    body_01.png …
+   ├─ 2_head/    head_01.png …
+   ├─ 3_hair/    …
+   ├─ 4_hat/     …   (มีตัวเลือก “ไม่ใส่” ให้อัตโนมัติ)
+   ├─ 5_weapon/  …   (โฟลเดอร์ชื่อ weapon จะหมุนตอนโจมตี)
+   └─ pack.json  จุดมือ + ค่าเลื่อนตำแหน่งของแต่ละรูป (แอปเขียนให้ตอนส่งออก)
+   จำนวนแบบ = คูณจำนวนรูปทุกชั้น
+
+รูปเฟรมเรียงชื่อ: 01.png 02.png …
+โฟลเดอร์ตามท่า: idle/ walk/ run/ attack/ skill/ cast/ hit/ death/ victory/</pre>
+        </details>
+      </section>
+
+      <section class="card sec panel" id="p-anim" hidden>
+        <h3>จำนวนเฟรมต่อท่า</h3>
+        <div class="chips" id="nChips"></div>
+        <h3>เอฟเฟกต์</h3>
+        <div class="fields">
+          <label class="f">ชนิดเอฟเฟกต์<select id="fxSel"></select></label>
+          <div class="f" style="display:grid;gap:4px;font-size:13px;color:var(--mute)">สีเอฟเฟกต์
+            <div class="row"><label class="chk"><input type="checkbox" id="fxAuto" checked> อัตโนมัติ</label><input type="color" id="fxCol" value="#58d9ff" aria-label="สีเอฟเฟกต์"></div>
+          </div>
+        </div>
+        <details open><summary>ท่าที่มีในเอนจิน</summary>
+          <pre>ยืน · เดิน · วิ่ง · โจมตี (อาวุธหมุนรอบจุดมือ) · สกิล · ร่ายเวท · โดนตี (กระพริบขาว) · ตาย (ล้มลง) · ชนะ (กระโดด)
+เลือกเฟรม 4–16 ต่อท่า และเปลี่ยนเอฟเฟกต์ของทุกท่าได้</pre>
+        </details>
+      </section>
+
+      <section class="card sec panel" id="p-exp" hidden>
+        <div class="fields">
+          <label class="f">ขนาดส่งออก<select id="exScale"></select></label>
+          <div class="hint" id="exSize" style="align-self:end"></div>
+        </div>
+        <div class="exp">
+          <div class="box"><b>ภาพรวม 12 แบบสุ่ม</b><span class="hint">รูปเดียว ส่งให้ Claude ตรวจว่าชิ้นส่วนลงตำแหน่งตรงกันไหม</span><button class="btn go" data-ex="preview">บันทึกภาพรวม</button></div>
+          <div class="box"><b>แพ็กชิ้นส่วน ZIP</b><span class="hint">ทุกรูปในแพ็ก + pack.json (ค่าเลื่อนตำแหน่ง) ส่งให้ Claude หรือเก็บสำรอง</span><button class="btn" data-ex="parts">บันทึกแพ็กชิ้นส่วน</button></div>
+          <div class="box"><b>แพ็กตัวละครเข้าเกม</b><span class="hint">ทุกท่า: โฟลเดอร์เฟรม + sheet.png + meta.json + portrait.png</span><button class="btn go" data-ex="pack">บันทึกแพ็ก ZIP</button></div>
+          <div class="box"><b>ท่านี้ · แถบ PNG</b><span class="hint">ทุกเฟรมของท่าที่เลือก เรียงแนวนอนรูปเดียว</span><button class="btn" data-ex="strip">บันทึก PNG</button></div>
+          <div class="box"><b>ท่านี้ · GIF ขยับ</b><span class="hint">พื้นโปร่งใส เอาไปโพสต์หรือดูตัวอย่าง</span><button class="btn" data-ex="gif">บันทึก GIF</button></div>
+          <div class="box"><b>ท่านี้ · เฟรมแยก ZIP</b><span class="hint">PNG ทีละเฟรม 01.png 02.png …</span><button class="btn" data-ex="frames">บันทึก ZIP</button></div>
+        </div>
+        <div class="stat" id="exStat"></div>
+        <div class="row" id="shareRow" hidden><button class="btn sm" id="shareBtn">แชร์ไฟล์นี้</button><span class="hint">ไฟล์อยู่ใน Download/PixelDeckForge</span></div>
+      </section>
+
+      <section class="card sec panel" id="p-ui" hidden>
+        <div class="fields">
+          <label class="f">ชนิด<select id="uiType"><option value="btn">ปุ่ม</option><option value="panel">แผง / กรอบ</option><option value="hp">แถบเลือด</option><option value="badge">ป้ายแรงก์</option><option value="slot">ช่องสกิล / ไอเท็ม</option></select></label>
+          <label class="f">ข้อความ<input type="text" id="uiText" value="START" maxlength="24"></label>
+          <label class="f">กว้าง (พิกเซล)<input type="number" id="uiW" min="8" max="200" value="64"></label>
+          <label class="f">สูง (พิกเซล)<input type="number" id="uiH" min="8" max="120" value="18"></label>
+          <label class="f">สไตล์<select id="uiStyle"><option value="gloss">เงาวาว</option><option value="bevel">นูน 3 มิติ</option><option value="flat">แบน</option></select></label>
+          <label class="f">มุมโค้ง<input type="range" id="uiR" min="0" max="4" value="2"></label>
+          <label class="f">ค่า % (แถบเลือด)<input type="range" id="uiV" min="0" max="100" value="72"></label>
+          <label class="f">ขยาย<select id="uiS"><option>2</option><option>3</option><option selected>4</option><option>6</option><option>8</option></select></label>
+        </div>
+        <div class="row" id="uiCols"></div>
+        <div class="uiwrap"><canvas id="uiCv" class="pix"></canvas></div>
+        <div class="row"><button class="btn go" id="uiSave">บันทึก PNG</button><span class="stat" id="uiStat"></span></div>
+      </section>
+    </div>
+  </div>
+</div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script src="jszip.min.js"></script>
+<script>
+'use strict';
+/* ============ basics ============ */
+const W=64,H=56,GY=50,HX=26;
+const $=id=>document.getElementById(id);
+const clamp=(v,a,b)=>v<a?a:v>b?b:v,lerp=(a,b,e)=>a+(b-a)*e;
+const ease=e=>e<=0?0:e>=1?1:e<.5?2*e*e:1-Math.pow(-2*e+2,2)/2,seg=(t,a,b)=>clamp((t-a)/(b-a),0,1);
+const D2R=Math.PI/180,dir=a=>({x:Math.sin(a*D2R),y:Math.cos(a*D2R)});
+const RGBC=new Map();
+function rgb(h){let v=RGBC.get(h);if(!v){const n=parseInt(h.slice(1),16);v=[n>>16&255,n>>8&255,n&255];RGBC.set(h,v)}return v}
+function shade(h,f){const c=rgb(h),m=f<0?0:255,a=Math.abs(f);return'#'+c.map(x=>Math.round(x+(m-x)*a).toString(16).padStart(2,'0')).join('')}
+let toastT;function toast(s){const t=$('toast');t.textContent=s;t.classList.add('show');clearTimeout(toastT);toastT=setTimeout(()=>t.classList.remove('show'),2600)}
+const store={get(k,d){try{const v=localStorage.getItem('pdforge_'+k);return v==null?d:JSON.parse(v)}catch(e){return d}},set(k,v){try{localStorage.setItem('pdforge_'+k,JSON.stringify(v))}catch(e){}}};
+const OUTC='#1b1226';
+class Buf{
+  constructor(w,h){this.w=w;this.h=h;this.d=new Uint8ClampedArray(w*h*4)}
+  set(x,y,c,a=1){x=Math.round(x);y=Math.round(y);if(x<0||y<0||x>=this.w||y>=this.h||!c||a<=0)return;
+    const[r,g,b]=rgb(c),i=(y*this.w+x)*4,d=this.d;
+    if(a>=1){d[i]=r;d[i+1]=g;d[i+2]=b;d[i+3]=255;return}
+    const da=d[i+3]/255,oa=a+da*(1-a);d[i]=(r*a+d[i]*da*(1-a))/oa;d[i+1]=(g*a+d[i+1]*da*(1-a))/oa;d[i+2]=(b*a+d[i+2]*da*(1-a))/oa;d[i+3]=oa*255}
+}
+function bufCanvas(B,cv){cv=cv||document.createElement('canvas');cv.width=B.w;cv.height=B.h;cv.getContext('2d').putImageData(new ImageData(new Uint8ClampedArray(B.d),B.w,B.h),0,0);return cv}
+const nat=(a,b)=>a.localeCompare(b,undefined,{numeric:true,sensitivity:'base'});
+const tick=()=>new Promise(r=>setTimeout(r,0));
+
+/* ============ the position standard (percent of a square canvas) ============ */
+const GUIDE={neck:[.47,.41],hand:[.62,.58],head:[.33,.14,.64,.44],feet:.97};
+const LAYDEF=[
+  {dir:'1_body',key:'body',th:'ร่างกาย'},{dir:'2_head',key:'head',th:'หัว'},{dir:'3_hair',key:'hair',th:'ผม'},
+  {dir:'4_hat',key:'hat',th:'หมวก',none:1},{dir:'5_weapon',key:'weapon',th:'อาวุธ',weapon:1}];
+const layDef=name=>{const n=name.toLowerCase();return LAYDEF.find(d=>n.includes(d.key))||null};
+
+/* ============ GPT prompts (each one complete on its own: one prompt = one picture) ============ */
+const GP={
+  body:{th:'ร่างกาย',where:'Draw the body from the neck down to the feet. The top of the neck/collar is at x 47%, y 41% and the body is centred on x 47%. The soles of the feet touch y 97%. The front arm reaches forward with an EMPTY closed fist exactly at x 62%, y 58% (this is where a weapon will be held); the back arm hangs relaxed. Hands wear gloves so no skin shows. Do NOT draw a head, face, hair, hat or weapon — above y 41% must stay empty.',
+    list:[['อัศวินเกราะเหล็ก','a knight in full silver steel plate armour with a blue tabard, steel gauntlets and steel boots'],
+      ['นักรบขนสัตว์','a barbarian warrior in brown fur and leather armour with a red sash belt, leather gloves and fur boots'],
+      ['จอมเวทชุดคลุม','a mage in a long deep-blue robe with gold trim and a wide belt, blue gloves; the robe reaches the ankles, small brown boots'],
+      ['พรานป่า','a ranger in a green leather tunic, brown belt with pouches, a short green cape on the back, brown gloves and tall brown boots'],
+      ['นินจา','a ninja in a black and dark-purple suit with wrapped arms and legs, a red sash, black gloves and black tabi boots'],
+      ['นักบวช','a holy cleric in white and gold robes with a light-blue sash, white gloves and white boots'],
+      ['ซามูไร','a samurai in red lacquered armour plates over a dark-blue outfit, black gloves and wrapped feet in straw sandals'],
+      ['ขุนนาง','a royal noble in a purple coat with gold buttons and gold shoulder epaulettes, white trousers, white gloves and black boots'],
+      ['เกราะกระดูก','a necromancer in black armour decorated with bone plates and a skull belt buckle, grey gloves and black boots'],
+      ['อัศวินทมิฬ','a dark knight in black obsidian plate armour with glowing red trim, spiked shoulder plates, black gauntlets and black boots']]},
+  head:{th:'หัว',where:'Draw ONLY the head (face, ears and skull) filling the head area x 33–64%, y 14–44%. The chin sits just above the neck point x 47%, y 41–43%. The head is BALD: no hair, no hat, no neck, no body.',
+    list:[['ฮีโร่หนุ่ม','a young hero with light skin, big determined blue eyes and a small smile'],
+      ['ผิวแทนยิ้มมุมปาก','tan skin, a confident smirk, brown eyes and thick eyebrows'],
+      ['ผิวเข้มสงบนิ่ง','dark brown skin, a calm focused expression and amber eyes'],
+      ['เอลฟ์','a pale elf with long pointed ears, green eyes and a gentle face'],
+      ['ออร์ค','a green-skinned orc with small tusks and fierce red eyes'],
+      ['ทหารผ่านศึก','a battle-scarred veteran with light skin, a scar across one eye and a stubble beard'],
+      ['หน้าร่าเริง','a cheerful young face with peach skin, rosy cheeks and huge sparkling eyes'],
+      ['อันเดด','an undead face with pale blue-grey skin, glowing cyan eyes and dark eye sockets'],
+      ['มนุษย์กิ้งก่า','a lizard-folk head with green scales, yellow slit eyes and a short snout'],
+      ['ผ้าปิดหน้า','warm brown skin, the lower half of the face covered by a dark cloth mask, sharp eyes']]},
+  hair:{th:'ผม',where:'Draw ONLY the hair for a head that fills x 33–64%, y 14–44%. The hair hugs the top and back of that head and may go slightly outside the area (long hair can fall down the back to about y 65%). The face area must stay completely empty/transparent. No head, no face, no hat.',
+    list:[['สั้นชี้ดำ','short spiky black hair'],['ยาวบลอนด์','long flowing blond hair falling down the back'],['หางม้าแดง','a red high ponytail'],['บ๊อบเงิน','a silver bob cut'],['โมฮอว์กฟ้า','a blue mohawk'],
+      ['ยุ่งน้ำตาล','messy brown hair'],['เปียขาว','long white hair in a single braid down the back'],['แกละชมพู','pink twin tails'],['ปัดข้างเขียว','green hair with a long side-swept fringe'],['ยาวตรงม่วง','long straight purple hair with blunt bangs']]},
+  hat:{th:'หมวก',where:'Draw ONLY the headwear, sitting on a head that fills x 33–64%, y 14–44%. Its bottom edge (rim/brim) sits around y 20–26%; it may rise as high as y 2% and be as wide as x 28–70%. Everything below the rim stays transparent. No head, no hair, no face.',
+    list:[['หมวกเหล็กอัศวิน','an open-face steel knight helmet covering the top and back of the head'],['หมวกพ่อมด','a tall pointed dark-blue wizard hat with a gold star band'],['มงกุฎทอง','a golden crown with red and blue gems'],['หมวกเขาไวกิ้ง','a horned iron viking helmet'],['ผ้าคาดหัวแดง','a red cloth headband with ribbon ends flowing back'],
+      ['ฮู้ดเขียว','a green hood covering the top and back of the head (no cape)'],['หมวกขนนก','a wide brown cavalier hat with a big white feather'],['คาบุโตะ','a samurai kabuto helmet with a gold crest'],['หมวกแม่มด','a purple witch hat with a bent tip'],['มงกุฎเงิน','a silver tiara with a blue gem']]},
+  weapon:{th:'อาวุธ',where:'Draw ONLY the weapon. Its grip (where a fist holds it) is centred exactly at x 62%, y 58%. The weapon points up and forward (up-right, about 45°) from the grip. No hand, no arm, no character.',
+    list:[['ดาบ','a longsword with a silver blade and a gold crossguard'],['ดาบใหญ่','a huge two-handed greatsword'],['ขวาน','a double-bladed battle axe with a wooden handle'],['หอก','a long spear with a steel tip and a red tassel'],['ค้อน','a heavy iron war hammer'],
+      ['มีดสั้น','a short curved dagger'],['คทา','a wooden mage staff topped with a glowing blue orb'],['ธนู','a wooden longbow held VERTICALLY (not tilted) with its grip at x 62%, y 58%'],['คาตานะ','a katana with a black-wrapped handle'],['เคียว','a dark reaper scythe with a long curved blade']]}};
+const GKEYS=['body','head','hair','hat','weapon'];
+function promptText(k,i){const g=GP[k],[,desc]=g.list[i],no=String(i+1).padStart(2,'0'),dirn=LAYDEF.find(d=>d.key===k).dir;
+  return `16-bit pixel art sprite part for a modular fantasy RPG character (cute chibi style, like a SNES / GBA game).
+
+PART TO DRAW: ${k.toUpperCase()} — ${desc}.
+Draw ONLY this part. Nothing else: no other body parts, no background, no ground, no shadow, no text, no frame.
+
+CANVAS: exactly 1024 × 1024 px square, fully transparent background (a real transparent PNG — not white, not a grey checkerboard pattern).
+STYLE: crisp 16-bit pixel art with chunky square pixels — the whole character is a 64 × 64 sprite scaled up 16×, so every pixel is a 16 × 16 block. 1-pixel dark outline, limited palette with 2–3 shades per colour, no anti-aliasing, no blur, no gradients. The character faces RIGHT in a 3/4 side view.
+
+POSITION (percent of the canvas, measured from the top-left corner) — follow exactly so every part stacks on the others:
+- Neck point: x 47%, y 41%
+- Head area: x 33–64%, y 14–44%
+- Front hand / weapon grip: x 62%, y 58%
+- Soles of the feet: y 97%
+${g.where}
+If a template image is attached, use it only as a position guide and do not draw it.
+
+OUTPUT: one transparent PNG named ${k}_${no}.png (folder ${dirn}).`}
+
+/* ============ template picture to attach in GPT ============ */
+function drawTemplate(c){const S=c.width,x=c.getContext('2d'),P=v=>v*S;x.clearRect(0,0,S,S);x.fillStyle='#ffffff';x.fillRect(0,0,S,S);
+  x.strokeStyle='#e6e6ee';x.lineWidth=1;for(let i=0;i<=S;i+=S/16){x.beginPath();x.moveTo(i+.5,0);x.lineTo(i+.5,S);x.moveTo(0,i+.5);x.lineTo(S,i+.5);x.stroke()}
+  const[hx0,hy0,hx1,hy1]=GUIDE.head,[nx,ny]=GUIDE.neck,[gx,gy]=GUIDE.hand,fy=GUIDE.feet;
+  x.fillStyle='#c9c9d4';x.lineCap='round';x.lineJoin='round';
+  // mannequin: back arm, legs, torso, front arm, head
+  x.strokeStyle='#b4b4c2';x.lineWidth=P(.045);x.beginPath();x.moveTo(P(.42),P(.46));x.lineTo(P(.385),P(.62));x.stroke();
+  x.strokeStyle='#c9c9d4';x.lineWidth=P(.05);x.beginPath();x.moveTo(P(.445),P(.7));x.lineTo(P(.435),P(fy-.03));x.moveTo(P(.505),P(.7));x.lineTo(P(.52),P(fy-.03));x.stroke();
+  x.fillRect(P(.40),P(fy-.03),P(.07),P(.03));x.fillRect(P(.49),P(fy-.03),P(.07),P(.03));
+  x.beginPath();x.moveTo(P(.40),P(.44));x.lineTo(P(.545),P(.44));x.lineTo(P(.53),P(.71));x.lineTo(P(.415),P(.71));x.closePath();x.fill();
+  x.strokeStyle='#bdbdca';x.lineWidth=P(.045);x.beginPath();x.moveTo(P(.53),P(.46));x.lineTo(P(gx),P(gy));x.stroke();
+  x.beginPath();x.ellipse(P((hx0+hx1)/2),P((hy0+hy1)/2),P((hx1-hx0)/2*.92),P((hy1-hy0)/2*.92),0,0,6.283);x.fill();
+  // head area
+  x.fillStyle='rgba(60,140,255,.12)';x.fillRect(P(hx0),P(hy0),P(hx1-hx0),P(hy1-hy0));x.setLineDash([P(.012),P(.008)]);x.strokeStyle='#2f7ae0';x.lineWidth=4;x.strokeRect(P(hx0),P(hy0),P(hx1-hx0),P(hy1-hy0));
+  // weapon direction
+  x.strokeStyle='#22a35a';x.beginPath();x.moveTo(P(gx),P(gy));x.lineTo(P(gx+.2),P(gy-.2));x.stroke();x.setLineDash([]);
+  // feet line, neck, hand
+  x.strokeStyle='#e08a1a';x.lineWidth=5;x.beginPath();x.moveTo(P(.2),P(fy));x.lineTo(P(.8),P(fy));x.stroke();
+  x.fillStyle='#e0303a';x.beginPath();x.arc(P(nx),P(ny),P(.014),0,6.283);x.fill();
+  x.strokeStyle='#22a35a';x.lineWidth=6;x.beginPath();x.arc(P(gx),P(gy),P(.028),0,6.283);x.stroke();x.fillStyle='#22a35a';x.beginPath();x.arc(P(gx),P(gy),P(.008),0,6.283);x.fill();
+  // labels
+  x.font=`700 ${Math.round(P(.026))}px sans-serif`;x.textBaseline='middle';
+  const lab=(t,a,b,c)=>{x.fillStyle=c;x.fillText(t,P(a),P(b))};
+  lab('HEAD  x 33–64%  y 14–44%',hx0,hy0-.025,'#2f7ae0');lab('NECK 47%, 41%',.15,ny,'#e0303a');x.strokeStyle='#e0303a';x.lineWidth=2;x.beginPath();x.moveTo(P(.33),P(ny));x.lineTo(P(nx-.016),P(ny));x.stroke();
+  lab('HAND / GRIP 62%, 58%',gx+.04,gy+.02,'#22a35a');lab('FEET y 97%',.62,fy-.025,'#e08a1a');lab('FACES RIGHT  →',.66,.08,'#555566');
+  x.font=`700 ${Math.round(P(.02))}px sans-serif`;lab('PIXELDECK PART TEMPLATE 1024×1024',.03,.03,'#9a9aaa')}
+
+/* ============ the animation engine (transforms imported pictures) ============ */
+const ANIMS=[['idle','ยืน'],['walk','เดิน'],['run','วิ่ง'],['attack','โจมตี'],['skill','สกิล'],['cast','ร่ายเวท'],['hit','โดนตี'],['death','ตาย'],['victory','ชนะ']];
+function ring(pl,cx,cy,rx,ry,c,a){const n=Math.max(12,Math.ceil((rx+ry)*3));for(let i=0;i<n;i++){const g=i/n*6.2832;pl(cx+Math.cos(g)*rx,cy+Math.sin(g)*ry,c,a)}}
+function circ(pl,cx,cy,r,c,a){const R=Math.ceil(r);for(let y=-R;y<=R;y++)for(let x=-R;x<=R;x++)if(x*x+y*y<=r*r)pl(cx+x,cy+y,c,a)}
+function star(pl,x,y,r,c,a){for(let i=-r;i<=r;i++){const f=a*(1-Math.abs(i)/(r+1));pl(x+i,y,c,f);if(i)pl(x,y+i,c,f)}}
+function plus(pl,x,y,c,a){pl(x,y,c,a);pl(x-1,y,c,a);pl(x+1,y,c,a);pl(x,y-1,c,a);pl(x,y+1,c,a)}
+const FX={
+  slash(pl,A,p,c,big){const o=A.shF,R=big?[13,14,15,16]:[10,11,12],e=ease(p),hd=lerp(205,35,e),tl=lerp(205,35,Math.max(0,e-.5)),fade=p>.75?1-(p-.75)/.25:1,mid=Math.floor(R.length/2);
+    for(let a=tl;a>=hd;a-=2.5){const f=(tl-a)/Math.max(1,tl-hd),d=dir(a);R.forEach((r,i)=>pl(o.x+d.x*r,o.y+d.y*r,i===mid?shade(c,.6):c,(.15+.85*f)*fade))}},
+  thrust(pl,A,p,c){const L=Math.round(5+p*14),fade=1-p*.7,x0=A.tip.x+1,y0=A.tip.y;for(let i=0;i<L;i++){const a=(1-i/L)*fade;pl(x0+i,y0,shade(c,.6),a);pl(x0+i,y0-1,c,a*.6);pl(x0+i,y0+1,c,a*.6)}if(p>.3&&p<.8)star(pl,x0+L,y0,2,c,1-p)},
+  arrow(pl,A,p,c){const x=A.handF.x+3+p*46,y=A.handF.y-1;for(let i=0;i<7;i++)pl(x-i,y,'#c9a26b');pl(x+1,y,'#e8eef6');pl(x+2,y,'#ffffff');pl(x+1,y-1,'#aab4c4');pl(x+1,y+1,'#aab4c4');pl(x-6,y-1,c);pl(x-6,y+1,c);pl(x-7,y-1,c);pl(x-7,y+1,c);for(let i=1;i<12;i++)pl(x-7-i,y,c,(1-i/12)*.7)},
+  orb(pl,A,p,c){const x=A.tip.x+1+p*38,y=A.tip.y+p*8;circ(pl,x,y,2.2,c,1);pl(x,y,'#ffffff');for(let i=1;i<8;i++)pl(x-i*1.6,y-(i%2),c,(1-i/8)*.6);if(p>.82){const r=(p-.82)/.18*7;ring(pl,x,y,r,r,c,1-(p-.82)/.18)}},
+  circle(pl,A,p,c){const a=Math.min(1,p*5)*(p>.85?1-(p-.85)/.15:1);if(a<=0)return;const cx=A.hip.x,cy=GY;ring(pl,cx,cy,13,3.2,c,a*.85);ring(pl,cx,cy,8,2,c,a*.5);for(let k=0;k<4;k++){const g=(p*360+k*90)*D2R;pl(cx+Math.cos(g)*13,cy+Math.sin(g)*3.2,'#ffffff',a)}for(let k=0;k<6;k++){const ph=(p*2+k/6)%1;pl(cx-10+k*4,cy-ph*16,c,a*(1-ph))}},
+  smash(pl,A,p,c){const cx=Math.round(A.tip.x),cy=GY,r=2+p*16;ring(pl,cx,cy,r,r*.28,c,1-p);ring(pl,cx,cy,r*.6,r*.17,shade(c,.5),(1-p)*.7);for(let k=0;k<8;k++){const x=cx+(k-3.5)*1.4*p*8,y=cy-(14*p-14*p*p)*(1+(k%3)*.4);pl(x,y,k%2?'#8a7a6a':'#c9b79a',1-p*.6)}if(p<.3)star(pl,cx,cy-2,4,'#ffffff',1-p/.3)},
+  hit(pl,A,p,c){const cx=A.hip.x+3,cy=A.hip.y-7;for(let k=0;k<8;k++){const g=k*45*D2R;for(let r=2;r<2+p*8;r++)pl(cx+Math.cos(g)*r,cy+Math.sin(g)*r,c,(1-p))}if(p<.35)star(pl,cx,cy,3,'#ffffff',1)},
+  heal(pl,A,p,c){for(let k=0;k<5;k++){const ph=(p+k*.21)%1;plus(pl,A.hip.x-8+k*4,A.hip.y+6-ph*26,c,Math.sin(ph*Math.PI))}},
+  buff(pl,A,p,c){for(let k=0;k<7;k++){const ph=(p*1.5+k/7)%1,x=A.hip.x-10+k*3.3,y=GY-ph*30,a=Math.sin(ph*Math.PI);pl(x,y,c,a);pl(x,y+1,c,a*.6);pl(x,y+2,c,a*.3)}ring(pl,A.hip.x,GY,12,3,c,.5+.3*Math.sin(p*12.57))},
+  shield(pl,A,p,c){const cx=A.hip.x+1,cy=A.hip.y-5,a=.35+.35*Math.sin(p*6.283);ring(pl,cx,cy,13,17,c,a+.3);for(let y=-16;y<=16;y+=2)for(let x=-12;x<=12;x+=2)if(x*x/144+y*y/256<1&&((x+y)/2)%2===0)pl(cx+x,cy+y,c,a*.3)},
+};
+const FXN={auto:'อัตโนมัติ (ตามท่า)',none:'ไม่มีเอฟเฟกต์',slash:'ฟันโค้ง',smash:'ทุบกระแทกพื้น',thrust:'แทงพุ่ง',arrow:'ลูกธนู',orb:'ลูกพลังเวท',circle:'วงเวทใต้เท้า',hit:'ประกายโดนตี',heal:'ฮีล',buff:'บัฟพลัง',shield:'โล่พลัง'};
+const FXC={slash:'#d8f3ff',smash:'#ffd27a',thrust:'#d8f3ff',arrow:'#ffe08a',hit:'#fff2a8',heal:'#7dff9a',buff:'#ffd84a',shield:'#8fe9ff'};
+function fxList(base,o,t){if(o.fx==='none')return[];if(o.fx==='auto')return base;
+  const out=base.filter(e=>e.k==='circle');const main=base.filter(e=>e.k!=='circle');
+  if(!main.length)out.push({k:o.fx,p:t});else main.forEach(e=>out.push({k:o.fx,p:e.p,big:e.big}));return out}
+function drawFx(pl,A,list,o){for(const e of list){if(!(e.p>0&&e.p<1))continue;const c=o.fxColor||FXC[e.k]||'#8fe9ff';FX[e.k](pl,A,e.p,c,e.big)}}
+
+let IMP=null;   // what the stage shows: the parts pack, or another import
+const ALIAS={idle:['idle','stand','ยืน'],walk:['walk','เดิน'],run:['run','วิ่ง'],attack:['attack','atk','slash','shoot','ตี','โจมตี','ยิง'],skill:['skill','special','สกิล'],cast:['cast','magic','ร่าย','ร่ายเวท'],hit:['hit','hurt','damage','โดนตี'],death:['death','die','dead','ตาย'],victory:['victory','win','ชนะ']};
+const PARTRANK=['back','cape','legs','body','armor','head','face','eyes','hair','hat','helmet','weapon','front'];
+function animKey(name){const n=name.toLowerCase().replace(/^\d+[_\-\s.]*/,'');for(const k in ALIAS)if(ALIAS[k].some(a=>n===a||n.startsWith(a)))return k;return null}
+function xf(anim,t){const s=Math.sin(2*Math.PI*t),T={x:0,y:0,rot:0,sx:1,sy:1,flash:0,wr:0,fx:[]};
+  switch(anim){
+    case'idle':T.y=-(s>0?1:0);T.sy=1+.015*s;T.sx=1-.01*s;break;
+    case'walk':T.y=-Math.round(Math.abs(s)*1.5);T.rot=3*s;break;
+    case'run':T.y=-Math.round(Math.abs(s)*3);T.rot=6+3*s;T.x=1;break;
+    case'attack':case'skill':{const big=anim==='skill';
+      if(t<.3){const e=ease(t/.3);T.rot=-6*e;T.x=-2*e;T.wr=80*e}
+      else if(t<.5){const e=ease((t-.3)/.2);T.rot=lerp(-6,10,e);T.x=lerp(-2,big?9:5,e);T.wr=lerp(80,-110,e)}
+      else{const e=ease((t-.5)/.5);T.rot=lerp(10,0,e);T.x=lerp(big?9:5,0,e);T.wr=lerp(-110,0,e)}
+      T.fx=big?[{k:'circle',p:seg(t,0,.5)},{k:'slash',p:seg(t,.28,.75),big:1}]:[{k:'slash',p:seg(t,.28,.72)}];break}
+    case'cast':{const e=Math.sin(Math.PI*seg(t,0,.6));T.y=-Math.round(2*e);T.sy=1+.03*e;T.wr=30*e;T.fx=[{k:'circle',p:t},{k:'orb',p:seg(t,.45,1)}];break}
+    case'hit':{const e=1-seg(t,0,.7);T.x=-3*e;T.rot=-8*e;T.flash=t<.2?1:0;T.fx=[{k:'hit',p:seg(t,0,.5)}];break}
+    case'death':{const e=ease(seg(t,0,.7));T.rot=-88*e;T.flash=t<.12?1:0;break}
+    case'victory':{const j=Math.sin(Math.PI*seg(t,0,.6));T.y=-Math.round(j*6);T.sy=1+.05*j;T.fx=[{k:'buff',p:t}];break}
+  }
+  return T}
+function impAnims(){if(!IMP)return ANIMS;const L=[];if(IMP.type==='frames')L.push(['src','ตามไฟล์']);
+  if(IMP.type==='anims')ANIMS.forEach(([k,n])=>L.push([k,IMP.anims[k]?n:n+' (ทำให้)']));else ANIMS.forEach(a=>L.push(a));return L}
+function impBase(){if(IMP.type==='frames')return IMP.frames[0];if(IMP.type==='anims')return(IMP.anims.idle||Object.values(IMP.anims)[0])[0];return IMP.img}
+/* where a pack item is drawn: scaled about the canvas centre, then shifted */
+function place(it,fw,fh){const sc=it.sc||1,w=fw*sc,h=fh*sc;return{x:(fw-w)/2+(it.dx||0),y:(fh-h)/2+(it.dy||0),w,h,sc}}
+function drawPack(x,P,fw,fh,wr,sel){P.layers.forEach((L,li)=>{const it=L.items[sel?sel[li]:L.sel];if(!it||!it.cv)return;const r=place(it,fw,fh);
+  if(L.weapon&&wr){const[px,py]=P.pivot;x.save();x.translate(px,py);x.rotate(-wr*D2R);x.translate(-px,-py);x.drawImage(it.cv,r.x,r.y,r.w,r.h);x.restore()}else x.drawImage(it.cv,r.x,r.y,r.w,r.h)})}
+const IC=document.createElement('canvas');
+function renderImp(anim,f,n,o,cv=IC,sel){const fw=IMP.fw,fh=IMP.fh;if(cv.width!==fw||cv.height!==fh){cv.width=fw;cv.height=fh}const x=cv.getContext('2d');x.clearRect(0,0,fw,fh);x.imageSmoothingEnabled=false;
+  const k=Math.max(1,fh/56);let T,src=null;
+  if(IMP.type==='frames'&&anim==='src'){src=IMP.frames[f%IMP.frames.length];T={x:0,y:0,rot:0,sx:1,sy:1,flash:0,wr:0,fx:[]}}
+  else if(IMP.type==='anims'&&IMP.anims[anim]){const L=IMP.anims[anim];src=L[f%L.length];T={x:0,y:0,rot:0,sx:1,sy:1,flash:0,wr:0,fx:xf(anim,f/n).fx}}
+  else T=xf(anim,f/n);
+  x.save();x.translate(fw/2+T.x*k,fh+T.y*k);x.rotate(T.rot*D2R);x.scale(T.sx,T.sy);x.translate(-fw/2,-fh);
+  if(src)x.drawImage(src,0,0);else if(IMP.type==='pack')drawPack(x,IMP,fw,fh,T.wr,sel);else x.drawImage(impBase(),0,0);
+  x.restore();
+  if(T.flash){x.globalCompositeOperation='source-atop';x.fillStyle='rgba(255,255,255,.75)';x.fillRect(0,0,fw,fh);x.globalCompositeOperation='source-over'}
+  const ox=fw*.45+T.x*k,oy=fh*.96,kk=Math.ceil(k);
+  const pl=(px,py,c,a=1)=>{x.globalAlpha=clamp(a,0,1);x.fillStyle=c;x.fillRect(Math.round((px-HX)*k+ox),Math.round((py-GY)*k+oy),kk,kk)};
+  const A={shF:{x:HX+2,y:GY-20},hip:{x:HX,y:GY-11},handF:{x:HX+8,y:GY-16},tip:{x:HX+14,y:GY-20}};
+  drawFx(pl,A,fxList(T.fx,o,f/n),o);x.globalAlpha=1;return cv}
+
+/* ---- reading picture files ---- */
+async function loadCanvas(blob){const bmp=await createImageBitmap(blob);const cv=document.createElement('canvas');cv.width=bmp.width;cv.height=bmp.height;cv.getContext('2d').drawImage(bmp,0,0);bmp.close&&bmp.close();return cv}
+/* remove a solid or checkerboard background that touches the picture's edge (flood fill from the border, so colours inside the drawing stay) */
+function keyOut(cv,tol){const w=cv.width,h=cv.height,x=cv.getContext('2d'),im=x.getImageData(0,0,w,h),d=im.data;
+  const hist=new Map();let opaque=0,border=0;const bump=i=>{border++;if(d[i+3]<10)return;opaque++;const k=(d[i]>>3)<<10|(d[i+1]>>3)<<5|(d[i+2]>>3);hist.set(k,(hist.get(k)||0)+1)};
+  for(let i=0;i<w;i++){bump(i*4);bump(((h-1)*w+i)*4)}for(let j=1;j<h-1;j++){bump(j*w*4);bump((j*w+w-1)*4)}
+  if(opaque<border*.5)return cv;   // already transparent
+  const top=[...hist.entries()].sort((a,b)=>b[1]-a[1]).slice(0,2),keys=top.filter(([,n],i)=>i===0||n>opaque*.2).map(([k])=>[(k>>10&31)*8+4,(k>>5&31)*8+4,(k&31)*8+4]);
+  const t=tol+6,near=i=>{if(d[i+3]<10)return true;for(const c of keys)if(Math.abs(d[i]-c[0])<=t&&Math.abs(d[i+1]-c[1])<=t&&Math.abs(d[i+2]-c[2])<=t)return true;return false};
+  const seen=new Uint8Array(w*h),q=new Int32Array(w*h);let qh=0,qt=0;const push=p=>{if(seen[p])return;seen[p]=1;if(near(p*4))q[qt++]=p};
+  for(let i=0;i<w;i++){push(i);push((h-1)*w+i)}for(let j=0;j<h;j++){push(j*w);push(j*w+w-1)}
+  while(qh<qt){const p=q[qh++];d[p*4+3]=0;const px=p%w;if(px>0)push(p-1);if(px<w-1)push(p+1);if(p>=w)push(p-w);if(p<w*(h-1))push(p+w)}
+  x.putImageData(im,0,0);return cv}
+function alphaBox(cv){const d=cv.getContext('2d').getImageData(0,0,cv.width,cv.height).data,w=cv.width,h=cv.height;let x0=w,y0=h,x1=-1,y1=-1;for(let y=0;y<h;y++)for(let x=0;x<w;x++)if(d[(y*w+x)*4+3]>8){if(x<x0)x0=x;if(x>x1)x1=x;if(y<y0)y0=y;if(y>y1)y1=y}return x1<0?null:{x0,y0,w:x1-x0+1,h:y1-y0+1}}
+/* mean x of the opaque pixels in the top rows of a box — where the neck is on a body picture */
+function topMidX(cv,b,frac){const rows=Math.max(1,Math.round(b.h*frac)),d=cv.getContext('2d').getImageData(b.x0,b.y0,b.w,rows).data;let s=0,n=0;for(let y=0;y<rows;y++)for(let x=0;x<b.w;x++)if(d[(y*b.w+x)*4+3]>8){s+=x;n++}return b.x0+(n?s/n:b.w/2)}
+function alignFrames(list){const bx=list.map(alphaBox);const mw=Math.max(1,...bx.map(b=>b?b.w:1)),mh=Math.max(1,...bx.map(b=>b?b.h:1)),pw=mw+4,ph=mh+2;
+  return list.map((cv,i)=>{const b=bx[i],o=document.createElement('canvas');o.width=pw;o.height=ph;if(b)o.getContext('2d').drawImage(cv,b.x0,b.y0,b.w,b.h,Math.round((pw-b.w)/2),ph-1-b.h,b.w,b.h);return o})}
+function prep(list,allowAlign=true){const o=opt();if(o.key)list.forEach(c=>keyOut(c,o.tol));list=list.filter(c=>alphaBox(c));if(!list.length)return list;if(o.align&&allowAlign)list=alignFrames(list);return list}
+function opt(){return{key:$('optKey').checked,tol:+$('optTol').value,align:$('optAlign').checked}}
+function sizeOf(list){return{fw:Math.max(...list.map(c=>c.width)),fh:Math.max(...list.map(c=>c.height))}}
+function impStat(s,err){const e=$('impStat');e.textContent=s;e.classList.toggle('err',!!err)}
+async function useImport(o){IMP=o;st.anim=impAnims()[0][0];st.f=0;$('pkUse').hidden=o.type==='pack'||!PK.count();buildLayers();buildExScale();refreshAll()}
+
+/* ============ the parts pack (kept on the phone between sessions) ============ */
+const idb={p:null,open(){return this.p||(this.p=new Promise((res,rej)=>{const r=indexedDB.open('pdforge',1);r.onupgradeneeded=()=>r.result.createObjectStore('img');r.onsuccess=()=>res(r.result);r.onerror=()=>rej(r.error)}))},
+  async tx(mode,fn){const db=await this.open();return new Promise((res,rej)=>{const t=db.transaction('img',mode),s=t.objectStore('img'),r=fn(s);t.oncomplete=()=>res(r&&r.result);t.onerror=()=>rej(t.error)})},
+  put(k,v){return this.tx('readwrite',s=>s.put(v,k))},get(k){return this.tx('readonly',s=>s.get(k))},del(k){return this.tx('readwrite',s=>s.delete(k))},clear(){return this.tx('readwrite',s=>s.clear())}};
+const uid=()=>'p'+Date.now().toString(36)+Math.random().toString(36).slice(2,8);
+const blobOf=c=>new Promise(r=>c.toBlob(r,'image/png'));
+const PK={type:'pack',layers:[],pivot:null,fw:0,fh:0,name:'pixeldeck_parts',pivotSet:false,
+  count(){return this.layers.reduce((a,L)=>a+L.items.filter(i=>i.cv).length,0)},
+  combos(){return this.count()?this.layers.reduce((a,L)=>a*Math.max(1,L.items.length),1):0},
+  reset(){this.layers=LAYDEF.map(d=>({dir:d.dir,name:d.key,weapon:!!d.weapon,sel:0,items:d.none?[{name:'(ไม่ใส่)',cv:null}]:[]}));this.pivot=null;this.pivotSet=false;this.fw=this.fh=0},
+  size(){const all=this.layers.flatMap(L=>L.items.filter(i=>i.cv).map(i=>i.cv));if(!all.length){this.fw=this.fh=0;return}const s=sizeOf(all),m=Math.max(s.fw,s.fh);this.fw=this.fh=m;if(!this.pivotSet)this.pivot=[Math.round(m*GUIDE.hand[0]),Math.round(m*GUIDE.hand[1])]},
+  meta(){return{name:this.name,pivot:this.pivotSet?this.pivot:null,layers:this.layers.map(L=>({dir:L.dir,name:L.name,weapon:L.weapon,sel:L.sel,items:L.items.map(i=>i.cv?{id:i.id,name:i.name,dx:i.dx||0,dy:i.dy||0,sc:i.sc||1}:{none:1,name:i.name})}))}}};
+let saveT;function savePack(){clearTimeout(saveT);saveT=setTimeout(()=>store.set('pack',PK.meta()),250)}
+async function restorePack(){const m=store.get('pack',null);PK.reset();if(!m||!m.layers)return;
+  try{PK.name=m.name||PK.name;if(m.pivot){PK.pivot=m.pivot;PK.pivotSet=true}
+    PK.layers=[];for(const L of m.layers){const items=[];for(const i of L.items){if(i.none){items.push({name:i.name,cv:null});continue}const b=await idb.get(i.id);if(!b)continue;items.push({id:i.id,name:i.name,dx:i.dx,dy:i.dy,sc:i.sc,cv:await loadCanvas(b)})}
+      PK.layers.push({dir:L.dir,name:L.name,weapon:!!L.weapon,sel:clamp(L.sel||0,0,Math.max(0,items.length-1)),items})}
+    for(const d of LAYDEF)if(!PK.layers.some(L=>L.name===d.key))PK.layers.push({dir:d.dir,name:d.key,weapon:!!d.weapon,sel:0,items:d.none?[{name:'(ไม่ใส่)',cv:null}]:[]});
+    PK.size()}catch(e){PK.reset()}}
+async function addItem(L,name,cv,off){const it={id:uid(),name,cv,dx:off?off[0]:0,dy:off?off[1]:0,sc:off&&off[2]?off[2]:1};L.items.push(it);try{await idb.put(it.id,await blobOf(cv))}catch(e){}return it}
+async function addParts(li,files){const L=PK.layers[li],o=opt();let n=0;impStat('กำลังเพิ่มรูป …');
+  for(const f of[...files].sort((a,b)=>nat(a.name,b.name))){const cv=await loadCanvas(f);if(o.key)keyOut(cv,o.tol);if(!alphaBox(cv))continue;await addItem(L,f.name.replace(/\.\w+$/,''),cv);n++;await tick()}
+  if(!n)return impStat('ไม่มีรูปที่ใช้ได้ (รูปว่างหลังลบพื้นหลัง)',1);
+  L.sel=L.items.length-1;PK.size();savePack();impStat(`เพิ่ม ${n} รูปในชั้น${layLabel(L)}แล้ว`);showPack()}
+async function delItem(li){const L=PK.layers[li],it=L.items[L.sel];if(!it||!it.cv)return;L.items.splice(L.sel,1);try{await idb.del(it.id)}catch(e){}L.sel=clamp(L.sel,0,Math.max(0,L.items.length-1));PK.size();savePack();showPack()}
+function showPack(){if(PK.count()){if(!IMP||IMP.type==='pack'){IMP=PK;$('pkUse').hidden=true}}else if(IMP===PK)IMP=null;buildLayers();buildExScale();refreshAll()}
+const layLabel=L=>{const d=layDef(L.name);return d?d.th:L.name};
+/* snap the body (neck + feet) or the head (into the head area) to the standard positions */
+function autoPlace(L,it){if(!it||!it.cv)return false;const d=layDef(L.name);if(!d||!['body','head'].includes(d.key))return false;const b=alphaBox(it.cv);if(!b)return false;
+  const fw=PK.fw,fh=PK.fh,iw=it.cv.width,ih=it.cv.height,kx=fw/iw,ky=fh/ih;   // picture → pack pixels at scale 1
+  let sc;if(d.key==='body')sc=(GUIDE.feet-GUIDE.neck[1])*fh/(b.h*ky);else{const[a0,b0,a1,b1]=GUIDE.head;sc=Math.min((a1-a0)*fw/(b.w*kx),(b1-b0)*fh/(b.h*ky))}
+  sc=clamp(sc,.4,2.5);const w=fw*sc,h=fh*sc,ox=(fw-w)/2,oy=(fh-h)/2,px=v=>v*kx*sc,py=v=>v*ky*sc;
+  if(d.key==='body'){const nx=topMidX(it.cv,b,.08);it.dx=GUIDE.neck[0]*fw-ox-px(nx);it.dy=GUIDE.feet*fh-oy-py(b.y0+b.h)}
+  else{const[a0,b0,a1,b1]=GUIDE.head;it.dx=(a0+a1)/2*fw-ox-px(b.x0+b.w/2);it.dy=(b0+b1)/2*fh-oy-py(b.y0+b.h/2)}
+  it.sc=+sc.toFixed(3);it.dx=Math.round(it.dx);it.dy=Math.round(it.dy);return true}
+function buildLayers(){const box=$('layers');box.innerHTML='';const stepSel=$('pkStep'),prev=stepSel.value,fw=PK.fw||1024,g=Math.max(1,Math.round(fw/64));
+  stepSel.innerHTML=`<option value="1">1 จุด (ละเอียดสุด)</option><option value="${g}">${g} จุด = 1 พิกเซลเกม</option><option value="${g*4}">${g*4} จุด = 4 พิกเซลเกม</option>`;stepSel.value=[...stepSel.options].some(o=>o.value===prev)?prev:String(g);
+  $('pkCount').textContent=PK.count().toLocaleString('en');$('pkCombos').textContent=PK.combos().toLocaleString('en');
+  PK.layers.forEach((L,li)=>{const el=document.createElement('div');el.className='layer';const real=L.items.filter(i=>i.cv).length,d=layDef(L.name);
+    el.innerHTML=`<div class="row between"><b>${li+1}. ${layLabel(L)}${L.weapon?' <span class="hint">(หมุนตอนโจมตี)</span>':''}</b><span class="hint">${real} รูป</span></div>
+      <div class="row"><select class="grow" aria-label="เลือกรูปชั้น${layLabel(L)}"></select><label class="btn sm go">+ เพิ่มรูป<input class="vh" type="file" accept="image/*" multiple></label></div>
+      <div class="row nudge"><button class="btn sm" data-n="l" aria-label="เลื่อนซ้าย">◀</button><button class="btn sm" data-n="r" aria-label="เลื่อนขวา">▶</button><button class="btn sm" data-n="u" aria-label="เลื่อนขึ้น">▲</button><button class="btn sm" data-n="d" aria-label="เลื่อนลง">▼</button><button class="btn sm" data-n="s-" aria-label="ย่อ">−</button><button class="btn sm" data-n="s+" aria-label="ขยาย">+</button>${d&&['body','head'].includes(d.key)?'<button class="btn sm" data-n="auto">จัดอัตโนมัติ</button>':''}<button class="btn sm" data-n="0">รีเซ็ต</button><button class="btn sm warn" data-n="del">ลบรูปนี้</button></div>
+      <span class="hint off"></span>`;
+    const s=el.querySelector('select');if(!L.items.length)s.innerHTML='<option>— ยังไม่มีรูป —</option>';else L.items.forEach((it,i)=>{const o=document.createElement('option');o.value=i;o.textContent=it.name;s.appendChild(o)});s.value=L.sel;s.disabled=!L.items.length;
+    const offTxt=()=>{const it=L.items[L.sel],on=!!(it&&it.cv);el.querySelectorAll('.nudge .btn').forEach(b=>b.disabled=!on||!IMP||IMP!==PK);el.querySelector('.off').textContent=on?`ตำแหน่ง x ${it.dx>=0?'+':''}${it.dx} · y ${it.dy>=0?'+':''}${it.dy} · ขนาด ${Math.round(it.sc*100)}%`:''};
+    s.onchange=()=>{L.sel=+s.value;offTxt();savePack();if(IMP===PK)refreshFrame(true)};
+    el.querySelector('input[type=file]').onchange=guard(async fl=>addParts(li,fl));
+    el.querySelectorAll('.nudge .btn').forEach(b=>b.onclick=()=>{const it=L.items[L.sel];if(!it||!it.cv)return;const st2=+$('pkStep').value,n=b.dataset.n;
+      if(n==='del'){if(b.dataset.arm){delItem(li);return}b.dataset.arm=1;b.textContent='แตะอีกครั้งเพื่อลบ';setTimeout(()=>{delete b.dataset.arm;b.textContent='ลบรูปนี้'},2500);return}
+      if(n==='l')it.dx-=st2;else if(n==='r')it.dx+=st2;else if(n==='u')it.dy-=st2;else if(n==='d')it.dy+=st2;else if(n==='s-')it.sc=Math.max(.2,+(it.sc-.02).toFixed(3));else if(n==='s+')it.sc=Math.min(4,+(it.sc+.02).toFixed(3));
+      else if(n==='0'){it.dx=it.dy=0;it.sc=1}else if(n==='auto'&&!autoPlace(L,it))return toast('จัดอัตโนมัติไม่ได้กับรูปนี้');
+      offTxt();savePack();refreshFrame(true)});
+    offTxt();box.appendChild(el)})}
+
+async function importZip(file){
+  if(!window.JSZip){impStat('อ่าน ZIP ไม่ได้ เพราะตัวอ่าน ZIP โหลดไม่สำเร็จ',1);return}
+  impStat('กำลังอ่าน '+file.name+' …');
+  const z=await JSZip.loadAsync(file);const ents=[];let metaF=null;
+  z.forEach((p,e)=>{if(e.dir||/__MACOSX|(^|\/)\./.test(p))return;if(/\.(png|webp|gif|jpe?g)$/i.test(p))ents.push(p);else if(/(^|\/)(pack|meta)\.json$/i.test(p))metaF=e});
+  if(!ents.length){impStat('ไม่พบรูปภาพใน ZIP นี้',1);return}
+  let meta={};if(metaF)try{meta=JSON.parse(await metaF.async('string'))}catch(e){}
+  const parts=ents.map(p=>p.split('/'));let root=0;while(parts.every(a=>a.length>root+1&&a[root]===parts[0][root]))root++;
+  const groups={};parts.forEach((a,i)=>{const g=a.length>root+1?a[root]:'';(groups[g]=groups[g]||[]).push(ents[i])});
+  const dirs=Object.keys(groups).filter(g=>g);
+  const read=async list=>{const out=[];for(const p of list.sort(nat))out.push(await loadCanvas(await z.file(p).async('blob')));return out};
+  if(!dirs.length){const fr=prep(await read(groups['']));if(!fr.length)return impStat('รูปใน ZIP ว่างทั้งหมด',1);await useImport({type:'frames',frames:fr,...sizeOf(fr),name:file.name});return impStat(`นำเข้าแล้ว ${fr.length} เฟรม · ${IMP.fw}×${IMP.fh} พิกเซล`)}
+  const animDirs=dirs.filter(d=>animKey(d));
+  if(animDirs.length&&animDirs.length>=dirs.length/2){const anims={};let all=[];
+    for(const d of animDirs){const k=animKey(d);if(anims[k])continue;anims[k]=await read(groups[d]);all=all.concat(anims[k])}
+    const o=opt();if(o.key)all.forEach(c=>keyOut(c,o.tol));
+    if(o.align){const al=alignFrames(all);let i=0;for(const k in anims)anims[k]=anims[k].map(()=>al[i++])}
+    const s=sizeOf(all);await useImport({type:'anims',anims,...s,name:file.name});
+    return impStat(`นำเข้าแล้ว ${Object.keys(anims).length} ท่า · ${s.fw}×${s.fh} พิกเซล`)}
+  // a parts pack: replaces the current pack
+  const rank=d=>{const m=d.match(/^(\d+)/);if(m)return+m[1];const n=d.toLowerCase();const i=PARTRANK.findIndex(k=>n.includes(k));return i<0?50:i+10};
+  try{await idb.clear()}catch(e){}PK.layers=[];PK.name=file.name.replace(/\.zip$/i,'');PK.pivotSet=Array.isArray(meta.pivot);PK.pivot=PK.pivotSet?meta.pivot:null;
+  const offs=meta.offsets||{},o=opt();let n=0;
+  for(const d of dirs.sort((a,b)=>rank(a)-rank(b)||nat(a,b))){const name=d.replace(/^\d+[_\-\s.]*/,'').toLowerCase()||d,def=layDef(name),L={dir:d,name,weapon:/weapon|อาวุธ/i.test(d),sel:0,items:[]};
+    if(def&&def.none||/^(back|cape|front)/i.test(name))L.items.push({name:'(ไม่ใส่)',cv:null});PK.layers.push(L);
+    for(const p of groups[d].sort(nat)){const cv=await loadCanvas(await z.file(p).async('blob'));if(o.key)keyOut(cv,o.tol);const nm=p.split('/').pop().replace(/\.\w+$/,'');await addItem(L,nm,cv,offs[d+'/'+nm]);n++;if(n%5===0){impStat(`กำลังนำเข้า ${n}/${ents.length} …`);await tick()}}}
+  PK.size();savePack();IMP=PK;showPack();
+  impStat(`นำเข้าแพ็กชิ้นส่วนแล้ว ${PK.layers.length} ชั้น ${n} รูป · ประกอบได้ ${PK.combos().toLocaleString('en')} แบบ`)}
+
+/* ============ app state ============ */
+const st={anim:'idle',n:8,fps:10,f:0,playing:true,fx:'auto',fxAuto:true,fxColor:'#58d9ff',flip:false,bg:'checker',tab:'gpt',guide:true,gk:'body'};
+(()=>{const s=store.get('st',null);if(s)['n','fps','fx','bg','tab','guide','gk'].forEach(k=>{if(s[k]!=null)st[k]=s[k]})})();
+const save=()=>store.set('st',{n:st.n,fps:st.fps,fx:st.fx,bg:st.bg,tab:st.tab,guide:st.guide,gk:st.gk});
+const opts=()=>({fx:st.fx,fxColor:st.fxAuto?null:st.fxColor});
+function curSize(){return IMP?{fw:IMP.fw,fh:IMP.fh}:{fw:W,fh:H}}
+function frameCount(){if(!IMP)return st.n;if(IMP.type==='frames'&&st.anim==='src')return IMP.frames.length;if(IMP.type==='anims'&&IMP.anims[st.anim])return IMP.anims[st.anim].length;return st.n}
+const BLANK=document.createElement('canvas');BLANK.width=W;BLANK.height=H;
+function frameAt(f,n,anim=st.anim){return IMP?renderImp(anim,f,n,opts()):BLANK}
+
+/* ---- stage ---- */
+const cv=$('cv'),cx=cv.getContext('2d');
+function sizeStage(){const r=$('stage').getBoundingClientRect(),cw=Math.max(200,Math.floor(r.width-4)),{fw,fh}=curSize();const ch=Math.round(Math.min(cw*fh/fw,420,Math.max(220,cw*.86)));const dpr=Math.min(2,window.devicePixelRatio||1);cv.width=Math.round(cw*dpr);cv.height=Math.round(ch*dpr);cv.style.height=ch+'px'}
+function paintBg(){const w=cv.width,h=cv.height;
+  if(st.bg==='checker'){const s=Math.max(8,Math.round(w/32));for(let y=0;y<h;y+=s)for(let x=0;x<w;x+=s){cx.fillStyle=((x/s+y/s)&1)?'#262043':'#3a3460';cx.fillRect(x,y,s,s)}}
+  else if(st.bg==='arena'){const g=Math.round(h*.8);cx.fillStyle='#5a7fd6';cx.fillRect(0,0,w,g);cx.fillStyle='#7d9de6';cx.fillRect(0,g*.55,w,g*.45);cx.fillStyle='#4f8a3c';cx.fillRect(0,g,w,h-g);cx.fillStyle='#3d6e2e';const s=Math.max(4,Math.round(w/64));for(let x=0;x<w;x+=s*3)cx.fillRect(x,g,s,s)}
+  else{cx.fillStyle={dark:'#0f0c1a',light:'#e9e6f2',green:'#00b140'}[st.bg]||'#0f0c1a';cx.fillRect(0,0,w,h)}}
+function guides(dx,dy,dw,dh){const X=v=>st.flip?cv.width-(dx+v*dw):dx+v*dw,Y=v=>dy+v*dh,lw=Math.max(1,Math.round(cv.width/300));cx.save();cx.lineWidth=lw;cx.setLineDash([lw*4,lw*3]);
+  const[a0,b0,a1,b1]=GUIDE.head;cx.strokeStyle='rgba(88,217,255,.9)';cx.strokeRect(Math.min(X(a0),X(a1)),Y(b0),Math.abs(X(a1)-X(a0)),Y(b1)-Y(b0));
+  cx.strokeStyle='rgba(255,200,61,.9)';cx.beginPath();cx.moveTo(dx,Y(GUIDE.feet));cx.lineTo(dx+dw,Y(GUIDE.feet));cx.stroke();cx.setLineDash([]);
+  cx.fillStyle='#ff4d5e';cx.beginPath();cx.arc(X(GUIDE.neck[0]),Y(GUIDE.neck[1]),lw*3,0,6.283);cx.fill();
+  const[px,py]=IMP.pivot||[GUIDE.hand[0]*IMP.fw,GUIDE.hand[1]*IMP.fh];cx.strokeStyle='#72f290';cx.lineWidth=lw*1.5;cx.beginPath();cx.arc(X(px/IMP.fw),Y(py/IMP.fh),lw*5,0,6.283);cx.stroke();cx.restore()}
+function draw(){const n=frameCount();st.f%=n;const fr=frameAt(st.f,n),{fw,fh}=curSize();paintBg();cx.imageSmoothingEnabled=false;
+  let s=Math.min(cv.width/fw,cv.height/fh);if(s>=1)s=Math.floor(s);const dw=fw*s,dh=fh*s,dx=Math.round((cv.width-dw)/2),dy=Math.round(cv.height-dh-(st.bg==='arena'?cv.height*.06:0));
+  cx.save();if(st.flip){cx.translate(cv.width,0);cx.scale(-1,1)}cx.drawImage(fr,0,0,fw,fh,st.flip?cv.width-dx-dw:dx,dy,dw,dh);cx.restore();
+  if(st.guide&&IMP&&IMP.type==='pack')guides(dx,dy,dw,dh);
+  $('empty').hidden=!!IMP;$('flab').textContent=`เฟรม ${st.f+1}/${n}`;document.querySelectorAll('#tl canvas').forEach((c,i)=>c.classList.toggle('cur',i===st.f))}
+let tlSig='';
+function buildTL(force){const n=frameCount(),sig=[st.anim,n,st.fx,st.fxAuto,st.fxColor,IMP&&IMP.name,IMP&&IMP.type==='pack'?IMP.layers.map(l=>l.sel+':'+l.items.length).join():''].join('|');if(!force&&sig===tlSig)return;tlSig=sig;
+  const T=$('tl');T.innerHTML='';if(!IMP)return;const{fw,fh}=curSize(),s=Math.min(1,96/fw);
+  for(let i=0;i<n;i++){const c=document.createElement('canvas');c.className='pix';c.width=Math.max(1,Math.round(fw*s));c.height=Math.max(1,Math.round(fh*s));const x=c.getContext('2d');x.imageSmoothingEnabled=false;x.drawImage(frameAt(i,n),0,0,c.width,c.height);c.title='เฟรม '+(i+1);c.onclick=()=>{st.f=i;setPlay(false);draw()};T.appendChild(c)}}
+function refreshFrame(tl){buildTL(tl);draw()}
+function setPlay(p){st.playing=p;$('play').textContent=p?'หยุด':'เล่น'}
+let last=0,acc=0;function loop(ts){requestAnimationFrame(loop);const dt=Math.min(250,ts-last);last=ts;if(!st.playing||!IMP)return;acc+=dt;const step=1000/st.fps;if(acc>=step){acc=acc%step;st.f=(st.f+1)%frameCount();draw()}}
+
+/* ---- header + anim chips ---- */
+function header(){if(!IMP){$('mname').textContent='ยังไม่มีตัวละคร';$('minfo').textContent='เพิ่มรูปชิ้นส่วนในแท็บ “ชิ้นส่วน”';$('mid').textContent='';return}
+  if(IMP.type==='pack'){const L=IMP.layers.map(L=>{const it=L.items[L.sel];return it&&it.cv?it.name:null}).filter(Boolean);$('mname').textContent=L.join(' + ')||'แพ็กชิ้นส่วน';$('minfo').textContent=`แพ็กชิ้นส่วน · ${IMP.fw}×${IMP.fh} พิกเซล`;$('mid').textContent=IMP.combos().toLocaleString('en')+' แบบ';return}
+  $('mname').textContent=IMP.name.replace(/\.\w+$/,'');$('minfo').textContent={frames:'เฟรมจากไฟล์',anims:'ท่าจากโฟลเดอร์',image:'รูปเดียว · แอปทำท่าให้'}[IMP.type]+` · ${IMP.fw}×${IMP.fh} พิกเซล`;$('mid').textContent='นำเข้า'}
+function animChips(){const L=impAnims();if(!L.some(a=>a[0]===st.anim))st.anim=L[0][0];const C=$('animChips');C.innerHTML='';
+  L.forEach(([k,n])=>{const b=document.createElement('button');b.className='btn sm'+(k===st.anim?' on':'');b.textContent=n;b.disabled=!IMP;b.onclick=()=>{st.anim=k;st.f=0;animChips();refreshFrame()};C.appendChild(b)})}
+function refreshAll(){header();animChips();sizeStage();buildTL(true);draw();exSize();save()}
+
+/* ---- GPT tab ---- */
+function gptSetup(){const C=$('gChips');GKEYS.forEach(k=>{const b=document.createElement('button');b.className='btn sm';b.dataset.k=k;b.textContent=GP[k].th+' 1–10';b.onclick=()=>{st.gk=k;save();gptList()};C.appendChild(b)});
+  drawTemplate($('tplCv'));$('tplSave').onclick=async()=>{const c=document.createElement('canvas');c.width=c.height=1024;drawTemplate(c);saveFile('pixeldeck_template.png',await blobOf(c),'tplStat')};gptList()}
+function gptList(){const k=st.gk,G=$('gList'),done=new Set(store.get('copied',[]));document.querySelectorAll('#gChips .btn').forEach(b=>b.classList.toggle('on',b.dataset.k===k));
+  $('gNote').textContent=`หมวด${GP[k].th}: ใส่รูปที่ได้ในชั้น “${GP[k].th}” ของแท็บชิ้นส่วน`;G.innerHTML='';
+  GP[k].list.forEach(([th],i)=>{const id=k+(i+1),t=promptText(k,i),el=document.createElement('div');el.className='pc';
+    el.innerHTML=`<div class="row between"><b>${GP[k].th} ${i+1} · ${th}</b><button class="btn sm${done.has(id)?' done':''}">${done.has(id)?'คัดลอกแล้ว ✓':'คัดลอก'}</button></div><pre></pre>`;el.querySelector('pre').textContent=t;
+    el.querySelector('button').onclick=async e=>{if(await copyText(t)){done.add(id);store.set('copied',[...done]);e.target.textContent='คัดลอกแล้ว ✓';e.target.classList.add('done');toast(`คัดลอกคำสั่ง${GP[k].th} ${i+1} แล้ว วางใน GPT ได้เลย`)}else toast('คัดลอกไม่ได้ กดค้างที่ข้อความเพื่อคัดลอกเอง')};G.appendChild(el)})}
+async function copyText(t){try{if(window.Android&&Android.copy){return!!Android.copy(t)}}catch(e){}
+  try{await navigator.clipboard.writeText(t);return true}catch(e){}
+  try{const a=document.createElement('textarea');a.value=t;a.style.position='fixed';a.style.opacity='0';document.body.appendChild(a);a.select();const ok=document.execCommand('copy');a.remove();return ok}catch(e){return false}}
+
+/* ---- anim panel ---- */
+function animSetup(){const N=$('nChips');[4,6,8,10,12,16].forEach(n=>{const b=document.createElement('button');b.className='btn sm'+(n===st.n?' on':'');b.textContent=n+' เฟรม';b.onclick=()=>{st.n=n;N.querySelectorAll('.btn').forEach(x=>x.classList.toggle('on',x===b));st.f=0;refreshAll()};N.appendChild(b)});
+  const S=$('fxSel');S.innerHTML=Object.entries(FXN).map(([k,n])=>`<option value="${k}">${n}</option>`).join('');S.value=st.fx;S.onchange=()=>{st.fx=S.value;refreshAll()};
+  $('fxAuto').onchange=()=>{st.fxAuto=$('fxAuto').checked;refreshFrame(true)};$('fxCol').oninput=()=>{st.fxColor=$('fxCol').value;$('fxAuto').checked=false;st.fxAuto=false;refreshFrame(true)}}
+
+/* ============ saving files ============ */
+let lastSaved=null;
+function b64(u8){let s='';for(let i=0;i<u8.length;i+=0x8000)s+=String.fromCharCode.apply(null,u8.subarray(i,i+0x8000));return btoa(s)}
+async function saveFile(name,blob,statId='exStat'){const el=$(statId);el.classList.remove('err');
+  try{
+    if(window.Android&&Android.begin){el.textContent='กำลังบันทึก …';const id=Android.begin(name,blob.type||'application/octet-stream');if(!id)throw new Error('เปิดไฟล์ปลายทางไม่ได้');
+      const u8=new Uint8Array(await blob.arrayBuffer()),CH=768*1024;for(let i=0;i<u8.length;i+=CH){if(!Android.chunk(id,b64(u8.subarray(i,i+CH))))throw new Error('เขียนไฟล์ไม่สำเร็จ');if(u8.length>CH*4){el.textContent=`กำลังบันทึก ${Math.min(100,Math.round((i+CH)/u8.length*100))}% …`;await tick()}}
+      const real=Android.end(id);if(!real)throw new Error('ปิดไฟล์ไม่สำเร็จ');lastSaved=id;el.textContent='บันทึกแล้ว: Download/PixelDeckForge/'+real;toast('บันทึกแล้ว: '+real);if(statId==='exStat')$('shareRow').hidden=false;return}
+    const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),4000);el.textContent='บันทึกแล้ว: '+name}
+  catch(e){el.classList.add('err');el.textContent='บันทึกไม่สำเร็จ: '+(e.message||e)}}
+
+/* ============ export ============ */
+function scaled(src,fw,fh,s,flip){const c=document.createElement('canvas');c.width=Math.max(1,Math.round(fw*s));c.height=Math.max(1,Math.round(fh*s));const x=c.getContext('2d');x.imageSmoothingEnabled=false;if(flip){x.translate(c.width,0);x.scale(-1,1)}x.drawImage(src,0,0,fw,fh,0,0,c.width,c.height);return c}
+function framesFor(anim,s){const n=IMP.type==='frames'&&anim==='src'?IMP.frames.length:IMP.type==='anims'&&IMP.anims[anim]?IMP.anims[anim].length:st.n;const{fw,fh}=curSize(),out=[];
+  for(let i=0;i<n;i++)out.push(scaled(frameAt(i,n,anim),fw,fh,s,st.flip));return out}
+function strip(list){const c=document.createElement('canvas');c.width=list[0].width*list.length;c.height=list[0].height;const x=c.getContext('2d');list.forEach((f,i)=>x.drawImage(f,i*f.width,0));return c}
+function sheet(rows){const fw=rows[0].f[0].width,fh=rows[0].f[0].height,cols=Math.max(...rows.map(r=>r.f.length)),c=document.createElement('canvas');c.width=fw*cols;c.height=fh*rows.length;const x=c.getContext('2d');rows.forEach((r,j)=>r.f.forEach((f,i)=>x.drawImage(f,i*fw,j*fh)));return c}
+const slug=s=>s.toLowerCase().replace(/[^a-z0-9ก-๙]+/g,'_').replace(/^_|_$/g,'')||'model';
+const baseName=()=>IMP.type==='pack'?slug(IMP.layers.map(L=>{const it=L.items[L.sel];return it&&it.cv?it.name:''}).filter(Boolean).join('_')||IMP.name):slug(IMP.name.replace(/\.\w+$/,''));
+function buildExScale(){const S=$('exScale'),prev=S.value,{fh}=curSize(),big=fh>200;
+  const opts=big?[[1/16,'1/16'],[1/8,'1/8'],[1/4,'1/4'],[1/2,'1/2'],[1,'1× (เต็ม)']]:[[1,'1×'],[2,'2×'],[3,'3×'],[4,'4×'],[6,'6×'],[8,'8×']];
+  S.innerHTML=opts.map(([v,l])=>`<option value="${v}">${l}</option>`).join('');S.value=[...S.options].some(o=>o.value===prev)?prev:String(big?(fh>=768?1/8:1/4):fh>100?1:fh>60?2:4)}
+function exSize(){const{fw,fh}=curSize(),s=+$('exScale').value;$('exSize').textContent=IMP?`เฟรมละ ${Math.round(fw*s)}×${Math.round(fh*s)} พิกเซล`:'ยังไม่มีตัวละครให้ส่งออก';
+  document.querySelectorAll('[data-ex]').forEach(b=>{const k=b.dataset.ex;b.disabled=!IMP||((k==='preview'||k==='parts')&&!PK.count())})}
+async function doExport(kind){const s=+$('exScale').value,st2=$('exStat');st2.classList.remove('err');$('shareRow').hidden=true;
+  if(!IMP&&!(kind==='parts'&&PK.count())){st2.textContent='ยังไม่มีตัวละคร';st2.classList.add('err');return}
+  const needZip=['frames','pack','parts'].includes(kind);if(needZip&&!window.JSZip){st2.textContent='สร้าง ZIP ไม่ได้ เพราะตัวสร้าง ZIP โหลดไม่สำเร็จ';st2.classList.add('err');return}
+  st2.textContent='กำลังสร้างไฟล์ …';await tick();
+  if(kind==='preview')return saveFile(`${slug(PK.name)}_preview.png`,await blobOf(previewSheet()));
+  if(kind==='parts'){const z=new JSZip(),offsets={},measured={};let n=0;for(const L of PK.layers){const fo=z.folder(L.dir);for(const it of L.items){if(!it.cv)continue;const key=L.dir+'/'+it.name;fo.file(it.name+'.png',await blobOf(it.cv));offsets[key]=[it.dx||0,it.dy||0,it.sc||1];
+        const b=alphaBox(it.cv),r=place(it,PK.fw,PK.fh),kx=r.w/it.cv.width,ky=r.h/it.cv.height;if(b)measured[key]={x0:+((r.x+b.x0*kx)/PK.fw*100).toFixed(1),y0:+((r.y+b.y0*ky)/PK.fh*100).toFixed(1),x1:+((r.x+(b.x0+b.w)*kx)/PK.fw*100).toFixed(1),y1:+((r.y+(b.y0+b.h)*ky)/PK.fh*100).toFixed(1),src:[it.cv.width,it.cv.height]};
+        if(++n%5===0){st2.textContent=`กำลังรวมรูป ${n}/${PK.count()} …`;await tick()}}}
+    z.file('pack.json',JSON.stringify({app:'PixelDeck Forge',size:[PK.fw,PK.fh],pivot:PK.pivot,guide:GUIDE,offsets,measured,note:'offsets: [dx, dy, scale] in pack pixels; measured: where each part lands after offsets, in % of the canvas'},null,1));
+    return saveFile(`${slug(PK.name)}_parts.zip`,await z.generateAsync({type:'blob'}))}
+  const nm=baseName();
+  if(kind==='strip')return saveFile(`${nm}_${st.anim}.png`,await blobOf(strip(framesFor(st.anim,s))));
+  if(kind==='gif'){const fr=framesFor(st.anim,s),w=fr[0].width,h=fr[0].height;const data=gifEncode(fr.map(c=>c.getContext('2d').getImageData(0,0,w,h)),w,h,Math.max(2,Math.round(100/st.fps)));return saveFile(`${nm}_${st.anim}.gif`,new Blob([data],{type:'image/gif'}))}
+  if(kind==='frames'){const z=new JSZip(),fr=framesFor(st.anim,s);for(let i=0;i<fr.length;i++)z.file(String(i+1).padStart(2,'0')+'.png',await blobOf(fr[i]));return saveFile(`${nm}_${st.anim}_frames.zip`,await z.generateAsync({type:'blob'}))}
+  if(kind==='pack'){const z=new JSZip(),rows=[];for(const a of impAnims().map(a=>a[0])){const fr=framesFor(a,s);rows.push({a,f:fr});const fo=z.folder(a==='src'?'frames':a);for(let i=0;i<fr.length;i++)fo.file(String(i+1).padStart(2,'0')+'.png',await blobOf(fr[i]));await tick()}
+    const sh=sheet(rows);z.file('sheet.png',await blobOf(sh));z.file('portrait.png',await blobOf(rows[0].f[0]));z.file('meta.json',JSON.stringify(meta(rows,s),null,2));return saveFile(`${nm}_pack.zip`,await z.generateAsync({type:'blob'}))}}
+function meta(rows,s){const fw=rows[0].f[0].width,fh=rows[0].f[0].height,o={name:IMP.type==='pack'?baseName():IMP.name,frameWidth:fw,frameHeight:fh,scale:s,fps:st.fps,facing:st.flip?'left':'right',sheet:'sheet.png',anims:{}};
+  rows.forEach((r,i)=>o.anims[r.a==='src'?'frames':r.a]={row:i,frames:r.f.length,folder:r.a==='src'?'frames':r.a});
+  if(IMP.type==='pack')o.parts=Object.fromEntries(IMP.layers.map(L=>[L.name,(L.items[L.sel]||{}).name||null]));return o}
+/* 12 random combinations (first one = what is on stage) in one picture, with the position guides, to check alignment */
+function previewSheet(){const P=PK,cell=256,cols=4,rows=3,pad=6,lab=22,c=document.createElement('canvas');c.width=cols*(cell+pad)+pad;c.height=rows*(cell+pad+lab)+pad;const x=c.getContext('2d');x.fillStyle='#14111f';x.fillRect(0,0,c.width,c.height);
+  const keep=IMP;IMP=P;const fc=document.createElement('canvas');
+  for(let k=0;k<cols*rows;k++){const sel=k===0?P.layers.map(L=>L.sel):P.layers.map(L=>Math.floor(Math.random()*L.items.length));renderImp('idle',0,8,{fx:'none'},fc,sel);
+    const gx=pad+(k%cols)*(cell+pad),gy=pad+Math.floor(k/cols)*(cell+pad+lab);x.fillStyle=k%2?'#2a2448':'#322b55';x.fillRect(gx,gy,cell,cell);x.imageSmoothingEnabled=false;x.drawImage(fc,0,0,P.fw,P.fh,gx,gy,cell,cell);
+    const X=v=>gx+v*cell,Y=v=>gy+v*cell;x.setLineDash([4,3]);x.lineWidth=1;const[a0,b0,a1,b1]=GUIDE.head;x.strokeStyle='rgba(88,217,255,.8)';x.strokeRect(X(a0),Y(b0),X(a1)-X(a0),Y(b1)-Y(b0));x.strokeStyle='rgba(255,200,61,.8)';x.beginPath();x.moveTo(gx,Y(GUIDE.feet));x.lineTo(gx+cell,Y(GUIDE.feet));x.stroke();x.setLineDash([]);
+    x.fillStyle='#ff4d5e';x.fillRect(X(GUIDE.neck[0])-2,Y(GUIDE.neck[1])-2,5,5);x.strokeStyle='#72f290';x.beginPath();x.arc(gx+P.pivot[0]/P.fw*cell,gy+P.pivot[1]/P.fh*cell,6,0,6.283);x.stroke();
+    x.fillStyle='#c9c2ea';x.font='12px sans-serif';x.textBaseline='top';const names=P.layers.map((L,li)=>{const it=L.items[sel[li]];return it&&it.cv?it.name.replace(/^[a-z]+_?/i,''):'-'}).join(' ');x.fillText(names.slice(0,40),gx+2,gy+cell+4)}
+  IMP=keep;return c}
+
+/* ---- GIF encoder (transparent, looping) ---- */
+function gifEncode(frames,w,h,delay){const pal=new Map();let sh=0;const key=(r,g,b)=>(r>>sh)<<16|(g>>sh)<<8|(b>>sh);
+  for(;;){pal.clear();let ok=true;outer:for(const f of frames){const d=f.data;for(let i=0;i<d.length;i+=4){if(d[i+3]<128)continue;const k=key(d[i],d[i+1],d[i+2]);if(!pal.has(k)){if(pal.size>=255){ok=false;break outer}pal.set(k,pal.size+1)}}}if(ok)break;sh++}
+  let bits=2;while((1<<bits)<pal.size+1)bits++;const out=[],w16=v=>out.push(v&255,v>>8&255),str=s=>{for(const c of s)out.push(c.charCodeAt(0))};
+  str('GIF89a');w16(w);w16(h);out.push(0xF0|(bits-1),0,0);const tb=new Array((1<<bits)*3).fill(0);const half=sh?1<<(sh-1):0;
+  for(const[k,i]of pal){tb[i*3]=Math.min(255,((k>>16&255)<<sh)+half);tb[i*3+1]=Math.min(255,((k>>8&255)<<sh)+half);tb[i*3+2]=Math.min(255,((k&255)<<sh)+half)}for(const v of tb)out.push(v);
+  out.push(0x21,0xFF,0x0B);str('NETSCAPE2.0');out.push(3,1,0,0,0);
+  for(const f of frames){out.push(0x21,0xF9,4,0x09,delay&255,delay>>8&255,0,0,0x2C);w16(0);w16(0);w16(w);w16(h);out.push(0);
+    const d=f.data,ix=new Uint8Array(w*h);for(let i=0,p=0;i<d.length;i+=4,p++)ix[p]=d[i+3]<128?0:pal.get(key(d[i],d[i+1],d[i+2]));lzw(ix,bits,out)}
+  out.push(0x3B);return new Uint8Array(out)}
+function lzw(ix,mc,out){out.push(mc);const clr=1<<mc,eoi=clr+1;let size=mc+1,next=eoi+1,dict=new Map(),cur=0,nb=0;const buf=[];
+  const emit=c=>{cur|=c<<nb;nb+=size;while(nb>=8){buf.push(cur&255);cur>>>=8;nb-=8}};
+  emit(clr);let pre=ix[0];
+  for(let i=1;i<ix.length;i++){const k=ix[i],kk=pre<<8|k,c=dict.get(kk);if(c!==undefined){pre=c;continue}emit(pre);
+    if(next===4096){emit(clr);dict=new Map();next=eoi+1;size=mc+1}else{if(next>=(1<<size))size++;dict.set(kk,next++)}pre=k}
+  emit(pre);emit(eoi);if(nb>0)buf.push(cur&255);
+  for(let i=0;i<buf.length;i+=255){const n=Math.min(255,buf.length-i);out.push(n);for(let j=0;j<n;j++)out.push(buf[i+j])}out.push(0)}
+
+/* ============ UI maker ============ */
+const UICOL=[['ทอง','#e2a21a'],['แดง','#d6303a'],['ฟ้า','#2f8ae0'],['เขียว','#2fb14e'],['ม่วง','#8a3fd0'],['ส้ม','#ef7b23'],['ชมพู','#e0569a'],['เทา','#6c7086']];
+let uiColor='#e2a21a';
+const UIDEF={btn:[64,18,'START'],panel:[96,56,'MENU'],hp:[80,10,''],badge:[56,14,'LEGEND'],slot:[24,24,'']};
+function uiSetup(){const C=$('uiCols');UICOL.forEach(([n,c])=>{const b=document.createElement('button');b.className='sw'+(c===uiColor?' on':'');b.style.background=c;b.title=n;b.setAttribute('aria-label','สี'+n);b.onclick=()=>{uiColor=c;C.querySelectorAll('.sw').forEach(x=>x.classList.toggle('on',x===b));uiRender()};C.appendChild(b)});
+  const ci=document.createElement('input');ci.type='color';ci.value=uiColor;ci.setAttribute('aria-label','สีกำหนดเอง');ci.oninput=()=>{uiColor=ci.value;C.querySelectorAll('.sw').forEach(x=>x.classList.remove('on'));uiRender()};C.appendChild(ci);
+  $('uiType').onchange=()=>{const d=UIDEF[$('uiType').value];$('uiW').value=d[0];$('uiH').value=d[1];$('uiText').value=d[2];uiRender()};
+  ['uiText','uiW','uiH','uiStyle','uiR','uiV','uiS'].forEach(id=>$(id).addEventListener('input',uiRender));
+  $('uiSave').onclick=async()=>saveFile(`ui_${$('uiType').value}_${slug($('uiText').value||'blank')}.png`,await blobOf($('uiCv')),'uiStat');uiRender()}
+function uiRender(){const t=$('uiType').value,w=clamp(+$('uiW').value||8,8,200),h=clamp(+$('uiH').value||8,8,120),r=+$('uiR').value,sty=$('uiStyle').value,v=+$('uiV').value,s=+$('uiS').value,c=uiColor;
+  const B=new Buf(w,h),lt=shade(c,.32),dk=shade(c,-.38),O=OUTC;
+  const inside=(x,y,rr=r)=>!(x+y<rr||(w-1-x)+y<rr||x+(h-1-y)<rr||(w-1-x)+(h-1-y)<rr)&&x>=0&&y>=0&&x<w&&y<h;
+  const edge=(x,y,rr)=>inside(x,y,rr)&&!(inside(x-1,y,rr)&&inside(x+1,y,rr)&&inside(x,y-1,rr)&&inside(x,y+1,rr));
+  for(let y=0;y<h;y++)for(let x=0;x<w;x++){if(!inside(x,y))continue;if(edge(x,y,r)){B.set(x,y,O);continue}
+    let col=c;
+    if(t==='panel'){const e2=x<=2||y<=2||x>=w-3||y>=h-3;col=e2?(x<=1||y<=1||x>=w-2||y>=h-2?c:dk):shade(c,-.78)}
+    else if(t==='hp'){const fillW=Math.round((w-2)*v/100);col=x<=fillW?(y===1?lt:y>=h-2?dk:((x%10)===0?shade(c,-.15):c)):'#2a1620'}
+    else if(t==='slot'){col=(x<=2||y<=2)?lt:(x>=w-3||y>=h-3)?dk:'#120f20';if(x===3&&y===3)col='#ffffff'}
+    else{if(sty==='gloss'){col=y<h*.45?shade(c,.18):c;if(y>=h-3)col=dk}else if(sty==='bevel'){col=(y===1||x===1)?lt:(y>=h-3||x>=w-2)?dk:c}else{col=y>=h-3?dk:c}}
+    B.set(x,y,col)}
+  if(t==='btn'&&sty==='gloss')for(let x=3;x<w-3;x++)B.set(x,2,'#ffffff',.55);
+  if(t==='panel')[[3,3],[w-4,3],[3,h-4],[w-4,h-4]].forEach(([x,y])=>{B.set(x,y,lt);B.set(x+1,y+1,O)});
+  if(t==='badge'){for(let k=0;k<3;k++)B.set(4+k*3,Math.floor(h/2)-1,'#ffffff',.9);for(let x=3;x<w-3;x++)B.set(x,2,'#ffffff',.45)}
+  const C=$('uiCv');C.width=w*s;C.height=h*s;const x=C.getContext('2d');x.imageSmoothingEnabled=false;x.drawImage(bufCanvas(B),0,0,w*s,h*s);
+  let txt=$('uiText').value;if(t==='hp'&&!txt)txt=v+'%';
+  if(txt){const fs=Math.max(8,Math.round((t==='panel'?Math.min(h*.22,16):h*.5)*s));x.font=`700 ${fs}px Silkscreen, sans-serif`;x.textAlign='center';x.textBaseline='middle';const ty=t==='panel'?Math.round(fs*.9+s*3):Math.round(h*s/2-(t==='btn'?s:0));
+    x.fillStyle=O;x.fillText(txt,w*s/2+Math.max(1,s/2),ty+Math.max(1,s/2));x.fillStyle='#ffffff';x.fillText(txt,w*s/2,ty)}
+  $('uiStat').textContent=`${w*s}×${h*s} พิกเซล`}
+
+/* ============ wiring ============ */
+function setTab(t){if(!$('p-'+t))t='gpt';st.tab=t;document.querySelectorAll('.tab').forEach(b=>b.classList.toggle('on',b.dataset.tab===t));document.querySelectorAll('.panel').forEach(p=>p.hidden=p.id!=='p-'+t);if(t==='ui')uiRender();save()}
+document.querySelectorAll('.tab').forEach(b=>b.onclick=()=>setTab(b.dataset.tab));
+$('play').onclick=()=>setPlay(!st.playing);
+$('fps').value=st.fps;$('fpsl').textContent=st.fps+' fps';$('fps').oninput=()=>{st.fps=+$('fps').value;$('fpsl').textContent=st.fps+' fps';save()};
+document.querySelectorAll('[data-bg]').forEach(b=>{b.classList.toggle('on',b.dataset.bg===st.bg);b.onclick=()=>{st.bg=b.dataset.bg;document.querySelectorAll('[data-bg]').forEach(x=>x.classList.toggle('on',x===b));draw();save()}});
+$('flip').onchange=()=>{st.flip=$('flip').checked;draw()};
+$('guide').checked=st.guide;$('guide').onchange=()=>{st.guide=$('guide').checked;draw();save()};
+$('exScale').onchange=exSize;
+document.querySelectorAll('[data-ex]').forEach(b=>b.onclick=async()=>{b.disabled=true;try{await doExport(b.dataset.ex)}catch(e){$('exStat').textContent='สร้างไฟล์ไม่สำเร็จ: '+(e.message||e);$('exStat').classList.add('err')}exSize()});
+$('shareBtn').onclick=()=>{try{if(lastSaved&&window.Android&&Android.share)Android.share(lastSaved)}catch(e){toast('แชร์ไม่ได้')}};
+const guard=fn=>async e=>{const fl=e.target.files;if(!fl||!fl.length)return;try{await fn(fl)}catch(err){impStat('นำเข้าไม่สำเร็จ: '+(err.message||err),1)}e.target.value=''};
+$('inZip').onchange=guard(async fl=>importZip(fl[0]));
+$('pkRand').onclick=()=>{if(!PK.count())return toast('ยังไม่มีรูปในแพ็ก');PK.layers.forEach(L=>{if(L.items.length)L.sel=Math.floor(Math.random()*L.items.length)});IMP=PK;savePack();buildLayers();refreshAll()};
+$('pkAuto').onclick=()=>{let n=0;PK.layers.forEach(L=>L.items.forEach(it=>{if(autoPlace(L,it))n++}));if(!n)return toast('ยังไม่มีรูปร่างกายหรือหัวให้จัด');savePack();buildLayers();refreshFrame(true);toast(`จัดตำแหน่งแล้ว ${n} รูป (ร่างกาย + หัว)`)};
+$('pkUse').onclick=()=>{IMP=PK;$('pkUse').hidden=true;buildExScale();buildLayers();refreshAll()};
+$('pkClear').onclick=async e=>{const b=e.currentTarget;if(!b.dataset.arm){b.dataset.arm=1;b.textContent='แตะอีกครั้งเพื่อลบทุกรูป';setTimeout(()=>{delete b.dataset.arm;b.textContent='ล้างแพ็กทั้งหมด'},3000);return}
+  delete b.dataset.arm;b.textContent='ล้างแพ็กทั้งหมด';try{await idb.clear()}catch(err){}PK.reset();savePack();if(IMP&&IMP.type==='pack')IMP=null;showPack();impStat('ล้างแพ็กแล้ว')};
+$('inFrames').onchange=guard(async fl=>{const L=[...fl].sort((a,b)=>nat(a.name,b.name));const fr=prep(await Promise.all(L.map(loadCanvas)));if(!fr.length)return impStat('รูปที่เลือกว่างทั้งหมด',1);await useImport({type:'frames',frames:fr,...sizeOf(fr),name:L[0].name.replace(/[_\-\s]*\d+\.\w+$/,'')||'frames'});impStat(`นำเข้าแล้ว ${fr.length} เฟรม · ${IMP.fw}×${IMP.fh} พิกเซล`)});
+$('inSheet').onchange=guard(async fl=>{const sc=await loadCanvas(fl[0]),cols=clamp(+$('shCols').value||1,1,64),rows=clamp(+$('shRows').value||1,1,64),cw=Math.floor(sc.width/cols),chh=Math.floor(sc.height/rows),L=[];
+  for(let j=0;j<rows;j++)for(let i=0;i<cols;i++){const c=document.createElement('canvas');c.width=cw;c.height=chh;c.getContext('2d').drawImage(sc,i*cw,j*chh,cw,chh,0,0,cw,chh);L.push(c)}
+  const fr=prep(L);if(!fr.length)return impStat('ตัดแล้วไม่เจอเฟรมที่มีรูป ลองเช็กจำนวนคอลัมน์และแถว',1);await useImport({type:'frames',frames:fr,...sizeOf(fr),name:fl[0].name});impStat(`ตัดได้ ${fr.length} เฟรม จาก ${cols}×${rows} ช่อง · ${IMP.fw}×${IMP.fh} พิกเซล`)});
+$('inOne').onchange=guard(async fl=>{const fr=prep([await loadCanvas(fl[0])]);if(!fr.length)return impStat('รูปนี้ว่างหลังลบพื้นหลัง ลองลดความไวลบพื้นหลัง',1);const c=fr[0];await useImport({type:'image',img:c,fw:c.width,fh:c.height,name:fl[0].name});impStat(`นำเข้าแล้ว · แอปทำท่าให้ ${ANIMS.length} ท่า · ${c.width}×${c.height} พิกเซล`)});
+window.addEventListener('resize',()=>{sizeStage();draw()});
+
+(async()=>{gptSetup();animSetup();uiSetup();setTab(st.tab);PK.reset();buildLayers();buildExScale();refreshAll();setPlay(true);requestAnimationFrame(loop);
+  await restorePack();if(PK.count()){IMP=PK;impStat(`แพ็กเดิมพร้อมใช้ ${PK.count()} รูป`)}showPack();window.forgeReady=true})();
+</script>
+</body>
+</html>

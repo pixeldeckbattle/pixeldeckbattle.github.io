@@ -1,0 +1,37 @@
+name: Forge APK
+on:
+  push:
+    branches: [main]
+    paths: ['forge/**', '.github/workflows/forge-apk.yml']
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with: { distribution: temurin, java-version: '17' }
+      - uses: gradle/actions/setup-gradle@v4
+        with: { gradle-version: '8.9' }
+      - name: Page assets
+        run: node forge/build_assets.js
+      - name: Build APK
+        working-directory: forge/apk
+        env:
+          KS_PATH: ${{ github.workspace }}/forge/apk/forge.jks
+          KS_PASS: pdforge-sign-2026
+          VERSION_CODE: ${{ github.run_number }}
+        run: gradle assembleRelease --no-daemon --stacktrace
+      - name: Name APK
+        run: cp forge/apk/app/build/outputs/apk/release/app-release.apk PixelDeckForge-v1.${{ github.run_number }}.apk
+      - uses: actions/upload-artifact@v4
+        with: { name: PixelDeckForge-apk, path: 'PixelDeckForge-v1.*.apk' }
+      - uses: softprops/action-gh-release@v2
+        with:
+          tag_name: forge-v1.${{ github.run_number }}
+          name: PixelDeck Forge v1.${{ github.run_number }}
+          body: APK ของ PixelDeck Forge — กดไฟล์ .apk ด้านล่างเพื่อดาวน์โหลดและติดตั้ง
+          files: 'PixelDeckForge-v1.*.apk'
+          make_latest: true

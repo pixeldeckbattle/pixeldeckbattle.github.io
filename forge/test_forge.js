@@ -1,37 +1,62 @@
-const {chromium}=require('/opt/npm-tools/node_modules/playwright');const fs=require('fs');
-(async()=>{const html='<!doctype html><html><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"></head><body>'+fs.readFileSync('forge.html','utf8')+'</body></html>';
-fs.writeFileSync('_t.html',html);
-const b=await chromium.launch({executablePath:'/opt/pw-browsers/chromium'}).catch(()=>chromium.launch());
-const p=await b.newPage({viewport:{width:1200,height:900}});const errs=[];p.on('pageerror',e=>errs.push(e.message));p.on('console',m=>{if(m.type()==='error')errs.push(m.text())});
-await p.route('**/jszip.min.js',r=>r.fulfill({body:fs.readFileSync('/opt/npm-tools/node_modules/jszip/dist/jszip.min.js'),contentType:'text/javascript'}));
-await p.route('https://fonts.**',r=>r.abort());
-await p.goto('file://'+__dirname+'/_t.html');await p.waitForTimeout(800);
-const r=await p.evaluate(async()=>{const out={};
- // uniqueness check of first 3000 ids
- const seen=new Set();for(let i=1;i<=3000;i++)seen.add(encodeC(modelOf(i)));out.uniq=seen.size;
- out.inv=[1,777,99999].map(i=>idOf(modelOf(i))===i);
- // render every anim for several models
- for(let id of [1,2,3,4,5,6,7,8,9,10,11,12,500,9999])for(const [a] of ANIMS)for(let f=0;f<8;f++)renderProc(modelOf(id),a,f/8,{rank:id%5,fx:'auto'});
- // GIF encode + decode
- const fr=framesFor('attack',2);const w=fr[0].width,h=fr[0].height;const g=gifEncode(fr.map(c=>c.getContext('2d').getImageData(0,0,w,h)),w,h,10);
- out.gifOk=await new Promise(res=>{const im=new Image();im.onload=()=>res(im.width+'x'+im.height);im.onerror=()=>res('bad');im.src=URL.createObjectURL(new Blob([g],{type:'image/gif'}))});
- // zip import: anim folders from our own pack format
- const z=new JSZip();for(const a of ['idle','attack'])for(let i=0;i<3;i++){const c=framesFor(a,1)[i];z.file(a+'/'+(i+1)+'.png',await blobOf(c))}
- const bl=await z.generateAsync({type:'blob'});bl.name='t.zip';await importZip(new File([bl],'hero.zip'));out.imp1=document.getElementById('impStat').textContent;
- for(const [a] of ANIMS)for(let f=0;f<6;f++)renderImp(a,f,6,opts());
- // parts pack
- const z2=new JSZip();for(const d of ['1_body','2_head','3_weapon'])for(let i=0;i<3;i++){const c=document.createElement('canvas');c.width=40;c.height=40;const x=c.getContext('2d');x.fillStyle=['#f00','#0f0','#00f'][i];x.fillRect(10+i*3,d.includes('head')?5:15,10,10);z2.file(d+'/p'+i+'.png',await blobOf(c))}
- await importZip(new File([await z2.generateAsync({type:'blob'})],'parts.zip'));out.imp2=document.getElementById('impStat').textContent;
- for(const [a] of ANIMS)renderImp(a,2,6,opts());
- document.getElementById('backLib').click();
- return out});
-console.log(JSON.stringify(r,null,1));
-await p.evaluate(()=>{pick(42);st.rank=3;st.anim='attack';st.f=3;setPlay(false);refreshAll()});
-await p.screenshot({path:'s1.png'});
-const m=await b.newPage({viewport:{width:390,height:844}});m.on('pageerror',e=>errs.push('m:'+e.message));
-await m.route('**/jszip.min.js',r=>r.fulfill({body:fs.readFileSync('/opt/npm-tools/node_modules/jszip/dist/jszip.min.js'),contentType:'text/javascript'}));
-await m.goto('file://'+__dirname+'/_t.html');await m.waitForTimeout(600);
-const ov=await m.evaluate(()=>document.documentElement.scrollWidth);
-await m.screenshot({path:'s2.png',fullPage:false});
-await m.evaluate(()=>setTab('ui'));await m.waitForTimeout(200);await m.screenshot({path:'s3.png',fullPage:true});
-console.log('errs',errs,'mobileScrollW',ov);await b.close()})();
+// Test of the APK page (forge/apk/app/src/main/assets/www/index.html) with a fake Android bridge.
+// Run: node forge/build_assets.js && node forge/test_forge.js <folder of test part PNGs>
+const {chromium}=require('/opt/npm-tools/node_modules/playwright');const fs=require('fs'),path=require('path');
+const page=path.join(__dirname,'apk/app/src/main/assets/www/index.html'),PARTS=process.argv[2],OUT=process.argv[3]||__dirname;
+const bridge=()=>{window.__saved=[];window.__copied=[];let n=0;const open={};
+  window.Android={begin:(name,mime)=>{const id=String(++n);open[id]={name,mime,len:0,parts:[]};return id},chunk:(id,b)=>{open[id].parts.push(b);open[id].len+=atob(b).length;return true},
+    end:id=>{const o=open[id];window.__saved.push({name:o.name,mime:o.mime,len:o.len,b64:o.parts});return o.name},share:()=>{},copy:t=>{window.__copied.push(t);return true}}};
+(async()=>{
+  const b=await chromium.launch({executablePath:'/opt/pw-browsers/chromium'}).catch(()=>chromium.launch());
+  const ctx=await b.newContext({viewport:{width:1200,height:900}});await ctx.addInitScript(bridge);
+  const p=await ctx.newPage();const errs=[];p.on('pageerror',e=>errs.push(e.message));p.on('console',m=>{if(m.type()==='error')errs.push(m.text())});
+  await p.goto('file://'+page);await p.waitForFunction(()=>window.forgeReady);
+  const out={};
+  out.prompts=await p.$$eval('#gList .pc',e=>e.length);
+  await p.click('#gList .pc button');out.copied=await p.evaluate(()=>window.__copied[0].slice(0,60));
+  out.promptLens=await p.evaluate(()=>GKEYS.map(k=>GP[k].list.length));
+  await p.click('#tplSave');await p.waitForTimeout(300);
+  await p.click('[data-tab=parts]');
+  const files=fs.readdirSync(PARTS).filter(f=>f.endsWith('.png'));
+  const byKey=k=>files.filter(f=>f.startsWith(k)).map(f=>path.join(PARTS,f));
+  const layers=await p.$$('#layers .layer');
+  for(const [i,k] of ['body','head','hair','hat','weapon'].entries()){const L=(await p.$$('#layers .layer'))[i];await (await L.$('input[type=file]')).setInputFiles(byKey(k));await p.waitForFunction(n=>PK.layers[n].items.filter(x=>x.cv).length>0,i);await p.waitForTimeout(150)}
+  out.after=await p.evaluate(()=>({count:PK.count(),combos:PK.combos(),size:PK.fw,imp:IMP===PK,stat:$('impStat').textContent,
+    // white detail inside the white-background body must survive the flood fill
+    whiteKept:(()=>{const it=PK.layers[0].items[1];const d=it.cv.getContext('2d').getImageData(Math.round(.46*512)+20,Math.round(.51*512),1,1).data;return d[3]}) (),
+    bgGone:PK.layers[0].items.slice(0,3).map(it=>it.cv.getContext('2d').getImageData(5,5,1,1).data[3])}));
+  await p.click('#pkAuto');await p.waitForTimeout(200);
+  out.auto=await p.evaluate(()=>PK.layers[0].items.map(i=>[i.dx,i.dy,i.sc]).concat(PK.layers[1].items.map(i=>[i.dx,i.dy,i.sc])));
+  // nudge the selected hair right 3 times
+  const hairL=(await p.$$('#layers .layer'))[2];for(let i=0;i<3;i++)await (await hairL.$('[data-n=r]')).click();
+  out.hair=await p.evaluate(()=>{const L=PK.layers[2];return[L.items[L.sel].dx,$('pkStep').value]});
+  for(const a of ['idle','attack','death','victory']){await p.evaluate(a=>{st.anim=a;refreshAll()},a)}
+  await p.evaluate(()=>{st.anim='attack';st.f=3;setPlay(false);refreshAll()});
+  await p.screenshot({path:path.join(OUT,'t_parts.png')});
+  await p.click('[data-tab=exp]');
+  for(const k of ["preview","parts","pack","gif"]){const n0=await p.evaluate(()=>window.__saved.length);await p.click(`[data-ex=${k}]`);try{await p.waitForFunction(n=>window.__saved.length>n,n0,{timeout:60000})}catch(e){console.log("FAIL",k,await p.evaluate(()=>$("exStat").textContent),errs);throw e}}
+  out.saved=await p.evaluate(()=>window.__saved.map(s=>s.name+' '+s.mime+' '+s.len));
+  // write the preview + parts zip to disk for a look
+  const sv=await p.evaluate(()=>window.__saved.map(s=>({name:s.name,b64:s.b64})));
+  for(const s of sv)if(/preview|template|_parts/.test(s.name))fs.writeFileSync(path.join(OUT,'t_'+s.name),Buffer.concat(s.b64.map(x=>Buffer.from(x,'base64'))));
+  // reload: the pack must come back from the phone's storage
+  await p.reload();await p.waitForFunction(()=>window.forgeReady);
+  out.restored=await p.evaluate(()=>({count:PK.count(),hairDx:PK.layers[2].items[PK.layers[2].sel].dx,imp:IMP===PK}));
+  // re-import the exported parts zip: offsets come back
+  await p.click('[data-tab=parts]');const zipName=sv.find(s=>/_parts\.zip$/.test(s.name)).name;
+  await p.setInputFiles('#inZip',path.join(OUT,'t_'+zipName));await p.waitForFunction(()=>/นำเข้าแพ็ก/.test($('impStat').textContent),null,{timeout:60000});
+  out.reimport=await p.evaluate(()=>({stat:$('impStat').textContent,body0:[PK.layers[0].items[0].dx,PK.layers[0].items[0].sc],layers:PK.layers.map(L=>L.dir+':'+L.items.length)}));
+  // other imports still work
+  await p.setInputFiles('#inOne',path.join(PARTS,'head_01.png'));await p.waitForTimeout(400);out.one=await p.evaluate(()=>IMP.type+' pkUse:'+!$('pkUse').hidden);
+  await p.click('#pkUse');out.back=await p.evaluate(()=>IMP===PK);
+  // phone
+  const m=await ctx.newPage();m.on('pageerror',e=>errs.push('m:'+e.message));await m.setViewportSize({width:390,height:844});
+  await m.goto('file://'+page);await m.waitForFunction(()=>window.forgeReady);
+  out.mobileScrollW=await m.evaluate(()=>document.documentElement.scrollWidth);
+  await m.screenshot({path:path.join(OUT,'t_m1.png')});
+  await m.evaluate(()=>setTab('parts'));await m.waitForTimeout(200);await m.screenshot({path:path.join(OUT,'t_m2.png'),fullPage:true});
+  await m.evaluate(()=>setTab('gpt'));
+  // fresh install look: empty state
+  const ctx2=await b.newContext({viewport:{width:390,height:844}});await ctx2.addInitScript(bridge);const e=await ctx2.newPage();e.on('pageerror',x=>errs.push('e:'+x.message));
+  await e.goto('file://'+page);await e.waitForFunction(()=>window.forgeReady);await e.screenshot({path:path.join(OUT,'t_empty.png')});
+  out.emptyExportDisabled=await e.evaluate(()=>[...document.querySelectorAll('[data-ex]')].every(b=>b.disabled));
+  console.log(JSON.stringify(out,null,1));console.log('errs',errs);await b.close()})();
