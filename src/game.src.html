@@ -1408,7 +1408,7 @@ let DIFF=3.0,EA=.3,EH=1.3,E0=.42,LATE=.003,LATE_N=250,LATE_W=50;   // b160: enem
 const PITY=.04,PITY_MAX=.12,VARY=.10,lossK=n=>S.ls&&S.ls.n===n?S.ls.k|0:0,softMul=n=>n>(S.cleared||0)?(1-Math.min(PITY_MAX,PITY*lossK(n)))*(1-VARY+2*VARY*Math.random()):1;
 // b173 Chapter 2: six realms of 100 stages after stage 500. Enemies start from stage 500's strength and grow CH2_G a stage (+ the realm's battlefield rule);
 // every 10th stage is the realm boss with two minions, every 100th the realm lord (bigger, with its own gimmick), x5 is an elite (one big monster), x7 a survival stage (live through 5 rounds).
-let CH2_G=.0012,CH2_K=1.5,CH2_RAMP=100,LORD_M=[1.25,2.4],CH3_K=.85,CH3_G=.0015;const RLM=[
+let CH2_G=.0012,CH2_K=1.5,CH2_RAMP=100,LORD_M=[1.25,2.4],CH3_K=.82,CH3_G=.0008;const RLM=[
  {n:'Deep Sea',th:'ทะเลลึก',m:['x11','x12','x13'],b:'x14',l:'x15',r:'tide',bg:['r11','r12'],fx:[{glow:'#2ad8ff',p:[['bubble','#9ff3ff',22],['spark','#9ff3ff',18],['fly','#7ae8ff',12]]},{glow:'#3affd8',p:[['bubble','#bff8ff',26],['spark','#ffffff',16],['dust','#bfeaff',20]]}]},
  {n:'Raging Volcano',th:'ภูเขาไฟคลั่ง',m:['x21','x22','x23'],b:'x24',l:'x25',r:'burn',bg:['r21','r22'],fx:[{glow:'#ff6a1a',volc:[[24,36],[57,22]],p:[['ember','#ffb04a',56],['ash','#c9b0a8',22]]},{glow:'#ff7a2a',p:[['ember','#ffc04a',60],['ash','#bfa8a0',16]]}]},
  {n:'Eternal Glacier',th:'ธารน้ำแข็งนิรันดร์',m:['x31','x32','x33'],b:'x34',l:'x35',r:'frost',bg:['r31','r32'],fx:[{aur:1,p:[['snow','#ffffff',56],['spark','#bfe6ff',14]]},{fog:'#e8f4ff',p:[['snow','#ffffff',40],['spark','#dff4ff',22]]}]},
