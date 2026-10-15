@@ -78,3 +78,9 @@ Live build: **b191** (15 Oct 2026 22:25: the invite-for-diamonds menu / FOUNDER 
 - Profile level Exp from every mode, daily cap 150 (first clears +10, daily quests +30, PvP win +8 / loss +3, tower +10 per 10 floors, world boss hit +5, login +5). Rewards: small Gold/diamonds per level, a new profile frame every 10 levels; optional +0.1%/level card stats (max +5%) OFF in PvP. Modes stay unlocked by stages only (recommended; owner had asked whether to overlap).
 - Profile picture: upload from phone, resized to 128x128 and stored on the account; the photo is visible to the OWNER ONLY (owner's choice) — others keep seeing the card character.
 - Frames are round avatar frames, 16-frame 4x4 sheets on magenta: pf-01, pf-10, pf-20, pf-30, pf-40, pf-50, pf-hallow (prompts sent). The pumpkin card frame (tools/wb_in/frame-pumpkin.png) can serve as a big showcase frame.
+
+## UI reskin plan (owner, 16 Oct 00:18; not built)
+- GPT UI kit kept in tools/ui_in (cut pieces in tools/ui_in/cut): panel, main/sub buttons, slot row, title ribbon, tabs on/off, currency pill, dock tile, progress bar (frame+fill), round buttons (close/back/gear). All 9-slice friendly.
+- Background chosen: option A "royal night blue" — radial gradient #2b3a8c → #151c4a → #0a0d24, faint star dots (34px grid, ~10% white), soft gold glow at the top. Mode accents done in code: shop gold glow, PvP red edge, tower ice-blue edge, world boss purple/green.
+- Icon sheets still to come from GPT (prompts sent): icons-menu (25), icons-battle (25), icons-inline (25: diamond, coin, crystal, star stone, class tags, lock, gift, trophy, mail, ticket, crown, megaphone, clover, warning, 6 realm-rule icons). Goal: replace emoji across the game.
+- The 1-bit UI pack (Batuhan) was tried and rejected by the owner ("ไม่สวย").
