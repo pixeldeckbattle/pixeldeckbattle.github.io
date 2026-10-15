@@ -84,3 +84,9 @@ Live build: **b191** (15 Oct 2026 22:25: the invite-for-diamonds menu / FOUNDER 
 - Background chosen: option A "royal night blue" — radial gradient #2b3a8c → #151c4a → #0a0d24, faint star dots (34px grid, ~10% white), soft gold glow at the top. Mode accents done in code: shop gold glow, PvP red edge, tower ice-blue edge, world boss purple/green.
 - Icon sheets still to come from GPT (prompts sent): icons-menu (25), icons-battle (25), icons-inline (25: diamond, coin, crystal, star stone, class tags, lock, gift, trophy, mail, ticket, crown, megaphone, clover, warning, 6 realm-rule icons). Goal: replace emoji across the game.
 - The 1-bit UI pack (Batuhan) was tried and rejected by the owner ("ไม่สวย").
+
+## World boss = PARTY mode (owner, 16 Oct 06:41–06:47; not built)
+- 2–4 players per room, each brings ONE card (their best). Host (crown) starts once 2+ are in. Room screen mock: scratchpad wb-party.png (4 standing slots, profile frame + name above, class plate + ready state, empty slot with invite / random search, own card row, short room chat).
+- Invite: host taps invite -> the invited player gets a small popup sliding down from the top wherever they are: "<name> ชวนตีบอสกันมั้ย?" with buttons สนใจ / ไว้ทีหลัง; auto-hides after 10 s with a countdown strip; the host can send again.
+- Room number: every room has a 4-digit number; "join by number" box; a copy button gives a ready-to-paste line for chat/Discord ("มาตีบอสฟักทองกัน! ห้อง #4821 ขาดอีก N คน"). First come first served, full at 4.
+- Proposed (owner not yet answered): bots fill to 2 after 30 s with no joiners (bots get no rewards); party damage cuts the server-wide boss HP, ranking per player; each member spends 1 ticket; candy +10% per member. Needs realtime room sync like the trade room (+2–3 days work).
