@@ -19,10 +19,10 @@ const r=await p.evaluate(()=>{USER={name:'g'};S=unlock(fresh());const out={};
  S.vip=0;out.lpr={lockedOff:lprOn(),btn:/🔒/.test(lprBtn())};S.vip=Date.now()+864e5;S.lpr=true;out.lpr.vipOn=lprOn();
  return out});
 // renders: card panel with the custom list, and the card fusion screen with Fuse all
-await p.evaluate(()=>{S.cards.h03={lv:50,exp:0};S.ask={h03:{o:[3,2,1,0],f:[1]}};zoom('h03')});await p.waitForTimeout(300);
-const zp=await p.evaluate(()=>({rows:document.querySelectorAll('#zoom .askr').length,off:document.querySelectorAll('#zoom .askr.off').length}));
-await p.click('#zoom [data-ask="dn"][data-k="3"]');await p.waitForTimeout(200);const ord=await p.evaluate(()=>S.ask.h03.o.join(''));
-await p.click('#zoom [data-ask="smart"]');await p.waitForTimeout(200);const reset=await p.evaluate(()=>!S.ask.h03);
-await p.evaluate(()=>{$('zoom').hidden=true;S.gold=50000;S.cards.h01={lv:1,exp:0,cp:6};fuTab='c';fuTo='UC';fuse()});await p.waitForTimeout(300);
+await p.evaluate(()=>{S.cards.h03={lv:50,exp:0};S.ask={h03:{o:[3,2,1,0],f:[1]}};askOpen('h03')});await p.waitForTimeout(300);
+const zp=await p.evaluate(()=>({rows:document.querySelectorAll('#ov .askr').length,off:document.querySelectorAll('#ov .askr.off').length}));
+await p.click('#ov [data-ask="dn"][data-k="3"]');await p.waitForTimeout(200);const ord=await p.evaluate(()=>S.ask.h03.o.join(''));
+await p.click('#ov [data-ask="smart"]');await p.waitForTimeout(200);const reset=await p.evaluate(()=>!S.ask.h03);
+await p.evaluate(()=>{ov('');askId=null;S.gold=50000;S.cards.h01={lv:1,exp:0,cp:6};fuTab='c';fuTo='UC';fuse()});await p.waitForTimeout(300);
 const fb=await p.evaluate(()=>{const x=document.querySelector('[data-act=fuall]');return x&&x.textContent.trim()});
 console.log(JSON.stringify({...r,panel:zp,orderAfterDown:ord,reset,fuseAllBtn:fb},null,1),'errors',e.length,e.slice(0,3).join('|'));await b.close()})()
