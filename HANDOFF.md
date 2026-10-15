@@ -1,6 +1,6 @@
 # Pixeldeck Battle — handoff for a new Claude session
 
-Live build: **b182** (15 Oct 2026). Talk to the owner (Toey) in Thai, never call them "ต้อย". The game name stays English; the in-game credit is "PixelDeckBattle".
+Live build: **b181**. b182 is BUILT and committed on origin but NOT released: it went to `pdb` by mistake on 15 Oct and was rolled back the same hour (pdb main = rollback commit 1e4cb59 restoring b181 index/version/admin). Release b182 only when the owner says "ปล่อย": put the b182 index.html/version.json/admin.html on pdb main (normal push, no force). Talk to the owner (Toey) in Thai, never call them "ต้อย". The game name stays English; the in-game credit is "PixelDeckBattle".
 
 ## Where things are
 - Game source (single file): `src/game.src.html`. Admin page source: `tools/admin.src.html`.
