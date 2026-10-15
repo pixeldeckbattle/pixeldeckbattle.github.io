@@ -68,3 +68,13 @@ Live build: **b191** (15 Oct 2026 22:25: the invite-for-diamonds menu / FOUNDER 
 - Problem seen in CBT: new cards (h29/h30/h31 SL, h34 L) came out too easily. Main cause: `fuDo` uses `randNew` (cards you don't own first), so the first L→SL fusion after release gave a new card 100%, and fuse-all made it instant. `bcTake` and mail rewards also use `randNew`. Normal pools went SL 4→7, so ~43% of any SL roll is a new card.
 - Agreed direction for OBT: fusion rolls evenly (no "new first" for new cards); a rate-up "new card banner" sold for diamonds with visible pity; new cards locked to that banner for the first weeks (not in fusion, stage drops or normal packs); a slow free path (Chapter 3 drops give card shards, N shards = 1 card); later the cards join the normal pool.
 - Measure with the admin card-source logs: % of active players owning the new card after 7 days (SL target ~5–15%), which source it came from.
+
+## b192 built, NOT released (15 Oct 23:45): Bag menu
+- Lobby dock first button "กระเป๋าไอเท็ม" (UI.bag) replaces My Cards; coll() has category tabs Cards / Amulets / Items (collTab 'it' -> itemsView(), list from itList()).
+- VIP card bought (diamond shop or arena shop) while VIP runs goes to S.vb (vbStore/vbHold); "ใช้" in Items calls vbUse -> vipAdd. Admin gift VIP still applies at once.
+- Waiting for the owner's release word.
+
+## Planned: profile level + profile picture frames (owner, 15 Oct 23:46–23:52; not built)
+- Profile level Exp from every mode, daily cap 150 (first clears +10, daily quests +30, PvP win +8 / loss +3, tower +10 per 10 floors, world boss hit +5, login +5). Rewards: small Gold/diamonds per level, a new profile frame every 10 levels; optional +0.1%/level card stats (max +5%) OFF in PvP. Modes stay unlocked by stages only (recommended; owner had asked whether to overlap).
+- Profile picture: upload from phone, resized to 128x128 and stored on the account; the photo is visible to the OWNER ONLY (owner's choice) — others keep seeing the card character.
+- Frames are round avatar frames, 16-frame 4x4 sheets on magenta: pf-01, pf-10, pf-20, pf-30, pf-40, pf-50, pf-hallow (prompts sent). The pumpkin card frame (tools/wb_in/frame-pumpkin.png) can serve as a big showcase frame.
