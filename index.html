@@ -485,7 +485,7 @@ h1{font-size:28px;letter-spacing:.02em;color:#ffe45c;text-shadow:0 3px 0 #e2413e
 h2{color:#ffe45c;text-shadow:0 2px 0 #080b1f}
 /* lobby */
 .lobby{position:relative;height:calc(100% + 20px);margin:-10px -16px;padding:8px 16px 10px;display:grid;grid-template-rows:auto minmax(0,1fr) auto;gap:6px;overflow:hidden}
-.lbg{position:absolute;inset:0;z-index:0;background:var(--bg) center 62%/cover;image-rendering:pixelated}
+.lbg{position:absolute;inset:0;z-index:0;background:var(--bg) center 10%/cover;image-rendering:pixelated}
 .lbg::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(8,11,31,.78) 0,rgba(8,11,31,.12) 34%,rgba(8,11,31,.2) 62%,rgba(8,11,31,.92) 100%),radial-gradient(90% 80% at 50% 50%,transparent 40%,rgba(8,11,31,.6))}
 .lobby>*:not(.lbg){position:relative;z-index:1}
 .hud{display:flex;align-items:center;gap:8px}
@@ -549,7 +549,7 @@ h2{color:#ffe45c;text-shadow:0 2px 0 #080b1f}
 .clang{position:absolute!important;right:14px;top:10px;display:flex;gap:6px}
 /* painted cover: the art already carries the logo, so the screen only adds a strip of controls along the bottom */
 .cover{display:grid;grid-template-columns:1fr;align-items:end}
-.cover .cbg,.loadv.art .cbg{background:var(--bg) center 100%/cover;image-rendering:auto;filter:none}
+.cover .cbg,.loadv.art .cbg{background:var(--bg) center 10%/cover;image-rendering:auto;filter:none}
 .cover .cbg::after,.loadv.art .cbg::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(8,11,31,.35) 0,transparent 16%,transparent 74%,rgba(8,11,31,.92) 96%)}
 .cover .cpanel{position:static!important;padding:0 16px 7px;gap:0}.cover .cbtns{position:relative;z-index:2}.cover .cnote{z-index:2}
 .cover .cbtns{display:flex;justify-content:center;gap:10px;width:auto;margin:0}.cover .cbtns .btn,.cover .gbtn{width:auto;min-width:180px;min-height:34px;padding-top:3px;padding-bottom:3px;font-size:13px;box-shadow:0 4px 0 #080b1f,0 0 18px rgba(0,0,0,.6)}
@@ -3356,7 +3356,7 @@ function settings(){
     ${USER&&!USER.sub?`<div class="row"><span style="flex:1" class="nt">${T('ผูกตัวนี้กับบัญชี Google','Link this player to Google')}<br><small class="sub">${T('ย้ายตัว Guest นี้ขึ้นคลาวด์ เล่นข้ามเครื่องได้ ขึ้นอันดับและเจอผู้เล่นจริง','Move this guest player to the cloud: play on any device, join the rankings, meet real players')}</small></span><button class="btn go sm nt" data-act="glink" ${FB_CFG?'':'disabled'}>${T('ผูกบัญชี','Link')}</button></div>`:''}
     <div class="row"><span style="flex:1">เซฟ</span><button class="btn red sm" data-act="reset">${armed?'แตะอีกครั้งเพื่อลบเซฟ':'เริ่มใหม่ทั้งหมด'}</button></div>
     ${TEST?`<p class="sub">โหมดเทส: ปลดล็อกครบทุกใบ</p><div class="row"><button class="btn alt sm" data-act="tgold">Gold +10000</button><button class="btn alt sm" data-act="tlv">ทุกใบ Lv +5</button><button class="btn alt sm" data-act="tam">เครื่องราง +1 ทุกชิ้น</button></div>`:''}</div></div>`)}
-const COVER_BG='cover.webp',CAST=[['h03',78,24,0,1],['h07',66,2,0,1],['h19',66,50,0,1],['h22',60,14,0,0],['h13',58,38,0,0],['h09',60,62,0,0]];
+const COVER_BG='cover-c3.webp',CAST=[['h03',78,24,0,1],['h07',66,2,0,1],['h19',66,50,0,1],['h22',60,14,0,0],['h13',58,38,0,0],['h09',60,62,0,0]];
 function titleScreen(){
   const emb=Array.from({length:16},(_,i)=>`<i class="emb" style="--x:${(i*37+11)%100}%;--t:${4+i%5}s;--d:${-(i*.7)}s;--dx:${(i%2?1:-1)*(10+i*3)}px;--c:${['#ffb04a','#ff6a3a','#ffe45c'][i%3]}"></i>`).join('');
   view(`<div class="cover" style="--bg:url(${COVER_BG})"><div class="cbg"></div>${emb}
@@ -3371,7 +3371,7 @@ function titleScreen(){
    <p class="cfoot nt">PixelDeckBattle · CBT build ${BUILD}</p></div>`);
 }
 // ---------- Firebase: Google sign-in and one cloud save document per account (saves/{uid}) ----------
-const BUILD='b185';
+const BUILD='b186';
 // The game moved to its own address. Anyone opening the old address is sent on, but only once the new site answers, so a broken move cannot lock players out.
 const DISCORD='https://discord.gg/dHDzRyPG9',DC_SVG='<svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="currentColor" d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.4189-2.1568 2.4189Z"/></svg>';
 const NEW_HOME='https://pixeldeckbattle.github.io/';
