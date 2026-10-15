@@ -173,10 +173,10 @@ pre{white-space:pre-wrap;font:12px/1.5 ui-monospace,Menlo,monospace;color:#d6d0f
           <div><span class="big" id="pkCount">0</span><span class="hint">รูปในแพ็ก</span></div>
           <div><span class="big" id="pkCombos">0</span><span class="hint">แบบที่ประกอบได้</span></div>
         </div>
-        <p class="hint">กด “+ เพิ่มรูป” ในชั้นที่ตรงกับรูปจาก GPT (เลือกหลายรูปพร้อมกันได้) หรือนำเข้า ZIP ทั้งแพ็ก (ถ้าใน ZIP มีโฟลเดอร์ parts แอปจะใช้เฉพาะโฟลเดอร์นั้น) แอปจำรูปไว้ในเครื่อง ปิดแอปแล้วยังอยู่</p>
+        <p class="hint">กด “+ เพิ่มรูป” ในชั้นที่ตรงกับรูปจาก GPT (เลือกหลายรูปพร้อมกันได้) หรือนำเข้า ZIP ทั้งแพ็ก (ถ้าใน ZIP มีโฟลเดอร์ parts แอปจะใช้เฉพาะโฟลเดอร์นั้น และถ้ามี rig.json แอปจะวางชิ้นส่วนตามไฟล์นั้น) · ถ้าแตก ZIP ไว้แล้ว กด “เลือกรูปหลายชั้นพร้อมกัน” แล้วเลือกรูปใน parts พร้อม rig.json แอปจำรูปไว้ในเครื่อง ปิดแอปแล้วยังอยู่</p>
         <div class="row">
           <label class="btn go">นำเข้า ZIP<input class="vh" type="file" id="inZip" accept=".zip,application/zip"></label>
-          <label class="btn">เลือกรูปหลายชั้นพร้อมกัน<input class="vh" type="file" id="inMany" accept="image/*" multiple></label>
+          <label class="btn">เลือกรูปหลายชั้นพร้อมกัน<input class="vh" type="file" id="inMany" accept="image/*,.json,application/json" multiple></label>
           <button class="btn sm" id="pkRand">สุ่มชิ้นส่วน</button>
           <button class="btn sm" id="pkAuto">จัดตำแหน่งอัตโนมัติทุกรูป</button>
           <button class="btn sm go" id="pkUse" hidden>กลับมาใช้แพ็กชิ้นส่วน</button>
@@ -434,20 +434,21 @@ let IMP=null;   // what the stage shows: the parts pack, or another import
 const ALIAS={idle:['idle','stand','ยืน'],walk:['walk','เดิน'],run:['run','วิ่ง'],attack:['attack','atk','slash','shoot','ตี','โจมตี','ยิง'],skill:['skill','special','สกิล'],cast:['cast','magic','ร่าย','ร่ายเวท'],hit:['hit','hurt','damage','โดนตี'],death:['death','die','dead','ตาย'],victory:['victory','win','ชนะ']};
 const PARTRANK=['back','cape','legs','body','armor','head','face','eyes','hair','hat','helmet','weapon','front'];
 function animKey(name){const n=name.toLowerCase().replace(/^\d+[_\-\s.]*/,'');for(const k in ALIAS)if(ALIAS[k].some(a=>n===a||n.startsWith(a)))return k;return null}
-function xf(anim,t){const s=Math.sin(2*Math.PI*t),T={x:0,y:0,rot:0,sx:1,sy:1,flash:0,wr:0,fx:[]};
+function xf(anim,t){const s=Math.sin(2*Math.PI*t),T={x:0,y:0,rot:0,sx:1,sy:1,flash:0,wr:0,fx:[],limb:{}},Lb=T.limb;
   switch(anim){
-    case'idle':T.y=-(s>0?1:0);T.sy=1+.015*s;T.sx=1-.01*s;break;
-    case'walk':T.y=-Math.round(Math.abs(s)*1.5);T.rot=3*s;break;
-    case'run':T.y=-Math.round(Math.abs(s)*3);T.rot=6+3*s;T.x=1;break;
+    case'idle':T.y=-(s>0?1:0);T.sy=1+.015*s;T.sx=1-.01*s;Lb.near_arm=4*s;Lb.far_arm=-4*s;break;
+    case'walk':T.y=-Math.round(Math.abs(s)*1.5);T.rot=1.5*s;Lb.near_leg=-24*s;Lb.far_leg=24*s;Lb.near_arm=20*s;Lb.far_arm=-20*s;break;
+    case'run':T.y=-Math.round(Math.abs(s)*3);T.rot=5+2*s;T.x=1;Lb.near_leg=-40*s;Lb.far_leg=40*s;Lb.near_arm=-10+34*s;Lb.far_arm=-10-34*s;break;
     case'attack':case'skill':{const big=anim==='skill';
-      if(t<.3){const e=ease(t/.3);T.rot=-6*e;T.x=-2*e;T.wr=80*e}
-      else if(t<.5){const e=ease((t-.3)/.2);T.rot=lerp(-6,10,e);T.x=lerp(-2,big?9:5,e);T.wr=lerp(80,-110,e)}
-      else{const e=ease((t-.5)/.5);T.rot=lerp(10,0,e);T.x=lerp(big?9:5,0,e);T.wr=lerp(-110,0,e)}
+      const up=big?170:140,dn=big?-95:-70;
+      if(t<.3){const e=ease(t/.3);T.rot=-6*e;T.x=-2*e;T.wr=80*e;Lb.near_arm=up*e;Lb.far_arm=20*e;Lb.far_leg=10*e}
+      else if(t<.5){const e=ease((t-.3)/.2);T.rot=lerp(-6,10,e);T.x=lerp(-2,big?9:5,e);T.wr=lerp(80,-110,e);Lb.near_arm=lerp(up,dn,e);Lb.far_arm=lerp(20,-25,e);Lb.near_leg=-22*e;Lb.far_leg=lerp(10,18,e)}
+      else{const e=ease((t-.5)/.5);T.rot=lerp(10,0,e);T.x=lerp(big?9:5,0,e);T.wr=lerp(-110,0,e);Lb.near_arm=lerp(dn,0,e);Lb.far_arm=lerp(-25,0,e);Lb.near_leg=lerp(-22,0,e);Lb.far_leg=lerp(18,0,e)}
       T.fx=big?[{k:'circle',p:seg(t,0,.5)},{k:'slash',p:seg(t,.28,.75),big:1}]:[{k:'slash',p:seg(t,.28,.72)}];break}
-    case'cast':{const e=Math.sin(Math.PI*seg(t,0,.6));T.y=-Math.round(2*e);T.sy=1+.03*e;T.wr=30*e;T.fx=[{k:'circle',p:t},{k:'orb',p:seg(t,.45,1)}];break}
-    case'hit':{const e=1-seg(t,0,.7);T.x=-3*e;T.rot=-8*e;T.flash=t<.2?1:0;T.fx=[{k:'hit',p:seg(t,0,.5)}];break}
-    case'death':{const e=ease(seg(t,0,.7));T.rot=-88*e;T.flash=t<.12?1:0;break}
-    case'victory':{const j=Math.sin(Math.PI*seg(t,0,.6));T.y=-Math.round(j*6);T.sy=1+.05*j;T.fx=[{k:'buff',p:t}];break}
+    case'cast':{const e=Math.sin(Math.PI*seg(t,0,.6));T.y=-Math.round(2*e);T.sy=1+.03*e;T.wr=30*e;Lb.near_arm=-105*ease(seg(t,0,.45))*(t>.85?1-(t-.85)/.15:1);Lb.far_arm=-30*e;T.fx=[{k:'circle',p:t},{k:'orb',p:seg(t,.45,1)}];break}
+    case'hit':{const e=1-seg(t,0,.7);T.x=-3*e;T.rot=-8*e;T.flash=t<.2?1:0;Lb.near_arm=40*e;Lb.far_arm=30*e;Lb.near_leg=10*e;T.fx=[{k:'hit',p:seg(t,0,.5)}];break}
+    case'death':{const e=ease(seg(t,0,.7));T.rot=-88*e;T.flash=t<.12?1:0;Lb.near_arm=-40*e;Lb.far_arm=-25*e;Lb.near_leg=-15*e;break}
+    case'victory':{const j=Math.sin(Math.PI*seg(t,0,.6));T.y=-Math.round(j*6);T.sy=1+.05*j;Lb.near_arm=-165*ease(seg(t,0,.3));Lb.far_arm=15*s;Lb.near_leg=j>.2?-12:0;Lb.far_leg=j>.2?12:0;T.fx=[{k:'buff',p:t}];break}
   }
   return T}
 function impAnims(){if(!IMP)return ANIMS;const L=[];if(IMP.type==='frames')L.push(['src','ตามไฟล์']);
@@ -455,16 +456,22 @@ function impAnims(){if(!IMP)return ANIMS;const L=[];if(IMP.type==='frames')L.pus
 function impBase(){if(IMP.type==='frames')return IMP.frames[0];if(IMP.type==='anims')return(IMP.anims.idle||Object.values(IMP.anims)[0])[0];return IMP.img}
 /* where a pack item is drawn: scaled about the canvas centre, then shifted */
 function place(it,fw,fh){const sc=it.sc||1,w=fw*sc,h=fh*sc;return{x:(fw-w)/2+(it.dx||0),y:(fh-h)/2+(it.dy||0),w,h,sc}}
-function drawPack(x,P,fw,fh,wr,sel){P.layers.forEach((L,li)=>{const it=L.items[sel?sel[li]:L.sel];if(!it||!it.cv)return;const r=place(it,fw,fh);
+/* rig packs (e.g. GPT's rig.json): each part sits at its slot, arms and legs turn at their pivots */
+function drawRig(x,P,limb,sel){const R=P.rig,[W0]=R.canvas,mir=R.facing==='left';x.save();if(mir){x.translate(W0,0);x.scale(-1,1)}
+  for(const slot of R.drawOrder){const m=slot.match(/^(near|far)_(.+)$/),kind=m?m[2]:slot,li=P.layers.findIndex(L=>L.name===kind);if(li<0)continue;const L=P.layers[li],it=L.items[sel?sel[li]:L.sel];if(!it)continue;
+    const cv=m&&m[1]==='far'&&it.cv2?it.cv2:it.cv;if(!cv)continue;const[sx,sy]=R.slots[slot]||[0,0],[px,py]=R.pivotLocal[kind]||[0,0],rot=((limb&&limb[slot])||0)*(mir?-1:1);
+    x.save();x.translate(sx+px+(it.dx||0)*(mir?-1:1),sy+py+(it.dy||0));x.rotate(rot*D2R);if(it.sc&&it.sc!==1)x.scale(it.sc,it.sc);x.drawImage(cv,-px,-py);x.restore()}
+  x.restore()}
+function drawPack(x,P,fw,fh,T,sel){if(P.rig)return drawRig(x,P,T.limb,sel);const wr=T.wr;P.layers.forEach((L,li)=>{const it=L.items[sel?sel[li]:L.sel];if(!it||!it.cv)return;const r=place(it,fw,fh);
   if(L.weapon&&wr){const[px,py]=P.pivot;x.save();x.translate(px,py);x.rotate(-wr*D2R);x.translate(-px,-py);x.drawImage(it.cv,r.x,r.y,r.w,r.h);x.restore()}else x.drawImage(it.cv,r.x,r.y,r.w,r.h)})}
 const IC=document.createElement('canvas');
 function renderImp(anim,f,n,o,cv=IC,sel){const fw=IMP.fw,fh=IMP.fh;if(cv.width!==fw||cv.height!==fh){cv.width=fw;cv.height=fh}const x=cv.getContext('2d');x.clearRect(0,0,fw,fh);x.imageSmoothingEnabled=false;
   const k=Math.max(1,fh/56);let T,src=null;
-  if(IMP.type==='frames'&&anim==='src'){src=IMP.frames[f%IMP.frames.length];T={x:0,y:0,rot:0,sx:1,sy:1,flash:0,wr:0,fx:[]}}
-  else if(IMP.type==='anims'&&IMP.anims[anim]){const L=IMP.anims[anim];src=L[f%L.length];T={x:0,y:0,rot:0,sx:1,sy:1,flash:0,wr:0,fx:xf(anim,f/n).fx}}
+  if(IMP.type==='frames'&&anim==='src'){src=IMP.frames[f%IMP.frames.length];T={x:0,y:0,rot:0,sx:1,sy:1,flash:0,wr:0,fx:[],limb:{}}}
+  else if(IMP.type==='anims'&&IMP.anims[anim]){const L=IMP.anims[anim];src=L[f%L.length];T={x:0,y:0,rot:0,sx:1,sy:1,flash:0,wr:0,fx:xf(anim,f/n).fx,limb:{}}}
   else T=xf(anim,f/n);
   x.save();x.translate(fw/2+T.x*k,fh+T.y*k);x.rotate(T.rot*D2R);x.scale(T.sx,T.sy);x.translate(-fw/2,-fh);
-  if(src)x.drawImage(src,0,0);else if(IMP.type==='pack')drawPack(x,IMP,fw,fh,T.wr,sel);else x.drawImage(impBase(),0,0);
+  if(src)x.drawImage(src,0,0);else if(IMP.type==='pack')drawPack(x,IMP,fw,fh,T,sel);else x.drawImage(impBase(),0,0);
   x.restore();
   if(T.flash){x.globalCompositeOperation='source-atop';x.fillStyle='rgba(255,255,255,.75)';x.fillRect(0,0,fw,fh);x.globalCompositeOperation='source-over'}
   const ox=fw*.45+T.x*k,oy=fh*.96,kk=Math.ceil(k);
@@ -505,42 +512,43 @@ const idb={p:null,open(){return this.p||(this.p=new Promise((res,rej)=>{const r=
   put(k,v){return this.tx('readwrite',s=>s.put(v,k))},get(k){return this.tx('readonly',s=>s.get(k))},del(k){return this.tx('readwrite',s=>s.delete(k))},clear(){return this.tx('readwrite',s=>s.clear())}};
 const uid=()=>'p'+Date.now().toString(36)+Math.random().toString(36).slice(2,8);
 const blobOf=c=>new Promise(r=>c.toBlob(r,'image/png'));
-const PK={type:'pack',layers:[],pivot:null,fw:0,fh:0,name:'pixeldeck_parts',pivotSet:false,
+const PK={type:'pack',layers:[],pivot:null,fw:0,fh:0,name:'pixeldeck_parts',pivotSet:false,rig:null,
   count(){return this.layers.reduce((a,L)=>a+L.items.filter(i=>i.cv).length,0)},
   combos(){return this.count()?this.layers.reduce((a,L)=>a*Math.max(1,L.items.length),1):0},
-  reset(){this.layers=LAYDEF.map(d=>({dir:d.dir,name:d.key,weapon:!!d.weapon,sel:0,items:d.none?[{name:'(ไม่ใส่)',cv:null}]:[]}));this.pivot=null;this.pivotSet=false;this.fw=this.fh=0},
-  size(){const all=this.layers.flatMap(L=>L.items.filter(i=>i.cv).map(i=>i.cv));if(!all.length){this.fw=this.fh=0;return}const s=sizeOf(all),m=Math.max(s.fw,s.fh);this.fw=this.fh=m;if(!this.pivotSet)this.pivot=[Math.round(m*GUIDE.hand[0]),Math.round(m*GUIDE.hand[1])]},
-  meta(){return{name:this.name,pivot:this.pivotSet?this.pivot:null,layers:this.layers.map(L=>({dir:L.dir,name:L.name,weapon:L.weapon,sel:L.sel,items:L.items.map(i=>i.cv?{id:i.id,name:i.name,dx:i.dx||0,dy:i.dy||0,sc:i.sc||1}:{none:1,name:i.name})}))}}};
+  reset(){this.rig=null;this.layers=LAYDEF.map(d=>({dir:d.dir,name:d.key,weapon:!!d.weapon,sel:0,items:d.none?[{name:'(ไม่ใส่)',cv:null}]:[]}));this.pivot=null;this.pivotSet=false;this.fw=this.fh=0},
+  size(){if(this.rig){[this.fw,this.fh]=this.rig.canvas;this.pivot=null;return}const all=this.layers.flatMap(L=>L.items.filter(i=>i.cv).map(i=>i.cv));if(!all.length){this.fw=this.fh=0;return}const s=sizeOf(all),m=Math.max(s.fw,s.fh);this.fw=this.fh=m;if(!this.pivotSet)this.pivot=[Math.round(m*GUIDE.hand[0]),Math.round(m*GUIDE.hand[1])]},
+  meta(){return{name:this.name,rig:this.rig,pivot:this.pivotSet?this.pivot:null,layers:this.layers.map(L=>({dir:L.dir,name:L.name,weapon:L.weapon,sel:L.sel,items:L.items.map(i=>i.cv?{id:i.id,name:i.name,id2:i.id2,name2:i.name2,dx:i.dx||0,dy:i.dy||0,sc:i.sc||1}:{none:1,name:i.name})}))}}};
 let saveT;function savePack(){clearTimeout(saveT);saveT=setTimeout(()=>store.set('pack',PK.meta()),250)}
 async function restorePack(){const m=store.get('pack',null);PK.reset();if(!m||!m.layers)return;
-  try{PK.name=m.name||PK.name;if(m.pivot){PK.pivot=m.pivot;PK.pivotSet=true}
-    PK.layers=[];for(const L of m.layers){const items=[];for(const i of L.items){if(i.none){items.push({name:i.name,cv:null});continue}const b=await idb.get(i.id);if(!b)continue;items.push({id:i.id,name:i.name,dx:i.dx,dy:i.dy,sc:i.sc,cv:await loadCanvas(b)})}
+  try{PK.name=m.name||PK.name;PK.rig=m.rig||null;if(m.pivot){PK.pivot=m.pivot;PK.pivotSet=true}
+    PK.layers=[];for(const L of m.layers){const items=[];for(const i of L.items){if(i.none){items.push({name:i.name,cv:null});continue}const b=await idb.get(i.id);if(!b)continue;const it={id:i.id,name:i.name,dx:i.dx,dy:i.dy,sc:i.sc,cv:await loadCanvas(b)};if(i.id2){const b2=await idb.get(i.id2);if(b2){it.id2=i.id2;it.name2=i.name2;it.cv2=await loadCanvas(b2)}}items.push(it)}
       PK.layers.push({dir:L.dir,name:L.name,weapon:!!L.weapon,sel:clamp(L.sel||0,0,Math.max(0,items.length-1)),items})}
-    for(const d of LAYDEF)if(!PK.layers.some(L=>L.name===d.key))PK.layers.push({dir:d.dir,name:d.key,weapon:!!d.weapon,sel:0,items:d.none?[{name:'(ไม่ใส่)',cv:null}]:[]});
+    if(!PK.rig)for(const d of LAYDEF)if(!PK.layers.some(L=>L.name===d.key))PK.layers.push({dir:d.dir,name:d.key,weapon:!!d.weapon,sel:0,items:d.none?[{name:'(ไม่ใส่)',cv:null}]:[]});
     PK.size()}catch(e){PK.reset()}}
 async function addItem(L,name,cv,off){const it={id:uid(),name,cv,dx:off?off[0]:0,dy:off?off[1]:0,sc:off&&off[2]?off[2]:1};L.items.push(it);try{await idb.put(it.id,await blobOf(cv))}catch(e){}return it}
 async function addParts(li,files){const L=PK.layers[li],o=opt();let n=0;impStat('กำลังเพิ่มรูป …');
   for(const f of[...files].sort((a,b)=>nat(a.name,b.name))){const cv=await loadCanvas(f);if(o.key)keyOut(cv,o.tol);if(!alphaBox(cv))continue;await addItem(L,f.name.replace(/\.\w+$/,''),cv);n++;busy(`กำลังเพิ่มรูป ${n}/${files.length} …`,n/files.length);await tick()}busy(null);
   if(!n)return impStat('ไม่มีรูปที่ใช้ได้ (รูปว่างหลังลบพื้นหลัง)',1);
   L.sel=L.items.length-1;PK.size();savePack();impStat(`เพิ่ม ${n} รูปในชั้น${layLabel(L)}แล้ว`);toast(`เพิ่ม ${n} รูปในชั้น${layLabel(L)}แล้ว`);showPack()}
-async function delItem(li){const L=PK.layers[li],it=L.items[L.sel];if(!it||!it.cv)return;L.items.splice(L.sel,1);try{await idb.del(it.id)}catch(e){}L.sel=clamp(L.sel,0,Math.max(0,L.items.length-1));PK.size();savePack();showPack()}
+async function delItem(li){const L=PK.layers[li],it=L.items[L.sel];if(!it||!it.cv)return;L.items.splice(L.sel,1);try{await idb.del(it.id);if(it.id2)await idb.del(it.id2)}catch(e){}L.sel=clamp(L.sel,0,Math.max(0,L.items.length-1));PK.size();savePack();showPack()}
 function showPack(){if(PK.count()){if(!IMP||IMP.type==='pack'){IMP=PK;$('pkUse').hidden=true}}else if(IMP===PK)IMP=null;buildLayers();buildExScale();refreshAll()}
-const layLabel=L=>{const d=layDef(L.name);return d?d.th:L.name};
+const RIGTH={head:'หัว',torso:'ลำตัว',arm:'แขน (คู่หน้า-หลัง)',leg:'ขา (คู่หน้า-หลัง)'};
+const layLabel=L=>{if(PK.rig&&RIGTH[L.name])return RIGTH[L.name];const d=layDef(L.name);return d?d.th:L.name};
 /* snap the body (neck + feet) or the head (into the head area) to the standard positions */
-function autoPlace(L,it){if(!it||!it.cv)return false;const d=layDef(L.name);if(!d||!['body','head'].includes(d.key))return false;const b=alphaBox(it.cv);if(!b)return false;
+function autoPlace(L,it){if(!it||!it.cv||PK.rig)return false;const d=layDef(L.name);if(!d||!['body','head'].includes(d.key))return false;const b=alphaBox(it.cv);if(!b)return false;
   const fw=PK.fw,fh=PK.fh,iw=it.cv.width,ih=it.cv.height,kx=fw/iw,ky=fh/ih;   // picture → pack pixels at scale 1
   let sc;if(d.key==='body')sc=(GUIDE.feet-GUIDE.neck[1])*fh/(b.h*ky);else{const[a0,b0,a1,b1]=GUIDE.head;sc=Math.min((a1-a0)*fw/(b.w*kx),(b1-b0)*fh/(b.h*ky))}
   sc=clamp(sc,.4,2.5);const w=fw*sc,h=fh*sc,ox=(fw-w)/2,oy=(fh-h)/2,px=v=>v*kx*sc,py=v=>v*ky*sc;
   if(d.key==='body'){const nx=topMidX(it.cv,b,.08);it.dx=GUIDE.neck[0]*fw-ox-px(nx);it.dy=GUIDE.feet*fh-oy-py(b.y0+b.h)}
   else{const[a0,b0,a1,b1]=GUIDE.head;it.dx=(a0+a1)/2*fw-ox-px(b.x0+b.w/2);it.dy=(b0+b1)/2*fh-oy-py(b.y0+b.h/2)}
   it.sc=+sc.toFixed(3);it.dx=Math.round(it.dx);it.dy=Math.round(it.dy);return true}
-function buildLayers(){const box=$('layers');box.innerHTML='';const stepSel=$('pkStep'),prev=stepSel.value,fw=PK.fw||1024,g=Math.max(1,Math.round(fw/64));
+function buildLayers(){const box=$('layers');box.innerHTML='';const stepSel=$('pkStep'),prev=stepSel.value,fw=PK.fw||1024,g=PK.rig?1:Math.max(1,Math.round(fw/64));
   stepSel.innerHTML=`<option value="1">1 จุด (ละเอียดสุด)</option><option value="${g}">${g} จุด = 1 พิกเซลเกม</option><option value="${g*4}">${g*4} จุด = 4 พิกเซลเกม</option>`;stepSel.value=[...stepSel.options].some(o=>o.value===prev)?prev:String(g);
   $('pkCount').textContent=PK.count().toLocaleString('en');$('pkCombos').textContent=PK.combos().toLocaleString('en');
   PK.layers.forEach((L,li)=>{const el=document.createElement('div');el.className='layer';const real=L.items.filter(i=>i.cv).length,d=layDef(L.name);
     el.innerHTML=`<div class="row between"><b>${li+1}. ${layLabel(L)}${L.weapon?' <span class="hint">(หมุนตอนโจมตี)</span>':''}</b><span class="hint">${real} รูป</span></div>
       <div class="row"><select class="grow" aria-label="เลือกรูปชั้น${layLabel(L)}"></select><label class="btn sm go">+ เพิ่มรูป<input class="vh" type="file" accept="image/*" multiple></label></div>
-      <div class="row nudge"><button class="btn sm" data-n="l" aria-label="เลื่อนซ้าย">◀</button><button class="btn sm" data-n="r" aria-label="เลื่อนขวา">▶</button><button class="btn sm" data-n="u" aria-label="เลื่อนขึ้น">▲</button><button class="btn sm" data-n="d" aria-label="เลื่อนลง">▼</button><button class="btn sm" data-n="s-" aria-label="ย่อ">−</button><button class="btn sm" data-n="s+" aria-label="ขยาย">+</button>${d&&['body','head'].includes(d.key)?'<button class="btn sm" data-n="auto">จัดอัตโนมัติ</button>':''}<button class="btn sm" data-n="0">รีเซ็ต</button><button class="btn sm warn" data-n="del">ลบรูปนี้</button></div>
+      <div class="row nudge"><button class="btn sm" data-n="l" aria-label="เลื่อนซ้าย">◀</button><button class="btn sm" data-n="r" aria-label="เลื่อนขวา">▶</button><button class="btn sm" data-n="u" aria-label="เลื่อนขึ้น">▲</button><button class="btn sm" data-n="d" aria-label="เลื่อนลง">▼</button><button class="btn sm" data-n="s-" aria-label="ย่อ">−</button><button class="btn sm" data-n="s+" aria-label="ขยาย">+</button>${!PK.rig&&d&&['body','head'].includes(d.key)?'<button class="btn sm" data-n="auto">จัดอัตโนมัติ</button>':''}<button class="btn sm" data-n="0">รีเซ็ต</button><button class="btn sm warn" data-n="del">ลบรูปนี้</button></div>
       <span class="hint off"></span>`;
     const s=el.querySelector('select');if(!L.items.length)s.innerHTML='<option>— ยังไม่มีรูป —</option>';else L.items.forEach((it,i)=>{const o=document.createElement('option');o.value=i;o.textContent=it.name;s.appendChild(o)});s.value=L.sel;s.disabled=!L.items.length;
     const offTxt=()=>{const it=L.items[L.sel],on=!!(it&&it.cv);el.querySelectorAll('.nudge .btn').forEach(b=>b.disabled=!on||!IMP||IMP!==PK);el.querySelector('.off').textContent=on?`ตำแหน่ง x ${it.dx>=0?'+':''}${it.dx} · y ${it.dy>=0?'+':''}${it.dy} · ขนาด ${Math.round(it.sc*100)}%`:''};
@@ -558,8 +566,8 @@ async function importZip(file){
   if(!window.JSZip){impStat('อ่าน ZIP ไม่ได้ เพราะตัวอ่าน ZIP โหลดไม่สำเร็จ',1);return}
   busy(`กำลังเปิด ${file.name} (${(file.size/1048576).toFixed(1)} MB) …`);await tick();
   try{
-  const z=await JSZip.loadAsync(file);let ents=[];let metaF=null;
-  z.forEach((p,e)=>{if(e.dir||/__MACOSX|(^|\/)\./.test(p))return;if(/\.(png|webp|gif|jpe?g)$/i.test(p))ents.push(p);else if(/(^|\/)pack\.json$/i.test(p))metaF=e});
+  const z=await JSZip.loadAsync(file);let ents=[];let metaF=null,rigF=null;
+  z.forEach((p,e)=>{if(e.dir||/__MACOSX|(^|\/)\./.test(p))return;if(/\.(png|webp|gif|jpe?g)$/i.test(p))ents.push(p);else if(/(^|\/)pack\.json$/i.test(p))metaF=e;else if(/(^|\/)rig\.json$/i.test(p)&&(!rigF||p.length<rigF.name.length))rigF=e});
   if(!ents.length){busy(null);impStat('ไม่พบรูปภาพใน ZIP นี้',1);return}
   // a big bundle (e.g. GPT's: characters/ parts/ source/ …): use only its parts folder
   const dirsOf=p=>{const a=p.split('/'),o=[];for(let i=1;i<a.length;i++)o.push(a.slice(0,i).join('/'));return o};
@@ -568,6 +576,8 @@ async function importZip(file){
   if(ents.length>MAXIMG){const top={};ents.forEach(p=>{const t=p.split('/').slice(0,-1).join('/')||'(นอกโฟลเดอร์)';top[t]=(top[t]||0)+1});
     busy(null);impStat(`ZIP นี้มีรูป ${ents.length.toLocaleString('en')} รูป มากเกินจะเป็นแพ็กชิ้นส่วน และหาโฟลเดอร์ parts ไม่เจอ · ${Object.entries(top).sort((a,b)=>b[1]-a[1]).slice(0,4).map(([k,v])=>k+' '+v).join(' · ')}`,1);return}
   let meta={};if(metaF)try{meta=JSON.parse(await metaF.async('string'))}catch(e){}
+  if(rigF){let rig=null;try{rig=JSON.parse(await rigF.async('string'))}catch(e){}
+    if(isRig(rig)){busy(null);return rigFrom(rig,ents.map(p=>({name:p.split('/').pop(),blob:()=>z.file(p).async('blob')})),file.name,meta.offsets)}}
   const parts=ents.map(p=>p.split('/'));let root=0;while(parts.every(a=>a.length>root+1&&a[root]===parts[0][root]))root++;
   const groups={};parts.forEach((a,i)=>{const g=a.length>root+1?a[root]:'';(groups[g]=groups[g]||[]).push(ents[i])});
   const dirs=Object.keys(groups).filter(g=>g);
@@ -599,8 +609,24 @@ async function packFrom(groups,z,meta,fname){
   }finally{busy(null)}
   PK.size();savePack();IMP=PK;showPack();
   impStat(`นำเข้าแพ็กชิ้นส่วนแล้ว ${PK.layers.length} ชั้น ${n} รูป · ประกอบได้ ${PK.combos().toLocaleString('en')} แบบ`);toast(`นำเข้าแล้ว ${n} รูป`)}
+const isRig=r=>!!(r&&Array.isArray(r.canvas)&&r.slots&&Array.isArray(r.drawOrder)&&r.pivotLocal);
+/* a rig pack: parts named <kind>_NN.png placed by rig.json; kinds used by near_/far_ slots come in pairs (2n = near, 2n+1 = far) */
+async function rigFrom(rig,files,fname,offs){offs=offs||{};const kinds=Object.keys(rig.pivotLocal),pair=k=>rig.drawOrder.some(sl=>sl==='near_'+k||sl==='far_'+k),o=opt();
+  const by={};for(const f of files){const m=f.name.toLowerCase().match(/^([a-z]+)[_\-]?(\d+)\.(png|webp|gif|jpe?g)$/);if(m&&kinds.includes(m[1]))(by[m[1]]=by[m[1]]||[]).push({n:+m[2],...f})}
+  const total=Object.values(by).reduce((a,l)=>a+l.length,0);if(!total)return impStat(`มี rig.json แต่ไม่พบรูปชื่อ ${kinds.map(k=>k+'_00').join(', ')}`,1);
+  const load=async f=>{const cv=await loadCanvas(await f.blob());if(o.key)keyOut(cv,o.tol);return cv};
+  try{await idb.clear()}catch(e){}PK.rig={canvas:rig.canvas,facing:rig.facing||'right',slots:rig.slots,drawOrder:rig.drawOrder,pivotLocal:rig.pivotLocal};PK.layers=[];PK.name=fname.replace(/\.(zip|json)$/i,'');PK.pivotSet=false;let n=0;
+  try{for(const k of kinds){const list=(by[k]||[]).sort((a,b)=>a.n-b.n),L={dir:'parts',name:k,weapon:false,sel:0,items:[]};PK.layers.push(L);
+      const step=pair(k)?2:1;for(let i=0;i<list.length;i+=step){const a=list[i],b=step===2?list[i+1]:null,nm=a.name.replace(/\.\w+$/,''),off=offs[nm];
+        const it=await addItem(L,nm,await load(a),off);n++;if(b){it.cv2=await load(b);it.name2=b.name.replace(/\.\w+$/,'');it.id2=uid();try{await idb.put(it.id2,await blobOf(it.cv2))}catch(e){}n++}
+        busy(`กำลังนำเข้าชิ้นส่วน ${n}/${total} …`,n/total);await tick()}}}finally{busy(null)}
+  PK.size();savePack();IMP=PK;showPack();
+  impStat(`นำเข้าแพ็ก rig แล้ว ${PK.layers.map(L=>layLabel(L)+' '+L.items.length).join(' · ')} · ประกอบได้ ${PK.combos().toLocaleString('en')} แบบ`);toast(`นำเข้าแล้ว ${n} รูป`)}
 /* many pictures at once: each goes to the layer its file name says (body_01 → ร่างกาย) */
-async function addMany(files){const o=opt(),list=[...files].sort((a,b)=>nat(a.name,b.name)),miss=[];let n=0;
+async function addMany(files){const rf=[...files].find(f=>/rig\.json$/i.test(f.name));
+  if(rf){let rig=null;try{rig=JSON.parse(await rf.text())}catch(e){}if(!isRig(rig))return impStat('อ่าน rig.json ไม่ได้',1);return rigFrom(rig,[...files].filter(f=>f!==rf).map(f=>({name:f.name,blob:async()=>f})),'parts')}
+  if(PK.rig)return impStat('แพ็กตอนนี้เป็นแบบ rig · เลือก rig.json มาพร้อมรูปด้วย หรือกด “ล้างแพ็กทั้งหมด” ก่อน',1);
+  files=[...files].filter(f=>!/\.json$/i.test(f.name));const o=opt(),list=[...files].sort((a,b)=>nat(a.name,b.name)),miss=[];let n=0;
   try{for(const f of list){const d=layDef(prefixOf(f.name));if(!d){miss.push(f.name);continue}const L=PK.layers.find(l=>l.name===d.key);if(!L){miss.push(f.name);continue}
     const cv=await loadCanvas(f);if(o.key)keyOut(cv,o.tol);if(!alphaBox(cv))continue;await addItem(L,f.name.replace(/\.\w+$/,''),cv);n++;busy(`กำลังเพิ่มรูป ${n}/${list.length} …`,n/list.length);await tick()}}finally{busy(null)}
   PK.size();savePack();showPack();
@@ -631,7 +657,7 @@ function guides(dx,dy,dw,dh){const X=v=>st.flip?cv.width-(dx+v*dw):dx+v*dw,Y=v=>
 function draw(){const n=frameCount();st.f%=n;const fr=frameAt(st.f,n),{fw,fh}=curSize();paintBg();cx.imageSmoothingEnabled=false;
   let s=Math.min(cv.width/fw,cv.height/fh);if(s>=1)s=Math.floor(s);const dw=fw*s,dh=fh*s,dx=Math.round((cv.width-dw)/2),dy=Math.round(cv.height-dh-(st.bg==='arena'?cv.height*.06:0));
   cx.save();if(st.flip){cx.translate(cv.width,0);cx.scale(-1,1)}cx.drawImage(fr,0,0,fw,fh,st.flip?cv.width-dx-dw:dx,dy,dw,dh);cx.restore();
-  if(st.guide&&IMP&&IMP.type==='pack')guides(dx,dy,dw,dh);
+  if(st.guide&&IMP&&IMP.type==='pack'&&!IMP.rig)guides(dx,dy,dw,dh);
   $('empty').hidden=!!IMP;$('flab').textContent=`เฟรม ${st.f+1}/${n}`;document.querySelectorAll('#tl canvas').forEach((c,i)=>c.classList.toggle('cur',i===st.f))}
 let tlSig='';
 function buildTL(force){const n=frameCount(),sig=[st.anim,n,st.fx,st.fxAuto,st.fxColor,IMP&&IMP.name,IMP&&IMP.type==='pack'?IMP.layers.map(l=>l.sel+':'+l.items.length).join():''].join('|');if(!force&&sig===tlSig)return;tlSig=sig;
@@ -699,6 +725,8 @@ async function doExport(kind){const s=+$('exScale').value,st2=$('exStat');st2.cl
   const needZip=['frames','pack','parts'].includes(kind);if(needZip&&!window.JSZip){st2.textContent='สร้าง ZIP ไม่ได้ เพราะตัวสร้าง ZIP โหลดไม่สำเร็จ';st2.classList.add('err');return}
   st2.textContent='กำลังสร้างไฟล์ …';await tick();
   if(kind==='preview')return saveFile(`${slug(PK.name)}_preview.png`,await blobOf(previewSheet()));
+  if(kind==='parts'&&PK.rig){const z=new JSZip(),fo=z.folder('parts'),offsets={};for(const L of PK.layers)for(const it of L.items){if(!it.cv)continue;fo.file(it.name+'.png',await blobOf(it.cv));if(it.cv2)fo.file(it.name2+'.png',await blobOf(it.cv2));if(it.dx||it.dy||(it.sc&&it.sc!==1))offsets[it.name]=[it.dx||0,it.dy||0,it.sc||1]}
+    z.file('rig.json',JSON.stringify(PK.rig,null,1));z.file('pack.json',JSON.stringify({app:'PixelDeck Forge',offsets},null,1));return saveFile(`${slug(PK.name)}_parts.zip`,await z.generateAsync({type:'blob'}))}
   if(kind==='parts'){const z=new JSZip(),offsets={},measured={};let n=0;for(const L of PK.layers){const fo=z.folder(L.dir);for(const it of L.items){if(!it.cv)continue;const key=L.dir+'/'+it.name;fo.file(it.name+'.png',await blobOf(it.cv));offsets[key]=[it.dx||0,it.dy||0,it.sc||1];
         const b=alphaBox(it.cv),r=place(it,PK.fw,PK.fh),kx=r.w/it.cv.width,ky=r.h/it.cv.height;if(b)measured[key]={x0:+((r.x+b.x0*kx)/PK.fw*100).toFixed(1),y0:+((r.y+b.y0*ky)/PK.fh*100).toFixed(1),x1:+((r.x+(b.x0+b.w)*kx)/PK.fw*100).toFixed(1),y1:+((r.y+(b.y0+b.h)*ky)/PK.fh*100).toFixed(1),src:[it.cv.width,it.cv.height]};
         if(++n%5===0){st2.textContent=`กำลังรวมรูป ${n}/${PK.count()} …`;await tick()}}}
@@ -717,9 +745,9 @@ function meta(rows,s){const fw=rows[0].f[0].width,fh=rows[0].f[0].height,o={name
 function previewSheet(){const P=PK,cell=256,cols=4,rows=3,pad=6,lab=22,c=document.createElement('canvas');c.width=cols*(cell+pad)+pad;c.height=rows*(cell+pad+lab)+pad;const x=c.getContext('2d');x.fillStyle='#14111f';x.fillRect(0,0,c.width,c.height);
   const keep=IMP;IMP=P;const fc=document.createElement('canvas');
   for(let k=0;k<cols*rows;k++){const sel=k===0?P.layers.map(L=>L.sel):P.layers.map(L=>Math.floor(Math.random()*L.items.length));renderImp('idle',0,8,{fx:'none'},fc,sel);
-    const gx=pad+(k%cols)*(cell+pad),gy=pad+Math.floor(k/cols)*(cell+pad+lab);x.fillStyle=k%2?'#2a2448':'#322b55';x.fillRect(gx,gy,cell,cell);x.imageSmoothingEnabled=false;x.drawImage(fc,0,0,P.fw,P.fh,gx,gy,cell,cell);
-    const X=v=>gx+v*cell,Y=v=>gy+v*cell;x.setLineDash([4,3]);x.lineWidth=1;const[a0,b0,a1,b1]=GUIDE.head;x.strokeStyle='rgba(88,217,255,.8)';x.strokeRect(X(a0),Y(b0),X(a1)-X(a0),Y(b1)-Y(b0));x.strokeStyle='rgba(255,200,61,.8)';x.beginPath();x.moveTo(gx,Y(GUIDE.feet));x.lineTo(gx+cell,Y(GUIDE.feet));x.stroke();x.setLineDash([]);
-    x.fillStyle='#ff4d5e';x.fillRect(X(GUIDE.neck[0])-2,Y(GUIDE.neck[1])-2,5,5);x.strokeStyle='#72f290';x.beginPath();x.arc(gx+P.pivot[0]/P.fw*cell,gy+P.pivot[1]/P.fh*cell,6,0,6.283);x.stroke();
+    const gx=pad+(k%cols)*(cell+pad),gy=pad+Math.floor(k/cols)*(cell+pad+lab);x.fillStyle=k%2?'#2a2448':'#322b55';x.fillRect(gx,gy,cell,cell);x.imageSmoothingEnabled=false;{let q=Math.min(cell/P.fw,cell/P.fh);if(q>=1)q=Math.floor(q);const w=P.fw*q,h=P.fh*q;x.drawImage(fc,0,0,P.fw,P.fh,gx+(cell-w)/2,gy+cell-h,w,h)}
+    if(!P.rig){const X=v=>gx+v*cell,Y=v=>gy+v*cell;x.setLineDash([4,3]);x.lineWidth=1;const[a0,b0,a1,b1]=GUIDE.head;x.strokeStyle='rgba(88,217,255,.8)';x.strokeRect(X(a0),Y(b0),X(a1)-X(a0),Y(b1)-Y(b0));x.strokeStyle='rgba(255,200,61,.8)';x.beginPath();x.moveTo(gx,Y(GUIDE.feet));x.lineTo(gx+cell,Y(GUIDE.feet));x.stroke();x.setLineDash([]);
+    x.fillStyle='#ff4d5e';x.fillRect(X(GUIDE.neck[0])-2,Y(GUIDE.neck[1])-2,5,5);x.strokeStyle='#72f290';x.beginPath();x.arc(gx+P.pivot[0]/P.fw*cell,gy+P.pivot[1]/P.fh*cell,6,0,6.283);x.stroke()}
     x.fillStyle='#c9c2ea';x.font='12px sans-serif';x.textBaseline='top';const names=P.layers.map((L,li)=>{const it=L.items[sel[li]];return it&&it.cv?it.name.replace(/^[a-z]+_?/i,''):'-'}).join(' ');x.fillText(names.slice(0,40),gx+2,gy+cell+4)}
   IMP=keep;return c}
 
