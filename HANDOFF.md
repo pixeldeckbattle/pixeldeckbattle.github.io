@@ -1,6 +1,6 @@
 # Pixeldeck Battle — handoff for a new Claude session
 
-Live build: **b188** (released 15 Oct 2026 21:05: PC never forced to fullscreen — `isPC()` by user agent (touch laptops count), PC pref key pdb_fs_pc, no sideways rotation on PC; b187 20:40: no flicker when picking cards — `prepSoft()` updates the rail and pick marks in place; fire canvases painted only after fireStep and only when on screen; b186 20:35 new Chapter 3 cover cover-c3.webp on login + loading, shown from the top; b185 20:30, b184 20:17, b183 20:05). Talk to the owner (Toey) in Thai, never call them "ต้อย". The game name stays English; the in-game credit is "PixelDeckBattle".
+Live build: **b189** (released 15 Oct 2026 21:40: tank SL amulets also work in the Tower and future world boss (`C3_ON` true for b.tw / b.wb, never PvP; startTower calls c3Amu); tower sim 10★ SL team 409 -> grove 419, gstar ~457; popup news189. b188 21:05: PC never forced to fullscreen — `isPC()` by user agent (touch laptops count), PC pref key pdb_fs_pc, no sideways rotation on PC; b187 20:40: no flicker when picking cards — `prepSoft()` updates the rail and pick marks in place; fire canvases painted only after fireStep and only when on screen; b186 20:35 new Chapter 3 cover cover-c3.webp on login + loading, shown from the top; b185 20:30, b184 20:17, b183 20:05). Talk to the owner (Toey) in Thai, never call them "ต้อย". The game name stays English; the in-game credit is "PixelDeckBattle".
 
 ## Where things are
 - Game source (single file): `src/game.src.html`. Admin page source: `tools/admin.src.html`.
