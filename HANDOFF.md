@@ -63,3 +63,8 @@ Live build: **b191** (15 Oct 2026 22:25: the invite-for-diamonds menu / FOUNDER 
 - Team presets; relax room / card-flex; party boss; weekly world boss; market reference price.
 - Clearer skill-4 wording in game ("ใช้ได้ตั้งแต่รอบ 3 · ใช้แล้วพัก 5 รอบ") — offered, not ordered.
 - Slip top-up outside 17:00–00:00: offered either queueing slips or a big warning — not ordered.
+
+## OBT plan: how new cards come out (owner: "รอ obt", 15 Oct 2026 — do NOT build before the OBT prep)
+- Problem seen in CBT: new cards (h29/h30/h31 SL, h34 L) came out too easily. Main cause: `fuDo` uses `randNew` (cards you don't own first), so the first L→SL fusion after release gave a new card 100%, and fuse-all made it instant. `bcTake` and mail rewards also use `randNew`. Normal pools went SL 4→7, so ~43% of any SL roll is a new card.
+- Agreed direction for OBT: fusion rolls evenly (no "new first" for new cards); a rate-up "new card banner" sold for diamonds with visible pity; new cards locked to that banner for the first weeks (not in fusion, stage drops or normal packs); a slow free path (Chapter 3 drops give card shards, N shards = 1 card); later the cards join the normal pool.
+- Measure with the admin card-source logs: % of active players owning the new card after 7 days (SL target ~5–15%), which source it came from.
