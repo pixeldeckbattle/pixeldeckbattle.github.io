@@ -587,6 +587,7 @@ h2{color:#ffe45c;text-shadow:0 2px 0 #080b1f}
 #pdbt{position:absolute;left:50%;top:12px;transform:translate(-50%,-30px);opacity:0;z-index:99;background:rgba(14,18,40,.94);color:#ffe9a0;border:1px solid #f2d98a;border-radius:999px;padding:7px 16px;font-size:14px;pointer-events:none;transition:.25s}#pdbt.on{opacity:1;transform:translate(-50%,0)}.lprb small{color:#f2d98a}
 #fxl{position:absolute;inset:0;pointer-events:none;z-index:8;overflow:hidden}.fx8{position:absolute;pointer-events:none;background-size:800% 100%;background-repeat:no-repeat;image-rendering:pixelated;animation:fx8 var(--fd,.8s) steps(8,jump-none) forwards}@keyframes fx8{from{background-position:0 0}to{background-position:100% 0}}#fxl .ghost{pointer-events:none;filter:brightness(1.7) saturate(.4) drop-shadow(0 0 6px rgba(140,200,255,.9))}
 .spr.f8 img{width:800%;animation:fr6 1.12s steps(8) infinite}.spr.f8.atk img{animation:fr6 var(--ad,.5s) steps(8) 1}
+.fig.tk .fhp{width:76%;height:9px;box-shadow:0 0 0 1px #8fd0ff,0 0 6px rgba(120,190,255,.6)}
 .strow{display:flex;align-items:center;gap:10px;flex-wrap:wrap;font-family:var(--display);font-weight:700;font-size:15px;color:#ffe45c}.strow .tx{font-family:var(--body);font-size:12px;color:#c8d2ff}
 .strow .btn{display:inline-block;font-size:13px}.strow .btn i{font-style:normal}.strow .btn.off{--b1:#5a6082;--b2:#3d4260;--tx:#aab0cc;opacity:.85}
 /* upright name editor: the phone keyboard always follows the device, so when the stage is rotated the text field is shown unrotated above it */
@@ -763,7 +764,7 @@ const C={
  // b173 Glacius Rex: Limited tank, only from the first clear of stage 1100 (rw:1 keeps it out of packs, drops and fusion)
  h28:{n:"Glacius Rex",a:73,h:61,d:42,c:10,r:'LT',role:'tank',st:'smash',ls:.2,rw:1},
  // b183 Thai-literature cards (f8 = 8-frame sprite sheets). Limited stays at least ~3% stronger than every SuperLegend.
- h29:{n:"Vanarin",a:103,h:50,d:13,c:30,x:1.7,r:'SL',role:'atk',st:'slash',f8:1},
+ h29:{n:"Vanarin",a:103,h:50,d:13,c:35,x:1.7,r:'SL',role:'atk',st:'slash',f8:1},
  h30:{n:"Tenface Asura",a:70,h:59,d:40,c:10,r:'SL',role:'tank',st:'smash',f8:1},
  h31:{n:"Indigo Dragonsteed",a:105,h:49,d:13,c:15,r:'SL',role:'atk',m:1,st:'cast',pj:'light',f8:1},
  h34:{n:"Temple Yaksha",a:63,h:55,d:33,c:5,r:'L',role:'tank',st:'smash',f8:1}   // only the first 3 players to clear stage 1100 (firsts/s1100 in Firestore), never sold
@@ -798,7 +799,7 @@ const SK={
  h26:[['Obsidian Hammer','hammer','hit',1],['Dragon Guard','taunt','guard',.42],['Cataclysm','earth','aoe',1.3]],
  h27:[['Sun Spear','spear','hit',1],['Aegis','taunt','guard',.5],['Solar Flare','holy','aoe',1.4]],
  h28:[['Frost Bite','bite','hit',1],['Permafrost Hide','taunt','guard',.52],['Glacial Breath','ice','aoe',1.45]],
- h29:[['Trident Thrust','spear','hit',1],['Wind Leap','exec','sure',1.5],['Hundred Strikes','claw','exec',1.75]],
+ h29:[['Trident Thrust','spear','hit',1],['Wind Leap','exec','sure',1.5],['Hundred Strikes','claw','aoe',1.45]],
  h30:[['Golden Club','hammer','hit',1],['Ten-Face Roar','taunt','guard',.5],['Demon Quake','earth','aoe',1.4]],
  h31:[['Storm Orb','bolt','hit',1],['Tidal Lash','ice','exec',1.7],['Sea Tempest','wind','aoe',1.6]],
  h34:[['Stone Club','hammer','hit',1],['Temple Ward','taunt','guard',.42],['Gate Breaker','earth','aoe',1.3]]
@@ -876,7 +877,11 @@ const MON={m01:{n:'Ember Imp',a:60,h:30,d:6,c:12},m02:{n:'Hellhound Pup',a:50,h:
  x51:{n:'Gear Hound',k:'arm',a:60,h:44,d:16,c:14,c2:1},x52:{n:'Steam Knight',k:'arm',a:58,h:56,d:18,c:10,st:'smash',c2:1},x53:{n:'Copter Drone',a:64,h:36,d:10,c:16,st:'shoot',c2:1},
  x54:{n:'Brass Juggernaut',k:'arm',a:80,h:88,d:22,c:10,boss:1,st:'smash',c2:1},x55:{n:'Clockwork Emperor',k:'arm',a:90,h:86,d:20,c:14,boss:1,lord:1,gim:'raise',c2:1},
  x61:{n:'Void Stalker',a:68,h:40,d:8,c:18,c2:1},x62:{n:'Rift Eye',k:'ward',a:70,h:34,d:6,c:14,m:1,st:'cast',pj:'soul',c2:1},x63:{n:'Mirror Knight',k:'arm',a:62,h:50,d:16,c:14,c2:1},
- x64:{n:'Chaos Chimera',k:'ward',a:88,h:80,d:14,c:16,boss:1,m:1,st:'cast',pj:'fire',c2:1},x65:{n:'The Void King',a:94,h:92,d:20,c:16,boss:1,lord:1,gim:'breath',c2:1}};
+ x64:{n:'Chaos Chimera',k:'ward',a:88,h:80,d:14,c:16,boss:1,m:1,st:'cast',pj:'fire',c2:1},x65:{n:'The Void King',a:94,h:92,d:20,c:16,boss:1,lord:1,gim:'breath',c2:1},
+ // b183 Chapter 3 (1101-1500, Thai legend): one monster per realm, its bigger self as the 10th-stage boss (sp = same sprite), and a realm lord
+ x71:{n:'Singha Cub',k:'arm',a:62,h:48,d:14,c:14,c2:1},x74:{n:'Singha Alpha',k:'arm',a:80,h:80,d:18,c:14,boss:1,sp:'x71',c2:1},x75:{n:'Raja Lion',k:'ward',a:92,h:90,d:20,c:14,boss:1,lord:1,m:1,st:'cast',pj:'fire',gim:'breath',c2:1},
+ x81:{n:'Demon Spearman',a:66,h:44,d:12,c:16,c2:1},x84:{n:'Demon Captain',a:84,h:78,d:16,c:16,boss:1,sp:'x81',c2:1},x85:{n:'Sleeping Colossus',k:'arm',a:96,h:96,d:22,c:12,boss:1,lord:1,st:'smash',gim:'rage',c2:1},
+ x91:{n:'Reef Raider',k:'arm',a:60,h:52,d:16,c:10,st:'smash',sp:'x11',c2:1},x94:{n:'Reef Warlord',k:'arm',a:80,h:84,d:20,c:12,boss:1,st:'smash',sp:'x11',c2:1},x95:{n:'Naga Sea King',k:'ward',a:98,h:94,d:20,c:16,boss:1,lord:1,m:1,st:'cast',pj:'moon',gim:'breath',c2:1}};
 Object.keys(MON).forEach(id=>Object.defineProperty(C,id,{value:{r:'C',role:'atk',...MON[id],mon:1},enumerable:false}));
 const MSM=Object.keys(MON).filter(id=>!MON[id].boss&&!MON[id].tw&&!MON[id].c2),MBS=Object.keys(MON).filter(id=>MON[id].boss&&!MON[id].tw&&!MON[id].c2);
 const RORD=['C','UC','R','L','SL','LT'],STARTERS=['h06','h20','h11'],POOL=Object.keys(C).filter(id=>C[id].r!=='ST').sort((x,y)=>RORD.indexOf(C[x].r)-RORD.indexOf(C[y].r));
@@ -887,7 +892,7 @@ const FB_CFG=null;
 const STAR_C2=[[30000,5],[60000,8],[120000,12],[200000,16],[350000,24]],STAR2_R=['L','SL','LT'],star2Cost=id=>{const st=starOf(id);return st>=5&&st<10&&STAR2_R.includes(C[id].r)?STAR_C2[st-5]:null},canStar2=id=>{const c=star2Cost(id);return !!(c&&S.cards[id]&&S.gold>=c[0]&&(S.rs||0)>=c[1])},starMax=id=>STAR2_R.includes(C[id].r)?10:5;
 const STAR_STAT=.03,STAR_COST=[[500,1],[1000,1],[2000,2],[4000,2],[8000,3]],STAR_COST_ST=[[200,0],[400,0],[800,0],[1500,0],[3000,0]];
 const GPACK=5000,GN=3,GODDS={SL:.001,L:.004,R:.03,UC:.22,C:.745};
-const PACK=200,ST_GIVE=['R','R','UC'],DUP=50,MAXST=1100,ST1=500,KEY='pdb_save4';   // b173 Chapter 2: stages 501-1100 (ST1 = the end of chapter 1, the tower's scale)
+const PACK=200,ST_GIVE=['R','R','UC'],DUP=50,MAXST=1500,ST1=500,KEY='pdb_save4';   // b173 Chapter 2: stages 501-1100 (ST1 = the end of chapter 1, the tower's scale)
 let S,bt=null,busy=false,fx=[],prepN=1,pull=null,armed=false;
 
 const sleep=ms=>new Promise(r=>setTimeout(r,ms));
@@ -1403,14 +1408,19 @@ let DIFF=3.0,EA=.3,EH=1.3,E0=.42,LATE=.003,LATE_N=250,LATE_W=50;   // b160: enem
 const PITY=.04,PITY_MAX=.12,VARY=.10,lossK=n=>S.ls&&S.ls.n===n?S.ls.k|0:0,softMul=n=>n>(S.cleared||0)?(1-Math.min(PITY_MAX,PITY*lossK(n)))*(1-VARY+2*VARY*Math.random()):1;
 // b173 Chapter 2: six realms of 100 stages after stage 500. Enemies start from stage 500's strength and grow CH2_G a stage (+ the realm's battlefield rule);
 // every 10th stage is the realm boss with two minions, every 100th the realm lord (bigger, with its own gimmick), x5 is an elite (one big monster), x7 a survival stage (live through 5 rounds).
-let CH2_G=.0012,CH2_K=1.5,CH2_RAMP=100,LORD_M=[1.25,2.4];const RLM=[
+let CH2_G=.0012,CH2_K=1.5,CH2_RAMP=100,LORD_M=[1.25,2.4],CH3_K=.85,CH3_G=.0015;const RLM=[
  {n:'Deep Sea',th:'ทะเลลึก',m:['x11','x12','x13'],b:'x14',l:'x15',r:'tide',bg:['r11','r12'],fx:[{glow:'#2ad8ff',p:[['bubble','#9ff3ff',22],['spark','#9ff3ff',18],['fly','#7ae8ff',12]]},{glow:'#3affd8',p:[['bubble','#bff8ff',26],['spark','#ffffff',16],['dust','#bfeaff',20]]}]},
  {n:'Raging Volcano',th:'ภูเขาไฟคลั่ง',m:['x21','x22','x23'],b:'x24',l:'x25',r:'burn',bg:['r21','r22'],fx:[{glow:'#ff6a1a',volc:[[24,36],[57,22]],p:[['ember','#ffb04a',56],['ash','#c9b0a8',22]]},{glow:'#ff7a2a',p:[['ember','#ffc04a',60],['ash','#bfa8a0',16]]}]},
  {n:'Eternal Glacier',th:'ธารน้ำแข็งนิรันดร์',m:['x31','x32','x33'],b:'x34',l:'x35',r:'frost',bg:['r31','r32'],fx:[{aur:1,p:[['snow','#ffffff',56],['spark','#bfe6ff',14]]},{fog:'#e8f4ff',p:[['snow','#ffffff',40],['spark','#dff4ff',22]]}]},
  {n:'Sky Citadel',th:'ป้อมลอยฟ้า',m:['x41','x42','x43'],b:'x44',l:'x45',r:'sky',bg:['r41','r42'],fx:[{glow:'#ffe9a0',p:[['dust','#ffe9a0',36],['spark','#ffffff',16],['petal','#fff3d0',10]]},{glow:'#b9a2ff',p:[['spark','#ffffff',34],['dust','#cfc0ff',26]]}]},
  {n:'Clockwork City',th:'เมืองจักรกล',m:['x51','x52','x53'],b:'x54',l:'x55',r:'gear',bg:['r51','r52'],fx:[{glow:'#ffb04a',puff:[[3,40],[95,42],[60,44]],p:[['dust','#ffe0a0',30],['spark','#ffd27a',10]]},{glow:'#7dff8a',puff:[[6,30],[94,32],[70,36],[30,38]],p:[['dust','#fff0c0',24],['spark','#c8ffd0',12]]}]},
- {n:'The Void',th:'ความว่างเปล่า',m:['x61','x62','x63'],b:'x64',l:'x65',r:'void',bg:['r61','r62'],fx:[{glow:'#b05cff',flash:'#c58cff',p:[['spore','#d6a8ff',34],['spark','#ffffff',22]]},{glow:'#c27aff',p:[['spore','#e0b8ff',30],['spark','#ffd8ff',18],['dust','#b9a2ff',18]]}]}];
-const realmOf=n=>n>ST1?Math.min(RLM.length-1,Math.floor((n-ST1-1)/100)):-1,stKind=n=>n<=ST1?'':n%100===0?'lord':n%10===0?'boss':n%10===5?'elite':n%10===7?'surv':'';
+ {n:'The Void',th:'ความว่างเปล่า',m:['x61','x62','x63'],b:'x64',l:'x65',r:'void',bg:['r61','r62'],fx:[{glow:'#b05cff',flash:'#c58cff',p:[['spore','#d6a8ff',34],['spark','#ffffff',22]]},{glow:'#c27aff',p:[['spore','#e0b8ff',30],['spark','#ffd8ff',18],['dust','#b9a2ff',18]]}]},
+ // b183 Chapter 3: realms of 150 stages (s..e); the lord stands on the realm's last stage
+ {n:'Himmaphan Forest',th:'ป่าหิมพานต์',m:['x71','x71','x71'],b:'x74',l:'x75',r:'sky',bg:['r71','r72'],s:1101,e:1250,c3:1,fx:[{glow:'#ffe9a0',p:[['petal','#ffd0e8',18],['fly','#d8ff9a',14],['dust','#fff0c0',14]]},{glow:'#7ad8ff',p:[['fly','#9fffd8',18],['spore','#c8a8ff',20]]}]},
+ {n:'Demon City',th:'กรุงยักษ์',m:['x81','x81','x81'],b:'x84',l:'x85',r:'burn',bg:['r81','r82'],s:1251,e:1400,c3:1,fx:[{glow:'#ff6a1a',p:[['ember','#ffb04a',44],['ash','#c9b0a8',18]]},{glow:'#ffb04a',p:[['ember','#ffc04a',30],['spark','#ffe0a0',12]]}]},
+ {n:'Great Ocean',th:'มหาสมุทร',m:['x91','x91','x91'],b:'x94',l:'x95',r:'tide',bg:['r91','r92'],s:1401,e:1500,c3:1,fx:[{glow:'#2ad8ff',flash:'#c58cff',p:[['spark','#bff8ff',20],['dust','#bfeaff',18]]},{glow:'#2ad8ff',flash:'#c58cff',p:[['spark','#bff8ff',20],['dust','#bfeaff',18]]}]}];
+const realmOf=n=>n<=ST1?-1:n<=1100?Math.floor((n-ST1-1)/100):Math.max(6,RLM.findIndex(R=>R.e>=n)),rS=r=>RLM[r].s||ST1+1+r*100,rE=r=>RLM[r].e||ST1+(r+1)*100,
+  stKind=n=>n<=ST1?'':n===rE(realmOf(n))?'lord':n%10===0?'boss':n%10===5?'elite':n%10===7?'surv':'';
 // the battlefield rule of a stage; the Void takes one of the other five, changing from stage to stage
 const RULE_K=['tide','burn','frost','sky','gear'],ruleOf=n=>{const r=realmOf(n);if(r<0)return '';const k=RLM[r].r;return k==='void'?RULE_K[n%5]:k};
 const RULES={tide:['🌊','คลื่นยักษ์','Tidal Wave','ทุก 3 รอบ คลื่นซัดทั้งสองฝ่าย เสียเลือด 8%','every 3rd round a wave hits both sides for 8% life'],
@@ -1421,7 +1431,7 @@ const RULES={tide:['🌊','คลื่นยักษ์','Tidal Wave','ทุ�
 const ruleTxt=(k,full)=>{const r=RULES[k];return r?`${r[0]} ${T(r[1],r[2])}${full?': '+T(r[3],r[4]):''}`:''};
 const KIND_T={lord:['เจ้าอาณาจักร','Realm Lord'],boss:['บอส','Boss'],elite:['ศัตรูยักษ์','Elite'],surv:['เอาตัวรอด 5 รอบ','Survive 5 rounds']};
 const stBud=n=>{const ease=Math.min(1,E0+(1-E0)*(n-1)/29);return 135*(1+.09*(LNAT[n]-1))*DIFF*ease*(1+LATE*Math.min(LATE_W,Math.max(0,n-LATE_N)))};
-function stageDef2(n){const R=RLM[realmOf(n)],k=n-ST1,kd=stKind(n),bud=stBud(ST1)*(1+(CH2_K-1)*Math.min(1,k/CH2_RAMP))*(1+CH2_G*k),one=(id,ma,mh,x)=>{const sh=.35+.3*C[id].a/(C[id].a+C[id].h+C[id].d);
+function stageDef2(n){const R=RLM[realmOf(n)],k=n-ST1,kd=stKind(n),bud=stBud(ST1)*(1+(CH2_K-1)*Math.min(1,k/CH2_RAMP))*(1+CH2_G*k)*(n>1100?CH3_K*(1+CH3_G*(n-1100)):1),one=(id,ma,mh,x)=>{const sh=.35+.3*C[id].a/(C[id].a+C[id].h+C[id].d);
     return{id,boss:!!C[id].boss,atk:Math.round(bud*sh*EA*ma),hp:Math.round(bud*(1-sh)*EH*mh),crit:C[id].c/200,cx:1.5,sh:0,...x}},M=i=>R.m[(k*7+i*5+(k>>2))%3];
   if(kd==='lord')return[one(M(0),1,1),one(R.l,LORD_M[0],LORD_M[1],{lord:1,gim:C[R.l].gim,gate:C[R.l].gim==='gate'?3:0}),one(M(1),1,1)];
   if(kd==='boss')return[one(M(0),1,1),one(R.b,1.2,2.2),one(M(2),1,1)];
@@ -1919,7 +1929,7 @@ const MAPS=VAR.map(v=>v[1]),FX={};VAR.forEach((v,i)=>FX[i+1]=v[2]);
 // stage order: a fixed pseudo-random walk over the variants that never shows the same picture twice in a row
 const MAPSEQ=[0];{let x=20261009,prev=0;for(let n=1;n<=ST1;n++){let k;do{x=(Math.imul(x,1103515245)+12345)>>>0;k=(x>>>8)%NSTAGE}while(VAR[k][0]===prev);prev=VAR[k][0];MAPSEQ[n]=k+1}}
 const MAPSEQ_N=ST1; // chapter 1 walks the 50 old pictures; a chapter 2 realm alternates its two pictures every 10 stages and its lord fights on the second (throne) one
-const rlmPic=n=>{const r=realmOf(n),i=n%100===0?1:Math.floor((n-ST1-1)/10)%2;return[r,i]};
+const rlmPic=n=>{const r=realmOf(n),i=stKind(n)==='lord'?1:Math.floor((n-rS(r))/10)%2;return[r,i]};
 RLM.forEach((R,r)=>R.bg.forEach((b,i)=>{FX[201+r*2+i]=R.fx[i];MAPS[200+r*2+i]=R.n}));
 const mapOf=n=>n===0?VAR.length:n>ST1?(([r,i])=>201+r*2+i)(rlmPic(n)):MAPSEQ[Math.max(1,Math.min(ST1,n))],mapImg=n=>n>ST1?(([r,i])=>`bg/${RLM[r].bg[i]}.webp`)(rlmPic(n)):`bg/m${VAR[mapOf(n)-1][0]}.webp`;
 function bgLayers(n){return bgCore(mapOf(n),mapImg(n))}
@@ -2069,7 +2079,7 @@ async function pose(from,tos){const f=$(from);if(!f||RM)return;
 // where each fighter stands on the floor: [x %, feet y %, size]; the back row is higher up, smaller and nearer the middle, the front row lower and larger
 const SPOT=[[19,47,.86],[34,63,.96],[17,80,1.04]],spots=n=>n===1?[[30,63,.96]]:n===2?[[24,50,.88],[24,77,1.02]]:SPOT;   // b173: triangle formation, the tip (middle fighter) nearest the enemy
 function unit(u,el,cls,attr,sp,side){const p=Math.max(0,u.hp/u.max*100),mon=u.boss!==undefined,k=sp[2]*(u.lord?1.3:u.elite?1.5:u.boss?1.18:1);
-  return `<div class="pos ${side?'r':'l'}" style="left:calc(${side?100-sp[0]:sp[0]}% - var(--bw)*${(k*.65).toFixed(3)});bottom:${100-sp[1]}%;--cw:calc(var(--bw)*${k.toFixed(3)});z-index:${Math.round(sp[1])}"><button class="fig ${u.boss?'boss':''} ${u.hp<=0?'dead':''} ${cls}" id="${el}" ${attr} title="${C[u.id].n}">
+  return `<div class="pos ${side?'r':'l'}" style="left:calc(${side?100-sp[0]:sp[0]}% - var(--bw)*${(k*.65).toFixed(3)});bottom:${100-sp[1]}%;--cw:calc(var(--bw)*${k.toFixed(3)});z-index:${Math.round(sp[1])}"><button class="fig ${u.boss?'boss':''} ${C[u.id].role==='tank'&&!C[u.id].mon?'tk':''} ${u.hp<=0?'dead':''} ${cls}" id="${el}" ${attr} title="${C[u.id].n}">
     <span class="plate">${u.lord?'<b class="tagb lord">LORD</b>':u.boss?'<b class="tagb">BOSS</b>':u.elite?'<b class="tagb">ELITE</b>':''}${u.taunt&&u.hp>0?`<b class="tnt">TAUNT${u.taunt>1?' '+u.taunt:''}</b>`:''}${u.gate>0&&u.hp>0?`<b class="tnt gtg nt">🛡 ×${u.gate}</b>`:''}${el[0]==='e'&&u.hp>0&&wkU(u)?`<b class="wkt ${wkU(u)} nt">${weakTxt(wkU(u))}</b>`:''}<span class="fhp"><i style="width:${p}%"></i>${u.sh>0&&u.hp>0?`<b style="width:${Math.min(100,u.sh/u.max*100)}%"></b>`:''}</span>
      <span class="st"><span class="a ${C[u.id].m?'m':''}"><img src="${ICON[MAGIC.includes(u.id)?'orb':'sword']}" alt="${atkName(u.id)}">${u.atk}</span><span class="d"><img src="${ICON.heart}" alt="HP">${Math.max(0,u.hp)}${u.sh>0&&u.hp>0?`<b class="shv">+${u.sh}</b>`:''}</span>${u.def>0?`<span class="f"><img src="${ICON.shield}" alt="DEF">${u.def}</span>`:''}</span></span>
     <span class="sw ${side?'':'flip'}">${sprite(u.id,(u.walk?'walk':'')+(C[u.id].gl?' glw':''))}</span></button></div>`}
@@ -2162,7 +2172,9 @@ function s4Round(b){[[b.al,'a'],[b.en,'e']].forEach(([L,p])=>L.forEach((x,i)=>{i
   if(!b.al.some(x=>x.hp>0&&!x.done)){const x=b.al.find(x=>x.hp>0);if(x)x.done=false}}
 // an enemy hits whoever is taunting, otherwise a random fighter (an arena opponent goes for the weakest instead)
 function foePick(){const live=bt.al.map((x,j)=>j).filter(j=>bt.al[j].hp>0);if(!live.length)return -1;const tn=live.filter(j=>bt.al[j].taunt);if(tn.length)return tn[0];
-  return bt.pvp?live.reduce((b,j)=>bt.al[j].hp<bt.al[b].hp?j:b):live[Math.floor(Math.random()*live.length)]}
+  return bt.pvp||C3_HUNT(bt)?live.reduce((b,j)=>bt.al[j].hp<bt.al[b].hp?j:b):live[Math.floor(Math.random()*live.length)]}
+// b183 Chapter 3 hunters: monsters with nobody taunting go for the ally with the least life, so a tank's taunt is what keeps the team standing
+const C3_HUNT=b=>!!b&&!b.pvp&&!b.tw&&b.n>1100;
 function foeHit(e,j){hitM=!!C[e.id].m;hitA=e.atk;HIT_SRC=[bt.en,'e',bt.en.indexOf(e)];const [d,cr]=roll(e,1);hurt(bt.al,'a',j,d,'d',cr);HIT_SRC=null;
   if(bt.rule==='frost'&&!e.fz0){e.fz0=1;const t=bt.al[j];if(t.hp>0&&Math.random()<FROST_P){t.frz=1;q('a'+j,'❄ FROZEN','s')}}}
 // b173 realm rules, run at the start of every round (draw() follows). Rule damage goes through shields and never kills (it leaves at least 1 life).
@@ -3056,9 +3068,12 @@ function twResult(f){const t=twGet(),R=twRun||{from:f,g:0,x:0,n:0,got:[]},r=twRa
     <p class="sub">${T('ทีมคุณ','Your team')}: ${T('กายภาพ','physical')} ${S.team.filter(id=>!C[id].m).length} · ${T('เวท','magic')} ${S.team.filter(id=>C[id].m).length}</p>
     ${R.got.length?`<h3>${T('ของที่ได้รอบนี้','Loot this run')}</h3><div class="itl">${R.got.map(itChip).join('')}</div>`:''}</div></div>`)}
 // b182 one-time note: tank HP, custom auto skills, VIP retry, fuse all, arena storm, PC window
-function news182(){if(S.tut!=null||S.n182)return false;if(!S.cleared){S.n182=1;return false}
-  setTimeout(()=>{if(bt||S.n182||$('ov').innerHTML.trim()||!document.querySelector('.lobby,.dk'))return;S.n182=1;save();
-  ov(`<div class="cd dlg nt"><div class="px cdbox swbox"><b>🆕 ${T('อัปเดตใหม่ b182','New update b182')}</b><div class="newsl">
+function news182(){if(S.tut!=null||S.n183)return false;if(!S.cleared){S.n183=1;return false}
+  setTimeout(()=>{if(bt||S.n183||$('ov').innerHTML.trim()||!document.querySelector('.lobby,.dk'))return;S.n183=1;save();
+  ov(`<div class="cd dlg nt"><div class="px cdbox swbox"><b>🆕 ${T('อัปเดตใหม่ b183','New update b183')}</b><div class="newsl">
+   <span>🏯 <b>${T('บท 3 ตำนานไทย ด่าน 1101–1500','Chapter 3, Thai legends, stages 1101–1500')}</b> · ${T('ป่าหิมพานต์ · กรุงยักษ์ · มหาสมุทร ศัตรูรุมตีตัวเลือดน้อย ต้องมีแท้งค์ · เครื่องรางแท้งค์ SL ใช้ได้แล้ว','Himmaphan · Demon City · Great Ocean; enemies hunt the weakest, bring a tank · tank SL amulets now work')}</span>
+   <span>🐒 <b>${T('การ์ดใหม่ 4 ใบ','4 new cards')}</b> · Vanarin · Tenface Asura · Indigo Dragonsteed (SuperLegend) · Temple Yaksha (Legend)</span>
+   <span>💥 <b>${T('เอฟเฟกต์สกิลใหม่','New skill effects')}</b> · ${T('ท่าไม้ตายทุกใบมีเอฟเฟกต์ของตัวเอง จอซูม คริติคอลและตอนตายมีเอฟเฟกต์','every ultimate has its own effect, camera zoom, crit and KO effects')}</span>
    <span>🛡 <b>${T('แท้งค์เลือดหนาขึ้น','Tanks are tougher')}</b> · ${T('HP แท้งค์โตต่อเลเวลเร็วขึ้น 30% ยิ่งเลเวลสูงยิ่งห่าง (เลเวล 1 เท่าเดิม) ใช้ทุกโหมด','tank HP grows 30% faster per level, the gap widens with level (Lv 1 unchanged), every mode')}</span>
    <span>🤖 <b>${T('ตั้งสกิลออโต้เอง','Custom auto skills')}</b> · ${T('แตะดูการ์ด → ออโต้ใช้สกิล → กำหนดเอง เรียงลำดับและปิดสกิลได้','open a card → Auto skills → Custom: order the skills or switch some off')}</span>
    <span>🔁 <b>${T('แพ้แล้วเล่นต่อ (VIP)','Retry on defeat (VIP)')}</b> · ${T('วนด่านแล้วแพ้ ระบบเล่นต่อให้เอง หยุดเมื่อแพ้ติดกัน 5 ครั้ง','a loss no longer ends the loop; it stops after 5 losses in a row')}</span>
@@ -3183,12 +3198,18 @@ function guide(){
      +tb([T('ดาวที่','Star'),'6','7','8','9','10'],[[T('Legend ขึ้นไป','Legend and up'),...STAR_C2.map(([g,c])=>N(g)+' Gold + 💠'+c)]])],
    ch2:[T('บท 2 (501–1100)','Chapter 2 (501–1100)'),()=>ul([
      T(`ผ่านด่าน ${ST1} แล้วเข้าบท 2: 6 อาณาจักร อาณาจักรละ 100 ด่าน ศัตรูเริ่มแรงกว่าด่าน ${ST1} และแรงขึ้นทีละด่าน`,`After stage ${ST1} comes Chapter 2: 6 realms of 100 stages each. Enemies start stronger than stage ${ST1} and grow stage by stage`),
-     ...RLM.map((R,i)=>T(`<b>${ST1+1+i*100}–${ST1+100+i*100} ${R.th}</b> · กฎสนาม ${ruleTxt(R.r==='void'?'':R.r,1)||'สลับกฎของทุกอาณาจักรทีละด่าน'} · เจ้าอาณาจักร ${C[R.l].n} (${gimT(R.l)})`,`<b>${ST1+1+i*100}–${ST1+100+i*100} ${R.n}</b> · rule ${ruleTxt(R.r==='void'?'':R.r,1)||'each stage takes one of the other realms\' rules'} · lord ${C[R.l].n} (${gimT(R.l)})`)),
+     ...RLM.slice(0,6).map((R,i)=>T(`<b>${ST1+1+i*100}–${ST1+100+i*100} ${R.th}</b> · กฎสนาม ${ruleTxt(R.r==='void'?'':R.r,1)||'สลับกฎของทุกอาณาจักรทีละด่าน'} · เจ้าอาณาจักร ${C[R.l].n} (${gimT(R.l)})`,`<b>${ST1+1+i*100}–${ST1+100+i*100} ${R.n}</b> · rule ${ruleTxt(R.r==='void'?'':R.r,1)||'each stage takes one of the other realms\' rules'} · lord ${C[R.l].n} (${gimT(R.l)})`)),
      T('ชนิดด่าน: ด่านลงท้าย 0 = บอส · ด่านลงท้าย 00 = เจ้าอาณาจักร (ตัวใหญ่ ป้าย LORD มีท่าพิเศษ) · ลงท้าย 5 = ศัตรูยักษ์ตัวเดียว (ELITE) · ลงท้าย 7 = ด่านเอาตัวรอด ศัตรูอึดแต่ตีเบา อยู่รอดครบ 5 รอบก็ชนะ','Stage kinds: ending in 0 = boss · ending in 00 = realm lord (big, LORD tag, a special trick) · ending in 5 = one giant elite enemy · ending in 7 = survival: tough but soft-hitting enemies, live through 5 rounds to win'),
      T('ดาวด่าน 3 ดวง: ★ ชนะ · ★ ไม่มีใครในทีมตาย · ★ ชนะภายใน 4 รอบ (ด่านเอาตัวรอด: เลือดรวมทีมเหลืออย่างน้อยครึ่ง) · เก็บดาวที่ดีที่สุดของแต่ละด่าน เล่นซ้ำเพื่อเก็บดาวที่ขาดได้','Stage stars: ★ win · ★ nobody in the team falls · ★ win within 4 rounds (survival: the team keeps at least half its life) · the best result per stage counts, replay to fill the missing stars'),
      T(`หีบดาว: ทุก ${STAR_CH} ดาวเปิดหีบได้ 1 ใบ ได้ผลึกอาณาจักร 💠1 + ${N(CHEST_G)} Gold (ปุ่ม 🎁 ในหน้าเลือกด่านและหน้าผลด่าน)`,`Star chests: every ${STAR_CH} stars opens a chest with 1 realm crystal 💠 + ${N(CHEST_G)} Gold (the 🎁 button on the stage and result screens)`),
      T(`ผลึกอาณาจักร 💠 ยังดรอปจากด่านบท 2: ด่านปกติ ${P(RS_DROP)} ด่านบอส ${P(RS_BOSS)} (คูณโอกาสดรอปของด่าน · VIP ×${VIP_RS}) · ชนะเจ้าอาณาจักรครั้งแรกได้ 💠${RS_LORD} + 💎${LORD_DIA} · ภารกิจรายวัน "ชนะ 10 ด่าน" ได้ 💠1 ทุกวัน (ด่านไหนก็ได้ เก็บได้ก่อนเข้าบท 2) · ด่าน 501–600 ความยากค่อยๆ ไต่ขึ้น · 🏆 ${F1100_N} ท่านแรกของเซิร์ฟเวอร์ที่ผ่านด่าน 1100 ได้การ์ด Limited Glacius Rex (ไม่มีขาย) คนถัดไปได้ 💠${F1100_LATE}`,`Realm crystals 💠 also drop in Chapter 2: ${P(RS_DROP)} on normal stages, ${P(RS_BOSS)} on bosses (times the stage drop bonus; VIP ×${VIP_RS}) · a realm lord's first defeat gives 💠${RS_LORD} + 💎${LORD_DIA} · the daily quest "win 10 stages" gives 💠1 every day (any stages, so you can collect before Chapter 2) · stages 501–600 ramp up gradually · 🏆 the first ${F1100_N} players on the server to clear stage 1100 get the Limited card Glacius Rex (never sold), later ones get 💠${F1100_LATE}`),
      T('การจัดทัพ: ทั้งสองฝ่ายยืนเป็นทรงสามเหลี่ยม ตัวที่ 2 ในทีมยืนหน้าสุดตรงกลาง ตัวที่ 1 และ 3 ยืนหลังซ้ายขวา (ตำแหน่งยืนไม่มีผลต่อดาเมจ)','Formation: both sides stand in a triangle, the 2nd card in front in the middle, the 1st and 3rd behind on either side (where a fighter stands does not change damage)')])],
+   ch3:[T('บท 3 (1101–1500)','Chapter 3 (1101–1500)'),()=>ul([
+     T('ผ่านด่าน 1100 แล้วเข้าบท 3 ตำนานไทย: 3 อาณาจักร ศัตรูแรงกว่าบท 2 ต่อเนื่อง','After stage 1100 comes Chapter 3, Thai legends: 3 realms, enemies keep growing from Chapter 2'),
+     ...RLM.slice(6).map(R=>T(`<b>${R.s}–${R.e} ${R.th}</b> · กฎสนาม ${ruleTxt(R.r,1)} · เจ้าอาณาจักรด่าน ${R.e}: ${C[R.l].n}`,`<b>${R.s}–${R.e} ${R.n}</b> · ${ruleTxt(R.r,1)} · realm lord on stage ${R.e}: ${C[R.l].n}`)),
+     T('<b>ศัตรูล่าเหยื่อ</b>: ในบท 3 ถ้าไม่มีใครล่อ (TAUNT) ศัตรูจะรุมตีตัวที่เลือดน้อยที่สุดในทีม ทีมที่มีแท้งค์ล่อไว้จึงยืนได้นานกว่ามาก','<b>Hunters</b>: in Chapter 3, with nobody taunting, enemies gang up on the ally with the least life, so a team with a taunting tank lasts far longer'),
+     T('<b>เครื่องรางแท้งค์ SuperLegend</b> (มรกตพฤกษา · หัวใจราชสีห์ · ดาราพิทักษ์) มีผลเฉพาะแท้งค์ในบท 3 นี้ ได้จากฟิวชั่นเครื่องราง Legend','<b>Tank SuperLegend amulets</b> (Emerald Grove · Lionheart · Guardian Star) work only on tanks, here in Chapter 3; they come from Legend amulet fusion'),
+     T('ด่านลงท้าย 0 = บอส · ด่านสุดท้ายของอาณาจักร = เจ้าอาณาจักร · ดาวด่าน หีบดาว และผลึก 💠 เหมือนบท 2','Stages ending in 0 are bosses · the realm\'s last stage is its lord · stage stars, star chests and crystals 💠 work as in Chapter 2')])],
    packs:[T('แพ็คการ์ด','Packs'),()=>tb([T('แพ็ค','Pack'),T('ราคา','Price'),T('ได้','Gives'),...['C','UC','R','L','SL'].map(rn)],
      [['Gold Pack',N(GPACK)+' Gold',GN+T(' ใบ',' cards'),...['C','UC','R','L','SL'].map(r=>P(GODDS[r]))],['Starter Pack',PACK+T(' เพชร',' diamonds'),T('3 ใบ','3 cards'),'–',T('1 ใบ','1 card'),T('2 ใบ','2 cards'),'–','–'],['Pro Pack',N(PRO.dia)+T(' เพชร หรือ ',' diamonds or ')+N(PRO.gold)+' Gold',PRO.n+T(' ใบ',' cards'),'–','–',...['R','L','SL'].map(r=>P(PRO.odds[r]))]])
      +`<p>${T('การ์ดดรอปจากด่านได้ด้วย: โอกาส ','Cards also drop from stages: ')}${P(CDROP)}${T(' ต่อการชนะ ด่านบอส ',' per win, boss stages ')}${P(CDROP_BOSS)} · ${CD_ODDS.slice().reverse().map(([r,pr,min])=>rn(r)+' '+P(pr)+(min>1?T(' (ด่าน ',' (stage ')+min+'+)':'')).join(' · ')}${T(' ที่เหลือเป็น Common',', the rest Common')}</p>`
@@ -3385,7 +3406,7 @@ function welcome(){
 const TIPS=['การ์ดได้ Exp เฉพาะใบที่อยู่ในทีมตอนชนะ','ด่านบอสทุก 10 ด่าน ดรอป Gold ทุกครั้ง และมีโอกาสได้เครื่องรางสูงกว่า','การ์ดแต่ละระดับมีเลเวลสูงสุดไม่เท่ากัน','ดู Lv แนะนำในหน้าเลือกด่านก่อนเข้าสู้','การเทรดคือการให้ของ ต้องยืนยันว่าเป็นผู้ส่งหรือผู้รับทุกครั้ง'];
 // loading screen: really preloads every card, fighter and the next map so nothing pops in during play
 function loading(wait){
-  const next=Math.min(MAXST,S.cleared+1),list=[COVER_BG,mapImg(next),...Object.keys(FXS).concat(Object.keys(PJS)).map(k=>`fx/${k}.webp`),...stageDef(next).filter(e=>C[e.id].mon).flatMap(e=>[`spr/${e.id}.webp`,artSrc(e.id)]),...Object.keys(C).flatMap(id=>[img(id),`spr/${id}.webp`])];
+  const next=Math.min(MAXST,S.cleared+1),list=[COVER_BG,mapImg(next),...Object.keys(FXS).concat(Object.keys(PJS)).map(k=>`fx/${k}.webp`),...stageDef(next).filter(e=>C[e.id].mon).flatMap(e=>[`spr/${C[e.id].sp||e.id}.webp`,artSrc(e.id)]),...Object.keys(C).flatMap(id=>[img(id),`spr/${id}.webp`])];
   view(`<div class="loadv art" style="--bg:url(${COVER_BG})"><div class="cbg"></div>
    <div class="lbar"><i id="lbi"></i></div><p class="lpct nt" id="lpc">0%</p>
    <p class="ltip">${TIPS[Math.floor(Math.random()*TIPS.length)]}</p></div>`);
