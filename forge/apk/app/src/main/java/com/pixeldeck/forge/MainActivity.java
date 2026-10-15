@@ -17,6 +17,9 @@ import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.webkit.WebResourceRequest;
+import android.webkit.WebResourceResponse;
+import java.io.InputStream;
 
 import java.io.OutputStream;
 import java.util.HashMap;
@@ -25,6 +28,24 @@ import java.util.Map;
 /** PixelDeck Forge: the whole app is the page in assets/www; this activity hosts it and gives it files, saving and copy. */
 public class MainActivity extends Activity {
     private static final int REQ_FILE = 7;
+    private static final String HOST = "studio.pixeldeck.app";
+
+    private static String mime(String p) {
+        String l = p.toLowerCase();
+        if (l.endsWith(".html")) return "text/html";
+        if (l.endsWith(".js")) return "application/javascript";
+        if (l.endsWith(".json")) return "application/json";
+        if (l.endsWith(".css")) return "text/css";
+        if (l.endsWith(".png")) return "image/png";
+        if (l.endsWith(".jpg") || l.endsWith(".jpeg")) return "image/jpeg";
+        if (l.endsWith(".webp")) return "image/webp";
+        if (l.endsWith(".gif")) return "image/gif";
+        if (l.endsWith(".svg")) return "image/svg+xml";
+        if (l.endsWith(".ttf")) return "font/ttf";
+        if (l.endsWith(".woff")) return "font/woff";
+        if (l.endsWith(".woff2")) return "font/woff2";
+        return "application/octet-stream";
+    }
     private static final String FOLDER = Environment.DIRECTORY_DOWNLOADS + "/PixelDeckForge";
     private WebView web;
     private ValueCallback<Uri[]> fileCb;
@@ -47,7 +68,27 @@ public class MainActivity extends Activity {
         s.setMediaPlaybackRequiresUserGesture(true);
         s.setTextZoom(100);
         web.addJavascriptInterface(new Bridge(), "Android");
-        web.setWebViewClient(new WebViewClient());
+        // the app's pages are served from assets/www under a private https origin, so canvases stay readable (export PNG/ZIP)
+        web.setWebViewClient(new WebViewClient() {
+            @Override
+            public WebResourceResponse shouldInterceptRequest(WebView v, WebResourceRequest r) {
+                Uri u = r.getUrl();
+                if (!HOST.equals(u.getHost())) return null;
+                String path = u.getPath();
+                if (path == null || path.equals("/")) path = "/index.html";
+                try {
+                    InputStream in = getAssets().open("www" + Uri.decode(path));
+                    WebResourceResponse res = new WebResourceResponse(mime(path), null, in);
+                    Map<String, String> h = new HashMap<>();
+                    h.put("Access-Control-Allow-Origin", "*");
+                    h.put("Cache-Control", "no-cache");
+                    res.setResponseHeaders(h);
+                    return res;
+                } catch (Exception e) {
+                    return new WebResourceResponse("text/plain", "utf-8", 404, "Not Found", new HashMap<String, String>(), null);
+                }
+            }
+        });
         web.setWebChromeClient(new WebChromeClient() {
             @Override
             public boolean onShowFileChooser(WebView v, ValueCallback<Uri[]> cb, FileChooserParams p) {
@@ -69,7 +110,7 @@ public class MainActivity extends Activity {
             }
         });
         if (saved != null) web.restoreState(saved);
-        else web.loadUrl("file:///android_asset/www/index.html");
+        else web.loadUrl("https://" + HOST + "/index.html");
     }
 
     @Override

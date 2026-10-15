@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <uses-permission android:name="android.permission.INTERNET" />
     <application
-        android:label="PixelDeck Forge"
+        android:label="PixelDeck Studio"
         android:icon="@mipmap/ic_launcher"
         android:theme="@style/Forge"
         android:hardwareAccelerated="true"

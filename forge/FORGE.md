@@ -1,23 +1,20 @@
-# PixelDeck Forge — handoff
+# PixelDeck Studio (was PixelDeck Forge) — handoff
 
-Owner's own character / UI maker app for Pixeldeck Battle (separate from the game; not deployed to pdb). Talk to the owner in Thai.
+Owner's own Android app (APK only) for laying out Pixeldeck Battle's screens before Claude builds them into the real game. Talk to the owner in Thai.
 
-## v2 (15 Oct 2026): APK only, bare app
-- Owner wants an APK, not a web artifact, and a bare app: no built-in Claude-drawn models. All art comes from GPT. Flow: Forge shows GPT prompts (copy button each) → owner makes images in GPT → adds them in Forge → exports → sends to Claude.
-- The old artifact (claude.ai/artifact/2Aa5UdgZ8nxo8yp23vWtPQ, v1 with 100,000 procedural models) is retired; do not republish.
-- Source: `forge/forge.html` (full page, no build). `node forge/build_assets.js` writes `forge/apk/app/src/main/assets/www/index.html` (swaps web font + cdn JSZip for local `silkscreen.ttf` + `jszip.min.js`).
-- Android shell: `forge/apk` (Java WebView, minSdk 29, no AndroidX). Bridge `window.Android`: begin/chunk/end (save to Download/PixelDeckForge via MediaStore, base64 chunks), share(id), copy(text). File inputs via onShowFileChooser (multi-select).
-- Build: `.github/workflows/forge-apk.yml` on push to forge/** → Gradle 8.9 / AGP 8.5.2 → signed with `forge/apk/forge.jks` (pass in workflow; keystore committed because the session can't set repo secrets) → GitHub Release `forge-v1.<run>` with `PixelDeckForge-v1.<run>.apk`. versionCode = run number, so new APKs install over old ones.
-- Test: `node forge/build_assets.js && node forge/test_forge.js <folder of part PNGs> [outdir]` (Playwright at /opt/npm-tools, fake Android bridge).
+## Decided with the owner (15 Oct 2026)
+- Part-based character maker dropped: the game uses full-frame sprite sheets, not parts. Owner wants an editor to arrange/compose every game screen freely ("Custom in the app, then send to Claude"), premium like a world-class game tool. A GPT-sheet cutter for new cards (studio idea 1) comes later.
 
-## What the app has
-- Tab คำสั่ง AI: ChatGPT / Gemini switch (Gemini prompts ask for a flat magenta FF00FF background + attached style and template images). Style reference forge/pixeldeck_style.png (8 game sprites, inlined by build_assets as window.STYLE_URI). 50 prompts (body/head/hair/hat/weapon × 10), each self-contained, 16-bit pixel art, 1024² transparent, positions in %; template PNG (pixeldeck_template.png) to attach in GPT.
-- Position standard (GUIDE): neck 47%/41%, head box 33–64% × 14–44%, hand/grip 62%/58% (weapon pivot), feet 97%.
-- Tab ชิ้นส่วน: 5 layers (1_body 2_head 3_hair 4_hat(+none) 5_weapon), "+ เพิ่มรูป" per layer, per-picture nudge (dx, dy, scale), auto-place for body (neck x + feet, height 41→97%) and head (fit head box), stage guides overlay. Background removal = flood fill from the edges (solid or checkerboard), keeps inner colours. Pack persists: blobs in IndexedDB, layout in localStorage.
-- Rig packs (GPT's format): rig.json {canvas, facing, slots{head,torso,near_arm,far_arm,near_leg,far_leg}:[x,y], drawOrder, pivotLocal{kind}:[px,py]} + parts/<kind>_NN.png; arm/leg come in pairs (2n near, 2n+1 far). `rigFrom`/`drawRig`; facing left is mirrored to face right; xf() gives limb rotations (T.limb) for walk/run/attack/cast/victory. Import via ZIP (rig.json anywhere) or the multi picker (images + rig.json). GPT's first bundle: 96×128, 20 heads × 20 torsos × 10 arm pairs × 10 leg pairs = 40,000.
-- ZIP import: parts pack (pack.json offsets restore), anim folders, numbered frames; also PNG frames / sprite sheet / single image.
-- Export: preview sheet (12 random combos with guides — for Claude to check alignment), parts ZIP + pack.json (offsets + measured % boxes), game pack ZIP, strip PNG, GIF, frames ZIP; scales 1/16…1× for big images.
-- UI maker (button/panel/HP bar/badge/slot).
+## How it works
+- `forge/capture/capture.js` (Playwright, run from repo root after `tools/mkt_page.py` built `_t.html`): opens the real game at 915×412 (phone landscape), visits 23 screens (lobby, prep, teampop, battle, result, coll, zoom, shop, amtab, fusehub, pvp, tower, quests, afk, mail, topup, exg, profile, invite, settings, guide, market, troom), freezes timers/animations, and saves per screen: `ref.jpg` (as seen), `bg.jpg` (background only), one transparent PNG per element + `screen.json` (box, selector path, data-act/key, text, font, bg image). Popups (#ov / #zoom) are captured as their own layers over the dimmed screen. Output: `forge/apk/app/src/main/assets/www/screens/` (committed). Re-run when the game UI changes.
+- Editor: `forge/studio.html` (single file). `node forge/build_assets.js` writes www/index.html, screens/data.js (all screen.json) and copies the game's art folders (ic ic2 ui am rk art cards spr fx bg fnt) to www/game/ + game/manifest.js (git-ignored; CI rebuilds it).
+- Android shell `forge/apk` (Java WebView): serves assets/www at https://studio.pixeldeck.app/ via shouldInterceptRequest (same origin, so canvases export). Bridge window.Android: begin/chunk/end (save to Download/PixelDeckForge), share(id), copy(text). Package id com.pixeldeck.forge (installs over Forge).
+- Build: .github/workflows/forge-apk.yml on push to forge/** → release forge-v1.<run> with PixelDeckForge-v1.<run>.apk. Keystore forge/apk/forge.jks committed.
+- Test locally: `cd forge/apk/app/src/main/assets/www && python3 -m http.server 8765`, then Playwright against http://localhost:8765/index.html with a fake window.Android.
 
-## Next
-- Owner tests the APK, makes the 50 GPT parts, sends the preview PNG / parts ZIP → check alignment, tune auto-place or prompts.
+## Editor features
+Canvas with pinch/wheel zoom and pan; tap/alpha hit-test select; drag move with smart guides (snap to other layers' edges/centres and the stage) and optional grid; 8 handles resize (corners keep aspect), rotate knob (snaps 45°); multi-select (toggle mode, marquee, shift); long-press/right-click context menu; undo/redo (120 steps per screen); copy/paste across screens; align/distribute; z-order; lock/hide; layers panel; inspector (X/Y/W/H/rot/opacity/flip, text font/size/colour/gradient/stroke/shadow, box/button fill/gradient/border/radius/gloss + presets, sprite row/fps); asset library (captured parts of every screen, game icons/UI/amulets/ranks/card art/cards/maps, animated card sprites spr/ 252×204 cells rows idle/ready/attack/front, animated fx strips, own uploads in IndexedDB); swap image; background swap/hide; before/after compare slider; play mode; per-layer and per-screen notes to Claude; autosave (IndexedDB 'pdstudio').
+- Export "ส่งให้ Claude": ZIP with layout.json (all layers, stage px, change list with original selector/data-act and old→new boxes), changes_th.txt (Thai list), <id>_compare.jpg (before|after), <id>_after.png, my_images/. Re-open a ZIP with the rail's open-file button.
+
+## When the owner sends a layout ZIP
+Read changes_th.txt + compare images, map each change by selector/data-act to src/game.src.html CSS/markup (stage is 915×412 CSS px), keep other screen sizes working, follow the game's release workflow (HANDOFF.md).
