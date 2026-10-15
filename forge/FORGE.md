@@ -11,7 +11,7 @@ Owner's own character / UI maker app for Pixeldeck Battle (separate from the gam
 - Test: `node forge/build_assets.js && node forge/test_forge.js <folder of part PNGs> [outdir]` (Playwright at /opt/npm-tools, fake Android bridge).
 
 ## What the app has
-- Tab คำสั่ง GPT: 50 prompts (body/head/hair/hat/weapon × 10), each self-contained, 16-bit pixel art, 1024² transparent, positions in %; template PNG (pixeldeck_template.png) to attach in GPT.
+- Tab คำสั่ง AI: ChatGPT / Gemini switch (Gemini prompts ask for a flat magenta FF00FF background + attached style and template images). Style reference forge/pixeldeck_style.png (8 game sprites, inlined by build_assets as window.STYLE_URI). 50 prompts (body/head/hair/hat/weapon × 10), each self-contained, 16-bit pixel art, 1024² transparent, positions in %; template PNG (pixeldeck_template.png) to attach in GPT.
 - Position standard (GUIDE): neck 47%/41%, head box 33–64% × 14–44%, hand/grip 62%/58% (weapon pivot), feet 97%.
 - Tab ชิ้นส่วน: 5 layers (1_body 2_head 3_hair 4_hat(+none) 5_weapon), "+ เพิ่มรูป" per layer, per-picture nudge (dx, dy, scale), auto-place for body (neck x + feet, height 41→97%) and head (fit head box), stage guides overlay. Background removal = flood fill from the edges (solid or checkerboard), keeps inner colours. Pack persists: blobs in IndexedDB, layout in localStorage.
 - ZIP import: parts pack (pack.json offsets restore), anim folders, numbered frames; also PNG frames / sprite sheet / single image.

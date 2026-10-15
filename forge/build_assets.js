@@ -5,5 +5,6 @@ const src=path.join(__dirname,'forge.html'),out=path.join(__dirname,'apk/app/src
 let h=fs.readFileSync(src,'utf8');
 const rep=(tag,to)=>{const re=new RegExp(`<!--${tag}-->[\\s\\S]*?<!--/${tag}-->`);if(!re.test(h))throw new Error('marker missing: '+tag);h=h.replace(re,to)};
 rep('FONTS',"<style>@font-face{font-family:'Silkscreen';src:url(silkscreen.ttf) format('truetype');font-display:swap}</style>");
+rep('STYLEIMG','<script>window.STYLE_URI="data:image/png;base64,'+fs.readFileSync(path.join(__dirname,'pixeldeck_style.png')).toString('base64')+'"</script>');
 rep('JSZIP','<script src="jszip.min.js"></script>');
 fs.writeFileSync(out,h);console.log('wrote',path.relative(process.cwd(),out),h.length,'bytes');

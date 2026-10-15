@@ -112,7 +112,7 @@ pre{white-space:pre-wrap;font:12px/1.5 ui-monospace,Menlo,monospace;color:#d6d0f
         <span class="idtag" id="mid"></span>
       </div>
       <div class="stage" id="stage"><canvas id="cv" class="pix" width="420" height="360"></canvas>
-        <div class="empty" id="empty"><b>ยังไม่มีตัวละคร</b><span>ขอคำสั่งในแท็บ “คำสั่ง GPT” ให้ GPT วาดชิ้นส่วน แล้วเอารูปมาใส่ในแท็บ “ชิ้นส่วน”</span></div></div>
+        <div class="empty" id="empty"><b>ยังไม่มีตัวละคร</b><span>ขอคำสั่งในแท็บ “คำสั่ง AI” ให้ GPT หรือ Gemini วาดชิ้นส่วน แล้วเอารูปมาใส่ในแท็บ “ชิ้นส่วน”</span></div></div>
       <div class="chips" id="animChips" role="group" aria-label="ท่าทาง"></div>
       <div class="row">
         <button class="btn sm" id="play">หยุด</button>
@@ -137,7 +137,7 @@ pre{white-space:pre-wrap;font:12px/1.5 ui-monospace,Menlo,monospace;color:#d6d0f
 
     <div class="sec">
       <div class="tabs" role="tablist">
-        <button class="btn tab on" data-tab="gpt">คำสั่ง GPT</button>
+        <button class="btn tab on" data-tab="gpt">คำสั่ง AI</button>
         <button class="btn tab" data-tab="parts">ชิ้นส่วน</button>
         <button class="btn tab" data-tab="anim">ท่า &amp; เอฟเฟกต์</button>
         <button class="btn tab" data-tab="exp">ส่งออก</button>
@@ -147,12 +147,18 @@ pre{white-space:pre-wrap;font:12px/1.5 ui-monospace,Menlo,monospace;color:#d6d0f
       <section class="card sec panel" id="p-gpt">
         <h3>ขั้นตอน</h3>
         <ol class="steps">
-          <li>บันทึกรูปแม่แบบ แล้วแนบให้ GPT ทุกครั้งที่ส่งคำสั่ง ชิ้นส่วนจะได้ลงตำแหน่งเดียวกัน</li>
-          <li>เลือกหมวดด้านล่าง กด “คัดลอก” แล้ววางใน GPT · 1 คำสั่ง = 1 รูป</li>
-          <li>บันทึกรูปจาก GPT ลงเครื่อง</li>
-          <li>ไปแท็บ “ชิ้นส่วน” กด “+ เพิ่มรูป” ในชั้นที่ตรงกับหมวด</li>
+          <li>เลือกว่าจะใช้ GPT หรือ Gemini</li>
+          <li>บันทึกรูปตัวอย่างสไตล์ และรูปแม่แบบตำแหน่ง แล้วแนบทั้ง 2 รูปทุกครั้งที่ส่งคำสั่ง รูปจะได้ออกมาสไตล์เกมเรา และลงตำแหน่งเดียวกัน</li>
+          <li>เลือกหมวด กด “คัดลอก” แล้ววาง · 1 คำสั่ง = 1 รูป</li>
+          <li>บันทึกรูปลงเครื่อง แล้วไปแท็บ “ชิ้นส่วน” กด “+ เพิ่มรูป” ในชั้นที่ตรงกับหมวด</li>
           <li>เปิดเส้นนำตำแหน่งเพื่อตรวจ แล้วส่งออก “ภาพรวม 12 แบบ” ส่งให้ Claude ดู</li>
         </ol>
+        <div class="chips" id="aiChips" role="group" aria-label="ใช้ AI ตัวไหน"><button class="btn sm" data-ai="gpt">ChatGPT</button><button class="btn sm" data-ai="gemini">Gemini</button></div>
+        <p class="hint" id="aiNote"></p>
+        <div class="tplrow">
+          <img id="styleImg" src="" alt="ตัวอย่างสไตล์" style="width:120px;height:120px;border:2px solid var(--line);border-radius:4px;image-rendering:pixelated;background:#fff">
+          <div class="sec" style="gap:6px"><button class="btn go" id="styleSave">บันทึกรูปตัวอย่างสไตล์</button><span class="hint">pixeldeck_style.png · ตัวละครจริงจากเกม ให้ AI วาดสไตล์เดียวกัน</span><span class="stat" id="styleStat"></span></div>
+        </div>
         <div class="tplrow">
           <canvas id="tplCv" class="pix" width="1024" height="1024" aria-label="รูปแม่แบบตำแหน่ง"></canvas>
           <div class="sec" style="gap:6px"><button class="btn go" id="tplSave">บันทึกรูปแม่แบบ</button><span class="hint">pixeldeck_template.png · 1024×1024 · บอกตำแหน่งคอ หัว มือ และเท้า</span><span class="stat" id="tplStat"></span></div>
@@ -267,6 +273,7 @@ pre{white-space:pre-wrap;font:12px/1.5 ui-monospace,Menlo,monospace;color:#d6d0f
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 <div class="busy" id="busy" hidden><div><b>กำลังทำงาน</b><span id="busyMsg"></span><i><span id="busyBar"></span></i></div></div>
 
+<!--STYLEIMG--><!--/STYLEIMG-->
 <!--JSZIP--><script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script><!--/JSZIP-->
 <script>
 'use strict';
@@ -336,22 +343,37 @@ const GP={
     list:[['ดาบ','a longsword with a silver blade and a gold crossguard'],['ดาบใหญ่','a huge two-handed greatsword'],['ขวาน','a double-bladed battle axe with a wooden handle'],['หอก','a long spear with a steel tip and a red tassel'],['ค้อน','a heavy iron war hammer'],
       ['มีดสั้น','a short curved dagger'],['คทา','a wooden mage staff topped with a glowing blue orb'],['ธนู','a wooden longbow held VERTICALLY (not tilted) with its grip at x 62%, y 58%'],['คาตานะ','a katana with a black-wrapped handle'],['เคียว','a dark reaper scythe with a long curved blade']]}};
 const GKEYS=['body','head','hair','hat','weapon'];
-function promptText(k,i){const g=GP[k],[,desc]=g.list[i],no=String(i+1).padStart(2,'0'),dirn=LAYDEF.find(d=>d.key===k).dir;
-  return `16-bit pixel art sprite part for a modular fantasy RPG character (cute chibi style, like a SNES / GBA game).
+const POS=`POSITION (percent of the canvas, measured from the top-left corner) — follow exactly so every part stacks on the others:
+- Neck point: x 47%, y 41%
+- Head area: x 33–64%, y 14–44%
+- Front hand / weapon grip: x 62%, y 58%
+- Soles of the feet: y 97%`;
+const STYLE=`STYLE: match the PixelDeck Battle game style — detailed cute chibi fantasy pixel art (big head, small body), rich saturated colours with 3–4 shades per colour, a crisp dark outline, like a 128 × 128 sprite scaled up 8× (every pixel an 8 × 8 block). No anti-aliasing, no blur, no soft gradients. Faces RIGHT in a 3/4 side view.`;
+function promptText(k,i,ai=st.ai){const g=GP[k],[,desc]=g.list[i],no=String(i+1).padStart(2,'0'),dirn=LAYDEF.find(d=>d.key===k).dir;
+  if(ai==='gemini')return `Create ONE image: a single character PART for a modular 2D game sprite system.
+I attached two images. Image 1 (pixeldeck_style.png) is the STYLE REFERENCE from my game PixelDeck Battle: copy its pixel-art style, level of detail, colours and dark outline. Do not copy its characters. Image 2 (pixeldeck_template.png) is the POSITION TEMPLATE: use it only for placement and size, do not draw it.
+
+PART TO DRAW: ${k.toUpperCase()} — ${desc}.
+Draw ONLY this part. Nothing else: no other body parts, no ground, no shadow, no text, no frame, no template lines.
+
+CANVAS: square 1:1, 1024 × 1024. BACKGROUND: one flat solid magenta colour #FF00FF everywhere outside the part — no gradient, no pattern, no glow, no shadow (my app removes it automatically). Do not use magenta inside the part.
+${STYLE}
+
+${POS}
+${g.where}
+
+Output the image only.`;
+  return `Pixel art sprite part for a modular fantasy RPG character (PixelDeck Battle game style).
 
 PART TO DRAW: ${k.toUpperCase()} — ${desc}.
 Draw ONLY this part. Nothing else: no other body parts, no background, no ground, no shadow, no text, no frame.
 
 CANVAS: exactly 1024 × 1024 px square, fully transparent background (a real transparent PNG — not white, not a grey checkerboard pattern).
-STYLE: crisp 16-bit pixel art with chunky square pixels — the whole character is a 64 × 64 sprite scaled up 16×, so every pixel is a 16 × 16 block. 1-pixel dark outline, limited palette with 2–3 shades per colour, no anti-aliasing, no blur, no gradients. The character faces RIGHT in a 3/4 side view.
+${STYLE}
 
-POSITION (percent of the canvas, measured from the top-left corner) — follow exactly so every part stacks on the others:
-- Neck point: x 47%, y 41%
-- Head area: x 33–64%, y 14–44%
-- Front hand / weapon grip: x 62%, y 58%
-- Soles of the feet: y 97%
+${POS}
 ${g.where}
-If a template image is attached, use it only as a position guide and do not draw it.
+If a style reference image is attached, match its style (do not copy its characters). If a template image is attached, use it only as a position guide and do not draw it.
 
 OUTPUT: one transparent PNG named ${k}_${no}.png (folder ${dirn}).`}
 
@@ -585,9 +607,9 @@ async function addMany(files){const o=opt(),list=[...files].sort((a,b)=>nat(a.na
   impStat(`เพิ่ม ${n} รูป${miss.length?` · ไม่รู้ว่าเป็นชั้นไหน ${miss.length} รูป (${miss.slice(0,3).join(', ')}${miss.length>3?' …':''}) ใช้ “+ เพิ่มรูป” ในชั้นนั้นแทน`:''}`,!n);if(n)toast(`เพิ่มแล้ว ${n} รูป`)}
 
 /* ============ app state ============ */
-const st={anim:'idle',n:8,fps:10,f:0,playing:true,fx:'auto',fxAuto:true,fxColor:'#58d9ff',flip:false,bg:'checker',tab:'gpt',guide:true,gk:'body'};
-(()=>{const s=store.get('st',null);if(s)['n','fps','fx','bg','tab','guide','gk'].forEach(k=>{if(s[k]!=null)st[k]=s[k]})})();
-const save=()=>store.set('st',{n:st.n,fps:st.fps,fx:st.fx,bg:st.bg,tab:st.tab,guide:st.guide,gk:st.gk});
+const st={anim:'idle',n:8,fps:10,f:0,playing:true,fx:'auto',fxAuto:true,fxColor:'#58d9ff',flip:false,bg:'checker',tab:'gpt',guide:true,gk:'body',ai:'gpt'};
+(()=>{const s=store.get('st',null);if(s)['n','fps','fx','bg','tab','guide','gk','ai'].forEach(k=>{if(s[k]!=null)st[k]=s[k]})})();
+const save=()=>store.set('st',{n:st.n,fps:st.fps,fx:st.fx,bg:st.bg,tab:st.tab,guide:st.guide,gk:st.gk,ai:st.ai});
 const opts=()=>({fx:st.fx,fxColor:st.fxAuto?null:st.fxColor});
 function curSize(){return IMP?{fw:IMP.fw,fh:IMP.fh}:{fw:W,fh:H}}
 function frameCount(){if(!IMP)return st.n;if(IMP.type==='frames'&&st.anim==='src')return IMP.frames.length;if(IMP.type==='anims'&&IMP.anims[st.anim])return IMP.anims[st.anim].length;return st.n}
@@ -629,12 +651,16 @@ function refreshAll(){header();animChips();sizeStage();buildTL(true);draw();exSi
 
 /* ---- GPT tab ---- */
 function gptSetup(){const C=$('gChips');GKEYS.forEach(k=>{const b=document.createElement('button');b.className='btn sm';b.dataset.k=k;b.textContent=GP[k].th+' 1–10';b.onclick=()=>{st.gk=k;save();gptList()};C.appendChild(b)});
+  $('styleImg').src=window.STYLE_URI||'pixeldeck_style.png';
+  document.querySelectorAll('#aiChips .btn').forEach(b=>b.onclick=()=>{st.ai=b.dataset.ai;save();gptList()});
+  $('styleSave').onclick=async()=>{const im=$('styleImg');try{if(!im.complete)await new Promise((r,j)=>{im.onload=r;im.onerror=j});const c=document.createElement('canvas');c.width=im.naturalWidth;c.height=im.naturalHeight;c.getContext('2d').drawImage(im,0,0);saveFile('pixeldeck_style.png',await blobOf(c),'styleStat')}catch(e){$('styleStat').textContent='โหลดรูปตัวอย่างไม่ได้';$('styleStat').classList.add('err')}};
   drawTemplate($('tplCv'));$('tplSave').onclick=async()=>{const c=document.createElement('canvas');c.width=c.height=1024;drawTemplate(c);saveFile('pixeldeck_template.png',await blobOf(c),'tplStat')};gptList()}
-function gptList(){const k=st.gk,G=$('gList'),done=new Set(store.get('copied',[]));document.querySelectorAll('#gChips .btn').forEach(b=>b.classList.toggle('on',b.dataset.k===k));
+function gptList(){const k=st.gk,G=$('gList'),done=new Set(store.get('copied',[]));document.querySelectorAll('#gChips .btn').forEach(b=>b.classList.toggle('on',b.dataset.k===k));document.querySelectorAll('#aiChips .btn').forEach(b=>b.classList.toggle('on',b.dataset.ai===st.ai));
+  $('aiNote').textContent=st.ai==='gemini'?'Gemini ทำพื้นโปร่งใสไม่ได้ คำสั่งชุดนี้เลยให้ใช้พื้นสีม่วงชมพู (#FF00FF) แอปลบให้เองตอนเพิ่มรูป · แนบรูปตัวอย่างสไตล์ก่อน แล้วตามด้วยรูปแม่แบบ':'แนบรูปตัวอย่างสไตล์และรูปแม่แบบไปพร้อมคำสั่ง · ถ้า GPT ไม่ทำพื้นโปร่งใส แอปลบพื้นสีเรียบหรือลายตารางให้เอง';
   $('gNote').textContent=`หมวด${GP[k].th}: ใส่รูปที่ได้ในชั้น “${GP[k].th}” ของแท็บชิ้นส่วน`;G.innerHTML='';
-  GP[k].list.forEach(([th],i)=>{const id=k+(i+1),t=promptText(k,i),el=document.createElement('div');el.className='pc';
+  GP[k].list.forEach(([th],i)=>{const id=st.ai+k+(i+1),t=promptText(k,i),el=document.createElement('div');el.className='pc';
     el.innerHTML=`<div class="row between"><b>${GP[k].th} ${i+1} · ${th}</b><button class="btn sm${done.has(id)?' done':''}">${done.has(id)?'คัดลอกแล้ว ✓':'คัดลอก'}</button></div><pre></pre>`;el.querySelector('pre').textContent=t;
-    el.querySelector('button').onclick=async e=>{if(await copyText(t)){done.add(id);store.set('copied',[...done]);e.target.textContent='คัดลอกแล้ว ✓';e.target.classList.add('done');toast(`คัดลอกคำสั่ง${GP[k].th} ${i+1} แล้ว วางใน GPT ได้เลย`)}else toast('คัดลอกไม่ได้ กดค้างที่ข้อความเพื่อคัดลอกเอง')};G.appendChild(el)})}
+    el.querySelector('button').onclick=async e=>{if(await copyText(t)){done.add(id);store.set('copied',[...done]);e.target.textContent='คัดลอกแล้ว ✓';e.target.classList.add('done');toast(`คัดลอกคำสั่ง${GP[k].th} ${i+1} แล้ว วางใน ${st.ai==='gemini'?'Gemini':'GPT'} ได้เลย`)}else toast('คัดลอกไม่ได้ กดค้างที่ข้อความเพื่อคัดลอกเอง')};G.appendChild(el)})}
 async function copyText(t){try{if(window.Android&&Android.copy){return!!Android.copy(t)}}catch(e){}
   try{await navigator.clipboard.writeText(t);return true}catch(e){}
   try{const a=document.createElement('textarea');a.value=t;a.style.position='fixed';a.style.opacity='0';document.body.appendChild(a);a.select();const ok=document.execCommand('copy');a.remove();return ok}catch(e){return false}}
