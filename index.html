@@ -1096,7 +1096,9 @@ function enterRoom(){
 }
 let trGive=null;
 // trading is a one-way gift: one player is the sender, the other the receiver, nothing has to come back; every transfer needs an explicit confirmation of the role
-const fdBadge=(w)=>`<span class="fdb nt"${w?` style="--fw:${w}px"`:''}><i></i><em class="fdx">FOUNDER</em></span>`;
+// b190: invite menu and the FOUNDER title are switched off (S.fd stays on the account, set FD_SHOW to bring the title back)
+const REF_ON=false,FD_SHOW=false;
+const fdBadge=(w)=>!FD_SHOW?'':`<span class="fdb nt"${w?` style="--fw:${w}px"`:''}><i></i><em class="fdx">FOUNDER</em></span>`;
 const nm=n=>`<b class="nt">${String(n.name).replace(/</g,'&lt;')}</b>`;
 function npcMenu(){const n=tn();if(!n)return;$('tui').innerHTML=`<div class="tmenu">${nm(n)}<span class="sub nt">${C[n.look].n} · ${RAR[C[n.look].r].n}</span>
   <span class="sub">การเทรดคือการให้ของ ไม่ต้องมีของมาแลก</span>
@@ -1605,7 +1607,7 @@ function home(){
     <button class="ibtn gearb" data-act="settings" title="ตั้งค่า">${ico(UI.gear,9)}</button>
    </div>
    <div class="mid">
-    ${evOn()&&!S.fd?`<button class="evb nt" data-act="invite">${fdBadge()}<em>🔥 ${T('ชวน 3 คน รับของ Limited','Invite 3, get Limited loot')}</em><small>${evLeft()}</small></button>`:`<button class="invb nt" data-act="invite"><b>🎁 ${T('ชวนเพื่อน','Invite')}</b><span>${T('รับ','get')} ${REF_DIA} 💎</span></button>`}${CFG.notice?`<p class="ntc nt">📢 ${esc(String(CFG.notice).slice(0,160))}</p>`:''}<div class="heroz"><h1 class="logo nt">PIXELDECK<b>BATTLE</b></h1><p class="onl nt" id="onlw" hidden><i></i>${T('ออนไลน์','Online')} <b id="onl">0</b> ${T('คน','players')}</p>
+    ${!REF_ON?'':evOn()&&!S.fd?`<button class="evb nt" data-act="invite">${fdBadge()}<em>🔥 ${T('ชวน 3 คน รับของ Limited','Invite 3, get Limited loot')}</em><small>${evLeft()}</small></button>`:`<button class="invb nt" data-act="invite"><b>🎁 ${T('ชวนเพื่อน','Invite')}</b><span>${T('รับ','get')} ${REF_DIA} 💎</span></button>`}${CFG.notice?`<p class="ntc nt">📢 ${esc(String(CFG.notice).slice(0,160))}</p>`:''}<div class="heroz"><h1 class="logo nt">PIXELDECK<b>BATTLE</b></h1><p class="onl nt" id="onlw" hidden><i></i>${T('ออนไลน์','Online')} <b id="onl">0</b> ${T('คน','players')}</p>
      <div class="squad">${S.team.map(id=>hero(id)).join('')}</div></div>
     <div class="side">
      <div class="row2"><button class="btn sm" data-act="afk" ${afkGold()<1?'disabled':''}>${ico(UI.afk,2)}<span>ออฟไลน์</span> <i class="nt" id="afkv">+${afkGold().toLocaleString('en')}</i></button><button class="btn alt sm" data-act="quests">${ico(UI.quest,4.2)}<span>ภารกิจ</span>${qReady()?` <i class="nt badge">${qReady()}</i>`:''}</button></div>
@@ -2605,7 +2607,7 @@ $('view').onclick=ev=>{{const w=ev.target.closest('.dk,.ibtn,.pill,.row2 .btn');
   else if(a==='tpick'){dSel=+t.dataset.i;if(!slip.busy)slip.msg='';topup()}
   else if(a==='tcancel'){dSel=null;topup()}
   else if(a==='grantref'){grantFetch(1);fx.push(['view',T('กำลังเช็ก…','Checking…'),'s']);topup()}
-  else if(a==='invite'){invite();refFetch(1)}
+  else if(a==='invite'){if(REF_ON){invite();refFetch(1)}}
   else if(a==='invref'){refFetch(1);invite()}
   else if(a==='invcopy'){try{navigator.clipboard.writeText(refLink())}catch(e){}fx.push(['view',T('คัดลอกลิงก์แล้ว','Link copied'),'g']);invite()}
   else if(a==='invshare'){try{navigator.share({title:'Pixeldeck Battle',text:T('มาเล่น Pixeldeck Battle กัน เกมการ์ดต่อสู้ เล่นฟรีบนเว็บ ไม่ต้องโหลด','Come play Pixeldeck Battle, a free card battle game in your browser'),url:refLink()}).catch(()=>{})}catch(e){}}
@@ -3213,7 +3215,7 @@ function guide(){
    start:[T('เริ่มต้น','Getting started'),()=>ul([
      T(`ล็อกอินครั้งแรกได้การ์ดเริ่มต้นฟรี ${GIFT.length} ใบ: ${GIFT.map(id=>C[id].n).join(', ')}`,`Your first login gives ${GIFT.length} free Starter cards: ${GIFT.map(id=>C[id].n).join(', ')}`),
      T('ผู้เล่นใหม่มีสอนเล่นด่านแรกทีละขั้น กดข้ามได้ และดูซ้ำได้ที่ ตั้งค่า → สอนเล่นด่านแรก','New players get a step-by-step tutorial for the first stage. It can be skipped, and replayed from Settings → First-stage tutorial'),
-     T(`ชวนเพื่อน (ป้ายในล็อบบี้): ส่งลิงก์ของคุณให้เพื่อนที่ยังไม่เคยเล่น เมื่อเพื่อนล็อกอิน Google ผ่านลิงก์และผ่านด่าน ${REF_NEED} คุณได้ ${REF_DIA} เพชร (สูงสุด ${REF_MAX} คน) และเพื่อนได้ ${REF_FRIEND} เพชร นับเฉพาะบัญชีใหม่ บัญชีละครั้งเดียว · FOUNDER EVENT (ถึง 14 ต.ค. 23:59 น.): ชวนครบ ${EV_NEED} คน รับป้าย FOUNDER (ผูกบัญชี แสดงในห้องเทรดและ PvP) และเครื่องราง Limited Lucky Clover (ทีมที่มีการ์ดใส่อยู่มีโอกาสเล็กน้อยได้การ์ด Legend จากทุกด่าน ยิ่งด่านสูงยิ่งมาก · Exp +10% ให้การ์ดที่ใส่ · ไม่เพิ่มพลังต่อสู้ · เทรดได้เฉพาะในห้องเทรด ลงตลาดกลางไม่ได้) · ทั้งสองอย่างไม่ถูกล้างเมื่อจบ CBT`,`Invite friends (banner in the lobby): send your link to a friend who has never played. When they sign in with Google through it and clear stage ${REF_NEED} you get ${REF_DIA} diamonds (up to ${REF_MAX} friends) and your friend gets ${REF_FRIEND}. Only new accounts count, once each · FOUNDER EVENT (until 14 Oct 23:59 Bangkok): invite ${EV_NEED} friends for the FOUNDER title (account-bound, shown in the trade room and PvP) and the Limited amulet Lucky Clover (a team with a card wearing it has a small chance of a Legend card on every stage, higher on later stages · Exp +10% for its wearer · no combat stats · tradable only in the trade room, not on the market) · neither is wiped when the CBT ends`),
+     ...(REF_ON?[T(`ชวนเพื่อน (ป้ายในล็อบบี้): ส่งลิงก์ของคุณให้เพื่อนที่ยังไม่เคยเล่น เมื่อเพื่อนล็อกอิน Google ผ่านลิงก์และผ่านด่าน ${REF_NEED} คุณได้ ${REF_DIA} เพชร (สูงสุด ${REF_MAX} คน) และเพื่อนได้ ${REF_FRIEND} เพชร นับเฉพาะบัญชีใหม่ บัญชีละครั้งเดียว · FOUNDER EVENT (ถึง 14 ต.ค. 23:59 น.): ชวนครบ ${EV_NEED} คน รับป้าย FOUNDER (ผูกบัญชี แสดงในห้องเทรดและ PvP) และเครื่องราง Limited Lucky Clover (ทีมที่มีการ์ดใส่อยู่มีโอกาสเล็กน้อยได้การ์ด Legend จากทุกด่าน ยิ่งด่านสูงยิ่งมาก · Exp +10% ให้การ์ดที่ใส่ · ไม่เพิ่มพลังต่อสู้ · เทรดได้เฉพาะในห้องเทรด ลงตลาดกลางไม่ได้) · ทั้งสองอย่างไม่ถูกล้างเมื่อจบ CBT`,`Invite friends (banner in the lobby): send your link to a friend who has never played. When they sign in with Google through it and clear stage ${REF_NEED} you get ${REF_DIA} diamonds (up to ${REF_MAX} friends) and your friend gets ${REF_FRIEND}. Only new accounts count, once each · FOUNDER EVENT (until 14 Oct 23:59 Bangkok): invite ${EV_NEED} friends for the FOUNDER title (account-bound, shown in the trade room and PvP) and the Limited amulet Lucky Clover (a team with a card wearing it has a small chance of a Legend card on every stage, higher on later stages · Exp +10% for its wearer · no combat stats · tradable only in the trade room, not on the market) · neither is wiped when the CBT ends`)]:[]),
      T('จัดทีมได้สูงสุด 3 ใบ แล้วตะลุยด่าน 1 ถึง '+MAXST,'Build a team of up to 3 cards and fight through stages 1 to '+MAXST),
      T('ทุก 10 ด่านเป็นด่านบอส บอสพลังโจมตี x1.2 และเลือด x2.2','Every 10th stage is a boss stage: the boss has x1.2 attack and x2.2 life'),
      T('ด่าน 1–3 มีศัตรู 1 ตัว ด่าน 4–10 มี 2 ตัว หลังจากนั้น 3 ตัว','Stages 1–3 have 1 enemy, stages 4–10 have 2, later stages have 3'),
@@ -3388,7 +3390,7 @@ function titleScreen(){
    <p class="cfoot nt">PixelDeckBattle · CBT build ${BUILD}</p></div>`);
 }
 // ---------- Firebase: Google sign-in and one cloud save document per account (saves/{uid}) ----------
-const BUILD='b189';
+const BUILD='b190';
 // The game moved to its own address. Anyone opening the old address is sent on, but only once the new site answers, so a broken move cannot lock players out.
 const DISCORD='https://discord.gg/dHDzRyPG9',DC_SVG='<svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="currentColor" d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.4189-2.1568 2.4189Z"/></svg>';
 const NEW_HOME='https://pixeldeckbattle.github.io/';
