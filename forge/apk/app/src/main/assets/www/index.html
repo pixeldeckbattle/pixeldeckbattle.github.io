@@ -755,7 +755,7 @@ $('guide').checked=st.guide;$('guide').onchange=()=>{st.guide=$('guide').checked
 $('exScale').onchange=exSize;
 document.querySelectorAll('[data-ex]').forEach(b=>b.onclick=async()=>{b.disabled=true;try{await doExport(b.dataset.ex)}catch(e){$('exStat').textContent='สร้างไฟล์ไม่สำเร็จ: '+(e.message||e);$('exStat').classList.add('err')}exSize()});
 $('shareBtn').onclick=()=>{try{if(lastSaved&&window.Android&&Android.share)Android.share(lastSaved)}catch(e){toast('แชร์ไม่ได้')}};
-const guard=fn=>async e=>{const fl=e.target.files;if(!fl||!fl.length)return;try{await fn(fl)}catch(err){busy(null);impStat('นำเข้าไม่สำเร็จ: '+(err.message||err),1)}e.target.value=''};
+const guard=fn=>async e=>{const t=e.target,fl=t&&t.files?[...t.files]:[];if(!fl.length)return;try{await fn(fl)}catch(err){busy(null);impStat('นำเข้าไม่สำเร็จ: '+(err.message||err),1)}try{t.value=''}catch(x){}};
 $('inZip').onchange=guard(async fl=>importZip(fl[0]));
 $('inMany').onchange=guard(async fl=>addMany(fl));
 $('pkRand').onclick=()=>{if(!PK.count())return toast('ยังไม่มีรูปในแพ็ก');PK.layers.forEach(L=>{if(L.items.length)L.sel=Math.floor(Math.random()*L.items.length)});IMP=PK;savePack();buildLayers();refreshAll()};
