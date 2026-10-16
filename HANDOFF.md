@@ -128,3 +128,7 @@ Live build: **b191** (15 Oct 2026 22:25: the invite-for-diamonds menu / FOUNDER 
 - Order: SL/LT cards -> L -> rest of cards -> bosses -> monsters -> 32 effects (one-row 16-frame strips).
 - Batch 1 prompts sent 16 Oct: Vanarin (h29), Tenface Asura (h30), Indigo Dragonsteed (h31), Aegis Valkyrie (h27).
 - Already 16-frame, skip: wb1/wb1r/wb1d, fx wb-curse / wb-pumpkin, logo16, rank-1 shield, profile frames.
+
+## b207 — release candidate
+- Guide: world-boss fight line (names, boss HP bar forms, party speed x2).
+- Branch `release` holds index.html / version.json / admin.html built from this source (deploy.py) — ready, NOT pushed to pdb. To release: `git push pdb release:main` (after merging main if newer), then update the GDD.
