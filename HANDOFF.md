@@ -90,3 +90,12 @@ Live build: **b191** (15 Oct 2026 22:25: the invite-for-diamonds menu / FOUNDER 
 - Invite: host taps invite -> the invited player gets a small popup sliding down from the top wherever they are: "<name> ชวนตีบอสกันมั้ย?" with buttons สนใจ / ไว้ทีหลัง; auto-hides after 10 s with a countdown strip; the host can send again.
 - Room number: every room has a 4-digit number; "join by number" box; a copy button gives a ready-to-paste line for chat/Discord ("มาตีบอสฟักทองกัน! ห้อง #4821 ขาดอีก N คน"). First come first served, full at 4.
 - Proposed (owner not yet answered): bots fill to 2 after 30 s with no joiners (bots get no rewards); party damage cuts the server-wide boss HP, ranking per player; each member spends 1 ticket; candy +10% per member. Needs realtime room sync like the trade room (+2–3 days work).
+
+## BETA (owner-only) — b195 on beta.html, LIVE index stays b191 (16 Oct 2026)
+- tools/deploy_beta.py writes beta.html only (Dev account only; others are sent to ./; no version.json polling). Release = run tools/deploy.py as usual when the owner says so; update the GDD then.
+- b192 Bag (see above). b193 profile level: S.pl, plGain/plBuff/plAv/plBox, frames pf/*.webp (tools/pfcut.py, 16-frame strips), own photo S.pl.ph (owner-only view).
+- b194 Halloween world boss: module tools/wb_mod.js is pasted into the game before /* mailbox */ (keep them in sync or edit the game copy). Event WB.from/to = 24 Oct 00:00 – 8 Nov 00:00 Bangkok; Dev sees it any time.
+  Shared HP on Firestore wb/hw26.dmg (increment), ranking wbr/hw26/s/{uid}; NEW firestore rules in firestore.rules (owner must paste/publish). Without them the Dev account plays a local copy (badge "โหมดทดสอบ").
+  Party rooms on RTDB under rooms/wb_<code>, open-room index rooms/wbidx, invites rooms/inv_<uid> (fits the existing rooms/$room/$uid rule). Boss sprite spr/wb1(r).webp 16x4 @16fps (tools/wbsheet.py), assets tools/wbassets.py -> wb/*. Balance: tools/simwb.js (WB_BOSS atk = ch3 lord x0.25: tank party survives 10 rounds, no-tank ~4-5). HP Lv1 6,000,000 (CFG.wbhp overrides), x1.5 per level, 5 levels.
+  Owner defaults taken (not answered): bots fill after 30 s, extra tickets 30/60 💎, Limited amulet 'hallow' in candy shop 1,000 (x1) + top 10.
+- b195 Royal Night skin (background A + GPT UI kit ui2/*, icons ui2/i-*), emoji in text auto-replaced by pixel icons (emoFix in view/ov).

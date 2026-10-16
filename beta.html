@@ -165,7 +165,7 @@ p{margin:0}
 .afto{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}.afto button{display:grid;justify-items:center;gap:4px;padding:8px 4px;border:3px solid #10142c;border-radius:11px;background:#243074;color:var(--ink);font-size:11px;line-height:1.2}.afto button.on{outline:3px solid var(--yellow);outline-offset:1px}.afto .amu{width:38px;height:38px}
 .afgot{display:flex;flex-wrap:wrap;gap:10px 16px;align-items:center;margin-bottom:16px;padding:12px;animation:pop .35s steps(5) backwards}.afgot h3{flex:1 0 100%;margin:0}.afgot span{display:flex;align-items:center;gap:8px}.afgot .amu{width:44px;height:44px}
 @media (max-height:480px){.afst .btn{min-width:38px}.afto .amu{width:30px;height:30px}}
-.bagt{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;margin:4px 0 14px}.itl{align-items:stretch}.itl .itr{width:100%;box-sizing:border-box}.bagt button{font:700 13px var(--display);white-space:nowrap;padding:6px 2px;border:3px solid var(--deep);background:var(--panel);color:var(--ink);opacity:.6}.bagt button.on{opacity:1;background:#ffd23a;color:var(--deep)}.bagt i{font-style:normal;background:#ff4d6d;color:#fff;border-radius:8px;padding:0 5px;font-size:11px}
+.bagt{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;margin:4px 0 14px}.itl{align-items:stretch}.itl .itr{width:100%;box-sizing:border-box}.bagt button{font:700 12px var(--display);white-space:nowrap;padding:5px 1px;border:2px solid #f2c14e;border-radius:8px;background:rgba(10,13,36,.85);color:#eaf2ff;opacity:.7;display:flex;flex-direction:column;align-items:center;gap:1px;line-height:1.1}.bagt button .emi{height:20px}.bagt button.on{opacity:1;background:#ffd23a;color:var(--deep)}.bagt i{font-style:normal;background:#ff4d6d;color:#fff;border-radius:8px;padding:0 5px;font-size:11px}
 .itr{grid-template-columns:52px 1fr auto!important;align-items:center}.iti{display:grid;place-items:center;width:52px;height:52px}.iti img{max-width:48px;max-height:48px}.itg{font-style:normal;font-size:34px;line-height:1}.itr b i{font-style:normal;color:#ffd23a}
 .amlist{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px 16px;margin-bottom:18px}
 .amrow{display:grid;grid-template-columns:44px 1fr;gap:4px 14px;align-items:center;text-align:left;padding:10px 12px 10px 14px;border:3px solid var(--deep);background:var(--panel);color:var(--ink)}
@@ -730,6 +730,7 @@ h2{color:#ffe45c;text-shadow:0 2px 0 #080b1f}
 .bub::after{content:"";position:absolute;top:100%;left:50%;margin-left:-5px;border:5px solid transparent;border-top-color:#080b1f}
 @keyframes bubin{from{transform:translateX(-50%) scale(.4);opacity:0}}
 
+/*SKIN2*/
 /* ---------- "Dark Ages" skin: buttons, panels and dividers come from the Dark Ages UI kit by Hypnobius (9-sliced pieces in ui/); palette: honey gold, tan, camel, charcoal, powder blue, dark blue ---------- */
 :root{--yellow:#f2d98a;--panel:#232a33;--deep:#0d141d;--dim:#b9ad98}
 #stage{background:radial-gradient(120% 90% at 50% -10%,#2a4563 0,#15202f 48%,#0a1019 100%)}
@@ -834,6 +835,37 @@ h1{color:#f2d98a;text-shadow:0 3px 0 #7a4a1c,0 6px 0 #0a1019}h2{color:#f2d98a;te
 .fig:not(.dead) .spr.glw{filter:drop-shadow(0 0 1.5px #9ff2ff) drop-shadow(0 0 5px rgba(70,215,255,.75))}.fig .plate .gtg{background:#3a6cff;color:#fff}
 @media (prefers-reduced-motion:reduce){.tsh::before,.tsh::after,.tsh.t1 i,.twscr,.twin .pos.r{animation:none}}
 @keyframes twpop{from{transform:scale(.6);opacity:0}}
+
+/* ---------- b195 "Royal Night" skin (owner pick: background A) — GPT UI kit in ui2/: gold frames on night blue. Layered over the Dark Ages skin; only sources, slices and colours change ---------- */
+:root{--yellow:#f2c14e;--panel:#151c4a;--deep:#0a0d24;--railbg:#11173f}
+#stage{background:radial-gradient(#fff 1px,transparent 1.6px) 0 0/34px 34px,radial-gradient(70% 45% at 50% -8%,rgba(255,196,90,.22),transparent 70%),radial-gradient(120% 80% at 50% 0%,#2b3a8c 0%,#151c4a 45%,#0a0d24 100%)}
+#stage{background-color:#0a0d24}
+h1,h2{color:#f2c14e}
+.btn,.btn.alt,.btn.go,.btn.on,.btn.red,.btn:disabled,.tab,.tab.am,.roomb,.roomb.px,.play,.ibtn{border-image:url(ui2/btn-sub.webp) 48 70 fill/9px 14px stretch;filter:drop-shadow(0 3px 0 rgba(0,0,0,.45))}
+.btn{--tx:#fff}.btn.alt,.roomb,.roomb.px,.ibtn{--tx:#eaf2ff}
+.btn:not(.alt):not(.red):not(.on),.btn.go,.play{border-image-source:url(ui2/btn-main.webp);border-image-slice:52 70 fill;--tx:#3a1400;text-shadow:0 1px 0 rgba(255,240,200,.55)}
+.btn.on{border-image-source:url(ui2/btn-main.webp);--tx:#3a1400;filter:drop-shadow(0 0 6px rgba(255,210,58,.7))}
+.btn.sm{border-width:7px 10px;border-image-width:7px 10px}
+.btn:disabled{border-image-source:url(ui2/btn-sub.webp);filter:grayscale(.85) brightness(.65);opacity:.85}
+.play{border-width:16px 26px;border-image-width:16px 26px}.play b{color:#fff;text-shadow:0 2px 0 #7a2a00}.play small,.play span{color:#fff2cf}
+.tab,.tab.am,.tab:not([class*="r-"]){border-image:url(ui2/tabs-2.webp) 70 96 fill/7px 10px stretch;opacity:.85;--tx:#eaf2ff;color:var(--tx)}
+.tab.on{border-image-source:url(ui2/tabs-1.webp);border-image-slice:70 96 fill;border-width:7px 10px;border-image-width:7px 10px;margin-top:0;--tx:#3a1400;color:var(--tx);text-shadow:none}
+.tab[class*="r-"].on{color:#3a1400}
+.px,.amrow,.chb,.lookb,.rkrow,.pvrow,.abar,.row.avsel{border-image:url(ui2/panel.webp) 44 fill/10px stretch}
+.chb.on,.amrow.on,.rkrow.me{border-image-source:url(ui2/panel.webp);border-image-slice:44 fill;filter:drop-shadow(0 0 6px rgba(255,210,58,.8)) brightness(1.15)}
+.tmenu{border-image:url(ui2/panel.webp) 44 fill/16px stretch}
+.dk{border:0;border-image:none;background:url(ui2/dock.webp) center/100% 100% no-repeat;padding:8px 4px 7px;--tx:#fff2cf;filter:drop-shadow(0 3px 0 rgba(0,0,0,.5))}
+.dk>span:last-child{font-size:13px;margin-top:2px}.dk small{display:none}
+.dk:disabled{filter:grayscale(.85) brightness(.6)}
+.pill,.pchip{border:2px solid #f2c14e;border-image:none;border-radius:20px;background:rgba(10,13,36,.88);padding:1px 10px 1px 3px;box-shadow:inset 0 0 0 2px rgba(0,0,0,.5)}
+.pchip{border-radius:14px;padding:0 10px 0 0}
+.pill .plus{background:#1f9a3a;border-radius:50%;color:#fff}
+.ibtn{border:0;border-image:none;background:none;filter:drop-shadow(0 2px 0 rgba(0,0,0,.5));width:40px;height:40px}.ibtn .ico img,.ibtn>img{width:38px!important;height:38px!important}
+.rail>.row:first-child{background:url(ui/div.png) 50% 100%/100% 8px no-repeat,var(--railbg,#11173f)}
+.atop{background:rgba(10,13,36,.75)!important;border-bottom:2px solid rgba(242,193,78,.5)}
+.gt th{background:#1a2260;color:#f2c14e}.gt td{background:rgba(20,26,74,.6)}.gt th,.gt td{border-color:#0a0d24}
+#ov .cd .px.cdbox,#ov .cdbox{border-image:url(ui2/panel.webp) 44 fill/18px stretch;padding:14px 20px}
+.emi{display:inline-block;height:1.15em;width:auto;vertical-align:-.2em;image-rendering:auto}
 </style>
 
 <div id="stage"><div id="view"></div><div id="ov"></div><div id="fsb" hidden></div><div id="tut"></div><div id="gate" hidden></div><div id="zoom" role="dialog" tabindex="-1" hidden></div></div>
@@ -1535,7 +1567,13 @@ const lvTxt=id=>{const o=S.cards[id];return maxed(id)?`Lv ${o.lv} · MAX`:`Lv ${
 function addExp(id,x){const c=S.cards[id],cap=capOf(id);if(c.lv>=cap){c.lv=cap;c.exp=0;return 0}c.exp+=x;let up=0;while(c.lv<cap&&c.exp>=need(c.lv)){c.exp-=need(c.lv);c.lv++;up++}if(c.lv>=cap)c.exp=0;return up}
 // re-drawing the same screen (picking a card, equipping an amulet, opening a pack) keeps both panels scrolled where they were
 const scrKey=()=>{const h=document.querySelector('#view .rail h2');return h?h.textContent.replace(/[0-9]/g,''):''};
-function view(h){if(CFG.pay&&CFG.pay.h)h=h.replace(/17:00–00:00/g,payTxt()).replace(/17:00/g,hh(ph()[0]));const k0=scrKey(),sc=k0?['.rail','.main'].map(q=>{const e=document.querySelector('#view '+q);return e?e.scrollTop:0}):null;$('view').innerHTML=h;
+
+// b195: emoji in game text become the pixel icons of the GPT sheets (only text nodes; inputs and attributes are left alone)
+const EMI={'💎':'inline-diamond','💠':'inline-crystal','🔒':'inline-lock','🔓':'inline-unlock','🎁':'inline-gift','🏆':'inline-trophy','📬':'menu-mail','🎟':'inline-ticket','👑':'inline-crown','📢':'inline-notice','🍀':'inline-clover','⚠':'inline-warn','🌊':'inline-r-tide','🔥':'inline-r-burn','❄':'inline-r-freeze','⚡':'inline-r-sky','⚙':'inline-r-clock','🤖':'inline-auto','🗼':'menu-tower','💰':'inline-coin','🪙':'inline-coin','🛡':'inline-c-tank','⚔':'inline-c-atk','✦':'inline-c-mage','✚':'inline-c-sup','📜':'menu-quest','🍬':'__candy','👻':'__soul','🎃':'menu-worldboss'};
+const EMRX=new RegExp('('+Object.keys(EMI).join('|')+')\\uFE0F?','g');
+function emoFix(root){if(!root)return;const w=document.createTreeWalker(root,NodeFilter.SHOW_TEXT,{acceptNode:n=>n.parentNode&&/^(SCRIPT|STYLE|TEXTAREA|OPTION|TITLE)$/.test(n.parentNode.nodeName)?2:EMRX.test(n.nodeValue)?(EMRX.lastIndex=0,1):2}),L=[];let n;while(n=w.nextNode())L.push(n);
+  L.forEach(t=>{const f=document.createDocumentFragment();let last=0;const v=t.nodeValue;v.replace(EMRX,(m,e,i)=>{if(i>last)f.append(v.slice(last,i));const k=EMI[e],im=document.createElement('img');im.className='emi';im.alt=e;im.src=k==='__candy'?'wb/candy.webp':k==='__soul'?'wb/soul.webp':'ui2/i-'+k+'.webp';f.append(im);last=i+m.length;return m});if(last<v.length)f.append(v.slice(last));t.replaceWith(f)})}
+function view(h){if(CFG.pay&&CFG.pay.h)h=h.replace(/17:00–00:00/g,payTxt()).replace(/17:00/g,hh(ph()[0]));const k0=scrKey(),sc=k0?['.rail','.main'].map(q=>{const e=document.querySelector('#view '+q);return e?e.scrollTop:0}):null;$('view').innerHTML=h;emoFix($('view'));
   if(sc&&scrKey()===k0){const put=()=>['.rail','.main'].forEach((q,i)=>{const e=document.querySelector('#view '+q);if(e)e.scrollTop=sc[i]});put();requestAnimationFrame(put)}
   fx.forEach(([el,t,cls])=>{const n=$(el);if(!n)return;const f=document.createElement('span');f.className='fl '+cls;f.textContent=t;n.append(f);setTimeout(()=>f.remove(),720)});fx=[];tutSync();cfgGate()}
 const q=(el,t,cls)=>fx.push([el,t,cls]);
@@ -2174,7 +2212,7 @@ function fxStep(c,t){
 if(!RM)(function loop(t){const c=$('bgfx');if(c){const w=Math.max(1,c.clientWidth>>1),h=Math.max(1,c.clientHeight>>1);if(c.width!==w||c.height!==h){c.width=w;c.height=h;fxM=0}fxStep(c,t)}requestAnimationFrame(loop)})(0);
 const W=ms=>sleep(ms/(S.spd||1));
 const art=id=>`<div class="art"><img src="${artSrc(id)}" alt=""></div>`;
-const ov=h=>{const o=$('ov');o.style.setProperty('--sp',S&&S.spd||1);o.innerHTML=h;$('stage').classList.toggle('ovon',!!h)};
+const ov=h=>{const o=$('ov');o.style.setProperty('--sp',S&&S.spd||1);o.innerHTML=h;if(h)emoFix(o);$('stage').classList.toggle('ovon',!!h)};
 let ret=null,quake=false;const hits=new Set();
 async function banner(t,cls=''){ov(`<div class="bn ${cls}"><span>${t}</span></div>`);await W(RM?400:850);ov('')}
 async function vsIntro(){const P=u=>`<div class="vp">${art(u.id)}</div>`;
@@ -2921,6 +2959,8 @@ const DIVS=['IV','III','II','I'],ST_MAX=TIERS.reduce((t,x)=>t+x[2]*4,0),PV_LOSE_
 function rankOf(st){st=Math.max(0,Math.min(ST_MAX,st|0));let i=0;while(i<TIERS.length-1&&st>=TIERS[i][2]*4){st-=TIERS[i][2]*4;i++}const per=TIERS[i][2];let d=Math.min(3,Math.floor(st/per)),k=st-d*per;return{i,t:TIERS[i],d,k,per}}
 UI.acoin=pic(["....yyyy....","..yyYYYYyy..",".yYYWWYYYYy.",".yYWyyyyYYy.","yYYyYYYYyYYy","yYYyYYYYyYYy","yYYyYYYYyYYy","yYYyYYYYyYYy",".yYYyyyyYYy.",".yYYYYYYYYy.","..yyYYYYyy..","....yyyy...."],{y:'#3a1a6e',Y:'#b06cff',W:'#f0dcff'});
 Object.assign(UI,{coin:'ic2/coin.webp',gem:'ic2/gem.webp',gear:'ic2/gear.webp',cards:'ic2/cards.webp',pack:'ic2/shop.webp',market:'ic2/market.webp',trade:'ic2/trade.webp',cup:'ic2/pvp.webp',acoin:'ic2/acoin.webp',amu:'ic2/amulet.webp',fuse:'ic2/fuse.webp',quest:'ic2/quest.webp',afk:'ic2/afk.webp',guide:'ic2/guide.webp'});
+// b195 Royal Night skin: menu icons from the GPT icon sheets (ui2/i-*)
+Object.assign(UI,{bag:'ui2/i-menu-bag.webp',pack:'ui2/i-menu-shop.webp',amu:'ui2/i-menu-amulet.webp',fuse:'ui2/i-menu-fusion.webp',market:'ui2/i-menu-market.webp',trade:'ui2/i-menu-trade.webp',cup:'ui2/i-menu-pvp.webp',quest:'ui2/i-menu-quest.webp',afk:'ui2/i-menu-afk.webp',guide:'ui2/i-menu-guide.webp',gear:'ui2/i-menu-settings.webp',coin:'ui2/i-inline-coin.webp',gem:'ui2/i-inline-diamond.webp'});
 const acoin=n=>`<span class="acn"><img src="${UI.acoin}" alt="Arena coin">${typeof n==='string'?n:(+n).toLocaleString('en')}</span>`;
 const tierTag=(st,stars=true)=>{const r=rankOf(st);return `<b style="color:${r.t[1]}">${r.t[0]} ${DIVS[r.d]}</b>${stars?` <span class="rst" style="color:${r.t[1]}">${'★'.repeat(r.k)}<i>${'★'.repeat(r.per-r.k)}</i></span>`:''}`};
 let pv={list:[],state:'idle',opp:[]};
@@ -3762,7 +3802,7 @@ function titleScreen(){
    <p class="cfoot nt">PixelDeckBattle · CBT build ${BUILD}</p></div>`);
 }
 // ---------- Firebase: Google sign-in and one cloud save document per account (saves/{uid}) ----------
-const BUILD='b194';
+const BUILD='b195';
 // The game moved to its own address. Anyone opening the old address is sent on, but only once the new site answers, so a broken move cannot lock players out.
 const DISCORD='https://discord.gg/dHDzRyPG9',DC_SVG='<svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="currentColor" d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.4189-2.1568 2.4189Z"/></svg>';
 const NEW_HOME='https://pixeldeckbattle.github.io/';
