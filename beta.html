@@ -861,6 +861,17 @@ h1{color:#f2d98a;text-shadow:0 3px 0 #7a4a1c,0 6px 0 #0a1019}h2{color:#f2d98a;te
 .bagt button{justify-content:center}
 .pill{display:inline-flex;align-items:center}
 .pvmenu .btn{justify-content:flex-start;gap:10px;padding-left:14px}.pvmenu .btn>span{text-align:left;display:flex;flex-direction:column;align-items:flex-start}
+
+/* b200 lobby logo: gold-and-ember title in the game's style; the team no longer stands in the lobby (only during the tutorial) */
+.heroz{align-content:center!important}
+.logo2,.logo2 *{text-shadow:none!important}.logo2{position:relative;margin:0;display:grid;justify-items:center;line-height:.9;font-family:"Chakra Petch","PDNum",sans-serif;font-weight:700;filter:drop-shadow(0 calc(var(--H)*.008) 0 #2a0a02) drop-shadow(0 0 calc(var(--H)*.03) rgba(255,190,60,.55))}
+.lg1{font-size:calc(var(--H)*.15);letter-spacing:.01em;background:linear-gradient(#ffffff 0%,#fff3a8 25%,#ffd23a 50%,#ffae1a 72%,#fff0a0 100%);-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-stroke:calc(var(--H)*.004) #5a2a06;paint-order:stroke fill}
+.lg2{display:flex;align-items:center;gap:calc(var(--H)*.02);margin-top:calc(var(--H)*-.005);font-size:calc(var(--H)*.105);letter-spacing:.14em;background:linear-gradient(#fff0c0 0%,#ffb03a 35%,#ff5a1f 70%,#d0200a 100%);-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-stroke:calc(var(--H)*.004) #3a0a02;paint-order:stroke fill}
+.lg2 em{display:block;width:calc(var(--H)*.09);height:calc(var(--H)*.012);background:linear-gradient(90deg,transparent,#f2c14e);clip-path:polygon(0 50%,100% 0,100% 100%)}
+.lg2 em:last-child{transform:scaleX(-1)}
+.lgfan{position:absolute;left:50%;top:calc(var(--H)*-.085);transform:translateX(-50%);display:flex;filter:drop-shadow(0 3px 0 rgba(0,0,0,.6))}
+.lgfan b{display:block;width:calc(var(--H)*.045);height:calc(var(--H)*.065);border:2px solid #f2c14e;border-radius:4px;background:linear-gradient(160deg,#7a1020,#2a0612);margin:0 calc(var(--H)*-.008)}
+.lgfan b:nth-child(1){transform:rotate(-16deg) translateY(4px);background:linear-gradient(160deg,#1f6b8a,#0a1a2a)}.lgfan b:nth-child(2){transform:translateY(-2px);background:linear-gradient(160deg,#f2c14e,#8a5a10)}.lgfan b:nth-child(3){transform:rotate(16deg) translateY(4px);background:linear-gradient(160deg,#5a2a8a,#1a0a2a)}
 </style>
 
 <div id="stage"><div id="view"></div><div id="ov"></div><div id="fsb" hidden></div><div id="tut"></div><div id="gate" hidden></div><div id="zoom" role="dialog" tabindex="-1" hidden></div></div>
@@ -1770,8 +1781,8 @@ function home(){if(BETA&&USER&&USER.sub&&!isDev()){location.replace('./');return
     <button class="ibtn gearb" data-act="settings" title="ตั้งค่า">${ico(UI.gear,9)}</button>
    </div>
    <div class="mid">
-    ${!REF_ON?'':evOn()&&!S.fd?`<button class="evb nt" data-act="invite">${fdBadge()}<em>🔥 ${T('ชวน 3 คน รับของ Limited','Invite 3, get Limited loot')}</em><small>${evLeft()}</small></button>`:`<button class="invb nt" data-act="invite"><b>🎁 ${T('ชวนเพื่อน','Invite')}</b><span>${T('รับ','get')} ${REF_DIA} 💎</span></button>`}${CFG.notice?`<p class="ntc nt">📢 ${esc(String(CFG.notice).slice(0,160))}</p>`:''}<div class="heroz"><h1 class="logo nt">PIXELDECK<b>BATTLE</b></h1><p class="onl nt" id="onlw" hidden><i></i>${T('ออนไลน์','Online')} <b id="onl">0</b> ${T('คน','players')}</p>
-     <div class="squad">${S.team.map(id=>hero(id)).join('')}</div></div>
+    ${!REF_ON?'':evOn()&&!S.fd?`<button class="evb nt" data-act="invite">${fdBadge()}<em>🔥 ${T('ชวน 3 คน รับของ Limited','Invite 3, get Limited loot')}</em><small>${evLeft()}</small></button>`:`<button class="invb nt" data-act="invite"><b>🎁 ${T('ชวนเพื่อน','Invite')}</b><span>${T('รับ','get')} ${REF_DIA} 💎</span></button>`}${CFG.notice?`<p class="ntc nt">📢 ${esc(String(CFG.notice).slice(0,160))}</p>`:''}<div class="heroz"><h1 class="logo2 nt" aria-label="PixelDeck Battle"><i class="lgfan"><b></b><b></b><b></b></i><span class="lg1">PixelDeck</span><span class="lg2"><em></em>BATTLE<em></em></span></h1><p class="onl nt" id="onlw" hidden><i></i>${T('ออนไลน์','Online')} <b id="onl">0</b> ${T('คน','players')}</p>
+     ${S.tut!=null?`<div class="squad">${S.team.map(id=>hero(id)).join('')}</div>`:''}</div>
     <div class="side">
      <div class="row2"><button class="btn sm" data-act="afk" ${afkGold()<1?'disabled':''}>${ico(UI.afk,2)}<span>ออฟไลน์</span> <i class="nt" id="afkv">+${afkGold().toLocaleString('en')}</i></button><button class="btn alt sm" data-act="quests">${ico(UI.quest,4.2)}<span>ภารกิจ</span>${qReady()?` <i class="nt badge">${qReady()}</i>`:''}</button></div>
      ${wbOpen()||wbShopOpen()?'':`<div class="pgl"><span>ผ่านแล้ว ${S.cleared}/${MAXST} ด่าน · มีการ์ด ${own}/${NC} ใบ</span><div class="hp xp"><i style="width:${S.cleared/MAXST*100}%"></i></div></div>`}
@@ -3793,7 +3804,7 @@ function titleScreen(){
    <p class="cfoot nt">PixelDeckBattle · CBT build ${BUILD}</p></div>`);
 }
 // ---------- Firebase: Google sign-in and one cloud save document per account (saves/{uid}) ----------
-const BUILD='b199';
+const BUILD='b200';
 // The game moved to its own address. Anyone opening the old address is sent on, but only once the new site answers, so a broken move cannot lock players out.
 const DISCORD='https://discord.gg/dHDzRyPG9',DC_SVG='<svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="currentColor" d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.4189-2.1568 2.4189Z"/></svg>';
 const NEW_HOME='https://pixeldeckbattle.github.io/';
