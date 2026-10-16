@@ -100,3 +100,4 @@ Live build: **b191** (15 Oct 2026 22:25: the invite-for-diamonds menu / FOUNDER 
   Owner defaults taken (not answered): bots fill after 30 s, extra tickets 30/60 💎, Limited amulet 'hallow' in candy shop 1,000 (x1) + top 10.
 - b195 Royal Night skin (background A + GPT UI kit ui2/*, icons ui2/i-*), emoji in text auto-replaced by pixel icons (emoFix in view/ov).
 - b196 (beta): owner disliked the Royal Night skin ("ทุเรศ มองยาก") -> reverted to the normal skin (only the bag icon kept). World boss screens rebuilt on the normal rail/main layout (wbHub, wbRoom, wbShop, wbRank, result as an overlay dialog); checked at phone size 932x430. Lobby: when the world boss is open its button replaces the progress panel so nothing overlaps.
+- b197 (beta): world boss screens in the orange-gold Halloween kit (ui2 panel/buttons/title) over a blurred, darkened map; two-column hub, 4-seat room with a card strip, shop/rank with side column; tested at 932x430 and 1280x720.
