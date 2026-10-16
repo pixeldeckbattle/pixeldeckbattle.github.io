@@ -10,7 +10,7 @@ from scipy import ndimage as nd
 P='/home/claude/r16/';U=P+'tools/r16_in/'
 src=open(P+'tools/monsheet2.py').read().split("TINT={")[0];ns={};exec(src,ns);key=ns['key']
 CW,CH,BASE=252,204,196
-CARDS={'h29':('SL',158),'h30':('SL',176),'h31':('SL',160),'h27':('SL',170)}
+CARDS={'h29':('SL',158),'h30':('SL',176),'h31':('SL',160),'h27':('SL',170),'h03':('SL',166),'h22':('SL',160),'h07':('SL',160),'h18':('LT',178)}
 FIX={'h30':{'idle':{1:0,3:4}}}   # 0-based frames to replace with another frame (glitched faces)
 def depink(rgba):
     a=rgba.astype(int);r,g,b=a[...,0],a[...,1],a[...,2]
@@ -58,18 +58,36 @@ def build(id,th):
     out=Image.new('RGBA',(CW*16,CH*4),(0,0,0,0));clip=0
     for R,fr in enumerate(rows):
         s=fsc if R==3 else side
-        # one horizontal offset for the whole row (frame 1's torso to the middle), so a lunge still moves forward;
-        # one vertical offset per GPT row band (its median feet on the floor line), since GPT rows are not evenly placed
-        dx=CW/2-torso(fr[0][1])*s
+        # vertical: one offset per GPT row band (its median feet on the floor line), since GPT rows are not evenly placed.
+        # horizontal: frame 1 centred on its torso; every later frame slid (within +-40px) to overlap the frame before it best,
+        # on the whole body for idle / walk / front and on the feet only for the attack (so a lunge still reaches forward).
         feet={}
         for g,c in fr:feet.setdefault(g,[]).append(bbox(c)[3])
+        ims=[];prev=None
         for k,(g,c) in enumerate(fr):
             im=Image.fromarray(c,'RGBA').resize((max(1,round(c.shape[1]*s)),max(1,round(c.shape[0]*s))),Image.LANCZOS)
-            ox=round(dx) if R!=2 else round(dx+(c.shape[1]/2-fr[0][1].shape[1]/2)*0);oy=round(BASE-(np.median(feet[g])+1)*s)
-            if R!=2:ox=round(CW/2-torso(c)*s)   # idle / walk / front stand in place: every frame centred on its own torso
+            oy=round(BASE-(np.median(feet[g])+1)*s);ox=round(CW/2-torso(c)*s)
+            def cellmask(o):
+                t=Image.new('RGBA',(CW+120,CH),(0,0,0,0));t.paste(im,(o+60,oy),im);m=np.asarray(t)[...,3]>60
+                return m[int(CH*.68):] if R==2 else m
+            if prev is not None:
+                best=None
+                for d in range(-40,41,2):
+                    m=cellmask(ox+d);sc=(m&prev).sum()/max(1,(m|prev).sum())
+                    if best is None or sc>best[0]:best=(sc,d)
+                ox+=best[1]
+            prev=cellmask(ox) if R!=2 or k==0 else prev   # attack: every frame matches frame 1's stance, so it never drifts
+            ims.append((im,ox,oy))
+        if R!=2:   # keep the loop centred: remove the average drift
+            m=round(np.mean([o+torso(c)*s for (o2,(_,o,_)),(g,c) in zip(enumerate(ims),fr) for o2 in [0]])-CW/2)
+            ims=[(im,o-m,y) for im,o,y in ims] if abs(m)>2 else ims
+        for k,(im,ox,oy) in enumerate(ims):
             clip=max(clip,-ox,ox+im.width-CW,-oy);t=Image.new('RGBA',(CW,CH),(0,0,0,0));t.paste(im,(ox,oy),im);out.paste(t,(k*CW,R*CH))
     out.save(P+f'spr/{id}.webp',quality=86,method=6);print(id,'scale %.2f front %.2f clipped %dpx'%(side,fsc,max(0,clip)),os.path.getsize(P+f'spr/{id}.webp')//1024,'KB')
 cs=open(P+'tools/cardsheet.py').read();cs=cs[cs.index('def faces('):cs.index('for id,(rank,th,_) in CARDS.items()')]
+# the art window is measured against the ORIGINAL finished cards (the live repo), never the remade ones; LT measured on Glacius Rex
+cs=cs.replace("P+f'cards/{o}.webp'","'/home/claude/pixeldeck/cards/'+o+'.webp'").replace("'SL':['h03','h22','h07']}","'SL':['h03','h22','h07'],'LT':['h28','h18']}")
+assert "/home/claude/pixeldeck/cards/" in cs and "'LT'" in cs
 fs={'np':np,'Image':Image,'nd':nd,'P':P,'U':'/tmp/claude-0/-home-claude/faf65de1-a492-52b3-8473-ee4e7e7dcc7a/scratchpad/r16art/','glob':glob};exec('from PIL import ImageEnhance\n'+cs,fs)
 os.makedirs('/tmp/claude-0/-home-claude/faf65de1-a492-52b3-8473-ee4e7e7dcc7a/scratchpad/r16art',exist_ok=True)
 for id,(rank,th) in CARDS.items():
