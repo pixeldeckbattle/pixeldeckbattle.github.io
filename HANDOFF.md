@@ -104,3 +104,4 @@ Live build: **b191** (15 Oct 2026 22:25: the invite-for-diamonds menu / FOUNDER 
 - b198 (beta): GPT UI kit (orange/gold buttons, gold panels, tabs, dock tiles, new menu icons) applied game-wide on the NORMAL background (no night-blue, no emoji swap). World boss room fix: wbSync looked for .wbroom (gone in b197) so picks/ready from RTDB never re-rendered; wbWrite now updates locally first.
 - b199 (beta): text centred in every frame: buttons/tabs as centred flex, dock tile drawn as a 9-slice (70 60 130) so the name plate keeps its height and the label sits inside it, PvP menu buttons left-aligned consistently.
 - b200 (beta): lobby logo restyled (gold PixelDeck + ember BATTLE, card fan, ornaments; .logo2); lobby team sprites removed (the .squad only renders during the tutorial, which points at it).
+- b201 (beta): lobby logo = GPT 16-frame sheet (tools/logocut.py -> ui2/logo16.webp) at 16 fps with a soft float (.logo3).
