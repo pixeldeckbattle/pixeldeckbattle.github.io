@@ -1568,6 +1568,8 @@ function quests(){const q=qDay(),a=afkGold();
      return `<div class="amrow" style="grid-template-columns:1fr"><span><b>${l}</b><small class="nt">${n}/${t}</small><small class="gold nt">+${g} Gold${QUESTS.find(x=>x[0]===k)[4]?' · <b style="color:#8fe9ff">💠+'+QUESTS.find(x=>x[0]===k)[4]+'</b>':''}</small></span><div class="hp xp"><i style="width:${n/t*100}%"></i></div><button class="btn ${ok&&!got?'go':'alt'} sm" data-act="qget" data-k="${k}" ${ok&&!got?'':'disabled'}>${got?'รับแล้ว':ok?'รับรางวัล':'ยังไม่ครบ'}</button></div>`}).join('')}</div></div></div>`)}
 // developer account: recognised by a hash of its Google e-mail (the address itself is not in the source); it is topped up to everything maxed each time the lobby opens
 const DEVH='38ee325cd572325c',h32=(s,k)=>{let h=k;for(const c of s)h=Math.imul(h^c.charCodeAt(0),16777619)>>>0;return h.toString(16)};
+// b192: beta.html is the owner's test page (built by tools/deploy_beta.py). Only the Dev account may stay on it; it never polls version.json
+const BETA=/beta\.html$/.test(location.pathname);
 const isDev=()=>{if(!USER||!USER.sub||!USER.email)return false;const e=String(USER.email).toLowerCase();return h32(e,2166136261)+h32(e,40389)===DEVH};
 function devGrant(){if(!isDev())return;let ch=0;
   if(S.gold<1e7){const d=1e7-S.gold;S.gold=1e7;lg('dev',d);ch=1}if((S.dia||0)<1e6){ld('dev',1e6-(S.dia||0));S.dia=1e6;ch=1}if(S.cleared<MAXST){S.cleared=MAXST;ch=1}if(!S.gift){S.gift=true;ch=1}
@@ -1578,7 +1580,7 @@ function devGrant(){if(!isDev())return;let ch=0;
   if((S.rs||0)<9999){S.rs=9999;ch=1}if((S.ss||0)<999){S.ss=999;ch=1}
   if(!S.fd||!S.fdg){S.fd=1;S.fdg=1;ch=1}['T1.1','T2.1','T3.1','P5.1','P3.1'].forEach(c=>{if(!(S.sh||[]).includes(c)){shAdd(c);ch=1}});   // b166: the Dev account carries the FOUNDER title too
   if(ch)save()}
-function home(){
+function home(){if(BETA&&USER&&USER.sub&&!isDev()){location.replace('./');return}
   bt=null;busy=false;if((S.era||1)<ERA){S=unlock(S);save();cloudFlush();return welcome()}ldInit(0);devGrant();ensureMe();grantFetch();mkPayCheck();dmRefundAll();giftTake();compTake();bcLate();if(S.f1100==='try')f1100Claim();twRoll();news189()||news182()||news180()||news176()||news174()||news167()||news165();vipDaily();if(!S.afk){S.afk=Date.now();save()}const own=Object.keys(S.cards).length,next=Math.min(MAXST,S.cleared+1);
   const ico=(src,d=0)=>`<span class="ico" style="--m:url(${src});--d:${d}s"><img src="${src}" alt=""></span>`;
   const dk=(act,ic,c,t,sub,dis,d)=>`<button class="dk ${c}" ${dis?'disabled':`data-act="${act}"`}>${ico(ic,d)}<span>${t}<small>${sub}</small></span></button>`;
@@ -3410,7 +3412,7 @@ if(location.hostname==='seeker6131.github.io')fetch(NEW_HOME+'version.json?'+Dat
 // Live update notice. deploy.py writes version.json next to the page; every open game polls it. When the build there differs from BUILD,
 // a banner drops from the top with a countdown, the game saves and reloads onto the new build. A battle in progress is never cut: the reload waits for it to end.
 const UPD_POLL=60000,UPD_WAIT=60;let updAt=0,updNew='',updBusy=false;
-function updCheck(){if(updAt||updBusy||!/^https?:$/.test(location.protocol)||document.hidden)return;updBusy=true;
+function updCheck(){if(BETA||updAt||updBusy||!/^https?:$/.test(location.protocol)||document.hidden)return;updBusy=true;
   fetch('version.json?t='+Date.now(),{cache:'no-store'}).then(r=>r.ok?r.json():null).then(v=>{updBusy=false;if(!v||!v.b||v.b===BUILD)return;
     let seen='';try{seen=sessionStorage.getItem('pdb_upd')||''}catch(e){}if(seen===v.b)return; // already reloaded for this build once: the host is still serving the old page, do not loop
     updShow(v.b,v.note||'')}).catch(()=>{updBusy=false})}
