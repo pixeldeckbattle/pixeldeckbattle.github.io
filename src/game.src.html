@@ -479,87 +479,50 @@ h2{color:#ffe45c;text-shadow:0 2px 0 #080b1f}
 .pchip{display:flex;align-items:center;gap:8px;padding:2px 12px 2px 4px;border:3px solid #080b1f;background:linear-gradient(180deg,rgba(60,76,160,.92),rgba(30,38,96,.92));color:var(--ink);text-align:left;box-shadow:inset 0 2px 0 rgba(150,200,255,.35)}
 .pchip .spr{height:40px;margin:-2px 0}
 
-/* ---- b193 world boss (Halloween) · new UI kit: ui2/panel, btn-main/sub, title, slot, round ---- */
-.wbv{position:absolute;inset:0;overflow:hidden;color:#fff4dc;--gold:#f2c14e;--ink2:#0a0d24}
-.wbbg{position:absolute;inset:0;background-size:cover;background-position:center 70%}.wbbg:after{content:"";position:absolute;inset:0;background:linear-gradient(rgba(10,6,24,.35),rgba(10,6,24,.15) 40%,rgba(10,6,24,.85))}
-.wbbg.dim{filter:blur(2px) brightness(.55)}
-.wbv.rage .wbbg:after{background:radial-gradient(transparent 45%,rgba(150,0,0,.5)),linear-gradient(rgba(10,6,24,.3),rgba(10,6,24,.85))}
-.wbtop{position:absolute;left:16px;right:16px;top:10px;height:56px;display:flex;align-items:center;gap:12px;z-index:5}
-.wbround{width:50px;height:50px;padding:0;border:0;background:none;flex:none}.wbround img{width:100%;height:100%}
-.wbttl{height:56px;min-width:260px;padding:0 54px;background:url(ui2/title.webp) center/100% 100% no-repeat;display:grid;place-items:center;font:900 20px var(--display);text-shadow:2px 2px 0 #4a0a00;white-space:nowrap}
-.wbttl.big{height:74px;min-width:420px;font-size:24px;margin:-58px auto 8px}
-.wbev{color:#ffb347;font-weight:800;font-size:14px;white-space:nowrap}
-.wbcur{margin-left:auto;display:flex;gap:8px}.wbcur span{display:flex;align-items:center;gap:6px;height:38px;padding:0 14px 0 6px;background:rgba(10,13,36,.85);border:2px solid var(--gold);border-radius:20px;font-weight:800;font-size:15px}
-.wbb{border:0;background:url(ui2/btn-sub.webp) center/100% 100% no-repeat;color:#fff;font:800 15px var(--display);height:44px;padding:0 22px;display:inline-flex;align-items:center;justify-content:center;gap:6px;text-shadow:0 2px 0 rgba(0,0,0,.45);white-space:nowrap}
-.wbb.main{background-image:url(ui2/btn-main.webp);color:#4a1a00;text-shadow:0 1px 0 rgba(255,255,255,.4)}
-.wbb.big{height:58px;font-size:18px}.wbb.sm{height:34px;font-size:13px;padding:0 14px}.wbb.wide{width:100%}
-.wbb:disabled{filter:grayscale(.85) brightness(.7)}
-.wbhub{position:absolute;left:16px;right:16px;top:76px;bottom:12px;display:grid;grid-template-columns:minmax(0,1fr) 560px;gap:16px}
-.wbstage{position:relative}.wbname{position:absolute;left:10px;top:4px;z-index:2}.wbname b{display:block;font:900 46px var(--display);color:#ffb347;letter-spacing:2px;text-shadow:0 4px 0 #3a0a00,0 0 24px rgba(255,140,0,.5)}
-.wbname span{display:inline-block;background:#7a1020;border:2px solid var(--gold);padding:1px 10px;font-weight:800}.wbname small{display:block;font-size:14px;opacity:.85;margin-top:4px}
-.wbboss{position:absolute!important;left:0;right:0;bottom:-6px;height:96%!important;aspect-ratio:315/255!important;margin:0 auto;filter:drop-shadow(0 0 26px rgba(120,255,80,.35))}
-.wbv.rage .wbboss{filter:drop-shadow(0 0 30px rgba(255,40,20,.6))}
+/* ---- b196 world boss: plain game panels ---- */
+.wbcur{display:flex;gap:6px;flex-wrap:wrap;margin:4px 0 8px}.wbcur span{display:flex;align-items:center;gap:4px;font-weight:700;font-size:13px;background:rgba(0,0,0,.35);padding:2px 8px 2px 4px;border-radius:12px}
+.wbtk{display:flex;align-items:center;gap:8px;margin-bottom:6px}.wbtk small{display:block;font-size:11px;opacity:.8}
+.rail .btn{width:100%;margin-bottom:6px}.wbrow3{display:grid;grid-template-columns:repeat(3,1fr);gap:4px}.wbrow3 .btn{padding-left:0;padding-right:0;font-size:12px}
+.wbboss{display:grid;grid-template-columns:minmax(150px,34%) minmax(0,1fr);gap:12px;align-items:center}
+.wbbimg{aspect-ratio:315/255;width:100%}.wbbimg .spr{height:100%!important;aspect-ratio:315/255!important;transform:none}
 .spr.f16 img{width:1600%;animation:fr6 1s steps(16) infinite}.spr.f16.atk img{animation:fr6 var(--ad,.5s) steps(16) 1}
-.wbloc{position:absolute;left:10px;bottom:10px;background:#7a1020;border:2px solid #ffb347;padding:3px 10px;font-size:12px}
-.wbpanel{border:24px solid transparent;border-image:url(ui2/panel.webp) 44 fill/24px stretch;padding:2px 6px;display:flex;flex-direction:column;gap:12px;overflow:auto}
-.wbsec{background:rgba(6,9,30,.55);border:1px solid rgba(242,193,78,.35);padding:10px 12px}
-.wbrow{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px}.wbred{color:#ff8a7a;font-weight:800}
-.wbhp{position:relative;overflow:hidden;height:22px;border:3px solid var(--gold);background:#2a0a14}.wbhp i{position:absolute;left:0;top:0;bottom:0;background:linear-gradient(#ff5a4a,#b0142a)}.wbhp i.cut{background:#ffe45c;animation:wbcut 1.2s ease-out forwards}
-@keyframes wbcut{from{opacity:1}to{opacity:.25}}.wbhp em{position:absolute;top:-7px;bottom:-7px;width:3px;background:#ffd23a}.wbhp.sm{height:16px;margin:10px 0 4px}
-.wbms{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:10px}.wbms span{text-align:center;font-size:12px;background:#141a3a;border:1px solid #3a3f6a;padding:4px 2px;line-height:1.3}.wbms b{display:block;color:#ffd23a}.wbms .ok{border-color:#3fbf5a;color:#7dff8a}.wbms .ok b{color:#7dff8a}
-.wbst{display:grid;grid-template-columns:repeat(3,1fr);text-align:center}.wbst small{display:block;font-size:12px;opacity:.8}.wbst b{font-size:22px;color:#ffd23a}
-.wbtix{display:flex;align-items:center;gap:10px}.wbtix .wbb{margin-left:auto}.wbvip{color:#f2d98a;font-weight:800}
-.wbbtns{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.wbmini{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.wbmini button{display:flex;align-items:center;gap:8px;justify-content:center;height:56px;border:2px solid var(--gold);background:rgba(20,26,74,.9);color:#fff4dc;font:800 15px var(--display)}.wbmini img{height:38px}
-.wbwitch{width:44px;height:46px;background:url(wb/witch.webp) 0 0/1600% 100% no-repeat;animation:fx16 1s steps(16) infinite}
-@keyframes fx16{from{background-position-x:0}to{background-position-x:106.6667%}}
-.wbroom{position:absolute;left:16px;right:16px;top:74px;bottom:10px;display:flex;flex-direction:column;gap:8px}
-.wbinfo{display:flex;align-items:center;gap:12px;background:rgba(10,13,36,.8);border:2px solid var(--gold);padding:6px 12px;font-size:14px}.wbinfo b{color:#ffd23a}.wbchk{margin-left:auto;color:#cfe7ff}
-.wbseats{flex:1;display:grid;grid-template-columns:repeat(4,1fr);gap:10px;min-height:0}
-.wbseat{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;padding-bottom:4px}
-.wbseat .who{position:absolute;top:0;display:flex;align-items:center;gap:6px;background:rgba(10,13,36,.85);border:2px solid #6b5a8a;padding:2px 10px 2px 2px;max-width:100%}
-.wbseat .who b{display:block;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:120px}.wbseat .who small{font-size:11px;opacity:.85}
-.wbbot{width:52px;height:52px;display:grid;place-items:center;background:#2a3a6a;font-weight:900;font-size:12px}
-.wbseat .hero{height:52%;max-height:220px;aspect-ratio:176/216}.wbseat .hero .spr{transform:none}
-.wbseat .ring{width:70%;height:24px;border-radius:50%;border:3px solid var(--c);box-shadow:0 0 16px var(--c);margin-top:-16px}
-.wbseat .plate{margin-top:6px;display:flex;align-items:center;gap:6px;background:linear-gradient(90deg,var(--c),rgba(0,0,0,.85) 35%);border:2px solid var(--c);padding:2px 12px 2px 4px;font:800 13px var(--display);clip-path:polygon(0 0,100% 0,94% 100%,0 100%);max-width:100%;white-space:nowrap;overflow:hidden}
-.wbseat .plate i{font-style:normal;font-size:10px;background:#000;padding:1px 5px}
-.wbseat .st{margin-top:5px;font-weight:800;font-size:13px;padding:1px 10px;border:2px solid}.wbseat .ok{color:#7dff8a;border-color:#3fbf5a;background:rgba(10,40,16,.8)}.wbseat .wait{color:#ffd23a;border-color:#b08a2a;background:rgba(40,30,6,.8)}
-.wbseat.empty{border:3px dashed rgba(242,193,78,.55);background:rgba(10,6,20,.5);justify-content:center;gap:10px}.wbseat .plus{width:64px;height:64px;border-radius:50%;border:3px solid var(--gold);display:grid;place-items:center;font:900 40px var(--display);color:var(--gold)}
-.wbpick{display:flex;gap:10px;align-items:center}.wbpick .lab{width:96px;font-weight:800;font-size:14px;line-height:1.2}.wbpick .lab small{display:block;font-weight:400;font-size:11px;opacity:.8}
-.wbcards{flex:1;display:flex;gap:6px;overflow-x:auto;padding:6px 2px}.wbc{flex:none;width:70px;display:flex;flex-direction:column;align-items:center;gap:2px;padding:3px;border:2px solid #3a3f6a;background:#141a3a;color:#fff4dc}.wbc small{font-size:10px;line-height:1.1;text-align:center;max-height:22px;overflow:hidden}.wbc.on{border-color:#ffd23a;box-shadow:0 0 10px #ffd23a;transform:translateY(-4px)}
-.wbfoot{display:flex;align-items:center;gap:12px;justify-content:flex-end}.wbfoot .sub{margin-right:auto;display:flex;align-items:center;gap:6px}
-.wbinvbox{position:absolute;right:0;top:44px;width:360px;max-height:70%;overflow:auto;background:rgba(10,13,36,.97);border:3px solid var(--gold);padding:10px;z-index:9}.wbinvh{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
-.wbirow{display:flex;align-items:center;gap:8px;width:100%;padding:4px;border:0;border-bottom:1px solid #3a3f6a;background:none;color:#fff4dc;text-align:left}.wbirow b{flex:1}
-.wbpop{position:absolute;left:50%;top:10px;transform:translateX(-50%);z-index:60;width:min(640px,92%);display:flex;align-items:center;gap:10px;padding:8px 12px;background:linear-gradient(90deg,#3a0f22,#1a0c2e);border:3px solid #ff8a2a;box-shadow:0 6px 24px rgba(0,0,0,.6),0 0 20px rgba(255,140,40,.4);animation:wbin .35s ease-out}
+.wbn{font-size:24px;color:#ffb347}.wbn i{font-style:normal;font-size:14px;background:#7a1020;padding:0 6px;vertical-align:middle}
+.wbbinfo>small{display:block;margin-bottom:8px}
+.wbrow{display:flex;justify-content:space-between;font-size:13px;margin-bottom:4px}.wbrow b{color:#ff8a7a}
+.wbhp{position:relative;height:16px;border:2px solid #000;background:#2a0a14;overflow:hidden}.wbhp i{position:absolute;left:0;top:0;bottom:0;background:linear-gradient(#ff5a4a,#b0142a)}.wbhp em{position:absolute;top:0;bottom:0;width:2px;background:#ffd23a}
+.wbms{display:grid;grid-template-columns:repeat(4,1fr);gap:4px;margin:8px 0}.wbms span{text-align:center;font-size:11px;background:rgba(0,0,0,.3);padding:3px 2px;line-height:1.3}.wbms b{display:block;color:#ffd23a}.wbms .ok b{color:#7dff8a}
+.wbst{display:grid;grid-template-columns:repeat(3,1fr);text-align:center}.wbst small{display:block;font-size:11px;opacity:.8}.wbst b{font-size:18px;color:#ffd23a}
+.wbloc{display:block;margin-top:6px;color:#ffb347;font-size:11px}
+.wbboss.rage{box-shadow:0 0 0 2px #ff4a3a inset}
+.wbseats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
+.wbseat{display:flex;flex-direction:column;align-items:center;gap:2px;min-height:0;padding:4px}.wbseat.rd{box-shadow:0 0 0 2px #3fbf5a inset}
+.wbwho{display:flex;align-items:center;gap:4px;max-width:100%}.wbwho b{font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.wbbot{width:40px;height:40px;display:grid;place-items:center;background:#2a3a6a;font-weight:900;font-size:11px;flex:none}
+.wbhero{height:min(24vh,130px);aspect-ratio:176/216}.wbhero .spr{transform:none}
+.wbcl{font-size:11px;text-align:center;line-height:1.2}.wbok{font-size:11px;font-weight:700;color:#ffd23a}.wbseat.rd .wbok{color:#7dff8a}
+.wbseat.empty{justify-content:center;opacity:.6;min-height:120px}.wbseat.empty b{font-size:36px;line-height:1}
+.wbcards{display:grid;grid-template-columns:repeat(auto-fill,minmax(84px,1fr));gap:6px}.wbcards .chb .spr{height:52px}.wbcards .chb span{font-size:10px;line-height:1.1}.wbcards .chb small{font-size:10px;opacity:.8}
+.wbinvbox{margin-top:10px}.wbirow{display:flex;align-items:center;gap:8px;width:100%;padding:4px;border:0;border-bottom:1px solid rgba(255,255,255,.15);background:none;color:inherit;text-align:left}.wbirow b{flex:1}
+.wbpop{position:absolute;left:50%;top:8px;transform:translateX(-50%);z-index:60;width:min(600px,94%);display:flex;align-items:center;gap:8px;padding:6px 10px;background:#1c1430;border:3px solid #ff8a2a;box-shadow:0 6px 20px rgba(0,0,0,.6);animation:wbin .35s ease-out}
 .wbpop.out{animation:wbout .3s ease-in forwards}@keyframes wbin{from{transform:translate(-50%,-120%)}to{transform:translate(-50%,0)}}@keyframes wbout{to{transform:translate(-50%,-140%);opacity:0}}
-.wbpop .t{flex:1;font-size:15px;line-height:1.3}.wbpop .t b{color:#ffd23a}.wbpop .t small{display:block;font-size:12px;opacity:.85}.wbpop .wbb{height:40px;padding:0 16px}
-.wbpop .tm{position:absolute;left:0;bottom:0;height:4px;background:#ffd23a;animation:wbtm 10s linear forwards}@keyframes wbtm{from{width:100%}to{width:0}}
-.wbdlg{border:24px solid transparent;border-image:url(ui2/panel.webp) 44 fill/24px stretch;padding:4px 10px;text-align:center;display:flex;flex-direction:column;gap:10px;align-items:center;min-width:420px;max-width:92vw}.wbdlg.wide{max-width:min(760px,94vw);text-align:left}
-.wbdt{font:900 22px var(--display);color:#ffb347}.wbcode{width:220px;font:900 40px monospace;text-align:center;letter-spacing:14px;background:#0a0d24;color:#ffd23a;border:3px solid var(--gold);padding:6px}
-.wbul{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:6px;font-size:14px;line-height:1.45}
-.wbvs .vr{display:flex;justify-content:center}.wbvsb{height:min(70vh,560px)!important;aspect-ratio:315/255!important}.wbvsn{position:absolute;right:4%;top:6%;text-align:right}.wbvsn b{display:block;font:900 54px var(--display);color:#ffb347;text-shadow:0 5px 0 #3a0a00,0 0 30px rgba(255,140,0,.7)}.wbvsn small{font-size:18px}
-.wbvsp{position:absolute;left:4%;top:6%;font:900 30px var(--display);color:#8fd0ff;text-shadow:0 3px 0 #001a4a}
-.arena.wbar .fig.wbf .plate{display:none}.arena.wbar .fig.wbf{filter:drop-shadow(0 0 22px rgba(120,255,80,.35))}
-.wbres{position:absolute;left:50%;top:52%;transform:translate(-50%,-50%);width:min(980px,94%);border:26px solid transparent;border-image:url(ui2/panel.webp) 44 fill/26px stretch;padding:10px 14px}
-.wbr1{display:flex;align-items:center;gap:16px}.wbrb{height:150px!important;aspect-ratio:315/255!important;flex:none}.wbr1 small{display:block;font-size:13px;opacity:.9}.wbbig{font:900 52px var(--display);color:#ffe45c;text-shadow:0 4px 0 #6a2a00}
-.wbrk{margin-left:auto;text-align:center}.wbrk img{height:80px;display:block;margin:0 auto}.wbrk b{font-size:28px;color:#ffd23a}.wbrk i{font-style:normal;color:#7dff8a;font-weight:800;margin-left:6px}
-.wbparty{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:10px}.wbparty span{display:flex;align-items:center;gap:6px;background:#141a3a;border:1px solid #3a3f6a;padding:3px 6px;font-size:13px}.wbparty b{flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.wbparty i{font-style:normal;color:#ffd23a;font-weight:800}
-.wbgot{display:flex;gap:10px;justify-content:center;margin:10px 0 14px;flex-wrap:wrap}.wbgot>span{min-width:120px;display:flex;flex-direction:column;align-items:center;gap:2px;background:#141a3a;border:2px solid #6b5a2a;padding:8px}.wbgot b{font-size:20px;color:#ffd23a}.wbgot small{font-size:12px;opacity:.85}
-.wbkill{display:flex;align-items:center;gap:12px;justify-content:center;margin-bottom:10px;color:#7dff8a}.wbtitle{width:200px;height:110px;background:url(wb/title.webp) 0 0/1600% 100% no-repeat;animation:fx16 1s steps(16) infinite}
-.wbshop{position:absolute;left:16px;right:16px;top:76px;bottom:12px;display:grid;grid-template-columns:300px minmax(0,1fr);gap:16px}
-.wbwitchbig{align-self:end;height:92%;aspect-ratio:230/240;background:url(wb/witch.webp) 0 0/1600% 100% no-repeat;animation:fx16 1s steps(16) infinite}
-.wbsl{border:24px solid transparent;border-image:url(ui2/panel.webp) 44 fill/24px stretch;padding:2px 6px;overflow:auto}
-.wbtabs{display:flex;gap:8px;margin-bottom:8px}.wbtabs button{height:42px;padding:0 20px;border:0;background:url(ui2/tabs-2.webp) center/100% 100%;color:#fff4dc;font:800 15px var(--display)}.wbtabs button.on{background-image:url(ui2/tabs-1.webp);color:#4a1a00}
-.wbitems{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:8px}.wbitem{display:flex;align-items:center;gap:10px;background:rgba(6,9,30,.6);border:2px solid #6b5a2a;padding:8px}
-.wbitem .ic{width:60px;height:60px;display:grid;place-items:center;flex:none}.wbitem .ic img{max-width:56px;max-height:56px}.wbitem .nm{flex:1;min-width:0}.wbitem .nm b{display:block;font-size:14px}.wbitem .nm small{font-size:11px;opacity:.8}
-.wbrank{position:absolute;left:16px;right:16px;top:76px;bottom:12px;display:grid;grid-template-columns:300px minmax(0,1fr);gap:16px}
-.wbprize{display:flex;flex-direction:column;gap:8px;overflow:auto}.wbprize>div{display:flex;align-items:center;gap:8px;background:rgba(10,13,36,.85);border:2px solid #6b5a2a;padding:6px 8px}.wbprize img{height:54px}.wbprize .wbsh1{height:64px;width:64px;object-fit:cover;object-position:0 0}.wbprize b{font-size:20px;color:#ffd23a;min-width:56px}.wbprize small{font-size:12px}
-.wblist{border:24px solid transparent;border-image:url(ui2/panel.webp) 44 fill/24px stretch;padding:2px 6px;overflow:auto}.wbli{display:flex;align-items:center;gap:10px;padding:4px 6px;border-bottom:1px solid #2a2f5a}.wbli.me{background:rgba(255,210,58,.12)}.wbli .no{width:34px;text-align:center;color:#ffd23a;font-size:18px}.wbli span{flex:1}.wbli span small{display:block;font-size:11px;opacity:.75}.wbli .d{color:#ffe45c}
-#view button.twb.wbl{background:linear-gradient(90deg,rgba(122,30,10,.92),rgba(60,14,60,.92));border-color:#ff8a2a;box-shadow:0 0 14px rgba(255,140,40,.45)}.wbl b{color:#ffb347}
-.wbdki{width:42px;height:42px;background:url(wb/btn.webp) 0 0/1600% 100% no-repeat;animation:fx16 1s steps(16) infinite;flex:none}
+.wbpop .t{flex:1;font-size:14px;line-height:1.3}.wbpop .t b{color:#ffd23a}.wbpop .t small{display:block;font-size:11px;opacity:.85}
+.wbpop .wbb{border:2px solid #000;background:#29adff;color:#fff;font-weight:800;padding:6px 12px;font-size:13px}.wbpop .wbb.main{background:#ffb02a;color:#3a1400}
+.wbpop .tm{position:absolute;left:0;bottom:0;height:3px;background:#ffd23a;animation:wbtm 10s linear forwards}@keyframes wbtm{from{width:100%}to{width:0}}
+.wbcode{width:200px;font:900 34px monospace;text-align:center;letter-spacing:12px;padding:4px}
+.wbresd{max-width:min(560px,94vw)}.wbrt{font-size:22px;color:#ffb347}.wbr1{display:flex;gap:24px;justify-content:center;text-align:center}.wbr1 small{display:block;font-size:12px}.wbbig{font-size:36px;color:#ffe45c;display:block;line-height:1.1}.wbbig.sm{font-size:28px}
+.wbparty{display:flex;flex-wrap:wrap;gap:4px 12px;justify-content:center;font-size:12px}.wbparty b{color:#ffd23a}
+.wbgot{display:flex;flex-wrap:wrap;gap:8px 14px;justify-content:center;font-weight:700}.wbgot span{display:flex;align-items:center;gap:4px}
+.wbitem{grid-template-columns:52px 1fr auto!important}.wbiic{width:48px;height:48px;display:grid;place-items:center;font-size:30px}
+.wbprize{display:flex;flex-direction:column;gap:6px;font-size:12px}.wbprize div{display:flex;align-items:center;gap:6px}.wbprize img{height:34px}.wbprize b{color:#ffd23a}
+.gt tr.me td{background:rgba(255,210,58,.18)}
+#view button.twb.wbl{background:linear-gradient(90deg,rgba(122,30,10,.92),rgba(60,14,60,.92));border-color:#ff8a2a}.wbl b{color:#ffb347}
+.wbdki{width:34px;height:34px;background:url(wb/btn.webp) 0 0/1600% 100% no-repeat;animation:fx16 1s steps(16) infinite}@keyframes fx16{from{background-position-x:0}to{background-position-x:106.6667%}}
 .fx8.f16{background-size:1600% 100%;animation:fx8 var(--fd,.8s) steps(16,jump-none) forwards}
-@media (max-width:900px){.wbhub{grid-template-columns:minmax(0,1fr) 440px}.wbname b{font-size:34px}}
+.arena.wbar .fig.wbf .plate{display:none}
+.wbbg{position:absolute;inset:0;background-size:cover;background-position:center 70%}
+.wbvs .vr{display:flex;justify-content:center}.wbvsb{height:min(60vh,480px)!important;aspect-ratio:315/255!important;transform:none!important}.wbvsn{position:absolute;right:4%;top:6%;text-align:right}.wbvsn b{display:block;font-size:44px;color:#ffb347;text-shadow:0 4px 0 #3a0a00}.wbvsp{position:absolute;left:4%;top:6%;font-size:24px;font-weight:900;color:#8fd0ff}
+.wbtitle{width:200px;height:110px;background:url(wb/title.webp) 0 0/1600% 100% no-repeat;animation:fx16 1s steps(16) infinite}
+
 
 .pfa{position:relative;display:inline-block;width:var(--s);height:var(--s);flex:none}.pfa .pfp{position:absolute;left:25%;top:25%;width:50%;height:50%;border-radius:50%;background-size:230% auto;background-position:50% 18%;background-color:#141a3a}
 .pfa .pff{position:absolute;inset:0;background-size:1600% 100%;background-repeat:no-repeat;image-rendering:auto;animation:pfan 1s steps(16) infinite}
@@ -825,36 +788,6 @@ h1{color:#f2d98a;text-shadow:0 3px 0 #7a4a1c,0 6px 0 #0a1019}h2{color:#f2d98a;te
 @media (prefers-reduced-motion:reduce){.tsh::before,.tsh::after,.tsh.t1 i,.twscr,.twin .pos.r{animation:none}}
 @keyframes twpop{from{transform:scale(.6);opacity:0}}
 
-/* ---------- b195 "Royal Night" skin (owner pick: background A) — GPT UI kit in ui2/: gold frames on night blue. Layered over the Dark Ages skin; only sources, slices and colours change ---------- */
-:root{--yellow:#f2c14e;--panel:#151c4a;--deep:#0a0d24;--railbg:#11173f}
-#stage{background:radial-gradient(#fff 1px,transparent 1.6px) 0 0/34px 34px,radial-gradient(70% 45% at 50% -8%,rgba(255,196,90,.22),transparent 70%),radial-gradient(120% 80% at 50% 0%,#2b3a8c 0%,#151c4a 45%,#0a0d24 100%)}
-#stage{background-color:#0a0d24}
-h1,h2{color:#f2c14e}
-.btn,.btn.alt,.btn.go,.btn.on,.btn.red,.btn:disabled,.tab,.tab.am,.roomb,.roomb.px,.play,.ibtn{border-image:url(ui2/btn-sub.webp) 48 70 fill/9px 14px stretch;filter:drop-shadow(0 3px 0 rgba(0,0,0,.45))}
-.btn{--tx:#fff}.btn.alt,.roomb,.roomb.px,.ibtn{--tx:#eaf2ff}
-.btn:not(.alt):not(.red):not(.on),.btn.go,.play{border-image-source:url(ui2/btn-main.webp);border-image-slice:52 70 fill;--tx:#3a1400;text-shadow:0 1px 0 rgba(255,240,200,.55)}
-.btn.on{border-image-source:url(ui2/btn-main.webp);--tx:#3a1400;filter:drop-shadow(0 0 6px rgba(255,210,58,.7))}
-.btn.sm{border-width:7px 10px;border-image-width:7px 10px}
-.btn:disabled{border-image-source:url(ui2/btn-sub.webp);filter:grayscale(.85) brightness(.65);opacity:.85}
-.play{border-width:16px 26px;border-image-width:16px 26px}.play b{color:#fff;text-shadow:0 2px 0 #7a2a00}.play small,.play span{color:#fff2cf}
-.tab,.tab.am,.tab:not([class*="r-"]){border-image:url(ui2/tabs-2.webp) 70 96 fill/7px 10px stretch;opacity:.85;--tx:#eaf2ff;color:var(--tx)}
-.tab.on{border-image-source:url(ui2/tabs-1.webp);border-image-slice:70 96 fill;border-width:7px 10px;border-image-width:7px 10px;margin-top:0;--tx:#3a1400;color:var(--tx);text-shadow:none}
-.tab[class*="r-"].on{color:#3a1400}
-.px,.amrow,.chb,.lookb,.rkrow,.pvrow,.abar,.row.avsel{border-image:url(ui2/panel.webp) 44 fill/10px stretch}
-.chb.on,.amrow.on,.rkrow.me{border-image-source:url(ui2/panel.webp);border-image-slice:44 fill;filter:drop-shadow(0 0 6px rgba(255,210,58,.8)) brightness(1.15)}
-.tmenu{border-image:url(ui2/panel.webp) 44 fill/16px stretch}
-.dk{border:0;border-image:none;background:url(ui2/dock.webp) center/100% 100% no-repeat;padding:8px 4px 7px;--tx:#fff2cf;filter:drop-shadow(0 3px 0 rgba(0,0,0,.5))}
-.dk>span:last-child{font-size:13px;margin-top:2px}.dk small{display:none}
-.dk:disabled{filter:grayscale(.85) brightness(.6)}
-.pill,.pchip{border:2px solid #f2c14e;border-image:none;border-radius:20px;background:rgba(10,13,36,.88);padding:1px 10px 1px 3px;box-shadow:inset 0 0 0 2px rgba(0,0,0,.5)}
-.pchip{border-radius:14px;padding:0 10px 0 0}
-.pill .plus{background:#1f9a3a;border-radius:50%;color:#fff}
-.ibtn{border:0;border-image:none;background:none;filter:drop-shadow(0 2px 0 rgba(0,0,0,.5));width:40px;height:40px}.ibtn .ico img,.ibtn>img{width:38px!important;height:38px!important}
-.rail>.row:first-child{background:url(ui/div.png) 50% 100%/100% 8px no-repeat,var(--railbg,#11173f)}
-.atop{background:rgba(10,13,36,.75)!important;border-bottom:2px solid rgba(242,193,78,.5)}
-.gt th{background:#1a2260;color:#f2c14e}.gt td{background:rgba(20,26,74,.6)}.gt th,.gt td{border-color:#0a0d24}
-#ov .cd .px.cdbox,#ov .cdbox{border-image:url(ui2/panel.webp) 44 fill/18px stretch;padding:14px 20px}
-.emi{display:inline-block;height:1.15em;width:auto;vertical-align:-.2em;image-rendering:auto}
 </style>
 
 <div id="stage"><div id="view"></div><div id="ov"></div><div id="fsb" hidden></div><div id="tut"></div><div id="gate" hidden></div><div id="zoom" role="dialog" tabindex="-1" hidden></div></div>
@@ -1562,7 +1495,7 @@ const EMI={'💎':'inline-diamond','💠':'inline-crystal','🔒':'inline-lock',
 const EMRX=new RegExp('('+Object.keys(EMI).join('|')+')\\uFE0F?','g');
 function emoFix(root){if(!root)return;const w=document.createTreeWalker(root,NodeFilter.SHOW_TEXT,{acceptNode:n=>n.parentNode&&/^(SCRIPT|STYLE|TEXTAREA|OPTION|TITLE)$/.test(n.parentNode.nodeName)?2:EMRX.test(n.nodeValue)?(EMRX.lastIndex=0,1):2}),L=[];let n;while(n=w.nextNode())L.push(n);
   L.forEach(t=>{const f=document.createDocumentFragment();let last=0;const v=t.nodeValue;v.replace(EMRX,(m,e,i)=>{if(i>last)f.append(v.slice(last,i));const k=EMI[e],im=document.createElement('img');im.className='emi';im.alt=e;im.src=k==='__candy'?'wb/candy.webp':k==='__soul'?'wb/soul.webp':'ui2/i-'+k+'.webp';f.append(im);last=i+m.length;return m});if(last<v.length)f.append(v.slice(last));t.replaceWith(f)})}
-function view(h){if(CFG.pay&&CFG.pay.h)h=h.replace(/17:00–00:00/g,payTxt()).replace(/17:00/g,hh(ph()[0]));const k0=scrKey(),sc=k0?['.rail','.main'].map(q=>{const e=document.querySelector('#view '+q);return e?e.scrollTop:0}):null;$('view').innerHTML=h;emoFix($('view'));
+function view(h){if(CFG.pay&&CFG.pay.h)h=h.replace(/17:00–00:00/g,payTxt()).replace(/17:00/g,hh(ph()[0]));const k0=scrKey(),sc=k0?['.rail','.main'].map(q=>{const e=document.querySelector('#view '+q);return e?e.scrollTop:0}):null;$('view').innerHTML=h;
   if(sc&&scrKey()===k0){const put=()=>['.rail','.main'].forEach((q,i)=>{const e=document.querySelector('#view '+q);if(e)e.scrollTop=sc[i]});put();requestAnimationFrame(put)}
   fx.forEach(([el,t,cls])=>{const n=$(el);if(!n)return;const f=document.createElement('span');f.className='fl '+cls;f.textContent=t;n.append(f);setTimeout(()=>f.remove(),720)});fx=[];tutSync();cfgGate()}
 const q=(el,t,cls)=>fx.push([el,t,cls]);
@@ -1768,8 +1701,8 @@ function home(){if(BETA&&USER&&USER.sub&&!isDev()){location.replace('./');return
      <div class="squad">${S.team.map(id=>hero(id)).join('')}</div></div>
     <div class="side">
      <div class="row2"><button class="btn sm" data-act="afk" ${afkGold()<1?'disabled':''}>${ico(UI.afk,2)}<span>ออฟไลน์</span> <i class="nt" id="afkv">+${afkGold().toLocaleString('en')}</i></button><button class="btn alt sm" data-act="quests">${ico(UI.quest,4.2)}<span>ภารกิจ</span>${qReady()?` <i class="nt badge">${qReady()}</i>`:''}</button></div>
-     <div class="pgl"><span>ผ่านแล้ว ${S.cleared}/${MAXST} ด่าน · มีการ์ด ${own}/${NC} ใบ</span><div class="hp xp"><i style="width:${S.cleared/MAXST*100}%"></i></div></div>
-     ${wbOpen()||wbShopOpen()?`<button class="twb wbl nt" data-act="wbhub"><span class="wbdki"></span><span><b>${T('บอสโลก 🎃','WORLD BOSS 🎃')}</b><small>${wbOpen()?T('ปาร์ตี้ 2–4 คน','Party of 2–4')+' · '+wbLeft():T('ร้านลูกอมยังเปิด','Candy shop open')}</small></span></button>`:''}
+     ${wbOpen()||wbShopOpen()?'':`<div class="pgl"><span>ผ่านแล้ว ${S.cleared}/${MAXST} ด่าน · มีการ์ด ${own}/${NC} ใบ</span><div class="hp xp"><i style="width:${S.cleared/MAXST*100}%"></i></div></div>`}
+     ${wbOpen()||wbShopOpen()?`<button class="twb wbl nt" data-act="wbhub"><span class="wbdki"></span><span><b>${T('บอสโลก 🎃','WORLD BOSS 🎃')}</b><small>${wbOpen()?T('ปาร์ตี้','Party')+' · '+wbLeft():T('ร้านลูกอมยังเปิด','Candy shop open')}</small></span></button>`:''}
      <button class="twb nt" data-act="tower">${shBadge('T1.'+twSeason(twWeek()),34)}<span><b>TOWER</b><small>S${twSeason(twWeek())} · ${T('ชั้น','floor')} ${twGet().f}${twRank()?' · #'+twRank():''} · ${T('เหลือ','ends in')} ${twLeft()}</small></span></button>
      <button class="play" data-act="prep"><small>ด่านถัดไป</small><b class="nt">STAGE ${next}</b><span>ตะลุยด่าน <i class="nt" style="font-style:normal">▶</i></span></button>
     </div>
@@ -2201,7 +2134,7 @@ function fxStep(c,t){
 if(!RM)(function loop(t){const c=$('bgfx');if(c){const w=Math.max(1,c.clientWidth>>1),h=Math.max(1,c.clientHeight>>1);if(c.width!==w||c.height!==h){c.width=w;c.height=h;fxM=0}fxStep(c,t)}requestAnimationFrame(loop)})(0);
 const W=ms=>sleep(ms/(S.spd||1));
 const art=id=>`<div class="art"><img src="${artSrc(id)}" alt=""></div>`;
-const ov=h=>{const o=$('ov');o.style.setProperty('--sp',S&&S.spd||1);o.innerHTML=h;if(h)emoFix(o);$('stage').classList.toggle('ovon',!!h)};
+const ov=h=>{const o=$('ov');o.style.setProperty('--sp',S&&S.spd||1);o.innerHTML=h;$('stage').classList.toggle('ovon',!!h)};
 let ret=null,quake=false;const hits=new Set();
 async function banner(t,cls=''){ov(`<div class="bn ${cls}"><span>${t}</span></div>`);await W(RM?400:850);ov('')}
 async function vsIntro(){const P=u=>`<div class="vp">${art(u.id)}</div>`;
@@ -2947,8 +2880,7 @@ const TIERS=[['Bronze','#d99a66',3,40,5],['Silver','#aab2c0',3,60,8],['Gold','#f
 const DIVS=['IV','III','II','I'],ST_MAX=TIERS.reduce((t,x)=>t+x[2]*4,0),PV_LOSE_GOLD=10;
 function rankOf(st){st=Math.max(0,Math.min(ST_MAX,st|0));let i=0;while(i<TIERS.length-1&&st>=TIERS[i][2]*4){st-=TIERS[i][2]*4;i++}const per=TIERS[i][2];let d=Math.min(3,Math.floor(st/per)),k=st-d*per;return{i,t:TIERS[i],d,k,per}}
 UI.acoin=pic(["....yyyy....","..yyYYYYyy..",".yYYWWYYYYy.",".yYWyyyyYYy.","yYYyYYYYyYYy","yYYyYYYYyYYy","yYYyYYYYyYYy","yYYyYYYYyYYy",".yYYyyyyYYy.",".yYYYYYYYYy.","..yyYYYYyy..","....yyyy...."],{y:'#3a1a6e',Y:'#b06cff',W:'#f0dcff'});
-Object.assign(UI,{coin:'ic2/coin.webp',gem:'ic2/gem.webp',gear:'ic2/gear.webp',cards:'ic2/cards.webp',pack:'ic2/shop.webp',market:'ic2/market.webp',trade:'ic2/trade.webp',cup:'ic2/pvp.webp',acoin:'ic2/acoin.webp',amu:'ic2/amulet.webp',fuse:'ic2/fuse.webp',quest:'ic2/quest.webp',afk:'ic2/afk.webp',guide:'ic2/guide.webp'});
-// b195 Royal Night skin: menu icons from the GPT icon sheets (ui2/i-*)
+Object.assign(UI,{bag:'ui2/i-menu-bag.webp',coin:'ic2/coin.webp',gem:'ic2/gem.webp',gear:'ic2/gear.webp',cards:'ic2/cards.webp',pack:'ic2/shop.webp',market:'ic2/market.webp',trade:'ic2/trade.webp',cup:'ic2/pvp.webp',acoin:'ic2/acoin.webp',amu:'ic2/amulet.webp',fuse:'ic2/fuse.webp',quest:'ic2/quest.webp',afk:'ic2/afk.webp',guide:'ic2/guide.webp'});
 Object.assign(UI,{bag:'ui2/i-menu-bag.webp',pack:'ui2/i-menu-shop.webp',amu:'ui2/i-menu-amulet.webp',fuse:'ui2/i-menu-fusion.webp',market:'ui2/i-menu-market.webp',trade:'ui2/i-menu-trade.webp',cup:'ui2/i-menu-pvp.webp',quest:'ui2/i-menu-quest.webp',afk:'ui2/i-menu-afk.webp',guide:'ui2/i-menu-guide.webp',gear:'ui2/i-menu-settings.webp',coin:'ui2/i-inline-coin.webp',gem:'ui2/i-inline-diamond.webp'});
 const acoin=n=>`<span class="acn"><img src="${UI.acoin}" alt="Arena coin">${typeof n==='string'?n:(+n).toLocaleString('en')}</span>`;
 const tierTag=(st,stars=true)=>{const r=rankOf(st);return `<b style="color:${r.t[1]}">${r.t[0]} ${DIVS[r.d]}</b>${stars?` <span class="rst" style="color:${r.t[1]}">${'★'.repeat(r.k)}<i>${'★'.repeat(r.per-r.k)}</i></span>`:''}`};
@@ -3288,38 +3220,43 @@ function wbInvList(){const box=$('wbinv');if(!box)return;box.innerHTML=`<p class
   fbLoad().then(fbUser).then(()=>firebase.firestore().collection('online').where('at','>',new Date(Date.now()-120000)).get()).then(q=>{const ids=q.docs.map(d=>d.id).filter(u=>u!==USER.sub&&!wbNodes().some(n=>n.u===u)).slice(0,20);
     return Promise.all(ids.map(u=>firebase.firestore().collection('arena').doc(u).get().then(d=>({u,n:d.exists?d.data().name:'?',l:d.exists?d.data().look:'h01'})).catch(()=>({u,n:'?',l:'h01'}))))}).then(L=>{if(!$('wbinv'))return;
     $('wbinv').innerHTML=L.length?L.map(x=>`<button class="wbirow" data-act="wbinvite" data-u="${x.u}" data-n="${esc(x.n||'?')}">${plAv(40,false,C[x.l]?x.l:'h01','01')}<b>${esc(x.n||'?')}</b><span class="wbb main sm">${T('ชวน','Invite')}</span></button>`).join(''):`<p class="sub">${T('ตอนนี้ไม่มีผู้เล่นอื่นออนไลน์ · คัดลอกเลขห้องไปแชร์ใน Discord แทนได้','Nobody else is online right now · copy the room number to Discord instead')}</p>`}).catch(()=>{if($('wbinv'))$('wbinv').innerHTML=`<p class="sub">${T('โหลดรายชื่อไม่ได้','Could not load the list')}</p>`})}
-// ---- screens
-const wbIc=(k,h=28)=>`<img class="wbic" src="${{cdy:'wb/candy.webp',sl:'wb/soul.webp',tix:'wb/ticket.webp',dia:'ui2/i-inline-diamond.webp',gold:'ui2/i-inline-coin.webp'}[k]}" alt="" style="height:${h}px">`;
-const wbTop3=()=>`<div class="wbcur nt"><span>${wbIc('cdy',24)}${(S.cdy||0).toLocaleString('en')}</span><span>${wbIc('sl',24)}${S.sl||0}</span><span>${wbIc('dia',24)}${(S.dia||0).toLocaleString('en')}</span></div>`;
-const wbHead=(t,back='wbhub')=>`<div class="wbtop"><button class="wbround" data-act="${back}" aria-label="${T('กลับ','Back')}"><img src="ui2/round-2.webp" alt=""></button><div class="wbttl nt"><span>${t}</span></div><span class="wbev nt">${wbLeft()}</span>${wbTop3()}</div>`;
-function wbHub(){if(!wbOpen()&&!wbShopOpen())return home();wbS();wbInbox();const draw=()=>{const s=wbAt(wbSrv.dmg),w=wbS(),rage=wbRage(s),r=wbMyRank();
-  view(`<div class="wbv nt ${rage?'rage':''}"><div class="wbbg" style="background-image:url(wb/${rage?'map2':'map1'}.webp)"></div>${wbHead('🎃 '+T('บอสโลก','World Boss'),'home')}
-   <div class="wbhub"><div class="wbstage"><div class="wbname"><b>${WB.n.toUpperCase()}</b><span>Lv.${s.L}${s.done?' · '+T('ถูกปราบแล้ว','defeated'):''}</span><small>${T(WB.th+'แห่งสุสาน',"the Pumpkin King")}</small></div>
-     <span class="spr f16 wbboss"><i><img src="spr/${rage?'wb1r':'wb1'}.webp" alt=""></i></span><img class="wbamb" src="wb/amb.webp" alt="" style="display:none">${wbSrv.local?`<span class="wbloc">${T('โหมดทดสอบ (ยังไม่ได้ใส่กฎ Firebase)','Test mode (Firebase rule not added yet)')}</span>`:''}</div>
-    <div class="wbpanel"><div class="wbsec"><div class="wbrow"><b>${T('เลือดบอสทั้งเซิร์ฟ','Server-wide boss HP')}</b><span class="wbred">${Math.round(s.pct*100)}% · ${s.left.toLocaleString('en')}</span></div>
+// ---- screens (b196: the game's own rail / main layout, plain background, nothing stacked on top of anything)
+const wbIc=(k,h=28)=>`<img class="wbic" src="${{cdy:'wb/candy.webp',sl:'wb/soul.webp',tix:'wb/ticket.webp',dia:'ic2/gem.webp',gold:'ic2/coin.webp'}[k]}" alt="" style="height:${h}px">`;
+const wbCur=()=>`<div class="wbcur nt"><span>${wbIc('cdy',20)}${(S.cdy||0).toLocaleString('en')}</span><span>${wbIc('sl',20)}${S.sl||0}</span><span>${wbIc('dia',20)}${(S.dia||0).toLocaleString('en')}</span></div>`;
+const wbRail=(title,back,body)=>`<div class="rail"><div class="row"><button class="btn alt sm" data-act="${back}">${T('กลับ','Back')}</button><h2>${title}</h2></div>${wbCur()}${body}</div>`;
+function wbHub(){if(!wbOpen()&&!wbShopOpen())return home();wbS();wbInbox();const draw=()=>{const s=wbAt(wbSrv.dmg),w=wbS(),rage=wbRage(s),r=wbMyRank(),can=wbOpen()&&!s.done;
+  view(`<div class="cols">${wbRail('🎃 '+T('บอสโลก','World Boss'),'home',`
+    <p class="sub nt">${wbLeft()} · ${T('ปาร์ตี้ 2–4 คน คนละ 1 การ์ด','parties of 2–4, one card each')}</p>
+    <div class="px wbtk nt">${wbIc('tix',30)}<span><b>${T('ตั๋ววันนี้','Tickets today')} ${wbTix()}/${wbFree()+(w.b||0)}</b><small>${vipOn()?'+1 VIP · ':''}${T('รีเซ็ตเที่ยงคืน','resets at midnight')}</small></span></div>
+    ${(w.b||0)<WB_BUY.length&&can?`<button class="btn alt sm" data-act="wbbuy">${T('ซื้อตั๋วเพิ่ม','Buy a ticket')} · ${WB_BUY[w.b||0]} 💎</button>`:''}
+    ${can?`<button class="btn go" data-act="wbnew">🎃 ${T('สร้างปาร์ตี้','Create party')}</button><button class="btn" data-act="wbrand">🔍 ${T('หาปาร์ตี้สุ่ม','Find a party')}</button><button class="btn alt" data-act="wbcode">🔢 ${T('เข้าด้วยเลขห้อง','Join by number')}</button>`:`<p class="sub">${s.done?T('ราชาฟักทองถูกปราบครบทุกเลเวลแล้ว!','Every level has fallen!'):T('อีเวนต์จบแล้ว ร้านลูกอมยังเปิดอีก 3 วัน','The event is over; the candy shop stays open 3 more days')}</p>`}
+    <div class="wbrow3"><button class="btn alt sm" data-act="wbrank">🏆 ${T('อันดับ','Ranking')}</button><button class="btn alt sm" data-act="wbshop">🍬 ${T('ร้าน','Shop')}</button><button class="btn alt sm" data-act="wbrules">📜 ${T('กติกา','Rules')}</button></div>`)}
+   <div class="main"><div class="px wbboss nt ${rage?'rage':''}"><div class="wbbimg"><span class="spr f16"><i><img src="spr/${rage?'wb1r':'wb1'}.webp" alt=""></i></span></div>
+     <div class="wbbinfo"><b class="wbn">${WB.n} <i>Lv.${s.L}</i></b><small>${T(WB.th+'แห่งสุสาน','the Pumpkin King')}${rage?` · <b style="color:#ff6a5a">${T('คลั่ง! ตีแรงขึ้น ลูกอม ×1.5','RAGE! harder hits, candy ×1.5')}</b>`:''}</small>
+      <div class="wbrow"><span>${T('เลือดทั้งเซิร์ฟ','Server HP')}</span><b>${(s.pct*100).toFixed(1)}% · ${s.left.toLocaleString('en')}</b></div>
       <div class="wbhp"><i style="width:${s.pct*100}%"></i>${WB_MS.slice(0,3).map(t=>`<em style="left:${t*100}%"></em>`).join('')}</div>
-      <div class="wbms">${WB_MS.map((t,i)=>{const ok=w.ms[s.L+'_'+i]||(s.done);const r=WB_MSR[i];return `<span class="${ok?'ok':''}"><b>${t?Math.round(t*100)+'%':T('ตาย','Kill')}</b>${r.dia?r.dia+' 💎':r.gold?r.gold.toLocaleString('en')+' G':''}${r.ss?T(' หินดาว×',' Star×')+r.ss:''}</span>`}).join('')}</div></div>
-     <div class="wbsec wbst"><div><small>${T('ดาเมจของฉัน','My damage')}</small><b>${(w.dmg||0).toLocaleString('en')}</b></div><div><small>${T('อันดับ','Rank')}</small><b>${r?'#'+r:'-'}</b></div><div><small>${T('ดาเมจสูงสุด','Best hit')}</small><b>${(w.best||0).toLocaleString('en')}</b></div></div>
-     <div class="wbsec wbtix">${wbIc('tix',36)}<b>${T('ตั๋วตีวันนี้','Tickets today')} ${wbTix()}/${wbFree()+(w.b||0)}</b>${vipOn()?'<span class="wbvip">+1 VIP</span>':''}${(w.b||0)<WB_BUY.length?`<button class="wbb sub sm" data-act="wbbuy">${T('ซื้อเพิ่ม','Buy')} ${WB_BUY[w.b||0]} 💎</button>`:''}</div>
-     ${wbOpen()&&!s.done?`<div class="wbbtns"><button class="wbb main big" data-act="wbnew">🎃 ${T('สร้างปาร์ตี้','Create party')}</button><button class="wbb sub big" data-act="wbcode">🔢 ${T('เข้าด้วยเลขห้อง','Join by number')}</button></div>
-     <button class="wbb sub wide" data-act="wbrand">🔍 ${T('หาปาร์ตี้สุ่ม','Find a party')}</button>`:`<p class="sub" style="text-align:center">${s.done?T('ราชาฟักทองถูกปราบครบทุกเลเวลแล้ว! ไปแลกของที่ร้านลูกอมได้','Every level is down! Spend your candy in the shop'):T('อีเวนต์จบแล้ว ร้านลูกอมยังเปิดอีก 3 วัน','The event is over; the candy shop stays open 3 more days')}</p>`}
-     <div class="wbmini"><button data-act="wbrank"><img src="ui2/i-menu-rank.webp" alt="">${T('อันดับ','Ranking')}</button><button data-act="wbshop"><span class="wbwitch"></span>${T('ร้านลูกอม','Candy shop')}</button><button data-act="wbrules"><img src="ui2/i-battle-help.webp" alt="">${T('กติกา','Rules')}</button></div></div></div></div>`)};
-  draw();wbFetch().then(()=>{wbMilestones();wbSettle();return wbTop()}).then(()=>{if(document.querySelector('.wbhub'))draw()})}
+      <div class="wbms">${WB_MS.map((t,i)=>{const ok=w.ms[s.L+'_'+i];const q=WB_MSR[i];return `<span class="${ok?'ok':''}"><b>${t?Math.round(t*100)+'%':T('ตาย','Kill')}${ok?' ✓':''}</b>${q.dia?q.dia+' 💎':q.gold?q.gold.toLocaleString('en')+' G':''}${q.ss?T('หินดาว ×','Star ×')+q.ss:''}</span>`}).join('')}</div>
+      <div class="wbst"><span><small>${T('ดาเมจของฉัน','My damage')}</small><b>${(w.dmg||0).toLocaleString('en')}</b></span><span><small>${T('อันดับ','Rank')}</small><b>${r?'#'+r:'-'}</b></span><span><small>${T('ครั้งเดียวสูงสุด','Best hit')}</small><b>${(w.best||0).toLocaleString('en')}</b></span></div>
+      ${wbSrv.local?`<small class="wbloc">${T('โหมดทดสอบ: ยังไม่ได้ใส่กฎ Firebase เลือดบอสยังไม่รวมทั้งเซิร์ฟ','Test mode: Firebase rule missing, HP is not shared yet')}</small>`:''}</div></div>
+   <p class="sub nt">${T('คำสาปเล็งตัวเลือดน้อย พาแท้งค์ไปด้วย · บอสแพ้เวท · ทุก 3 รอบฟันกวาดทั้งทีม','The curse hunts the lowest HP: bring a tank · weak to magic · every 3 rounds it sweeps the party')}</p></div></div>`)};
+  draw();wbFetch().then(()=>{wbMilestones();wbSettle();return wbTop()}).then(()=>{if(document.querySelector('.wbboss'))draw()})}
 function wbRoom(){if(!wbp)return wbHub();const L=wbNodes(),me=wbMine(),host=wbHost(),amH=wbAmHost(),bots=(host&&host.bots)||[],seats=[...L,...bots.map((b,i)=>({u:'bot'+i,bot:1,...b}))].slice(0,4),
-  alone=Date.now()-wbp.t0>WB_BOT_S*1000,canGo=amH&&seats.length>=2&&L.every(x=>x.rd),cls=id=>clsOf(id),hasT=seats.some(x=>C[x.c]&&C[x.c].role==='tank'),hasM=seats.some(x=>C[x.c]&&C[x.c].m);
-  const seat=x=>{const c=C[x.c]?x.c:'h01',k=CLS[cls(c)]||['?','',''];return `<div class="wbseat" style="--c:${k[3]||'#888'}"><div class="who">${x.bot?'<span class="wbbot">BOT</span>':plAv(52,x.u===wbp.me,x.l,x.f)}<span><b>${x.u===(host&&host.u)?'👑 ':''}${esc(x.bot?T('บอทช่วยตี','Helper bot'):x.n)}</b><small>${C[c].n} · Lv.${x.lv||1}</small></span></div>
-    <div class="hero">${sprite(c,'',`height:100%`)}</div><div class="ring"></div><div class="plate"><i>${k[0]} ${T(k[1],k[2])}</i>${C[c].n.toUpperCase()}</div><span class="st ${x.bot||x.rd?'ok':'wait'}">${x.bot||x.rd?'✓ '+T('พร้อม','Ready'):T('กำลังเลือก…','Choosing…')}</span></div>`};
-  view(`<div class="wbv nt"><div class="wbbg" style="background-image:url(wb/map1.webp)"></div>${wbHead('🎃 '+T('ปาร์ตี้','Party')+' #'+wbp.code,'wbquit')}
-   <div class="wbroom"><div class="wbinfo"><span>${T('ห้อง','Room')} <b>#${wbp.code}</b> · <b>${seats.length}/4</b> · ${T('เริ่มได้ตั้งแต่ 2 คน','2 or more to start')}</span><button class="wbb sub sm" data-act="wbcopy">📋 ${T('คัดลอกเลขห้อง','Copy number')}</button>
-     <span class="wbchk">${hasT?'✓':'✗'} ${T('แท้งค์','Tank')} · ${hasM?'✓':'✗'} ${T('เมจ','Mage')} · ${T('จุดอ่อนบอส: เวท','Weak to magic')}</span></div>
-    <div class="wbseats">${seats.map(seat).join('')}${Array.from({length:4-seats.length},()=>`<div class="wbseat empty"><div class="plus">+</div><b>${T('ว่าง','Free')}</b>${wbp.solo?'':`<button class="wbb sub sm" data-act="wbinvopen">📨 ${T('ชวนเพื่อน','Invite')}</button>`}${amH&&(alone||wbp.solo)?`<button class="wbb sub sm" data-act="wbbot">🤖 ${T('เติมบอท','Add bot')}</button>`:''}</div>`).join('')}</div>
-    <div class="wbpick"><div class="lab">${T('การ์ดของคุณ','Your card')}<small>${T('คนละ 1 ใบ','one card each')}</small></div><div class="wbcards">${byRank(Object.keys(S.cards).filter(id=>C[id]&&C[id].r!=='ST')).slice(0,40).map(id=>`<button class="wbc ${id===me.c?'on':''}" data-act="wbcard" data-id="${id}" ${me.rd?'disabled':''}>${mkIcon(id)}<small>${C[id].n}</small></button>`).join('')}</div></div>
-    <div class="wbfoot"><span class="sub">${wbIc('tix',22)} ${T('ตั๋ววันนี้','Tickets')} ${wbTix()} · ${T('ยิ่งคนเยอะ ลูกอมยิ่งเยอะ +10%/คน','more players, more candy +10% each')}</span>
-     ${me.rd?`<button class="wbb sub" data-act="wbready">${T('ยกเลิกพร้อม','Not ready')}</button>`:`<button class="wbb main" data-act="wbready" ${wbTix()?'':'disabled'}>${wbTix()?'✓ '+T('พร้อม','Ready'):T('ตั๋วหมด','No tickets')}</button>`}
-     ${amH?`<button class="wbb main big" data-act="wbgo" ${canGo?'':'disabled'}>⚔ ${T('เริ่มตีบอส','Start')} (${seats.length}/4)</button>`:`<span class="sub">${T('รอหัวห้องกดเริ่ม','Waiting for the host')}</span>`}</div>
-    <div id="wbinvbox" class="wbinvbox" hidden><div class="wbinvh"><b>📨 ${T('ชวนผู้เล่นที่ออนไลน์','Invite a player online')}</b><button class="wbb sub sm" data-act="wbinvclose">✕</button></div><div id="wbinv"></div></div></div></div>`)}
-function wbCodeAsk(){ov(`<div class="cd dlg nt"><div class="wbdlg"><b class="wbdt">🔢 ${T('เข้าห้องด้วยเลขห้อง','Join by room number')}</b><input id="wbcd" inputmode="numeric" maxlength="4" placeholder="0000" class="wbcode"><p class="sub">${T('ได้เลขห้องจากเพื่อน แชต หรือ Discord · ห้องเต็ม 4 คน','Get the number from a friend or Discord · rooms hold 4')}</p>
-  <div class="row" style="justify-content:center;gap:10px"><button class="wbb sub" data-wbc="no">${T('ยกเลิก','Cancel')}</button><button class="wbb main" data-wbc="go">${T('เข้าห้อง','Join')}</button></div></div></div>`);setTimeout(()=>{const i=$('wbcd');if(i)i.focus()},50)}
+  alone=Date.now()-wbp.t0>WB_BOT_S*1000,canGo=amH&&seats.length>=2&&L.every(x=>x.rd),hasT=seats.some(x=>C[x.c]&&C[x.c].role==='tank'),hasM=seats.some(x=>C[x.c]&&C[x.c].m);
+  const seat=x=>{const c=C[x.c]?x.c:'h01',k=CLS[clsOf(c)]||['','',''];return `<div class="px wbseat ${x.bot||x.rd?'rd':''}" style="--c:${k[3]||'#888'}"><div class="wbwho">${x.bot?'<span class="wbbot">BOT</span>':plAv(40,x.u===wbp.me,x.l,x.f)}<b>${x.u===(host&&host.u)?'👑 ':''}${esc(x.bot?T('บอท','Bot'):x.n)}</b></div>
+    <div class="wbhero">${sprite(c,'','height:100%')}</div><small class="wbcl">${k[0]} ${C[c].n} · Lv.${x.lv||1}</small><span class="wbok">${x.bot||x.rd?'✓ '+T('พร้อม','Ready'):T('กำลังเลือก…','Choosing…')}</span></div>`};
+  view(`<div class="cols">${wbRail('🎃 '+T('ห้อง','Room')+' #'+wbp.code,'wbquit',`
+    <p class="sub nt">${seats.length}/4 · ${T('เริ่มได้ตั้งแต่ 2 คน','2 or more to start')}<br>${hasT?'✓':'✗'} ${T('แท้งค์','Tank')} · ${hasM?'✓':'✗'} ${T('เมจ','Mage')}</p>
+    ${wbp.solo?'':`<button class="btn alt sm" data-act="wbcopy">📋 ${T('คัดลอกเลขห้อง','Copy room number')}</button><button class="btn alt sm" data-act="wbinvopen">📨 ${T('ชวนผู้เล่นออนไลน์','Invite players online')}</button>`}
+    ${amH&&seats.length<4&&(alone||wbp.solo)?`<button class="btn alt sm" data-act="wbbot">🤖 ${T('เติมบอท (ไม่ได้ของ)','Add a bot (no rewards)')}</button>`:amH&&seats.length<4?`<p class="sub">${T(`รอ ${WB_BOT_S} วินาทีแล้วเติมบอทได้`,`Bots after ${WB_BOT_S} s`)}</p>`:''}
+    ${me.rd?`<button class="btn alt" data-act="wbready">${T('ยกเลิกพร้อม','Not ready')}</button>`:`<button class="btn" data-act="wbready" ${wbTix()?'':'disabled'}>${wbTix()?'✓ '+T('พร้อม','Ready'):T('ตั๋วหมด','No tickets')}</button>`}
+    ${amH?`<button class="btn go" data-act="wbgo" ${canGo?'':'disabled'}>⚔ ${T('เริ่มตีบอส','Start')}</button>`:`<p class="sub">${T('รอหัวห้องกดเริ่ม','Waiting for the host')}</p>`}
+    <p class="sub nt">${T('ตั๋ว','Tickets')} ${wbTix()} · ${T('ลูกอม +10% ต่อคน','candy +10% per player')}</p>`)}
+   <div class="main"><div class="wbseats">${seats.map(seat).join('')}${Array.from({length:4-seats.length},()=>`<div class="px wbseat empty"><b>+</b><small>${T('ว่าง','Free')}</small></div>`).join('')}</div>
+    <p class="sub nt" style="margin:10px 0 6px">${T('เลือกการ์ดของคุณ 1 ใบ','Pick one card')}${me.rd?' · '+T('กด ยกเลิกพร้อม เพื่อเปลี่ยน','press Not ready to change'):''}</p>
+    <div class="wbcards">${byRank(Object.keys(S.cards).filter(id=>C[id]&&C[id].r!=='ST')).map(id=>`<button class="chb r-${C[id].r} ${id===me.c?'on':''}" data-act="wbcard" data-id="${id}" ${me.rd?'disabled':''}>${hero(id)}<span class="nt">${C[id].n}</span><small class="nt">Lv.${S.cards[id].lv}</small></button>`).join('')}</div>
+    <div id="wbinvbox" class="px wbinvbox" hidden><div class="row"><b>📨 ${T('ชวนผู้เล่นที่ออนไลน์','Invite a player online')}</b><button class="btn alt sm" data-act="wbinvclose">✕</button></div><div id="wbinv"></div></div></div></div>`)}
+function wbCodeAsk(){ov(`<div class="cd dlg nt"><div class="px cdbox"><b>🔢 ${T('เข้าห้องด้วยเลขห้อง','Join by room number')}</b><input id="wbcd" inputmode="numeric" maxlength="4" placeholder="0000" class="wbcode"><p class="sub">${T('ได้เลขห้องจากเพื่อน แชต หรือ Discord · ห้องเต็ม 4 คน','Get the number from a friend or Discord · rooms hold 4')}</p>
+  <div class="row"><button class="btn alt" data-wbc="no">${T('ยกเลิก','Cancel')}</button><button class="btn go" data-wbc="go">${T('เข้าห้อง','Join')}</button></div></div></div>`);setTimeout(()=>{const i=$('wbcd');if(i)i.focus()},50)}
 $('ov').addEventListener('click',e=>{const b=e.target.closest('[data-wbc]');if(!b)return;const v=($('wbcd')||{}).value;ov('');if(b.dataset.wbc==='go')wbJoin(v)});
 // ---- the fight
 const WB_BOSS=()=>{const L=stageDef(1500).find(e=>e.lord)||stageDef(1500)[0];return{atk:Math.round(L.atk*.25),def:24}};   // simwb.js: a tank party lasts the 10 rounds, a party without a tank falls around round 4-5
@@ -3344,31 +3281,27 @@ async function wbFinish(won){const my=bt;busy=true;const kill=my.en[0].hp<=0;sfx
   const was=wbMyRank()||0;await wbPush(d);const s1=wbAt(wbSrv.dmg),last=s1.L>s0.L||s1.done&&!s0.done;if(kill&&last){soul+=5;S.cdy+=100;S.wbt=1}
   S.sl=(S.sl||0)+soul;bt=null;busy=false;save();cloudFlush();wbMilestones();if(wbp)wbWrite({dd:d,rd:0,go:0});
   wbp&&(wbp.res={d,share,cdy,g,x,up,am,soul,best,kill:kill&&last,s0,s1,was,id});wbTop(true).then(()=>{if(document.querySelector('.wbres'))wbResult(wbp?wbp.res:null)});wbResult(wbp?wbp.res:{d,share,cdy,g,x,up,am,soul,best,kill,s0,s1,was,id})}
-function wbResult(r){if(!r)return wbHub();const now=wbMyRank(),party=wbNodes();
-  view(`<div class="wbv nt"><div class="wbbg dim" style="background-image:url(wb/map1.webp)"></div><div class="wbres"><div class="wbttl big nt"><span>${r.kill?T('ปราบราชาฟักทองสำเร็จ!','You felled the Pumpkin King!'):T('จบการตีบอส','Boss fight over')}</span></div>
-   <div class="wbr1"><span class="spr f16 wbrb"><i><img src="spr/wb1.webp" alt=""></i></span><div><small>${T('ดาเมจของฉัน','My damage')}</small><b class="wbbig">${r.d.toLocaleString('en')}</b><small>= ${(r.share*100).toFixed(1)}% ${T('ของเลือดบอส','of the boss')}${r.best?` · <b style="color:#7dff8a">${T('ดาเมจสูงสุดใหม่!','New best!')}</b>`:''}</small></div>
-    <div class="wbrk">${now&&now<=3?`<img src="wb/sh${now===1?'2':now}.webp" alt="">`:''}<small>${T('อันดับ','Rank')}</small><b>${now?'#'+now:'-'}</b>${r.was&&now&&now<r.was?`<i>▲${r.was-now}</i>`:''}</div></div>
-   ${party.length>1?`<div class="wbparty">${party.map(x=>`<span>${plAv(36,x.u===(wbp&&wbp.me),x.l,x.f)}<b>${esc(x.n)}</b><i>${x.dd!=null?(+x.dd).toLocaleString('en'):'…'}</i></span>`).join('')}</div>`:''}
-   <div class="wbhp sm"><i style="width:${r.s1.pct*100}%"></i><i class="cut" style="left:${r.s1.pct*100}%;width:${Math.max(.6,Math.min(100-r.s1.pct*100,(r.s0.L===r.s1.L?r.s0.pct-r.s1.pct:1-r.s1.pct)*100))}%"></i></div><p class="sub" style="text-align:center">${T('เลือดบอสทั้งเซิร์ฟ','Server boss HP')} ${Math.round(r.s0.pct*100)}% → ${Math.round(r.s1.pct*100)}%${r.s1.L>r.s0.L?` · ${T('ขึ้นเลเวล','now Lv.')}${r.s1.L}`:''}</p>
-   <div class="wbgot"><span>${wbIc('cdy',40)}<b>+${r.cdy}</b><small>${T('ลูกอม','Candy')}</small></span><span>${wbIc('gold',40)}<b>+${r.g.toLocaleString('en')}</b><small>Gold</small></span><span><img src="ui2/i-battle-levelup.webp" alt="" style="height:40px"><b>+${r.x.toLocaleString('en')}</b><small>Exp${r.up?' · Lv↑':''}</small></span>
-    ${r.soul?`<span>${wbIc('sl',40)}<b>+${r.soul}</b><small>${T('เหรียญวิญญาณ','Soul coin')}</small></span>`:''}${r.am?`<span><span style="display:inline-block;width:40px">${amu(r.am)}</span><b>${AM[r.am].n}</b><small>${T('เครื่องราง','Amulet')}</small></span>`:''}</div>
-   ${r.kill?`<div class="wbkill"><span class="wbtitle"></span><b>${T('คุณคือคนปิดฉาก! ได้ฉายา PUMPKIN SLAYER + เหรียญวิญญาณ 5 + ลูกอม 100','You landed the last hit! PUMPKIN SLAYER title + 5 soul coins + 100 candy')}</b></div>`:''}
-   <div class="wbbtns"><button class="wbb sub big" data-act="wbquit">${T('กลับหน้าบอส','Back to the boss')}</button>${wbp&&!wbp.solo?`<button class="wbb main big" data-act="wbagain">🎃 ${T('ตีต่อกับทีมเดิม','Again with this party')}</button>`:`<button class="wbb main big" data-act="wbagain">🎃 ${T('ตีอีกครั้ง','Fight again')}</button>`}</div></div></div>`)}
+function wbResult(r){if(!r)return wbHub();const now=wbMyRank(),party=wbNodes();if(!document.querySelector('.wbboss'))wbHub();
+  ov(`<div class="cd dlg nt"><div class="px cdbox wbresd"><b class="wbrt">${r.kill?T('ปราบราชาฟักทองสำเร็จ!','You felled the Pumpkin King!'):T('จบการตีบอส','Boss fight over')}</b>
+   <div class="wbr1"><span><small>${T('ดาเมจของฉัน','My damage')}</small><b class="wbbig">${r.d.toLocaleString('en')}</b><small>${(r.share*100).toFixed(1)}% ${T('ของเลือดบอส','of the boss')}${r.best?` · <b style="color:#7dff8a">${T('สูงสุดใหม่!','new best!')}</b>`:''}</small></span><span><small>${T('อันดับ','Rank')}</small><b class="wbbig sm">${now?'#'+now:'-'}</b>${r.was&&now&&now<r.was?`<small style="color:#7dff8a">▲${r.was-now}</small>`:''}</span></div>
+   ${party.length>1?`<div class="wbparty">${party.map(x=>`<span>${esc(x.n)} <b>${x.dd!=null?(+x.dd).toLocaleString('en'):'…'}</b></span>`).join('')}</div>`:''}
+   <p class="sub">${T('เลือดบอสทั้งเซิร์ฟ','Server boss HP')} ${(r.s0.pct*100).toFixed(1)}% → ${(r.s1.pct*100).toFixed(1)}%${r.s1.L>r.s0.L?' · Lv.'+r.s1.L:''}</p>
+   <div class="wbgot"><span>${wbIc('cdy',30)}+${r.cdy}</span><span>${wbIc('gold',26)}+${r.g.toLocaleString('en')}</span><span>Exp +${r.x.toLocaleString('en')}${r.up?' · Lv↑':''}</span>${r.soul?`<span>${wbIc('sl',28)}+${r.soul}</span>`:''}${r.am?`<span>${AM[r.am].n}</span>`:''}</div>
+   ${r.kill?`<b style="color:#7dff8a">${T('คุณตีดาบสุดท้าย! ได้ฉายา PUMPKIN SLAYER + เหรียญวิญญาณ 5 + ลูกอม 100','Last hit! PUMPKIN SLAYER title + 5 soul coins + 100 candy')}</b>`:''}
+   <div class="row"><button class="btn alt" data-act="wbquit">${T('กลับหน้าบอส','Back')}</button><button class="btn go" data-act="wbagain">🎃 ${wbp&&!wbp.solo?T('ตีต่อทีมเดิม','Again, same party'):T('ตีอีกครั้ง','Fight again')}</button></div></div></div>`)}
 // candy shop + soul shop (soul coins never expire; candy shop closes 3 days after the event)
 const WB_SHOP=[['ss','หินดาว','Star stone',30,0,{ss:1}],['rs','ผลึกอาณาจักร','Realm crystal',40,0,{rs:1}],['am','เครื่องราง Legend สุ่ม','Random Legend amulet',150,0,{am:'L'}],['card','การ์ด Legend สุ่ม','Random Legend card',400,2,{card:'L'}],['hal','เครื่องราง Limited โคมวิญญาณฟักทอง','Limited amulet: Pumpkin Soul Lantern',1000,1,{amk:'hallow'}],['pf','กรอบรูปฮาโลวีน','Halloween profile frame',500,1,{pfr:'hallow'}]];
 const WB_SOUL=[['tk','ตั๋วสลับการ์ด','Card swap ticket',15,0,{swap:1}],['pf2','กรอบรูปฮาโลวีน','Halloween profile frame',30,1,{pfr:'hallow'}],['dia','เพชร 30','30 diamonds',10,5,{dia:30}]];
 function wbShop(tab){tab=tab||'c';S.wbb=S.wbb||{};const L=tab==='c'?WB_SHOP:WB_SOUL,cur=tab==='c'?(S.cdy||0):(S.sl||0),open=tab!=='c'||wbShopOpen();
-  view(`<div class="wbv nt"><div class="wbbg dim" style="background-image:url(wb/map1.webp)"></div>${wbHead('🍬 '+T('ร้านลูกอม','Candy shop'))}<div class="wbshop"><div class="wbwitchbig"></div><div class="wbsl"><div class="wbtabs"><button class="${tab==='c'?'on':''}" data-act="wbshop" data-t="c">🍬 ${T('ลูกอม','Candy')}</button><button class="${tab==='s'?'on':''}" data-act="wbshop" data-t="s">👻 ${T('เหรียญวิญญาณ','Soul coins')}</button></div>
-   <p class="sub">${tab==='c'?T('ลูกอมใช้ได้ถึงร้านปิด (หลังจบอีเวนต์ 3 วัน) แล้วจะหายไป','Candy can be spent until the shop closes, 3 days after the event; then it is gone'):T('เหรียญวิญญาณไม่หาย สะสมข้ามบอสทุกฤดูกาล','Soul coins never expire; they carry over to every future boss')}</p>
-   <div class="wbitems">${L.map(([k,th,en,p,lim,it])=>{const used=S.wbb[tab+k]||0,out=lim&&used>=lim,ok=open&&!out&&cur>=p&&!(it.pfr&&pfHave('hallow'));return `<div class="wbitem"><span class="ic">${it.amk?amu(it.amk):it.pfr?plAv(60,true,null,'hallow'):it.card?`<img src="ui2/i-menu-chest.webp" alt="">`:it.am?`<img src="ui2/i-menu-amulet.webp" alt="">`:it.ss?`<img src="ui2/i-inline-starstone.webp" alt="">`:it.rs?`<img src="ui2/i-inline-crystal.webp" alt="">`:it.swap?`<img src="ui2/i-inline-ticket.webp" alt="">`:`<img src="ui2/i-inline-diamond.webp" alt="">`}</span>
-     <span class="nm"><b>${T(th,en)}</b><small>${lim?T(`จำกัด ${lim} ครั้ง · ใช้ไป ${used}`,`limit ${lim} · bought ${used}`):T('ไม่จำกัด','no limit')}</small></span><button class="wbb main sm" data-act="wbbuyit" data-t="${tab}" data-k="${k}" ${ok?'':'disabled'}>${wbIc(tab==='c'?'cdy':'sl',20)} ${p}</button></div>`}).join('')}</div></div></div></div>`)}
+  view(`<div class="cols">${wbRail('🍬 '+T('ร้านลูกอม','Candy shop'),'wbhub',`<button class="tab ${tab==='c'?'on':''}" data-act="wbshop" data-t="c">🍬 ${T('ร้านลูกอม','Candy')}</button><button class="tab ${tab==='s'?'on':''}" data-act="wbshop" data-t="s">👻 ${T('ร้านเหรียญวิญญาณ','Soul coins')}</button>
+    <p class="sub">${tab==='c'?T('ลูกอมใช้ได้ถึงร้านปิด (หลังจบอีเวนต์ 3 วัน) แล้วหายไป','Candy can be spent until the shop closes, 3 days after the event'):T('เหรียญวิญญาณไม่หมดอายุ สะสมข้ามบอสทุกฤดูกาล','Soul coins never expire')}</p>`)}
+   <div class="main"><div class="amlist">${L.map(([k,th,en,p,lim,it])=>{const used=S.wbb[tab+k]||0,out=lim&&used>=lim,ok=open&&!out&&cur>=p&&!(it.pfr&&pfHave('hallow'));
+    return `<div class="amrow wbitem"><span class="wbiic">${it.amk?amu(it.amk):it.pfr?plAv(48,true,null,'hallow'):it.card?'🎴':it.am?'🔮':it.ss?'★':it.rs?'💠':it.swap?'🎟':'💎'}</span><span><b>${T(th,en)}</b><small>${lim?T(`จำกัด ${lim} ครั้ง · ใช้ไป ${used}`,`limit ${lim} · bought ${used}`):T('ไม่จำกัด','no limit')}</small></span><button class="btn go sm" data-act="wbbuyit" data-t="${tab}" data-k="${k}" ${ok?'':'disabled'}>${wbIc(tab==='c'?'cdy':'sl',18)} ${p}</button></div>`}).join('')}</div></div></div>`)}
 function wbBuyIt(tab,k){const L=tab==='c'?WB_SHOP:WB_SOUL,x=L.find(r=>r[0]===k);if(!x)return;const [,,,p,lim,it]=x,key=tab==='c'?'cdy':'sl';S.wbb=S.wbb||{};if((S[key]||0)<p||(lim&&(S.wbb[tab+k]||0)>=lim))return;if(tab==='c'&&!wbShopOpen())return;
   S[key]-=p;S.wbb[tab+k]=(S.wbb[tab+k]||0)+1;const out=itGive(it,'wbshop');save();sfx('win');ov(`<div class="cd dlg nt"><div class="wbdlg"><b class="wbdt">${T('ได้รับแล้ว!','Got it!')}</b><div class="itgot">${out.map(itChip).join('')}</div><button class="wbb main" data-wbc="no">${T('ตกลง','OK')}</button></div></div>`);wbShop(tab)}
 function wbRank(){wbTop(true).then(L=>{const me=USER&&USER.sub;
-  view(`<div class="wbv nt"><div class="wbbg dim" style="background-image:url(wb/map1.webp)"></div>${wbHead('🏆 '+T('อันดับดาเมจ','Damage ranking'))}<div class="wbrank"><div class="wbprize">
-   <div><img src="wb/sh1.webp" class="wbsh1" alt=""><b>#1</b><small>${T('โล่ราชาฟักทอง (ขยับได้) + เครื่องราง Limited + 200 💎','Animated shield + Limited amulet + 200 💎')}</small></div><div><img src="wb/sh2.webp" alt=""><b>#2</b><small>${T('โล่เงิน + Limited + 150 💎','Silver shield + Limited + 150 💎')}</small></div><div><img src="wb/sh3.webp" alt=""><b>#3</b><small>${T('โล่ทองแดง + Limited + 120 💎','Bronze shield + Limited + 120 💎')}</small></div>
-   <div><b>#4–10</b><small>Limited + 80 💎</small></div><div><b>#11–50</b><small>30 💎 + 🍬300</small></div></div>
-   <div class="wblist">${L.length?L.map((x,i)=>`<div class="wbli ${x.id===me?'me':''}"><b class="no">${i+1}</b>${plAv(40,x.id===me,C[x.l]?x.l:'h01',x.f)}<span>${esc(x.n||'?')}<small>${T('ตี','hits')} ${x.h||0}</small></span><b class="d">${(+x.d||0).toLocaleString('en')}</b></div>`).join(''):`<p class="sub">${T('ยังไม่มีใครตีบอส','Nobody has hit the boss yet')}</p>`}</div></div></div>`)})}
+  view(`<div class="cols">${wbRail('🏆 '+T('อันดับดาเมจ','Damage ranking'),'wbhub',`<div class="wbprize nt"><div><img src="wb/sh2.webp" alt=""><span><b>#1</b> ${T('โล่ขยับได้ + Limited + 200 💎','animated shield + Limited + 200 💎')}</span></div><div><img src="wb/sh2.webp" alt=""><span><b>#2–3</b> ${T('โล่ + Limited + 150/120 💎','shield + Limited + 150/120 💎')}</span></div><div><span><b>#4–10</b> Limited + 80 💎</span></div><div><span><b>#11–50</b> 30 💎 + 🍬300</span></div></div>`)}
+   <div class="main">${L.length?`<table class="gt"><tr><th>#</th><th>${T('ผู้เล่น','Player')}</th><th>${T('ตี','Hits')}</th><th>${T('ดาเมจรวม','Damage')}</th></tr>${L.map((x,i)=>`<tr class="${x.id===me?'me':''}"><td>${i+1}</td><td>${esc(x.n||'?')}</td><td>${x.h||0}</td><td>${(+x.d||0).toLocaleString('en')}</td></tr>`).join('')}</table>`:`<p class="sub">${T('ยังไม่มีใครตีบอส','Nobody has hit the boss yet')}</p>`}</div></div>`)})}
 function wbRules(){ov(`<div class="cd dlg nt"><div class="wbdlg wide"><b class="wbdt">📜 ${T('กติกาบอสโลก','World boss rules')}</b><ul class="wbul">
   <li>${T('บอสตัวเดียวทั้งเซิร์ฟ เลือดใช้ร่วมกัน ทุกคนช่วยกันตัด · ปราบได้แล้วฟื้นเป็นเลเวลถัดไป เลือด ×1.5 (สูงสุด Lv.5)','One boss for the whole server with shared HP · when it falls it returns one level up with ×1.5 HP (up to Lv.5)')}</li>
   <li>${T('ปาร์ตี้ 2–4 คน คนละ 1 การ์ด · ห้องมีเลข 4 หลัก แชร์ให้เพื่อนได้ · รอเกิน 30 วินาที หัวห้องเติมบอทได้ (บอทไม่ได้ของ)','Parties of 2–4, one card each · every room has a 4-digit number to share · after 30 s the host may add a bot (bots earn nothing)')}</li>
@@ -3378,8 +3311,8 @@ function wbRules(){ov(`<div class="cd dlg nt"><div class="wbdlg wide"><b class="
   <li>${T('รางวัลทั้งเซิร์ฟ (เลือด 75/50/25% และตอนตาย) ส่งเข้ากล่องจดหมายทุกคนที่เคยตี · คนตีดาบสุดท้ายได้ฉายา PUMPKIN SLAYER · ปราบครบ 5 เลเวล ทุกคนได้กรอบรูปฮาโลวีน','Server rewards (75/50/25% and each kill) go to the mailbox of everyone who hit · the last hit earns the PUMPKIN SLAYER title · all 5 levels down: everyone gets the Halloween frame')}</li></ul>
   <button class="wbb main" data-wbc="no">${T('เข้าใจแล้ว','Got it')}</button></div></div>`)}
 function wbClick(a,t){
-  if(a==='wbhub'){wbLeave();wbHub();return 1}
-  if(a==='wbquit'){wbLeave();wbHub();return 1}
+  if(a==='wbhub'){ov('');wbLeave();wbHub();return 1}
+  if(a==='wbquit'){ov('');wbLeave();wbHub();return 1}
   if(a==='wbnew'){if(!wbTix())return toast(T('ตั๋ววันนี้หมดแล้ว','No tickets left today')),1;wbJoin(String(1000+Math.floor(Math.random()*9000)),true);return 1}
   if(a==='wbcode'){wbCodeAsk();return 1}
   if(a==='wbrand'){wbRandom();return 1}
@@ -3389,7 +3322,7 @@ function wbClick(a,t){
   if(a==='wbbot'){const m=wbMine(),b=m.bots||[],used=[...wbNodes().map(x=>x.c),...b.map(x=>x.c)],pool=Object.keys(C).filter(id=>!C[id].mon&&['SL','L'].includes(C[id].r)&&!used.includes(id)),c=pool[Math.floor(Math.random()*pool.length)],lv=Math.max(1,Math.round((S.cards[wbMe().c]||{lv:100}).lv*.85));
     wbWrite({bots:[...b,{c,lv,st:3,n:'BOT',l:c}].slice(0,3)});return 1}
   if(a==='wbgo'){const L=wbNodes();if(!wbAmHost()||L.length+((wbMine().bots||[]).length)<2||!L.every(x=>x.rd))return 1;wbWrite({go:Date.now()});if(wbp.solo){wbp.went=wbMine().go;wbBegin(wbMine())}return 1}
-  if(a==='wbagain'){if(!wbp){wbJoin('',true);return 1}wbp.res=null;wbp.t0=Date.now();wbWrite({rd:0,dd:null,go:0});wbRoom();return 1}
+  if(a==='wbagain'){ov('');if(!wbp){wbJoin('',true);return 1}wbp.res=null;wbp.t0=Date.now();wbWrite({rd:0,dd:null,go:0});wbRoom();return 1}
   if(a==='wbcopy'){const s=T(`มาตีบอสฟักทองกัน! ห้อง #${wbp.code} ขาดอีก ${4-wbNodes().length} คน 🎃`,`Pumpkin King raid! Room #${wbp.code}, ${4-wbNodes().length} seats left 🎃`);try{navigator.clipboard.writeText(s)}catch(e){}toast(T('คัดลอกแล้ว: ','Copied: ')+s);return 1}
   if(a==='wbinvopen'){const b=$('wbinvbox');if(b){b.hidden=false;wbInvList()}return 1}
   if(a==='wbinvclose'){const b=$('wbinvbox');if(b)b.hidden=true;return 1}
@@ -3791,7 +3724,7 @@ function titleScreen(){
    <p class="cfoot nt">PixelDeckBattle · CBT build ${BUILD}</p></div>`);
 }
 // ---------- Firebase: Google sign-in and one cloud save document per account (saves/{uid}) ----------
-const BUILD='b195';
+const BUILD='b196';
 // The game moved to its own address. Anyone opening the old address is sent on, but only once the new site answers, so a broken move cannot lock players out.
 const DISCORD='https://discord.gg/dHDzRyPG9',DC_SVG='<svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="currentColor" d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.4189-2.1568 2.4189Z"/></svg>';
 const NEW_HOME='https://pixeldeckbattle.github.io/';
