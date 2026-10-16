@@ -110,3 +110,9 @@ Live build: **b191** (15 Oct 2026 22:25: the invite-for-diamonds menu / FOUNDER 
 - `TESTH` holds hashed emails of beta testers (first: Toey's friend for boss tests). Testers pass `isDev()`: beta.html access, Dev VIP, free PvP/boss tickets, instant bots, tower/stage dev buttons.
 - `isOwn()` is the owner only: DEV back-office menu, VIP gifts, ADMIN diamond grants. Firestore rules still decide server-side.
 - To add a tester: hash the lowercase email with h32(e,2166136261)+h32(e,40389) and push it into `TESTH`.
+
+## b205 — boss fight fixes
+- Result dialog buttons (Back / Again) live in #ov, which never routed data-act → added an #ov listener that sends `wb*` acts to `wbClick`.
+- `SPOTWB(n)`: boss-fight formation, a diagonal line stepping toward the boss (back-right small → front-left big) so no plate covers another fighter.
+- Player names over each ally (`.pnm`, own name gold, bots "บอท 1..3").
+- `wbBar()`: boss HP bar top-right — name, Lv x/5, form (ร่าง 1 / ร่าง 2·คลั่ง below 50%), HP numbers, marks at 75 / 50 (ร่าง 2) / 25.
