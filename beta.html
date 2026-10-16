@@ -489,6 +489,14 @@ h2{color:#ffe45c;text-shadow:0 2px 0 #080b1f}
 .hud{display:flex;align-items:center;gap:8px}
 .pchip{display:flex;align-items:center;gap:8px;padding:2px 12px 2px 4px;border:3px solid #080b1f;background:linear-gradient(180deg,rgba(60,76,160,.92),rgba(30,38,96,.92));color:var(--ink);text-align:left;box-shadow:inset 0 2px 0 rgba(150,200,255,.35)}
 .pchip .spr{height:40px;margin:-2px 0}
+.pfa{position:relative;display:inline-block;width:var(--s);height:var(--s);flex:none}.pfa .pfp{position:absolute;left:25%;top:25%;width:50%;height:50%;border-radius:50%;background-size:230% auto;background-position:50% 18%;background-color:#141a3a}
+.pfa .pff{position:absolute;inset:0;background-size:1600% 100%;background-repeat:no-repeat;image-rendering:auto;animation:pfan 1s steps(16) infinite}
+@keyframes pfan{from{background-position-x:0%}to{background-position-x:106.6667%}}
+.pchip .pfa{margin:-8px -4px -8px -8px}.plv{font-style:normal;font-size:11px;color:#ffd23a}
+.plbox{background:rgba(10,13,36,.85);border:3px solid #f2c14e;padding:10px 12px;margin-bottom:14px}.plhead{display:flex;gap:12px;align-items:center}.plhead small{display:block;font-size:12px}
+.pllv{font-size:28px;color:#ffd23a}.plbar{height:12px;width:240px;max-width:100%;background:#0a0d24;border:2px solid #f2c14e;margin:4px 0}.plbar i{display:block;height:100%;background:linear-gradient(#ffe45c,#ff9a2e)}
+.pfgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(84px,1fr));gap:6px}.pfb{display:flex;flex-direction:column;align-items:center;padding:4px;border:2px solid #3a3f6a;background:#141a3a;color:var(--ink)}.pfb small{font-size:11px;text-align:center;line-height:1.2}
+.pfb.on{border-color:#ffd23a;box-shadow:0 0 10px #ffd23a}.pfb.lock{opacity:.45;filter:grayscale(.8)}
 .chb .spr{height:58px}.chb span{color:var(--gl,var(--ink))}.avsel .spr{height:74px}
 .row.avsel{display:grid;justify-items:center;gap:4px;padding:16px 0 6px;background:linear-gradient(180deg,#2c3884,#1d2560);border:3px solid #080b1f;box-shadow:inset 0 2px 0 rgba(150,200,255,.25)}.row.avsel b{font-family:var(--display);font-size:15px;color:var(--gl,var(--ink))}
 .pchip b{display:block;font-family:var(--display);font-size:15px;line-height:1.1;max-width:150px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.pchip small{font-size:11px;color:#ffe45c}
@@ -1005,12 +1013,46 @@ function pcard(){const me=pvGet(),r=rankOf(me.st),h=rankOf(me.hi||0),n=me.w+me.l
     <div class="stt"><span class="tr">🏆 <b>${me.w.toLocaleString('en')}</b> ${T('ถ้วยซีซั่นนี้','trophies this season')}</span>
       <b>${me.w} / ${me.l}</b><span>${T('ชนะ / แพ้','Wins / Losses')}</span><b>${n?Math.round(me.w/n*100):0}%</b><span>${T('อัตราชนะ','Win rate')}</span><b style="color:${h.t[1]}">${h.t[0]} ${DIVS[h.d]}</b><span>${T('แร้งค์สูงสุด','Best rank')}</span><b style="color:#d3a6ff">${(S.ac||0).toLocaleString('en')}</b><span>${T('เหรียญอารีน่า','Arena coins')}</span></div>
     <div class="ssn">PIXELDECK BATTLE · SEASON ${PV_SEASON.n} · ${PV_SEASON.name.toUpperCase()}</div></div>`}
+
+// ---------- b192 profile level (owner idea from GrienZa): Exp from every mode, capped per day; frames every 10 levels; own photo seen only by its owner ----------
+// S.pl={x: total exp, d: day key, dx: exp today, f: frame id, ph: own photo (jpeg data url, 128 px), lg: last login day}
+const PL_CAP=150,PL_MAX=60,PL_BUF=.001,PL_BUFMAX=.05;
+const PL_GAIN={stage:10,quest:6,pvpw:8,pvpl:3,tower:10,wb:5,login:5};
+const PF=[['01',1,'Wood & Iron','ไม้และเหล็ก'],['10',10,'Silver','เงิน'],['20',20,'Royal Gold','ทองราชา'],['30',30,'Frost Crystal','คริสตัลน้ำแข็ง'],['40',40,'Arcane','เวทสีม่วง'],['50',50,'Dragon Flame','มังกรเพลิง'],['hallow',0,'Halloween','ฮาโลวีน']];
+const plNeed=L=>60+L*20;   // exp to go from level L to L+1
+const plGet=()=>{S.pl=S.pl||{x:0};return S.pl};
+const plLvOf=x=>{let L=1;while(L<PL_MAX&&x>=plNeed(L)){x-=plNeed(L);L++}return{L,cur:x,need:L<PL_MAX?plNeed(L):0}};
+const plLv=()=>plLvOf(plGet().x).L;
+const plMul=()=>1+Math.min(PL_BUFMAX,(plLv()-1)*PL_BUF);
+const pfHave=id=>{const f=PF.find(x=>x[0]===id);if(!f)return false;if(id==='hallow')return !!(S.pfx&&S.pfx.hallow)||isDev();return plLv()>=f[1]||isDev()};
+const pfMine=()=>{const f=plGet().f;return f&&pfHave(f)?f:[...PF].filter(x=>x[1]&&pfHave(x[0])).pop()[0]};
+function plGain(k){const n=PL_GAIN[k]||0;if(!n||!S)return 0;const p=plGet(),d=today();if(p.d!==d){p.d=d;p.dx=0}const g=Math.max(0,Math.min(n,PL_CAP-(p.dx||0)));if(!g)return 0;
+  const was=plLv();p.x=(p.x||0)+g;p.dx=(p.dx||0)+g;const now=plLv();if(now>was)plUp(was,now);return g}
+function plUp(was,now){let gold=0,dia=0,fr=[];for(let L=was+1;L<=now;L++){gold+=L*500;if(L%5===0)dia+=10;const f=PF.find(x=>x[1]===L);if(f)fr.push(f)}
+  S.gold+=gold;lg('plv',gold);if(dia){S.dia=(S.dia||0)+dia;ld('plv',dia)}save();
+  setTimeout(()=>{try{sfx('win')}catch(e){}toast(T(`เลเวลโปรไฟล์ ${now}! +${gold.toLocaleString('en')} Gold${dia?` +${dia} 💎`:''}${fr.length?' · กรอบใหม่: '+fr.map(f=>f[3]).join(', '):''}`,`Profile level ${now}! +${gold.toLocaleString('en')} Gold${dia?` +${dia} 💎`:''}${fr.length?' · new frame: '+fr.map(f=>f[2]).join(', '):''}`))},600)}
+function plDaily(){const p=plGet(),d=today();if(p.lg===d)return;p.lg=d;plGain('login');save()}
+function plBuff(b){if(!b||b.pvp)return;const m=plMul();if(m<=1)return;b.al.forEach(f=>{f.atk=f.base=Math.round(f.atk*m);f.hp=f.max=Math.round(f.max*m);f.def=Math.round(f.def*m)})}
+// the framed avatar: own photo (only ever drawn for the owner) or the face of the card picked in the profile
+const plAv=(sz,own=true,look,frame)=>{const id=look||S.me.look,f=frame||pfMine(),ph=own&&plGet().ph;
+  return `<span class="pfa" style="--s:${sz}px"><i class="pfp" style="${ph?`background-image:url(${ph});background-size:cover;background-position:center`:`background-image:url(cards/${id}.webp)`}"></i><i class="pff" style="background-image:url(pf/${f}.webp)"></i></span>`};
+function plPhoto(file){if(!file||!/^image\//.test(file.type))return;const r=new FileReader();r.onload=()=>{const im=new Image();im.onload=()=>{const c=document.createElement('canvas');c.width=c.height=128;const x=c.getContext('2d'),m=Math.min(im.width,im.height);
+  x.drawImage(im,(im.width-m)/2,(im.height-m)/2,m,m,0,0,128,128);plGet().ph=c.toDataURL('image/jpeg',.82);save();charMake()};im.src=r.result};r.readAsDataURL(file)}
+const plBox=()=>{const p=plGet(),v=plLvOf(p.x||0),d=p.d===today()?p.dx||0:0;
+  return `<div class="plbox nt"><div class="plhead">${plAv(110)}<div><b class="pllv">Lv.${v.L}</b><small>${T('เลเวลโปรไฟล์','Profile level')}${v.L>=PL_MAX?' · MAX':''}</small>
+   <div class="plbar"><i style="width:${v.need?Math.round(v.cur/v.need*100):100}%"></i></div><small>${v.need?`${v.cur}/${v.need} Exp`:'MAX'} · ${T('วันนี้','today')} ${d}/${PL_CAP}</small>
+   <small style="color:#7dff8a">${T(`โบนัสพลังการ์ด +${((plMul()-1)*100).toFixed(1)}% (ไม่มีผลใน PvP)`,`Card power +${((plMul()-1)*100).toFixed(1)}% (not in PvP)`)}</small></div></div>
+   <div class="row" style="gap:6px;flex-wrap:wrap;margin:6px 0"><label class="btn sm">${T('📷 ใส่รูปจากเครื่อง','📷 Use my photo')}<input type="file" accept="image/*" id="plph" hidden></label>${p.ph?`<button class="btn alt sm" data-act="plphx">${T('ใช้หน้าการ์ดแทน','Use card face')}</button>`:''}</div>
+   <p class="sub">${T('รูปจากเครื่องเห็นแค่คุณคนเดียว ผู้เล่นอื่นเห็นหน้าการ์ดที่คุณเลือก','Your photo is only shown to you; other players see your chosen card')}</p>
+   <h4 style="margin:8px 0 4px">${T('กรอบรูป','Frames')}</h4><div class="pfgrid">${PF.map(([id,lv,en,th])=>{const ok=pfHave(id);return `<button class="pfb ${pfMine()===id?'on':''} ${ok?'':'lock'}" ${ok?`data-act="pfpick" data-f="${id}"`:'disabled'}>${plAv(64,true,null,id)}<small>${T(th,en)}<br>${ok?'':id==='hallow'?T('บอสโลก','World boss'):'Lv.'+lv}</small></button>`}).join('')}</div>
+   <p class="sub">${T(`ได้ Exp จาก: ผ่านด่านใหม่ +${PL_GAIN.stage} · ภารกิจ +${PL_GAIN.quest} · PvP ชนะ +${PL_GAIN.pvpw} แพ้ +${PL_GAIN.pvpl} · หอคอยทุก 10 ชั้น +${PL_GAIN.tower} · ตีบอสโลก +${PL_GAIN.wb} · ล็อกอินรายวัน +${PL_GAIN.login} · วันละไม่เกิน ${PL_CAP}`,`Exp from: new stage +${PL_GAIN.stage} · quest +${PL_GAIN.quest} · PvP win +${PL_GAIN.pvpw} / loss +${PL_GAIN.pvpl} · every 10 tower floors +${PL_GAIN.tower} · world boss hit +${PL_GAIN.wb} · daily login +${PL_GAIN.login} · up to ${PL_CAP} a day`)}</p></div>`};
+document.addEventListener('change',e=>{if(e.target&&e.target.id==='plph')plPhoto(e.target.files&&e.target.files[0])});
 function charMake(){ensureMe();
   view(`<div class="cols"><div class="rail"><div class="row"><button class="btn alt sm" data-act="dressdone">กลับ</button><h2>โปรไฟล์</h2></div>
     <div class="row avsel r-${C[S.me.look].r}">${hero(S.me.look)}<b class="nt">${C[S.me.look].n}</b></div>
     <label for="nm" class="sub">ชื่อ (ไม่เกิน 12 ตัวอักษร)</label><input id="nm" maxlength="12" value="${S.me.name.replace(/"/g,'')}">
     <button class="btn go sm" data-act="dressdone">บันทึก</button><p class="sub">เลือกได้เฉพาะตัวละครของการ์ดที่คุณมี ได้การ์ดใหม่ก็ได้ตัวละครเพิ่ม</p></div>
-    <div class="main">${pcard()}<div class="shbox nt"><h3>🛡 ${T('ตู้โล่','Shield cabinet')} (${(S.sh||[]).length})</h3><p class="sub">${T('โล่ Limited จากอันดับหอคอยและแร้งค์ PvP ประจำซีซั่น · แตะเพื่อเลือกใบที่โชว์ข้างชื่อ (แตะซ้ำเพื่อไม่โชว์) · ผูกบัญชี เทรดไม่ได้ ไม่ถูกล้างเมื่อจบ CBT','Limited shields from tower ranks and PvP seasons · tap one to show it beside your name (tap again to hide it) · account-bound, cannot be traded, not wiped when the CBT ends')}</p>
+    <div class="main">${plBox()}${pcard()}<div class="shbox nt"><h3>🛡 ${T('ตู้โล่','Shield cabinet')} (${(S.sh||[]).length})</h3><p class="sub">${T('โล่ Limited จากอันดับหอคอยและแร้งค์ PvP ประจำซีซั่น · แตะเพื่อเลือกใบที่โชว์ข้างชื่อ (แตะซ้ำเพื่อไม่โชว์) · ผูกบัญชี เทรดไม่ได้ ไม่ถูกล้างเมื่อจบ CBT','Limited shields from tower ranks and PvP seasons · tap one to show it beside your name (tap again to hide it) · account-bound, cannot be traded, not wiped when the CBT ends')}</p>
       <div class="shcols">${[['T','🗼 TOWER',T('ติดอันดับ 1–3 ของหอคอยประจำสัปดาห์','Finish in the weekly tower top 3')],['P','⚔️ PvP',T('ลงแข่ง PvP ให้จบซีซั่น ได้โล่ตามแร้งค์สูงสุด','Play PvP through a season for a shield of your best rank')]].map(([k,h,e])=>{const L=[...(S.sh||[])].reverse().filter(c=>shOk(c)&&c[0]===k);
         return `<div class="shcol ${k==='T'?'tw':'pv'}"><h4>${h} <i>${L.length}</i></h4>${L.length?`<div class="shgrid">${L.map(c=>`<button class="shb ${shMine()===c?'on':''}" data-act="shpick" data-c="${c}">${shBadge(c,56)}<small>${shName(c)}</small></button>`).join('')}</div>`:`<p class="sub" style="opacity:.8">${T('ยังไม่มีโล่','No shields yet')} · ${e}</p>`}</div>`}).join('')}</div></div><div class="chgrid">${byRank(Object.keys(S.cards).filter(id=>C[id])).map(id=>`<button class="chb r-${C[id].r} ${id===S.me.look?'on':''}" data-act="dress" data-i="${id}">${hero(id)}<span class="nt">${C[id].n}</span></button>`).join('')}</div></div></div>`)}
 // ---------- trade rooms: live presence on Firebase Realtime Database, rooms/{room}/{uid} = {n,l,tx,ty,gift?,ack?,dec?} ----------
@@ -1592,12 +1634,12 @@ function devGrant(){if(!isDev())return;let ch=0;
   if(!S.fd||!S.fdg){S.fd=1;S.fdg=1;ch=1}['T1.1','T2.1','T3.1','P5.1','P3.1'].forEach(c=>{if(!(S.sh||[]).includes(c)){shAdd(c);ch=1}});   // b166: the Dev account carries the FOUNDER title too
   if(ch)save()}
 function home(){if(BETA&&USER&&USER.sub&&!isDev()){location.replace('./');return}
-  bt=null;busy=false;if((S.era||1)<ERA){S=unlock(S);save();cloudFlush();return welcome()}ldInit(0);devGrant();ensureMe();grantFetch();mkPayCheck();dmRefundAll();giftTake();compTake();bcLate();if(S.f1100==='try')f1100Claim();twRoll();news189()||news182()||news180()||news176()||news174()||news167()||news165();vipDaily();if(!S.afk){S.afk=Date.now();save()}const own=Object.keys(S.cards).length,next=Math.min(MAXST,S.cleared+1);
+  bt=null;busy=false;if((S.era||1)<ERA){S=unlock(S);save();cloudFlush();return welcome()}ldInit(0);devGrant();ensureMe();grantFetch();mkPayCheck();dmRefundAll();giftTake();compTake();bcLate();if(S.f1100==='try')f1100Claim();twRoll();news189()||news182()||news180()||news176()||news174()||news167()||news165();vipDaily();plDaily();if(!S.afk){S.afk=Date.now();save()}const own=Object.keys(S.cards).length,next=Math.min(MAXST,S.cleared+1);
   const ico=(src,d=0)=>`<span class="ico" style="--m:url(${src});--d:${d}s"><img src="${src}" alt=""></span>`;
   const dk=(act,ic,c,t,sub,dis,d)=>`<button class="dk ${c}" ${dis?'disabled':`data-act="${act}"`}>${ico(ic,d)}<span>${t}<small>${sub}</small></span></button>`;
   view(`<div class="lobby" style="--bg:url(${mapImg(next)})"><div class="lbg"></div>
    <div class="hud">
-    <button class="pchip" data-act="profile">${hero(S.me.look)}<span><b class="nt">${S.me.name.replace(/</g,'&lt;')}${shBadge(shMine(),18)}</b><small class="nt">${isDev()?'<b style="color:#ff5a3c">DEV</b> · ':vipOn()&&!vipOwn()?`<b style="color:${VIPC[vipTier()]}">${vipName()}</b> · `:''}${C[S.me.look].n}</small></span></button>
+    <button class="pchip" data-act="profile">${plAv(46)}<span><b class="nt">${S.me.name.replace(/</g,'&lt;')} <i class="plv">Lv.${plLv()}</i>${shBadge(shMine(),18)}</b><small class="nt">${isDev()?'<b style="color:#ff5a3c">DEV</b> · ':vipOn()&&!vipOwn()?`<b style="color:${VIPC[vipTier()]}">${vipName()}</b> · `:''}${C[S.me.look].n}</small></span></button>
     ${isDev()?`<button class="pill nt devb" data-act="dev" title="Dev menu">🛠 DEV</button>`:''}
     <span class="hgap"></span>
     ${vipOwn()?`<button class="pill vipp nt" data-act="vip" style="--vc:${VIPC[vipOwn()]}" title="VIP ${VIPN[vipOwn()]}"><img src="ic2/vip${vipOwn()}.webp" alt=""><b>${VIPN[vipOwn()]}</b><small>${(m=>m>=864e5?T(Math.floor(m/864e5)+' วัน',Math.floor(m/864e5)+' d'):T(Math.max(1,Math.floor(m/36e5))+' ชม.',Math.max(1,Math.floor(m/36e5))+' h'))(S.vip-Date.now())}</small></button>`:''}
@@ -2064,7 +2106,7 @@ async function startBattle(n,opp){
     en:opp?opp.team.map(c=>fighter(c.id,c.lv,c)):(m=>stageDef(n).map(e=>{const hp=Math.max(1,Math.round(e.hp*m)),atk=Math.max(1,Math.round(e.atk*m));return{...e,atk,base:atk,hp,max:hp}}))(softMul(n))};
   if(!opp){bt.rule=ruleOf(n);bt.surv=stKind(n)==='surv'}
   if(opp)[...bt.al,...bt.en].forEach(f=>{f.hp=f.max=f.max*PV_HP}); // cards hit each other far harder than stage monsters do, so arena fights give everyone more life
-  c3Amu(bt);const my=bt;busy=true;draw();await vsIntro();if(bt!==my)return;
+  c3Amu(bt);plBuff(bt);const my=bt;busy=true;draw();await vsIntro();if(bt!==my)return;
   if(opp)for(const n of[3,2,1]){beep();ov(`<div class="bn cd"><span>${n}</span></div>`);await sleep(RM?600:1000);if(bt!==my)return}
   sfx('start');await banner('START');if(bt!==my)return;
   busy=false;my.log='เลือกสกิล แล้วแตะศัตรู';draw();if(S.auto)autoAct();
@@ -2353,7 +2395,7 @@ async function finish(won){
       return `<div class="mini r-${C[id].r} glow ${fr(id)}">${fxh(id)}${rib(id)}<div class="art"><img src="${artSrc(id)}" alt=""></div></div><div><b>${C[id].n}</b> ${wasMax?'<span class="gold">Lv MAX</span>':'Exp +'+x} ${up?`<span class="gold">Lv ${was} → ${c.lv}</span>`:`· Lv ${c.lv}`}<div class="hp xp"><i style="width:${maxed(id)?100:c.exp/need(c.lv)*100}%"></i></div></div>`}).join('');
     if(sw){S.cs=S.cs||{};if(sw>(S.cs[n]||0)){swNew=sw-(S.cs[n]||0);S.cs[n]=sw}rsg=(n>S.cleared&&stKind(n)==='lord'?RS_LORD:0)+(Math.random()<dropP(n,RS_DROP,RS_BOSS,first)/vipP().dr*(vipPaid()?VIP_RS:1)?1:0);if(rsg)S.rs=(S.rs||0)+rsg}
     if(n>S.cleared&&stKind(n)==='lord'){S.dia=(S.dia||0)+LORD_DIA;ld('lord',LORD_DIA);fx.push(['view','+'+LORD_DIA+' 💎','g'])}
-    if(n>S.cleared)S.cleared=n;if(S.ls)delete S.ls;if(n===1100&&first)setTimeout(f1100Claim,1800);bcs=bcTake();save();if(loop)fsAdd(true,g+bb+eb,drop,cdrop&&cdrop.id,ups)}
+    if(n>S.cleared){plGain('stage');S.cleared=n}if(S.ls)delete S.ls;if(n===1100&&first)setTimeout(f1100Claim,1800);bcs=bcTake();save();if(loop)fsAdd(true,g+bb+eb,drop,cdrop&&cdrop.id,ups)}
   else if(loop)fsAdd(false)
   else if(first){S.ls={n,k:lossK(n)+1};save()}
   const next=Math.min(MAXST,n+1);
@@ -2569,6 +2611,8 @@ $('view').onclick=ev=>{{const w=ev.target.closest('.dk,.ibtn,.pill,.row2 .btn');
   else if(a==='roomgo'){roomNo=+t.dataset.i;room=null;enterRoom()}
   else if(a==='charedit'||a==='profile'){dressBack=a==='profile'?'home':'room';charMake()}
   else if(a==='dress'){S.me.name=($('nm').value.trim()||'ผู้เล่น').slice(0,12);S.me.look=t.dataset.i;save();const m=document.querySelector('.main'),y=m.scrollTop;charMake();document.querySelector('.main').scrollTop=y}
+  else if(a==='pfpick'){plGet().f=t.dataset.f;save();charMake()}
+  else if(a==='plphx'){delete plGet().ph;save();charMake()}
   else if(a==='dressdone'){S.me.name=($('nm').value.trim()||'ผู้เล่น').slice(0,12);save();room=null;dressBack==='room'?enterRoom():home()}
   else if(a==='tnpc'){if(room&&room.menu==null){room.target=t.dataset.u}}
   else if(a==='tclose'){room.menu=null;$('tui').innerHTML=''}
@@ -2621,7 +2665,7 @@ $('view').onclick=ev=>{{const w=ev.target.closest('.dk,.ibtn,.pill,.row2 .btn');
   else if(a==='shoparr')shopPick(shopSel+ +t.dataset.d,1);
   else if(a==='quests')quests()
   else if(a==='afk'){const g=afkGold(),ms=S.afk?Date.now()-S.afk:0;if(g>0){S.gold+=g;lg('afk',g);const got=afkDrops(ms);S.afk=Date.now();qAdd('afk');save();cloudFlush();sfx('win');fx.push(['view','+'+g.toLocaleString('en')+' Gold','g']);document.querySelector('.lobby')?home():quests();afkShow(g,got);return}document.querySelector('.lobby')?home():quests()}
-  else if(a==='qget'){const q=qDay(),k=t.dataset.k,d=QUESTS.find(x=>x[0]===k);if(d&&(q.n[k]||0)>=d[2]&&!q.got[k]){q.got[k]=1;S.gold+=d[3];lg('quest',d[3]);if(d[4])S.rs=(S.rs||0)+d[4];save();sfx('win');fx.push(['view','+'+d[3]+' Gold'+(d[4]?' · 💠+'+d[4]:''),'g'])}quests()}
+  else if(a==='qget'){const q=qDay(),k=t.dataset.k,d=QUESTS.find(x=>x[0]===k);if(d&&(q.n[k]||0)>=d[2]&&!q.got[k]){q.got[k]=1;plGain('quest');S.gold+=d[3];lg('quest',d[3]);if(d[4])S.rs=(S.rs||0)+d[4];save();sfx('win');fx.push(['view','+'+d[3]+' Gold'+(d[4]?' · 💠+'+d[4]:''),'g'])}quests()}
   else if(a==='exg'){exN=EX_DIA;exRaw=String(EX_DIA);exDone=0;exchange()}
   else if(a==='kp')kpKey(t.dataset.c,t.dataset.k);
   else if(a==='exmax'){exRaw=String(exMax());exDone=0;exchange()}
@@ -2964,7 +3008,7 @@ function pvPick(){const o=pv.opp[pv.sel],me=pvGet(),tm=pvTeam(),can=isDev()||me.
     <button class="btn go" data-act="pvstart" ${tm.length&&can?'':'disabled'}>${T('เริ่ม','Start')} (${tm.length}/3)</button></div>
    <div class="main"><p class="sub nt" style="margin-bottom:14px">${T('แตะการ์ดเพื่อเลือกเข้าทีม สูงสุด 3 ใบ','Tap cards to add them, up to 3')}</p><div class="grid big">
     ${byRank(Object.keys(C).filter(id=>S.cards[id])).map(id=>{const k=tm.indexOf(id);return `<div>${full(id,`data-act="pvpick" data-id="${id}" aria-pressed="${k>=0}"`,'glow'+(k>=0?' sel':'')).replace('</button>',(k>=0?`<span class="ord">${k+1}</span>`:'')+'</button>')}<p class="sub cap nt">Lv ${S.cards[id].lv}</p></div>`}).join('')}</div></div></div>`)}
-function pvpResult(won,opp){const me=pvGet(),was=me.st,[g,c]=pvPay(won,was),r0=rankOf(was);me.st=Math.max(0,Math.min(ST_MAX,me.st+(won?1:-1)));me.hi=Math.max(me.hi||0,me.st);won?me.w++:me.l++;me.ws=won?(me.ws||0)+1:0;me.bs=Math.max(me.bs||0,me.ws);S.gold+=g;lg('pvp',g);S.ac=(S.ac||0)+c;save();pvpPush();
+function pvpResult(won,opp){plGain(won?'pvpw':'pvpl');const me=pvGet(),was=me.st,[g,c]=pvPay(won,was),r0=rankOf(was);me.st=Math.max(0,Math.min(ST_MAX,me.st+(won?1:-1)));me.hi=Math.max(me.hi||0,me.st);won?me.w++:me.l++;me.ws=won?(me.ws||0)+1:0;me.bs=Math.max(me.bs||0,me.ws);S.gold+=g;lg('pvp',g);S.ac=(S.ac||0)+c;save();pvpPush();
   const r1=rankOf(me.st),up=r1.i*4+r1.d>r0.i*4+r0.d,dn=r1.i*4+r1.d<r0.i*4+r0.d;
   view(`<div class="cols arenav"><div class="rail nt"><h1>${won?T('ชนะ!','Victory!'):T('แพ้','Defeat')}</h1><p class="num">PvP · vs ${esc(opp.name)}</p>
     <div style="justify-self:center">${shield(me.st,'md')}</div><p class="num" style="font-size:18px">${tierTag(me.st)} <b style="color:${me.st>was?'#6cf586':'#ff8492'}">${me.st>was?'★+1':me.st<was?'★−1':''}</b></p>
@@ -3110,7 +3154,7 @@ function tower(){bt=null;busy=false;twTok++;loop=0;const t=twGet(),w=t.w,next=t.
    </div><div class="main"><div class="clsbar">${tabs.map(([k,n])=>`<button class="clsb ${twTab===k?'on':''}" data-act="twtab" data-t="${k}">${n}</button>`).join('')}</div>${main}</div></div>`)}
 
 /* a tower fight and the run between floors */
-async function startTower(f,cont){const t=twGet();bt={n:twEq(f),tw:f,w:t.w,round:1,sel:0,log:'',pvp:null,farm:false,first:true,in:1,al:S.team.map(id=>fighter(id,S.cards[id].lv)),en:twDef(f)};c3Amu(bt);
+async function startTower(f,cont){const t=twGet();bt={n:twEq(f),tw:f,w:t.w,round:1,sel:0,log:'',pvp:null,farm:false,first:true,in:1,al:S.team.map(id=>fighter(id,S.cards[id].lv)),en:twDef(f)};c3Amu(bt);plBuff(bt);
   const my=bt,boss=f%10===0;busy=true;draw();my.in=0;if(boss){sfx('ult');ov(`<div class="bn lose twbn"><span>⚠ BOSS</span></div>`);await W(RM?500:900);ov('');if(bt!==my)return}
   if(!cont){sfx('start');await banner(T('ชั้น ','FLOOR ')+f);if(bt!==my)return}else{await W(RM?150:380);if(bt!==my)return}
   const bs=my.en.find(e=>e.boss&&e.gim);busy=false;my.log=bs?gimT(bs.id).replace(/<[^>]+>/g,''):T('เลือกสกิล แล้วแตะศัตรู','Pick a skill, then tap an enemy');draw();if(S.auto)autoAct()}
@@ -3125,7 +3169,7 @@ async function twFinish(won){const my=bt,f=my.tw,team=my.al.map(a=>a.id);busy=tr
   if(Math.random()<dp(CDROP,CDROP_BOSS)){const c=giveCard(randOf(cardDropRank(s)),'tower');got.push(['c',c.id,c.dup?1:0])}
   let ups=0;team.forEach(id=>{if(S.cards[id])ups+=addExp(id,Math.round(x0*(amOf(id)&&amOf(id).xp||1)))});
   if(TW_MS[f])itGive(TW_MS[f],'twms').forEach(o=>got.push(o));
-  t.f=f;t.at=Date.now();if(twRun){twRun.g+=g+bb;twRun.x+=x0;twRun.n++;got.forEach(o=>{if(o[0]!=='g')twRun.got.push(o)})}save();twPush(f%10===0);if(f%10===0)cloudFlush();
+  if(f>(t.f||0)&&f%10===0)plGain('tower');t.f=f;t.at=Date.now();if(twRun){twRun.g+=g+bb;twRun.x+=x0;twRun.n++;got.forEach(o=>{if(o[0]!=='g')twRun.got.push(o)})}save();twPush(f%10===0);if(f%10===0)cloudFlush();
   bt=null;busy=false;return twAdvance(f,{g,bb,x0,ups,got,team})}
 // the run: the cleared floor's picture scrolls past (picture, its mirror, picture again, so the joins never show) while the team walks; a new zone comes in through a white flash
 async function twAdvance(f,info){const tok=++twTok,nf=f+1,zc=twZone(f)!==twZone(nf),z=TWZ[twZone(nf)],boss=nf%10===0,src=TWZ[twZone(f)].bg,al=info.team.filter(id=>S.cards[id]).map(id=>({...fighter(id,S.cards[id].lv),walk:1})),long=info.got.length>0,ms=(long?2300:1500);
@@ -3415,7 +3459,7 @@ function titleScreen(){
    <p class="cfoot nt">PixelDeckBattle · CBT build ${BUILD}</p></div>`);
 }
 // ---------- Firebase: Google sign-in and one cloud save document per account (saves/{uid}) ----------
-const BUILD='b192';
+const BUILD='b193';
 // The game moved to its own address. Anyone opening the old address is sent on, but only once the new site answers, so a broken move cannot lock players out.
 const DISCORD='https://discord.gg/dHDzRyPG9',DC_SVG='<svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="currentColor" d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.4189-2.1568 2.4189Z"/></svg>';
 const NEW_HOME='https://pixeldeckbattle.github.io/';
