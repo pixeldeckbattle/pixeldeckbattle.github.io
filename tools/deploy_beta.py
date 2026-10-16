@@ -6,4 +6,4 @@ cfg=open('FB_CFG.json').read().strip()
 assert "const FB_CFG=null;" in s and 'const BETA=' in s
 w=s.replace("const FB_CFG=null;","const FB_CFG=%s;"%cfg)
 open('/home/claude/pixeldeck/beta.html','w',encoding='utf8').write(head+w+'\n</body>\n</html>\n')
-print('beta',re.search(r"const BUILD='(b\d+)'",s).group(1))
+b=re.search(r"const BUILD='(b\d+)'",s).group(1);open('/home/claude/pixeldeck/beta.json','w').write('{"b":"%s"}'%b);print('beta',b)
