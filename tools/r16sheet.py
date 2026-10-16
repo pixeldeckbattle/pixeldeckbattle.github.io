@@ -10,7 +10,7 @@ from scipy import ndimage as nd
 P='/home/claude/r16/';U=P+'tools/r16_in/'
 src=open(P+'tools/monsheet2.py').read().split("TINT={")[0];ns={};exec(src,ns);key=ns['key']
 CW,CH,BASE=252,204,196
-CARDS={'h29':('SL',158),'h30':('SL',176),'h31':('SL',160),'h27':('SL',170),'h03':('SL',166),'h22':('SL',160),'h07':('SL',160),'h18':('LT',178)}
+CARDS={'h29':('SL',158),'h30':('SL',176),'h31':('SL',160),'h27':('SL',170),'h03':('SL',166),'h22':('SL',160),'h07':('SL',160),'h18':('LT',178),'h28':('LT',150),'h15':('L',162),'h13':('L',164),'h14':('L',150)}
 FIX={'h30':{'idle':{1:0,3:4}}}   # 0-based frames to replace with another frame (glitched faces)
 def depink(rgba):
     a=rgba.astype(int);r,g,b=a[...,0],a[...,1],a[...,2]
@@ -22,8 +22,16 @@ def cuts(prof,n,L):
     for k in range(1,n):
         c=round(k*L/n);w=round(L/n*.18);lo,hi=c-w,c+w;out.append(lo+int(np.argmin(sm[lo:hi])))
     out.append(L);return out
+COOL={'h28','h15'}   # ice characters: lilac mist / swirls that picked up the magenta background become icy blue
+def cool(rgba):
+    a=rgba.astype(int);r,g,b=a[...,0],a[...,1],a[...,2]
+    m=(r>g+8)&(b>g+25)&(r+g+b>300)
+    g2=np.minimum(255,g+35);a[...,0]=np.where(m,(g*.65).astype(int),r);a[...,1]=np.where(m,g2,g);a[...,2]=np.where(m,np.maximum(b,np.minimum(255,g2+30)),b)   # -> cyan ice
+    return a.astype('uint8')
+CUR=['']
 def frames(path,mirror):
-    rgba=depink(key(Image.open(path)));al=rgba[...,3]>40;H,W=al.shape
+    rgba=depink(key(Image.open(path)))
+    if CUR[0] in COOL:rgba=cool(rgba);al=rgba[...,3]>40;H,W=al.shape
     rc=cuts(al.sum(1),4,H);out=[]
     for r in range(4):
         band=al[rc[r]:rc[r+1]];cc=cuts(band.sum(0),4,W)
@@ -48,7 +56,7 @@ def bbox(c):
 def torso(c):
     x0,x1,y0,y1=bbox(c);m=c[y0:y0+int((y1-y0)*.6),:,3]>40;return np.where(m)[1].mean()
 def build(id,th):
-    D=U+id+'/';rows=[frames(D+'idle.png',True),frames(D+'walk.png',True),frames(D+'attack.png',True),frames(D+'front.png',False)]
+    CUR[0]=id;D=U+id+'/';rows=[frames(D+'idle.png',True),frames(D+'walk.png',True),frames(D+'attack.png',True),frames(D+'front.png',False)]
     for nm,mp in FIX.get(id,{}).items():
         i={'idle':0,'walk':1,'attack':2,'front':3}[nm]
         for a,b in mp.items():rows[i][a]=rows[i][b]
