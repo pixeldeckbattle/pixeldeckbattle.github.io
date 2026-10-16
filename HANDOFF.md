@@ -105,3 +105,8 @@ Live build: **b191** (15 Oct 2026 22:25: the invite-for-diamonds menu / FOUNDER 
 - b199 (beta): text centred in every frame: buttons/tabs as centred flex, dock tile drawn as a 9-slice (70 60 130) so the name plate keeps its height and the label sits inside it, PvP menu buttons left-aligned consistently.
 - b200 (beta): lobby logo restyled (gold PixelDeck + ember BATTLE, card fan, ornaments; .logo2); lobby team sprites removed (the .squad only renders during the tutorial, which points at it).
 - b201 (beta): lobby logo = GPT 16-frame sheet (tools/logocut.py -> ui2/logo16.webp) at 16 fps with a soft float (.logo3).
+
+## b204 — beta tester
+- `TESTH` holds hashed emails of beta testers (first: Toey's friend for boss tests). Testers pass `isDev()`: beta.html access, Dev VIP, free PvP/boss tickets, instant bots, tower/stage dev buttons.
+- `isOwn()` is the owner only: DEV back-office menu, VIP gifts, ADMIN diamond grants. Firestore rules still decide server-side.
+- To add a tester: hash the lowercase email with h32(e,2166136261)+h32(e,40389) and push it into `TESTH`.
