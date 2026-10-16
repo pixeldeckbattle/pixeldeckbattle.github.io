@@ -54,10 +54,14 @@ def build(id,th):
         for a,b in mp.items():rows[i][a]=rows[i][b]
     def scale(fr):
         bb=[bbox(c) for _,c in fr];return min(th/np.median([b[3]-b[2] for b in bb]),236/np.median([b[1]-b[0] for b in bb]))
-    side=scale(rows[1]);fsc=scale(rows[3])
+    # each sheet gets its own scale so the body ends up the same height whatever size GPT drew it at:
+    # idle / walk / front by their own median size, the attack by its last 4 frames (back in the ready stance)
+    def scale4(fr):
+        bb=[bbox(c) for _,c in fr[12:]];return min(th/np.median([b[3]-b[2] for b in bb]),236/np.median([b[1]-b[0] for b in bb]))
+    SC=[scale(rows[0]),scale(rows[1]),scale4(rows[2]),scale(rows[3])];side=SC[1];fsc=SC[3]
     out=Image.new('RGBA',(CW*16,CH*4),(0,0,0,0));clip=0
     for R,fr in enumerate(rows):
-        s=fsc if R==3 else side
+        s=SC[R]
         # vertical: one offset per GPT row band (its median feet on the floor line), since GPT rows are not evenly placed.
         # horizontal: frame 1 centred on its torso; every later frame slid (within +-40px) to overlap the frame before it best,
         # on the whole body for idle / walk / front and on the feet only for the attack (so a lunge still reaches forward).
@@ -81,6 +85,10 @@ def build(id,th):
         if R!=2:   # keep the loop centred: remove the average drift
             m=round(np.mean([o+torso(c)*s for (o2,(_,o,_)),(g,c) in zip(enumerate(ims),fr) for o2 in [0]])-CW/2)
             ims=[(im,o-m,y) for im,o,y in ims] if abs(m)>2 else ims
+        # a long body (tail one side, heads the other) can hang out of the cell when centred on the torso: slide the row back in
+        L=min(o+bbox(c)[0]*s for (_,o,_),(g,c) in zip(ims,fr));Rr=max(o+(bbox(c)[1]+1)*s for (_,o,_),(g,c) in zip(ims,fr))
+        if R!=2 and (L<2 or Rr>CW-2):
+            sh=round(CW/2-(L+Rr)/2) if Rr-L<CW-4 else round(2-L);ims=[(im,o+sh,y) for im,o,y in ims]
         for k,(im,ox,oy) in enumerate(ims):
             clip=max(clip,-ox,ox+im.width-CW,-oy);t=Image.new('RGBA',(CW,CH),(0,0,0,0));t.paste(im,(ox,oy),im);out.paste(t,(k*CW,R*CH))
     out.save(P+f'spr/{id}.webp',quality=86,method=6);print(id,'scale %.2f front %.2f clipped %dpx'%(side,fsc,max(0,clip)),os.path.getsize(P+f'spr/{id}.webp')//1024,'KB')
