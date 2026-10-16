@@ -10,7 +10,7 @@ from scipy import ndimage as nd
 P='/home/claude/r16/';U=P+'tools/r16_in/'
 src=open(P+'tools/monsheet2.py').read().split("TINT={")[0];ns={};exec(src,ns);key=ns['key']
 CW,CH,BASE=252,204,196
-CARDS={'h29':('SL',158),'h30':('SL',176),'h31':('SL',160),'h27':('SL',170),'h03':('SL',166),'h22':('SL',160),'h07':('SL',160),'h18':('LT',178),'h28':('LT',150),'h15':('L',162),'h13':('L',164),'h14':('L',150)}
+CARDS={'h29':('SL',158),'h30':('SL',176),'h31':('SL',160),'h27':('SL',170),'h03':('SL',166),'h22':('SL',160),'h07':('SL',160),'h18':('LT',178),'h28':('LT',150),'h15':('L',162),'h13':('L',164),'h14':('L',150),'h19':('L',150),'h04':('L',162),'h26':('L',168),'h34':('L',170)}
 FIX={'h30':{'idle':{1:0,3:4}}}   # 0-based frames to replace with another frame (glitched faces)
 def depink(rgba):
     a=rgba.astype(int);r,g,b=a[...,0],a[...,1],a[...,2]
@@ -22,7 +22,13 @@ def cuts(prof,n,L):
     for k in range(1,n):
         c=round(k*L/n);w=round(L/n*.18);lo,hi=c-w,c+w;out.append(lo+int(np.argmin(sm[lo:hi])))
     out.append(L);return out
-COOL={'h28','h15'}   # ice characters: lilac mist / swirls that picked up the magenta background become icy blue
+COOL={'h28','h15','h04'}
+GREY={'h26'}   # smoke that picked up the magenta background becomes ash grey
+def grey(rgba):
+    a=rgba.astype(int);r,g,b=a[...,0],a[...,1],a[...,2]
+    m=(b>g+12)&(r>g+5)&(b>=r-30)
+    v=((r+g+b)//3*.85).astype(int);a[...,0]=np.where(m,v,r);a[...,1]=np.where(m,v,g);a[...,2]=np.where(m,v+6,b)
+    return a.astype('uint8')   # ice characters: lilac mist / swirls that picked up the magenta background become icy blue
 def cool(rgba):
     a=rgba.astype(int);r,g,b=a[...,0],a[...,1],a[...,2]
     m=(r>g+8)&(b>g+25)&(r+g+b>300)
@@ -31,7 +37,9 @@ def cool(rgba):
 CUR=['']
 def frames(path,mirror):
     rgba=depink(key(Image.open(path)))
-    if CUR[0] in COOL:rgba=cool(rgba);al=rgba[...,3]>40;H,W=al.shape
+    if CUR[0] in COOL:rgba=cool(rgba)
+    if CUR[0] in GREY:rgba=grey(rgba)
+    al=rgba[...,3]>40;H,W=al.shape
     rc=cuts(al.sum(1),4,H);out=[]
     for r in range(4):
         band=al[rc[r]:rc[r+1]];cc=cuts(band.sum(0),4,W)
