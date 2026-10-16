@@ -1774,7 +1774,7 @@ function devGrant(){if(!isDev())return;let ch=0;
   if((S.rs||0)<9999){S.rs=9999;ch=1}if((S.ss||0)<999){S.ss=999;ch=1}
   if(!S.fd||!S.fdg){S.fd=1;S.fdg=1;ch=1}['T1.1','T2.1','T3.1','P5.1','P3.1'].forEach(c=>{if(!(S.sh||[]).includes(c)){shAdd(c);ch=1}});   // b166: the Dev account carries the FOUNDER title too
   if(ch)save()}
-function home(){if(BETA&&USER&&USER.sub&&!isDev()){location.replace('./');return}
+function home(){wbSpdBack();if(BETA&&USER&&USER.sub&&!isDev()){location.replace('./');return}
   bt=null;busy=false;if((S.era||1)<ERA){S=unlock(S);save();cloudFlush();return welcome()}ldInit(0);devGrant();ensureMe();grantFetch();mkPayCheck();dmRefundAll();giftTake();compTake();bcLate();if(S.f1100==='try')f1100Claim();twRoll();news189()||news182()||news180()||news176()||news174()||news167()||news165();vipDaily();plDaily();if(mkOn())wbInbox();if(wbPopQ){const q=wbPopQ;wbPopQ=null;setTimeout(()=>wbPop(q),800)}if(!S.afk){S.afk=Date.now();save()}const own=Object.keys(S.cards).length,next=Math.min(MAXST,S.cleared+1);
   const ico=(src,d=0)=>`<span class="ico" style="--m:url(${src});--d:${d}s"><img src="${src}" alt=""></span>`;
   const dk=(act,ic,c,t,sub,dis,d)=>`<button class="dk ${c}" ${dis?'disabled':`data-act="${act}"`}>${ico(ic,d)}<span>${t}<small>${sub}</small></span></button>`;
@@ -2350,7 +2350,7 @@ function draw(){
   const ac=busy?null:actor(),ord=[...bt.al.filter(a=>a.hp>0&&!a.done).map(a=>[a,'al']),...bt.en.filter(e=>e.hp>0).map(e=>[e,'en'])];
   view(`<div class="arena px ${bt.tw&&bt.in?'twin':''} ${bt.wb?'wbar':''}">${bt.tw?twBg(bt.tw):bt.wb?`<div class="wbbg" style="background-image:url(wb/${bt.wbRage?'map2':'map1'}.webp)"></div>`:bgLayers(bt.n)}
     <div class="atop"><span class="num">${bt.wb?`<span class="nt">🎃 ${WB.n} Lv.${bt.wbL}${bt.wbRage?' · <b class="rlb">'+T('คลั่ง','RAGE')+'</b>':''} · ${T('ดาเมจปาร์ตี้','Party dmg')} ${bt.wbd.reduce((a,b)=>a+b,0).toLocaleString('en')} · ${T('รอบ','Round')} ${bt.round}/${WB_R}</span>`:bt.pvp?`<span class="nt">PvP · vs ${esc(bt.pvp.name)}${bt.pvp.fd?' '+fdBadge(78):''}</span>`:bt.tw?`<span class="nt">TOWER · ${T('ชั้น','Floor')} ${bt.tw} · ${T(TWZ[twZone(bt.tw)].th,TWZ[twZone(bt.tw)].n)}</span>`:`ด่าน ${bt.n} · ${mapName(bt.n)}${ruleOf(bt.n)?` · <b class="rlb">${ruleTxt(ruleOf(bt.n))}</b>`:''}${bt.surv?` · <b class="rlb">⏳ ${Math.max(0,6-bt.round)}</b>`:''}`}${bt.wb?'':' · รอบ '+bt.round}</span><span class="alog" aria-live="polite">${bt.log}</span>
-      <span class="row"><button class="btn sm ${S.auto?'on':'alt'}" data-act="auto">ออโต้</button><button class="btn alt sm" data-act="spd">x${S.spd||1}</button>${!bt.pvp&&loop&&fs?`<button class="btn alt sm nt fsch" data-act="fsview" title="${T('ฟาร์มรอบนี้ได้อะไรบ้าง','This farm run so far')}">💰 ${S.gold.toLocaleString('en')} <i>+${fs.g.toLocaleString('en')}</i> 📊</button>`:''}${!bt.pvp&&loop?`<button class="btn on sm nt" data-act="lpstop">${loop===2?'🔁':'⏩'} ${T('หยุดวน','Stop loop')}</button>${lprBtn()}`:''}<button class="btn red sm" data-act="prep">ถอย</button></span></div>
+      <span class="row"><button class="btn sm ${S.auto?'on':'alt'}" data-act="auto">ออโต้</button>${bt.wbLock?`<span class="btn alt sm" style="pointer-events:none;opacity:.7" title="${T('ตีกับเพื่อน ความเร็วคงที่','Party fight: fixed speed')}">x2 🔒</span>`:`<button class="btn alt sm" data-act="spd">x${S.spd||1}</button>`}${!bt.pvp&&loop&&fs?`<button class="btn alt sm nt fsch" data-act="fsview" title="${T('ฟาร์มรอบนี้ได้อะไรบ้าง','This farm run so far')}">💰 ${S.gold.toLocaleString('en')} <i>+${fs.g.toLocaleString('en')}</i> 📊</button>`:''}${!bt.pvp&&loop?`<button class="btn on sm nt" data-act="lpstop">${loop===2?'🔁':'⏩'} ${T('หยุดวน','Stop loop')}</button>${lprBtn()}`:''}<button class="btn red sm" data-act="prep">ถอย</button></span></div>
     <div class="field">
       <div class="order">${ord.map(([u,sd],i)=>`<span class="op ${sd} ${i?'':'now'}">${art(u.id)}</span>`).join('')}</div>
       ${bt.al.map((a,i)=>unit(a,'a'+i,a===ac?'act':'','disabled',(bt.wb?SPOTWB:spots)(bt.al.length)[i],0)).join('')}
@@ -3325,7 +3325,7 @@ const wbIc=(k,h=28)=>`<img class="wbic" src="${{cdy:'wb/candy.webp',sl:'wb/soul.
 const wbCur=()=>`<div class="wbcur nt"><span>${wbIc('cdy',20)}${(S.cdy||0).toLocaleString('en')}</span><span>${wbIc('sl',20)}${S.sl||0}</span><span>${wbIc('dia',20)}${(S.dia||0).toLocaleString('en')}</span></div>`;
 const wbTop=(t,back)=>`<header class="wbh"><button class="wbrd" data-act="${back}" aria-label="${T('กลับ','Back')}"><img src="ui2/round-2.webp" alt=""></button><div class="wbrib nt"><span>${t}</span></div><span class="wbleft nt">${wbOpen()?wbLeft():''}</span>${wbCur()}</header>`;
 const wbPage=(cls,head,body)=>`<div class="wbv nt ${cls}"><div class="wbbg"></div>${head}<div class="wbbody">${body}</div></div>`;
-function wbHub(){if(!wbOpen()&&!wbShopOpen())return home();wbS();wbInbox();const draw=()=>{const s=wbAt(wbSrv.dmg),w=wbS(),rage=wbRage(s),r=wbMyRank(),can=wbOpen()&&!s.done;
+function wbHub(){wbSpdBack();if(!wbOpen()&&!wbShopOpen())return home();wbS();wbInbox();const draw=()=>{const s=wbAt(wbSrv.dmg),w=wbS(),rage=wbRage(s),r=wbMyRank(),can=wbOpen()&&!s.done;
   view(wbPage('hub'+(rage?' rage':''),wbTop('🎃 '+T('บอสโลก','World Boss'),'home'),`
    <section class="wbshow"><div class="wbname"><b>${WB.n}</b><i>Lv.${s.L}</i></div><div class="wbstage"><span class="spr f16"><i><img src="spr/${rage?'wb1r':'wb1'}.webp" alt=""></i></span></div>
     <p class="wbtip">${rage?`<b>${T('คลั่ง!','RAGE!')}</b> ${T('ตีแรงขึ้น · ลูกอม ×1.5','harder hits · candy ×1.5')}`:T('แพ้เวท · พาแท้งค์ไปรับคำสาป','Weak to magic · bring a tank')}</p></section>
@@ -3359,6 +3359,7 @@ const WB_BOSS=()=>{const L=stageDef(1500).find(e=>e.lord)||stageDef(1500)[0];ret
 function wbBar(){const e=bt.en[0],p=Math.max(0,e.hp/e.max),f2=p<.5;
   return `<div class="wbbar nt"><div class="wbbt"><b>${WB.n}</b><span>Lv.${bt.wbL}/${WB_LV}</span><i class="${f2?'f2':''}">${f2?T('ร่าง 2 · คลั่ง','Form 2 · Rage'):T('ร่าง 1','Form 1')}</i><em>${Math.max(0,e.hp).toLocaleString('en')} / ${e.max.toLocaleString('en')}</em></div>
    <div class="wbbh"><i style="width:${p*100}%"></i>${[75,50,25].map(m=>`<s class="${m===50?'fm':''}" style="left:${m}%"><u>${m===50?T('ร่าง 2','Form 2'):m+'%'}</u></s>`).join('')}</div></div>`}
+var wbSpd0=0;function wbSpdBack(){if(wbSpd0){S.spd=wbSpd0;wbSpd0=0}}
 async function wbBegin(h){if(!wbp||bt)return;const w=wbS();if(!wbTix()){toast(T('ตั๋วหมดแล้ววันนี้','No tickets left today'));return}
   await wbFetch(true);const s=wbAt(wbSrv.dmg);if(s.done){toast(T('บอสถูกปราบครบแล้ว','The boss is already down'));return wbHub()}
   w.u=(w.u||0)+1;save();const seats=[...wbNodes(),...((h&&h.bots)||[]).map(b=>({...b,bot:1}))].slice(0,4);
@@ -3367,11 +3368,11 @@ async function wbBegin(h){if(!wbp||bt)return;const w=wbS();if(!wbTix()){toast(T(
     al:seats.map(x=>{const c=C[x.c]?x.c:'h01';return x.u===wbp.me?fighter(c,S.cards[c]?S.cards[c].lv:x.lv):fighter(c,x.lv||1,{star:x.st||0,am:x.am||''})}),
     en:[{id:rage?'wb1r':'wb1',boss:true,lord:1,atk,base:atk,hp:s.left,max:s.max,def:B.def,crit:.08,cx:1.5,sh:0,gim:'breath'}],wbd:seats.map(()=>0),wbA:0,wbMe:seats.findIndex(x=>x.u===wbp.me),wbL:s.L,wbRage:rage,wbStart:wbSrv.dmg};
   bt.al.forEach((f,k)=>{const am=k===bt.wbMe?(S.cards[f.id]||{}).am:seats[k]&&seats[k].am;if(am==='hallow')f.atk=f.base=Math.round(f.atk*1.1)});
-  c3Amu(bt);plBuff(bt);if(!S.auto)bt.wbAuto=1;S.auto=true;const my=bt;busy=true;draw();await wbVs();if(bt!==my)return;sfx('start');await banner('START');if(bt!==my)return;busy=false;draw();if(S.auto)autoAct()}
+  if(bt.party.filter(x=>!x.bot).length>1){wbSpd0=S.spd||1;S.spd=2;bt.wbLock=1}c3Amu(bt);plBuff(bt);if(!S.auto)bt.wbAuto=1;S.auto=true;const my=bt;busy=true;draw();await wbVs();if(bt!==my)return;sfx('start');await banner('START');if(bt!==my)return;busy=false;draw();if(S.auto)autoAct()}
 async function wbVs(){const P=f=>`<div class="vp">${sprite(f.id,'',`height:100%`)}</div>`;
   ov(`<div class="vs wbvs"><div class="vl">${bt.al.map(P).join('')}</div><b>VS</b><div class="vr"><span class="spr f16 wbvsb"><i><img src="spr/${bt.en[0].id}.webp" alt=""></i></span></div><div class="wbvsn"><b>${WB.n.toUpperCase()}</b><small>${T(WB.th+'แห่งสุสาน','the Pumpkin King')} · Lv.${bt.wbL}</small></div><div class="wbvsp">PARTY #${wbp?wbp.code:''} ${bt.al.length}/4</div></div>`);
   sfx('ult');await W(RM?600:1700);ov('')}
-async function wbFinish(won){const my=bt;busy=true;const kill=my.en[0].hp<=0;sfx(kill?'win':'start');await banner(kill?T('ปราบสำเร็จ!','DEFEATED!'):'FINISH',kill?'':'');if(bt!==my)return;
+async function wbFinish(won){wbSpdBack();const my=bt;busy=true;const kill=my.en[0].hp<=0;sfx(kill?'win':'start');await banner(kill?T('ปราบสำเร็จ!','DEFEATED!'):'FINISH',kill?'':'');if(bt!==my)return;
   if(my.wbAuto)S.auto=false;const w=wbS(),i=my.wbMe,d=Math.max(0,Math.round(my.wbd[i]||0)),s0=wbAt(my.wbStart),share=d/s0.max,id=my.al[i]?my.al[i].id:null,n=my.party.length;
   let cdy=d<10000?10:d<25000?20:d<50000?30:40;cdy=Math.round(cdy*(1+.1*n)*(my.wbRage?1.5:1)*(vipOn()?1.5:1)*(id&&S.cards[id]&&S.cards[id].am==='hallow'?1.2:1));
   const g=rollGold(1500).g*VX(),x=Math.round(expOf(1500)*VX()*.6);let up=0,am=null,soul=0;
@@ -3823,7 +3824,7 @@ function titleScreen(){
    <p class="cfoot nt">PixelDeckBattle · CBT build ${BUILD}</p></div>`);
 }
 // ---------- Firebase: Google sign-in and one cloud save document per account (saves/{uid}) ----------
-const BUILD='b205';
+const BUILD='b206';
 // The game moved to its own address. Anyone opening the old address is sent on, but only once the new site answers, so a broken move cannot lock players out.
 const DISCORD='https://discord.gg/dHDzRyPG9',DC_SVG='<svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="currentColor" d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.4189-2.1568 2.4189Z"/></svg>';
 const NEW_HOME='https://pixeldeckbattle.github.io/';

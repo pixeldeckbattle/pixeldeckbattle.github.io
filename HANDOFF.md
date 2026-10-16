@@ -116,3 +116,6 @@ Live build: **b191** (15 Oct 2026 22:25: the invite-for-diamonds menu / FOUNDER 
 - `SPOTWB(n)`: boss-fight formation, a diagonal line stepping toward the boss (back-right small → front-left big) so no plate covers another fighter.
 - Player names over each ally (`.pnm`, own name gold, bots "บอท 1..3").
 - `wbBar()`: boss HP bar top-right — name, Lv x/5, form (ร่าง 1 / ร่าง 2·คลั่ง below 50%), HP numbers, marks at 75 / 50 (ร่าง 2) / 25.
+
+## b206 — party speed lock
+- A boss fight with 2+ real players runs at a fixed x2 (button shows "x2 🔒"); own speed (`wbSpd0`) comes back in wbFinish / wbHub / home. Solo or bots-only keeps x1/x2/x3.
