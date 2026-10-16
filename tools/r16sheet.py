@@ -1,0 +1,81 @@
+# 16-frame remake (Oct 2026): new card models from GPT.
+# Sources: tools/r16_in/<id>/{idle,walk,attack,front}.png = 4x4 sheets on magenta (side views facing RIGHT), art.png = painted card art.
+# Output: spr/<id>.webp = 16 columns x 4 rows of 252x204 cells (idle, walk, attack, front), the game marks these cards f16;
+# art/<id>.webp + cards/<id>.webp through cardsheet.py's faces() when art.png exists.
+# GPT grids are not exact, so the cuts between frames are found from the empty gaps; spill from a neighbour frame is dropped,
+# and what is left is faded at the cell edge so an effect never ends in a hard line.
+import sys,os,glob,numpy as np
+from PIL import Image
+from scipy import ndimage as nd
+P='/home/claude/r16/';U=P+'tools/r16_in/'
+src=open(P+'tools/monsheet2.py').read().split("TINT={")[0];ns={};exec(src,ns);key=ns['key']
+CW,CH,BASE=252,204,196
+CARDS={'h29':('SL',158),'h30':('SL',176),'h31':('SL',160),'h27':('SL',170)}
+FIX={'h30':{'idle':{1:0,3:4}}}   # 0-based frames to replace with another frame (glitched faces)
+def depink(rgba):
+    a=rgba.astype(int);r,g,b=a[...,0],a[...,1],a[...,2]
+    pink=(r>170)&(b>g+40)&(r>g+50)&(r>=b-25)   # magenta glow left over from the background (halos, auras); indigo scales are not touched
+    a[...,2]=np.where(pink,np.minimum(b,g+10),b);a[...,0]=np.where(pink,np.maximum(r,230),r);a[...,1]=np.where(pink,np.maximum(g,(r+g)//2),g)
+    return a.astype('uint8')
+def cuts(prof,n,L):
+    sm=np.convolve(prof,np.ones(9)/9,'same');out=[0]
+    for k in range(1,n):
+        c=round(k*L/n);w=round(L/n*.18);lo,hi=c-w,c+w;out.append(lo+int(np.argmin(sm[lo:hi])))
+    out.append(L);return out
+def frames(path,mirror):
+    rgba=depink(key(Image.open(path)));al=rgba[...,3]>40;H,W=al.shape
+    rc=cuts(al.sum(1),4,H);out=[]
+    for r in range(4):
+        band=al[rc[r]:rc[r+1]];cc=cuts(band.sum(0),4,W)
+        for c in range(4):
+            x=rgba[rc[r]:rc[r+1],cc[c]:cc[c+1]].copy();m=x[...,3]>40;lab,n=nd.label(nd.binary_dilation(m,iterations=2)&m|m)
+            if n>1:
+                sz=nd.sum(m,lab,range(1,n+1));big=int(np.argmax(sz))+1;h,w=m.shape
+                for i in range(1,n+1):
+                    if i==big:continue
+                    ys,xs=np.where(lab==i);cy,cx=ys.mean(),xs.mean()
+                    edge=(xs.min()<3 and cx<w*.22) or (xs.max()>w-4 and cx>w*.78) or (ys.min()<3 and cy<h*.18) or (ys.max()>h-4 and cy>h*.85)
+                    if edge and sz[i-1]<sz[big-1]*.45:x[lab==i]=0
+            h,w=x.shape[:2];f=np.ones((h,w));E=10
+            for k in range(E):
+                v=(k+1)/(E+1);f[k,:]=np.minimum(f[k,:],v);f[h-1-k,:]=np.minimum(f[h-1-k,:],v);f[:,k]=np.minimum(f[:,k],v);f[:,w-1-k]=np.minimum(f[:,w-1-k],v)
+            x[...,3]=(x[...,3]*f).astype('uint8')
+            if mirror:x=x[:,::-1].copy()
+            out.append((r,x))
+    return out
+def bbox(c):
+    ys,xs=np.where(c[...,3]>40);return xs.min(),xs.max(),ys.min(),ys.max()
+def torso(c):
+    x0,x1,y0,y1=bbox(c);m=c[y0:y0+int((y1-y0)*.6),:,3]>40;return np.where(m)[1].mean()
+def build(id,th):
+    D=U+id+'/';rows=[frames(D+'idle.png',True),frames(D+'walk.png',True),frames(D+'attack.png',True),frames(D+'front.png',False)]
+    for nm,mp in FIX.get(id,{}).items():
+        i={'idle':0,'walk':1,'attack':2,'front':3}[nm]
+        for a,b in mp.items():rows[i][a]=rows[i][b]
+    def scale(fr):
+        bb=[bbox(c) for _,c in fr];return min(th/np.median([b[3]-b[2] for b in bb]),236/np.median([b[1]-b[0] for b in bb]))
+    side=scale(rows[1]);fsc=scale(rows[3])
+    out=Image.new('RGBA',(CW*16,CH*4),(0,0,0,0));clip=0
+    for R,fr in enumerate(rows):
+        s=fsc if R==3 else side
+        # one horizontal offset for the whole row (frame 1's torso to the middle), so a lunge still moves forward;
+        # one vertical offset per GPT row band (its median feet on the floor line), since GPT rows are not evenly placed
+        dx=CW/2-torso(fr[0][1])*s
+        feet={}
+        for g,c in fr:feet.setdefault(g,[]).append(bbox(c)[3])
+        for k,(g,c) in enumerate(fr):
+            im=Image.fromarray(c,'RGBA').resize((max(1,round(c.shape[1]*s)),max(1,round(c.shape[0]*s))),Image.LANCZOS)
+            ox=round(dx) if R!=2 else round(dx+(c.shape[1]/2-fr[0][1].shape[1]/2)*0);oy=round(BASE-(np.median(feet[g])+1)*s)
+            if R!=2:ox=round(CW/2-torso(c)*s)   # idle / walk / front stand in place: every frame centred on its own torso
+            clip=max(clip,-ox,ox+im.width-CW,-oy);t=Image.new('RGBA',(CW,CH),(0,0,0,0));t.paste(im,(ox,oy),im);out.paste(t,(k*CW,R*CH))
+    out.save(P+f'spr/{id}.webp',quality=86,method=6);print(id,'scale %.2f front %.2f clipped %dpx'%(side,fsc,max(0,clip)),os.path.getsize(P+f'spr/{id}.webp')//1024,'KB')
+cs=open(P+'tools/cardsheet.py').read();cs=cs[cs.index('def faces('):cs.index('for id,(rank,th,_) in CARDS.items()')]
+fs={'np':np,'Image':Image,'nd':nd,'P':P,'U':'/tmp/claude-0/-home-claude/faf65de1-a492-52b3-8473-ee4e7e7dcc7a/scratchpad/r16art/','glob':glob};exec('from PIL import ImageEnhance\n'+cs,fs)
+os.makedirs('/tmp/claude-0/-home-claude/faf65de1-a492-52b3-8473-ee4e7e7dcc7a/scratchpad/r16art',exist_ok=True)
+for id,(rank,th) in CARDS.items():
+    if len(sys.argv)>1 and id not in sys.argv[1:]:continue
+    if not os.path.exists(U+id+'/idle.png'):continue
+    build(id,th)
+    if os.path.exists(U+id+'/art.png'):
+        Image.open(U+id+'/art.png').save(f'/tmp/claude-0/-home-claude/faf65de1-a492-52b3-8473-ee4e7e7dcc7a/scratchpad/r16art/{id}-x-art.png');fs['faces'](id,rank)
+    else:print(id,'no card art yet - keeps the old card face')
