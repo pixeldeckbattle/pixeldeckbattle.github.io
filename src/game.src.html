@@ -813,6 +813,30 @@ h1{color:#f2d98a;text-shadow:0 3px 0 #7a4a1c,0 6px 0 #0a1019}h2{color:#f2d98a;te
 @media (prefers-reduced-motion:reduce){.tsh::before,.tsh::after,.tsh.t1 i,.twscr,.twin .pos.r{animation:none}}
 @keyframes twpop{from{transform:scale(.6);opacity:0}}
 
+/* ---------- b198 GPT kit skin on the normal background (owner: orange/gold buttons and gold frames everywhere, background unchanged) — GPT UI kit in ui2/: gold frames on night blue. Layered over the Dark Ages skin; only sources, slices and colours change ---------- */
+.btn,.btn.alt,.btn.go,.btn.on,.btn.red,.btn:disabled,.tab,.tab.am,.roomb,.roomb.px,.play,.ibtn{border-image:url(ui2/btn-sub.webp) 48 70 fill/9px 14px stretch;filter:drop-shadow(0 3px 0 rgba(0,0,0,.45))}
+.btn{--tx:#fff}.btn.alt,.roomb,.roomb.px,.ibtn{--tx:#eaf2ff}
+.btn:not(.alt):not(.red):not(.on),.btn.go,.play{border-image-source:url(ui2/btn-main.webp);border-image-slice:52 70 fill;--tx:#3a1400;text-shadow:0 1px 0 rgba(255,240,200,.55)}
+.btn.on{border-image-source:url(ui2/btn-main.webp);--tx:#3a1400;filter:drop-shadow(0 0 6px rgba(255,210,58,.7))}
+.btn.sm{border-width:7px 10px;border-image-width:7px 10px}
+.btn:disabled{border-image-source:url(ui2/btn-sub.webp);filter:grayscale(.85) brightness(.65);opacity:.85}
+.play{border-width:16px 26px;border-image-width:16px 26px}.play b{color:#fff;text-shadow:0 2px 0 #7a2a00}.play small,.play span{color:#fff2cf}
+.tab,.tab.am,.tab:not([class*="r-"]){border-image:url(ui2/tabs-2.webp) 70 96 fill/7px 10px stretch;opacity:.85;--tx:#eaf2ff;color:var(--tx)}
+.tab.on{border-image-source:url(ui2/tabs-1.webp);border-image-slice:70 96 fill;border-width:7px 10px;border-image-width:7px 10px;margin-top:0;--tx:#3a1400;color:var(--tx);text-shadow:none}
+.tab[class*="r-"].on{color:#3a1400}
+.px,.amrow,.chb,.lookb,.rkrow,.pvrow,.abar,.row.avsel{border-image:url(ui2/panel.webp) 44 fill/10px stretch}
+.chb.on,.amrow.on,.rkrow.me{border-image-source:url(ui2/panel.webp);border-image-slice:44 fill;filter:drop-shadow(0 0 6px rgba(255,210,58,.8)) brightness(1.15)}
+.tmenu{border-image:url(ui2/panel.webp) 44 fill/16px stretch}
+.dk{border:0;border-image:none;background:url(ui2/dock.webp) center/100% 100% no-repeat;padding:8px 4px 7px;--tx:#fff2cf;filter:drop-shadow(0 3px 0 rgba(0,0,0,.5))}
+.dk>span:last-child{font-size:13px;margin-top:2px}.dk small{display:none}
+.dk:disabled{filter:grayscale(.85) brightness(.6)}
+.pill,.pchip{border:2px solid #f2c14e;border-image:none;border-radius:20px;background:rgba(10,13,36,.88);padding:1px 10px 1px 3px;box-shadow:inset 0 0 0 2px rgba(0,0,0,.5)}
+.pchip{border-radius:14px;padding:0 10px 0 0}
+.pill .plus{background:#1f9a3a;border-radius:50%;color:#fff}
+.ibtn{border:0;border-image:none;background:none;filter:drop-shadow(0 2px 0 rgba(0,0,0,.5));width:40px;height:40px}.ibtn .ico img,.ibtn>img{width:38px!important;height:38px!important}
+.atop{background:rgba(10,13,36,.75)!important;border-bottom:2px solid rgba(242,193,78,.5)}
+#ov .cd .px.cdbox,#ov .cdbox{border-image:url(ui2/panel.webp) 44 fill/18px stretch;padding:14px 20px}
+
 </style>
 
 <div id="stage"><div id="view"></div><div id="ov"></div><div id="fsb" hidden></div><div id="tut"></div><div id="gate" hidden></div><div id="zoom" role="dialog" tabindex="-1" hidden></div></div>
@@ -2905,7 +2929,8 @@ const TIERS=[['Bronze','#d99a66',3,40,5],['Silver','#aab2c0',3,60,8],['Gold','#f
 const DIVS=['IV','III','II','I'],ST_MAX=TIERS.reduce((t,x)=>t+x[2]*4,0),PV_LOSE_GOLD=10;
 function rankOf(st){st=Math.max(0,Math.min(ST_MAX,st|0));let i=0;while(i<TIERS.length-1&&st>=TIERS[i][2]*4){st-=TIERS[i][2]*4;i++}const per=TIERS[i][2];let d=Math.min(3,Math.floor(st/per)),k=st-d*per;return{i,t:TIERS[i],d,k,per}}
 UI.acoin=pic(["....yyyy....","..yyYYYYyy..",".yYYWWYYYYy.",".yYWyyyyYYy.","yYYyYYYYyYYy","yYYyYYYYyYYy","yYYyYYYYyYYy","yYYyYYYYyYYy",".yYYyyyyYYy.",".yYYYYYYYYy.","..yyYYYYyy..","....yyyy...."],{y:'#3a1a6e',Y:'#b06cff',W:'#f0dcff'});
-Object.assign(UI,{bag:'ui2/i-menu-bag.webp',coin:'ic2/coin.webp',gem:'ic2/gem.webp',gear:'ic2/gear.webp',cards:'ic2/cards.webp',pack:'ic2/shop.webp',market:'ic2/market.webp',trade:'ic2/trade.webp',cup:'ic2/pvp.webp',acoin:'ic2/acoin.webp',amu:'ic2/amulet.webp',fuse:'ic2/fuse.webp',quest:'ic2/quest.webp',afk:'ic2/afk.webp',guide:'ic2/guide.webp'});
+Object.assign(UI,{coin:'ic2/coin.webp',gem:'ic2/gem.webp',gear:'ic2/gear.webp',cards:'ic2/cards.webp',pack:'ic2/shop.webp',market:'ic2/market.webp',trade:'ic2/trade.webp',cup:'ic2/pvp.webp',acoin:'ic2/acoin.webp',amu:'ic2/amulet.webp',fuse:'ic2/fuse.webp',quest:'ic2/quest.webp',afk:'ic2/afk.webp',guide:'ic2/guide.webp'});
+Object.assign(UI,{bag:'ui2/i-menu-bag.webp',pack:'ui2/i-menu-shop.webp',amu:'ui2/i-menu-amulet.webp',fuse:'ui2/i-menu-fusion.webp',market:'ui2/i-menu-market.webp',trade:'ui2/i-menu-trade.webp',cup:'ui2/i-menu-pvp.webp',quest:'ui2/i-menu-quest.webp',afk:'ui2/i-menu-afk.webp',guide:'ui2/i-menu-guide.webp',gear:'ui2/i-menu-settings.webp'});
 Object.assign(UI,{bag:'ui2/i-menu-bag.webp',pack:'ui2/i-menu-shop.webp',amu:'ui2/i-menu-amulet.webp',fuse:'ui2/i-menu-fusion.webp',market:'ui2/i-menu-market.webp',trade:'ui2/i-menu-trade.webp',cup:'ui2/i-menu-pvp.webp',quest:'ui2/i-menu-quest.webp',afk:'ui2/i-menu-afk.webp',guide:'ui2/i-menu-guide.webp',gear:'ui2/i-menu-settings.webp',coin:'ui2/i-inline-coin.webp',gem:'ui2/i-inline-diamond.webp'});
 const acoin=n=>`<span class="acn"><img src="${UI.acoin}" alt="Arena coin">${typeof n==='string'?n:(+n).toLocaleString('en')}</span>`;
 const tierTag=(st,stars=true)=>{const r=rankOf(st);return `<b style="color:${r.t[1]}">${r.t[0]} ${DIVS[r.d]}</b>${stars?` <span class="rst" style="color:${r.t[1]}">${'★'.repeat(r.k)}<i>${'★'.repeat(r.per-r.k)}</i></span>`:''}`};
@@ -3216,7 +3241,7 @@ const wbHost=()=>{const L=wbNodes();return L[0]||null},wbAmHost=()=>{const h=wbH
 const wbMine=()=>wbp&&wbp.nodes&&wbp.nodes[wbp.me]||{};
 function wbMe(){const w=wbS(),c=wbp&&wbp.card&&S.cards[wbp.card]?wbp.card:(S.team.find(id=>S.cards[id])||Object.keys(S.cards)[0]);return{n:String(S.me.name||'?').slice(0,12),l:S.me.look,c,lv:S.cards[c].lv,st:starOf(c),am:S.cards[c].am||'',f:pfMine()}}
 function wbRef(){return rtDb().ref('rooms/wb_'+wbp.code)}
-function wbWrite(o){if(!wbp)return;if(wbp.solo){wbp.nodes[wbp.me]={...(wbp.nodes[wbp.me]||{}),...o};return wbRoom()}rtDb().ref('rooms/wb_'+wbp.code+'/'+wbp.me).update(o).catch(()=>{})}
+function wbWrite(o){if(!wbp)return;wbp.nodes=wbp.nodes||{};wbp.nodes[wbp.me]={...(wbp.nodes[wbp.me]||{}),...o};if(document.querySelector('.wbv.room'))wbRoom();if(wbp.solo)return;rtDb().ref('rooms/wb_'+wbp.code+'/'+wbp.me).update(o).catch(e=>toast(T('ส่งข้อมูลห้องไม่สำเร็จ ลองใหม่','Could not update the room, try again')))}
 function wbIdx(){if(!wbp||wbp.solo||!wbAmHost())return;const L=wbNodes(),b=(wbMine().bots||[]).length;rtDb().ref('rooms/wbidx/'+wbp.me).set({code:wbp.code,n:wbMe().n,cnt:L.length+b,at:Date.now()}).catch(()=>{})}
 function wbLeave(){if(!wbp)return;const p=wbp;wbp=null;clearInterval(p.beat);if(p.solo)return;try{p.ref.off();rtDb().ref('rooms/wb_'+p.code+'/'+p.me).remove();rtDb().ref('rooms/wbidx/'+p.me).remove()}catch(e){}}
 function wbJoin(code,create){if(!mkOn()){wbp={code:'LOCAL',me:'me',nodes:{},solo:true,t0:Date.now()};wbp.nodes.me={...wbMe(),j:Date.now(),hb:Date.now()};return wbRoom()}
@@ -3230,7 +3255,7 @@ function wbJoin(code,create){if(!mkOn()){wbp={code:'LOCAL',me:'me',nodes:{},solo
     wbp.ref.on('value',s=>{if(!wbp||wbp.code!==code)return;wbp.nodes=s.val()||{};wbSync()});
     wbp.beat=setInterval(()=>{if(!wbp)return;wbWrite({hb:Date.now()});wbIdx()},20000);wbRoom()}).catch(()=>toast(T('เชื่อมต่อไม่ได้ ลองใหม่อีกครั้ง','Could not connect, try again')))}
 function wbSync(){if(!wbp)return;const h=wbHost();if(h&&h.go&&h.go!==wbp.went&&Date.now()-h.go<20000&&wbMine().rd){wbp.went=h.go;return wbBegin(h)}
-  if(wbp.res&&document.querySelector('.wbres'))return wbResult(wbp.res);if(document.querySelector('.wbroom'))wbRoom();wbIdx()}
+  if(document.querySelector('.wbv.room'))wbRoom();wbIdx()}
 function wbRandom(){if(!mkOn())return wbJoin('',true);fbLoad().then(fbUser).then(()=>rtDb().ref('rooms/wbidx').once('value')).then(s=>{const L=Object.values(s.val()||{}).filter(x=>x&&x.code&&Date.now()-x.at<45000&&x.cnt<4).sort((a,b)=>b.cnt-a.cnt);
   if(L.length)wbJoin(L[0].code);else{toast(T('ยังไม่มีห้องว่าง สร้างห้องใหม่ให้แล้ว','No open party right now, a new one was made for you'));wbJoin(String(1000+Math.floor(Math.random()*9000)),true)}}).catch(()=>wbJoin(String(1000+Math.floor(Math.random()*9000)),true))}
 // invites: written into the target's inbox node; the target's game shows a small banner for 10 s
@@ -3744,7 +3769,7 @@ function titleScreen(){
    <p class="cfoot nt">PixelDeckBattle · CBT build ${BUILD}</p></div>`);
 }
 // ---------- Firebase: Google sign-in and one cloud save document per account (saves/{uid}) ----------
-const BUILD='b197';
+const BUILD='b198';
 // The game moved to its own address. Anyone opening the old address is sent on, but only once the new site answers, so a broken move cannot lock players out.
 const DISCORD='https://discord.gg/dHDzRyPG9',DC_SVG='<svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="currentColor" d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.4189-2.1568 2.4189Z"/></svg>';
 const NEW_HOME='https://pixeldeckbattle.github.io/';
