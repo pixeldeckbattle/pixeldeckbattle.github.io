@@ -119,3 +119,12 @@ Live build: **b191** (15 Oct 2026 22:25: the invite-for-diamonds menu / FOUNDER 
 
 ## b206 — party speed lock
 - A boss fight with 2+ real players runs at a fixed x2 (button shows "x2 🔒"); own speed (`wbSpd0`) comes back in wbFinish / wbHub / home. Solo or bots-only keeps x1/x2/x3.
+
+## 16-frame remake (started 16 Oct 2026) — owner's standing plan
+- Every character gets a NEW model (new design, SAME name), 16 frames. Claude writes GPT prompts; Toey generates daily until the GPT quota runs out and sends that day's images.
+- Store everything in tools/r16_in/<id>/ and build it into the work copy, but DO NOT deploy (not even beta) until Toey gives the word. Continue daily until done.
+- Per character (5 images): 1 idle, 2 walk, 3 attack, 4 front-facing idle (lobby/avatar), 5 painted card art (cards only; monsters skip 5).
+  Sheets: 4x4 grid = 16 frames, flat magenta #FF00FF, side views facing RIGHT (game mirrors), 16-bit pixel art. Attack: 1-4 wind-up, 5-8 strike (frame 7 = impact), 9-16 recover.
+- Order: SL/LT cards -> L -> rest of cards -> bosses -> monsters -> 32 effects (one-row 16-frame strips).
+- Batch 1 prompts sent 16 Oct: Vanarin (h29), Tenface Asura (h30), Indigo Dragonsteed (h31), Aegis Valkyrie (h27).
+- Already 16-frame, skip: wb1/wb1r/wb1d, fx wb-curse / wb-pumpkin, logo16, rank-1 shield, profile frames.
