@@ -13,8 +13,9 @@ CW,CH,BASE=252,204,196
 CARDS={'h29':('SL',158),'h30':('SL',176),'h31':('SL',160),'h27':('SL',170),'h03':('SL',166),'h22':('SL',160),'h07':('SL',160),'h18':('LT',178),'h28':('LT',150),'h15':('L',162),'h13':('L',164),'h14':('L',150),'h19':('L',150),'h04':('L',162),'h26':('L',168),'h34':('L',170),'h05':('R',160),'h09':('R',162),'h10':('R',140),'h08':('R',150),'h02':('UC',150),'h21':('UC',152),'h24':('UC',156),'h25':('UC',160),'h16':('UC',166),'h17':('C',140),'h12':('C',120),'h23':('C',140),'h01':('C',140),'h06':('ST',138),'h20':('ST',128),'h11':('ST',146),
   'b01':('M',176),'b02':('M',176),'b03':('M',150),'b04':('M',180),'b05':('M',160),
   'tb1':('M',178),'tb2':('M',170),'tb3':('M',160),'tb4':('M',150),'tb5':('M',172),
-  'x65':('M',176),'x75':('M',160),'x85':('M',180),'x95':('M',170),'x14':('M',150),'x24':('M',176)}   # M = monster: sprite only, no card
-FIX={'h30':{'idle':{1:0,3:4}}}   # 0-based frames to replace with another frame (glitched faces)
+  'x65':('M',176),'x75':('M',160),'x85':('M',180),'x95':('M',170),'x14':('M',150),'x24':('M',176),
+  'x15':('M',168),'x25':('M',160),'x35':('M',178),'x45':('M',176),'x55':('M',178)}   # M = monster: sprite only, no card
+FIX={'h30':{'idle':{1:0,3:4}},'x45':{'idle':{12:13},'front':{12:13}}}   # x45 idle frame 13: green-tinted glitch   # 0-based frames to replace with another frame (glitched faces)
 def depink(rgba):
     a=rgba.astype(int);r,g,b=a[...,0],a[...,1],a[...,2]
     pink=(r>170)&(b>g+40)&(r>g+50)&(r>=b-25)   # magenta glow left over from the background (halos, auras); indigo scales are not touched
@@ -25,7 +26,7 @@ def cuts(prof,n,L):
     for k in range(1,n):
         c=round(k*L/n);w=round(L/n*.18);lo,hi=c-w,c+w;out.append(lo+int(np.argmin(sm[lo:hi])))
     out.append(L);return out
-COOL={'h28','h15','h04','h24','tb4'}
+COOL={'h28','h15','h04','h24','tb4','x35','x15'}
 GREY={'h26'}
 VIOLET={'h08','h05'}   # purple/dark characters: keep their purple, only strip pure-magenta spill   # smoke that picked up the magenta background becomes ash grey
 def grey(rgba):
