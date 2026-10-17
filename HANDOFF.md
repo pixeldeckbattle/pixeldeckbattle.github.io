@@ -146,3 +146,6 @@ Live build: **b191** (15 Oct 2026 22:25: the invite-for-diamonds menu / FOUNDER 
 ## b210 animation tempo
 - One tempo for every loop: 8 fps (16f=2s, 8f=1s, 6f=.75s) for characters idle/front, logo, chests, badges, frames, amulets, stars, world-boss items. Walk 12 fps. One-shot VFX/projectiles unchanged.
 - 16-frame attacks use @keyframes fr16a: frames 1-6 fast (40 ms), impact frame 7 held 120 ms (hit-stop), 8-16 recover; total .8s/speed, impact still at 0.24 s.
+
+## b211 world boss open-ended
+- WB.from = release (17 Oct 21:00 BKK), ends when the server kills Lv.5 (wbEnd: first time a player sees it dead, stored in S.wb.end); WB.to 1 Jan 2027 is only a hard cap. Shop +3 days after the kill, ranking mail on the kill. Hub/guide say the CBT ends and the OBT opens within 7 days after the kill. Retune HP live with CFG.wbhp.
