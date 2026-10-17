@@ -10,7 +10,7 @@ from scipy import ndimage as nd
 P='/home/claude/r16/';U=P+'tools/r16_in/'
 src=open(P+'tools/monsheet2.py').read().split("TINT={")[0];ns={};exec(src,ns);key=ns['key']
 CW,CH,BASE=252,204,196
-CARDS={'h29':('SL',158),'h30':('SL',176),'h31':('SL',160),'h27':('SL',170),'h03':('SL',166),'h22':('SL',160),'h07':('SL',160),'h18':('LT',178),'h28':('LT',150),'h15':('L',162),'h13':('L',164),'h14':('L',150),'h19':('L',150),'h04':('L',162),'h26':('L',168),'h34':('L',170),'h05':('R',160),'h09':('R',162),'h10':('R',140),'h08':('R',150),'h02':('UC',150),'h21':('UC',152),'h24':('UC',156),'h25':('UC',160),'h16':('UC',166),'h17':('C',140),'h12':('C',120),'h23':('C',140)}
+CARDS={'h29':('SL',158),'h30':('SL',176),'h31':('SL',160),'h27':('SL',170),'h03':('SL',166),'h22':('SL',160),'h07':('SL',160),'h18':('LT',178),'h28':('LT',150),'h15':('L',162),'h13':('L',164),'h14':('L',150),'h19':('L',150),'h04':('L',162),'h26':('L',168),'h34':('L',170),'h05':('R',160),'h09':('R',162),'h10':('R',140),'h08':('R',150),'h02':('UC',150),'h21':('UC',152),'h24':('UC',156),'h25':('UC',160),'h16':('UC',166),'h17':('C',140),'h12':('C',120),'h23':('C',140),'h01':('C',140),'h06':('ST',138),'h20':('ST',128),'h11':('ST',146)}
 FIX={'h30':{'idle':{1:0,3:4}}}   # 0-based frames to replace with another frame (glitched faces)
 def depink(rgba):
     a=rgba.astype(int);r,g,b=a[...,0],a[...,1],a[...,2]
@@ -111,7 +111,7 @@ def build(id,th):
     out.save(P+f'spr/{id}.webp',quality=86,method=6);print(id,'scale %.2f front %.2f clipped %dpx'%(side,fsc,max(0,clip)),os.path.getsize(P+f'spr/{id}.webp')//1024,'KB')
 cs=open(P+'tools/cardsheet.py').read();cs=cs[cs.index('def faces('):cs.index('for id,(rank,th,_) in CARDS.items()')]
 # the art window is measured against the ORIGINAL finished cards (the live repo), never the remade ones; LT measured on Glacius Rex
-cs=cs.replace("P+f'cards/{o}.webp'","'/home/claude/pixeldeck/cards/'+o+'.webp'").replace("'SL':['h03','h22','h07']}","'SL':['h03','h22','h07'],'LT':['h28','h18'],'R':['h05','h09','h10','h08']}")
+cs=cs.replace("P+f'cards/{o}.webp'","'/home/claude/pixeldeck/cards/'+o+'.webp'").replace("'SL':['h03','h22','h07']}","'SL':['h03','h22','h07'],'LT':['h28','h18'],'R':['h05','h09','h10','h08'],'ST':['h06','h20','h11']}")
 assert "/home/claude/pixeldeck/cards/" in cs and "'LT'" in cs
 fs={'np':np,'Image':Image,'nd':nd,'P':P,'U':'/tmp/claude-0/-home-claude/faf65de1-a492-52b3-8473-ee4e7e7dcc7a/scratchpad/r16art/','glob':glob};exec('from PIL import ImageEnhance\n'+cs,fs)
 os.makedirs('/tmp/claude-0/-home-claude/faf65de1-a492-52b3-8473-ee4e7e7dcc7a/scratchpad/r16art',exist_ok=True)
