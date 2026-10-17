@@ -10,7 +10,8 @@ from scipy import ndimage as nd
 P='/home/claude/r16/';U=P+'tools/r16_in/'
 src=open(P+'tools/monsheet2.py').read().split("TINT={")[0];ns={};exec(src,ns);key=ns['key']
 CW,CH,BASE=252,204,196
-CARDS={'h29':('SL',158),'h30':('SL',176),'h31':('SL',160),'h27':('SL',170),'h03':('SL',166),'h22':('SL',160),'h07':('SL',160),'h18':('LT',178),'h28':('LT',150),'h15':('L',162),'h13':('L',164),'h14':('L',150),'h19':('L',150),'h04':('L',162),'h26':('L',168),'h34':('L',170),'h05':('R',160),'h09':('R',162),'h10':('R',140),'h08':('R',150),'h02':('UC',150),'h21':('UC',152),'h24':('UC',156),'h25':('UC',160),'h16':('UC',166),'h17':('C',140),'h12':('C',120),'h23':('C',140),'h01':('C',140),'h06':('ST',138),'h20':('ST',128),'h11':('ST',146)}
+CARDS={'h29':('SL',158),'h30':('SL',176),'h31':('SL',160),'h27':('SL',170),'h03':('SL',166),'h22':('SL',160),'h07':('SL',160),'h18':('LT',178),'h28':('LT',150),'h15':('L',162),'h13':('L',164),'h14':('L',150),'h19':('L',150),'h04':('L',162),'h26':('L',168),'h34':('L',170),'h05':('R',160),'h09':('R',162),'h10':('R',140),'h08':('R',150),'h02':('UC',150),'h21':('UC',152),'h24':('UC',156),'h25':('UC',160),'h16':('UC',166),'h17':('C',140),'h12':('C',120),'h23':('C',140),'h01':('C',140),'h06':('ST',138),'h20':('ST',128),'h11':('ST',146),
+  'b01':('M',176),'b02':('M',176),'b03':('M',150),'b04':('M',180),'b05':('M',160)}   # M = monster: sprite only, no card
 FIX={'h30':{'idle':{1:0,3:4}}}   # 0-based frames to replace with another frame (glitched faces)
 def depink(rgba):
     a=rgba.astype(int);r,g,b=a[...,0],a[...,1],a[...,2]
@@ -65,7 +66,7 @@ def bbox(c):
 def torso(c):
     x0,x1,y0,y1=bbox(c);m=c[y0:y0+int((y1-y0)*.6),:,3]>40;return np.where(m)[1].mean()
 def build(id,th):
-    CUR[0]=id;D=U+id+'/';rows=[frames(D+'idle.png',True),frames(D+'walk.png',True),frames(D+'attack.png',True),frames(D+'front.png',False)]
+    CUR[0]=id;D=U+id+'/';rows=[frames(D+'idle.png',True),frames(D+'walk.png',True),frames(D+'attack.png',True),frames(D+'front.png' if os.path.exists(D+'front.png') else D+'idle.png',not os.path.exists(D+'front.png'))]   # monsters have no front sheet: the idle stands in
     for nm,mp in FIX.get(id,{}).items():
         i={'idle':0,'walk':1,'attack':2,'front':3}[nm]
         for a,b in mp.items():rows[i][a]=rows[i][b]
@@ -119,6 +120,6 @@ for id,(rank,th) in CARDS.items():
     if len(sys.argv)>1 and id not in sys.argv[1:]:continue
     if not os.path.exists(U+id+'/idle.png'):continue
     build(id,th)
-    if os.path.exists(U+id+'/art.png'):
+    if rank!='M' and os.path.exists(U+id+'/art.png'):
         Image.open(U+id+'/art.png').save(f'/tmp/claude-0/-home-claude/faf65de1-a492-52b3-8473-ee4e7e7dcc7a/scratchpad/r16art/{id}-x-art.png');fs['faces'](id,rank)
-    else:print(id,'no card art yet - keeps the old card face')
+    elif rank!='M':print(id,'no card art yet - keeps the old card face')
