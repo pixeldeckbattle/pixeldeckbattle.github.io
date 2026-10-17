@@ -153,3 +153,8 @@ Live build: **b191** (15 Oct 2026 22:25: the invite-for-diamonds menu / FOUNDER 
 
 ## b211 world boss open-ended
 - WB.from = release (17 Oct 21:00 BKK), ends when the server kills Lv.5 (wbEnd: first time a player sees it dead, stored in S.wb.end); WB.to 1 Jan 2027 is only a hard cap. Shop +3 days after the kill, ranking mail on the kill. Hub/guide say the CBT ends and the OBT opens within 7 days after the kill. Retune HP live with CFG.wbhp.
+
+## Site deploy (from 17 Oct): pdb gets a SITE-ONLY commit
+- GitHub Pages limit is 1 GB; tools/ (GPT sources) is >1 GB. Never push main to pdb any more.
+- Deploy: build index/beta in main, commit, then `git worktree add -B site /home/claude/site HEAD` (or reset site to main), `git rm -rq tools src`, commit, `git push -f pdb site:main`.
+- If Pages says "in progress deployment", rerun the failed job a few minutes later (actions/runs/<id>/rerun-failed-jobs).
