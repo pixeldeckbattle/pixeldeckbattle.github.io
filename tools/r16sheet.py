@@ -10,7 +10,7 @@ from scipy import ndimage as nd
 P='/home/claude/r16/';U=P+'tools/r16_in/'
 src=open(P+'tools/monsheet2.py').read().split("TINT={")[0];ns={};exec(src,ns);key=ns['key']
 CW,CH,BASE=252,204,196
-CARDS={'h29':('SL',158),'h30':('SL',176),'h31':('SL',160),'h27':('SL',170),'h03':('SL',166),'h22':('SL',160),'h07':('SL',160),'h18':('LT',178),'h28':('LT',150),'h15':('L',162),'h13':('L',164),'h14':('L',150),'h19':('L',150),'h04':('L',162),'h26':('L',168),'h34':('L',170),'h05':('R',160),'h09':('R',162),'h10':('R',140),'h08':('R',150),'h02':('UC',150),'h21':('UC',152)}
+CARDS={'h29':('SL',158),'h30':('SL',176),'h31':('SL',160),'h27':('SL',170),'h03':('SL',166),'h22':('SL',160),'h07':('SL',160),'h18':('LT',178),'h28':('LT',150),'h15':('L',162),'h13':('L',164),'h14':('L',150),'h19':('L',150),'h04':('L',162),'h26':('L',168),'h34':('L',170),'h05':('R',160),'h09':('R',162),'h10':('R',140),'h08':('R',150),'h02':('UC',150),'h21':('UC',152),'h24':('UC',156),'h25':('UC',160)}
 FIX={'h30':{'idle':{1:0,3:4}}}   # 0-based frames to replace with another frame (glitched faces)
 def depink(rgba):
     a=rgba.astype(int);r,g,b=a[...,0],a[...,1],a[...,2]
@@ -22,7 +22,7 @@ def cuts(prof,n,L):
     for k in range(1,n):
         c=round(k*L/n);w=round(L/n*.18);lo,hi=c-w,c+w;out.append(lo+int(np.argmin(sm[lo:hi])))
     out.append(L);return out
-COOL={'h28','h15','h04'}
+COOL={'h28','h15','h04','h24'}
 GREY={'h26'}
 VIOLET={'h08','h05'}   # purple/dark characters: keep their purple, only strip pure-magenta spill   # smoke that picked up the magenta background becomes ash grey
 def grey(rgba):
