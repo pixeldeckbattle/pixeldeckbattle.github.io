@@ -132,6 +132,6 @@ Live build: **b191** (15 Oct 2026 22:25: the invite-for-diamonds menu / FOUNDER 
 ## b207 — release candidate
 - Guide: world-boss fight line (names, boss HP bar forms, party speed x2).
 - Branch `release` holds index.html / version.json / admin.html built from this source (deploy.py) — ready, NOT pushed to pdb. To release: `git push pdb release:main` (after merging main if newer), then update the GDD.
-- 16 Oct progress (branch r16, NOT live): 27 cards remade (17 Oct: +h24 h25 h16 h17 h12; h23 Ember Witch waits for its walk sheet) — h29 h30 h31 h27 h03 h22 h07 h18 h28 h15 h13 h14 h19 h04 h26 h34 h05 h09 h10 h08 h02 h21.
+- 16 Oct progress (branch r16, NOT live): 28 cards remade (17 Oct: +h24 h25 h16 h17 h12 h23) — h29 h30 h31 h27 h03 h22 h07 h18 h28 h15 h13 h14 h19 h04 h26 h34 h05 h09 h10 h08 h02 h21.
   Still to do (prompts already sent for Storm Shaman h24 + Ironbark Guardian h25): h24 h25, then h16 Elder Treant, C/ST cards (h23 h17 h12 h01 h06 h20 h11), then bosses, monsters, effects.
   Built with tools/r16sheet.py (per-sheet scale, frame alignment, tint fixes COOL/GREY). Wiring f16 into the game (C[id].f16) is not done yet — do it when merging.
