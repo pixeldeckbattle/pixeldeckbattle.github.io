@@ -135,3 +135,10 @@ Live build: **b191** (15 Oct 2026 22:25: the invite-for-diamonds menu / FOUNDER 
 - 16 Oct progress (branch r16, NOT live): ALL 32 cards + bosses b01-b05 + tower bosses tb1-tb5 + x65 x75 x85 x95 x14 x24 + x15 x25 x35 x45 x55 = ALL 21 bosses remade (monsters: idle/walk/attack only, idle doubles as front) — h29 h30 h31 h27 h03 h22 h07 h18 h28 h15 h13 h14 h19 h04 h26 h34 h05 h09 h10 h08 h02 h21.
   Still to do (prompts already sent for Storm Shaman h24 + Ironbark Guardian h25): h24 h25, then h16 Elder Treant, C/ST cards (h23 h17 h12 h01 h06 h20 h11), then bosses, monsters, effects.
   Built with tools/r16sheet.py (per-sheet scale, frame alignment, tint fixes COOL/GREY). Wiring f16 into the game (C[id].f16) is not done yet — do it when merging.
+
+## b208 (branch r16 → release candidate, NOT live, NOT beta) — 16-frame remake wired in
+- 53 sheets marked f16:1 in C/MON (32 cards, 21 bosses); f8 removed from h29/h30/h31/h34. Card faces/art regenerated. Images get ?16 so caches refresh (sprUrl()).
+- Shop chests ui/ch_*16.webp and FOUNDER ui/founder16.webp: 16-frame strips (1600%, steps(16)). Built by tools/ui16.py from tools/ui16_in.
+- loading() now preloads only the player's own cards (+ next stage monsters) — the 16-frame sheets doubled spr/ to ~54 MB.
+- Still 6-frame: 44 normal monsters, star badges st6-10, tower shield tw1, 9 animated amulets, 32 fx. Prompts sent; add as they arrive (r16sheet.py 'M' rank / ui16.py).
+- Release = `git push pdb release:main` (release branch = r16 + index.html/version.json/admin.html built by deploy.py), then update GDD.
