@@ -158,3 +158,8 @@ Live build: **b191** (15 Oct 2026 22:25: the invite-for-diamonds menu / FOUNDER 
 - GitHub Pages limit is 1 GB; tools/ (GPT sources) is >1 GB. Never push main to pdb any more.
 - Deploy: build index/beta in main, commit, then `git worktree add -B site /home/claude/site HEAD` (or reset site to main), `git rm -rq tools src`, commit, `git push -f pdb site:main`.
 - If Pages says "in progress deployment", rerun the failed job a few minutes later (actions/runs/<id>/rerun-failed-jobs).
+
+## 18 Oct 2026 — all remaining 16-frame prompts handed over
+- Before Claude's weekly quota ran out, every remaining prompt went to Toey as one artifact page (https://claude.ai/artifact/FF24ipg8i5FrDgmGv7qVHu); source in tools/prompts16/ (gen.py -> data.json).
+- 179 images, in page order: star badges st6-st10 + tower shield tw1 (6), animated amulets kfang dscale deye seraph grove lion gstar hallow clover (9), 44 monsters x3 idle/walk/attack (132), 32 fx (16 frames in a 4x4 grid; game strips need code changes for 16 frames).
+- The stage-end ~10 s hang report is still open: not reproducible, waiting for Toey's answers.
