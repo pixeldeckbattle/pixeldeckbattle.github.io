@@ -1158,7 +1158,7 @@ function plDaily(){const p=plGet(),d=today();if(p.lg===d)return;p.lg=d;plGain('l
 function plBuff(b){if(!b||b.pvp)return;const m=plMul();if(m<=1)return;b.al.forEach(f=>{f.atk=f.base=Math.round(f.atk*m);f.hp=f.max=Math.round(f.max*m);f.def=Math.round(f.def*m)})}
 // the framed avatar: own photo (only ever drawn for the owner) or the face of the card picked in the profile
 const plAv=(sz,own=true,look,frame)=>{const id=look||S.me.look,f=frame||pfMine(),ph=own&&plGet().ph;
-  return `<span class="pfa" style="--s:${sz}px"><i class="pfp" style="${ph?`background-image:url(${ph});background-size:cover;background-position:center`:`background-image:url(cards/${id}.webp)`}"></i><i class="pff" style="background-image:url(pf/${f}.webp)"></i></span>`};
+  return `<span class="pfa" style="--s:${sz}px"><i class="pfp" style="${ph?`background-image:url(${ph});background-size:cover;background-position:center`:`background-image:url(${img(id)})`}"></i><i class="pff" style="background-image:url(pf/${f}.webp)"></i></span>`};
 function plPhoto(file){if(!file||!/^image\//.test(file.type))return;const r=new FileReader();r.onload=()=>{const im=new Image();im.onload=()=>{const c=document.createElement('canvas');c.width=c.height=128;const x=c.getContext('2d'),m=Math.min(im.width,im.height);
   x.drawImage(im,(im.width-m)/2,(im.height-m)/2,m,m,0,0,128,128);plGet().ph=c.toDataURL('image/jpeg',.82);save();charMake()};im.src=r.result};r.readAsDataURL(file)}
 const plBox=()=>{const p=plGet(),v=plLvOf(p.x||0),d=p.d===today()?p.dx||0:0;
