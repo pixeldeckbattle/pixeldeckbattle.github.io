@@ -132,3 +132,7 @@ Live build: **b191** (15 Oct 2026 22:25: the invite-for-diamonds menu / FOUNDER 
 ## b207 — release candidate
 - Guide: world-boss fight line (names, boss HP bar forms, party speed x2).
 - Branch `release` holds index.html / version.json / admin.html built from this source (deploy.py) — ready, NOT pushed to pdb. To release: `git push pdb release:main` (after merging main if newer), then update the GDD.
+
+## b208 on BETA (17 Oct)
+- Beta loads the remade art from spr16/ cards16/ art16/ (copies of branch r16 spr/cards/art) so live b191 keeps its own spr/cards/art untouched. Paths swapped only in the beta build (img/artSrc/sprUrl/wb sprites).
+- On real release: push the release branch (it has the new spr/cards/art in place); the *16 folders can be deleted afterwards.
