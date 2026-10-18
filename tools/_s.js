@@ -1,7 +1,0 @@
-const {chromium}=require('playwright');(async()=>{const b=await chromium.launch({executablePath:'/opt/pw-browsers/chromium'});const e=[];const D='/tmp/claude-0/-home-claude/faf65de1-a492-52b3-8473-ee4e7e7dcc7a/scratchpad/sk/';
-for(const [w,h,t] of [[932,430,'m'],[1280,720,'pc']]){const p=await b.newPage({viewport:{width:w,height:h}});p.on('pageerror',x=>e.push(x.message));
-await p.goto('file:///home/claude/pixeldeck/_t.html');await p.waitForTimeout(900);
-await p.evaluate(()=>{USER={name:'g'};S=unlock(fresh());S.tut=null;['n160','n165','n167','n174','n176','n180','n182','n183','n189'].forEach(k=>S[k]=1);S.bc=[10,20,30,40,50,60,70,80,90,100];S.cleared=1500;S.gold=123456;S.dia=900;
- S.cards={h29:{lv:190,exp:0,star:6},h30:{lv:190,exp:0,star:6},h31:{lv:190,exp:0},h03:{lv:150,exp:0},h22:{lv:150,exp:0}};S.am={dragon:2};S.team=['h30','h29','h31'];S.me={name:'Toey',look:'h29'};WB.from=0;WB.to=Date.now()+5e9;home()});
-await p.waitForTimeout(2600);for(const [n,f] of [['lobby','ov("");home()'],['bag','collTab="all";coll()'],['shop','shop()'],['quests','quests()'],['pvp','pv.tab="hub";arena()'],['prep','prep()'],['settings','settings()'],['popup','home();ov(`<div class="cd dlg nt"><div class="px cdbox"><b>ทดสอบ</b><p>ป๊อปอัป</p><div class="row"><button class="btn alt">ยกเลิก</button><button class="btn go">ตกลง</button></div></div></div>`)']]){await p.evaluate(f);await p.waitForTimeout(500);await p.screenshot({path:D+t+'-'+n+'.png'})}await p.close()}
-console.log('errors',e.length,e.join('|'));await b.close()})()
