@@ -163,3 +163,10 @@ Live build: **b191** (15 Oct 2026 22:25: the invite-for-diamonds menu / FOUNDER 
 - Before Claude's weekly quota ran out, every remaining prompt went to Toey as one artifact page (https://claude.ai/artifact/FF24ipg8i5FrDgmGv7qVHu); source in tools/prompts16/ (gen.py -> data.json).
 - 179 images, in page order: star badges st6-st10 + tower shield tw1 (6), animated amulets kfang dscale deye seraph grove lion gstar hallow clover (9), 44 monsters x3 idle/walk/attack (132), 32 fx (16 frames in a 4x4 grid; game strips need code changes for 16 frames).
 - The stage-end ~10 s hang report is still open: not reproducible, waiting for Toey's answers.
+
+## b212 (beta only) — supports rework
+- Players said supports do nothing. Sim (L teams, stage camp): 2 atk + tank ~299, atk+tank+sup ~283, 2 atk + sup ~247, 3 atk ~239; most deaths at the wall are one-shots from above 20% life.
+- Heal / team-heal / team-shield skills now also strike (SK_HIT heal .6, healall .5, shieldall .5); the support poses (heal fx) then attacks. hitTgt() picks a live target (taunt first).
+- Passive "ช่วยชีวิต / Lifesaver" (supSave): first time in a battle an ally drops under 20% or takes a killing blow (left at 1 first), a ready support heals it SAVE_P of its max life (h16 40%, h04 50%, h07 60%, x heal amulet). Once per support per battle, both sides (arena too). Shown as a passive row in the card view.
+- Auto team-shield only when foes hit hard (boss/lord, or a hit ≥25% of the weakest ally's max life) or someone is low; no longer on rounds 1-2 by default.
+- After: 2 atk + sup ~279, atk+tank+sup ~307, 2 atk + tank ~299 (unchanged). Guide class line updated. Live is still b211.
