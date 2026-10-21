@@ -1,0 +1,195 @@
+<!doctype html>
+<html lang="th"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>PixelDeck CBT Pre-wipe Audit (Read Only)</title>
+<style>
+:root{color-scheme:dark}body{font-family:system-ui,sans-serif;background:#11172e;color:#f0f4ff;max-width:950px;margin:auto;padding:18px}
+h1{font-size:24px}h2{font-size:19px}button{font:inherit;color:white;background:#3056b3;border:1px solid #6685cd;border-radius:9px;padding:12px;margin:5px;cursor:pointer}
+button:disabled{opacity:.45}section{background:#1d2645;border:1px solid #43547b;border-radius:13px;padding:14px;margin:12px 0}
+.warn{color:#ffb8af}.note{color:#a9f5cf}p{line-height:1.6}small{color:#c7d5f5}
+table{border-collapse:collapse;width:100%;font-size:12px}th,td{border-bottom:1px solid #516184;padding:7px;text-align:left;word-break:break-all}
+.scroll{overflow:auto}strong{color:#ffe079}
+</style></head><body>
+<h1>PixelDeck Battle — ตรวจ Limited ก่อนล้าง CBT</h1>
+<p id="audit-version"><strong>เวอร์ชัน V3 — ตรวจ Firestore 2 รอบ · แก้ข้อผิดพลาด coll.count</strong></p>
+<section><strong>อ่านข้อมูลอย่างเดียว ไม่มีคำสั่งล้าง/เขียนฐานข้อมูล</strong>
+<p>เครื่องมือนี้โหลดเซฟทุกบัญชีจาก Firestore ไปยังหน่วยความจำในเบราว์เซอร์ของเจ้าของ และส่งออกไฟล์ JSON/CSV ลงอุปกรณ์ของเจ้าของเท่านั้น ไม่ส่งข้อมูลผู้เล่นขึ้น GitHub</p>
+<p class="warn"><b>คำเตือน:</b> นี่คือสำเนาเอกสารใน collection <code>saves</code> ไม่ใช่ Backup ทั้ง Firestore และไม่รับประกัน snapshot ณ เวลาเดียวกัน ต้องปิดปรับปรุงก่อนสแกน และสำรอง Firestore ด้วยระบบจัดการของ Google Cloud อีกชุด</p></section>
+<section><h2>ขั้นตอน</h2>
+<p>1) เปิดโหมดปิดปรับปรุงจาก Admin ก่อน · 2) ลงชื่อเข้าใช้ด้วย Google เจ้าของ · 3) กดตรวจทั้งหมด · 4) ดาวน์โหลด JSON และ CSV แล้วตรวจไฟล์ว่ามีข้อมูลจริง · 5) สำรอง Firestore อย่างเป็นทางการก่อนล้าง CBT</p>
+<button id="login">เข้า Google เจ้าของ</button><button id="audit" disabled>ตรวจบัญชีทั้งหมด (อ่านอย่างเดียว)</button>
+<button id="raw" disabled>ดาวน์โหลดเซฟ JSON</button><button id="csv" disabled>ดาวน์โหลดรายงาน Limited CSV</button>
+<p id="status">ยังไม่ได้เข้าใช้งาน</p><b id="counts"></b><div id="log"></div></section>
+<section><h2>ตัวอย่างรายชื่อผู้มีสิทธิ์คงเหลือ</h2><small>รายการเต็มอยู่ในไฟล์ CSV ซึ่งรวมทุกบัญชี แม้ไม่มี Limited เพื่อใช้ตรวจเทียบ</small>
+<div class="scroll"><table><thead><tr><th>ชื่อ</th><th>UID</th><th>การ์ด LT</th><th>เครื่องราง LT</th><th>โล่</th><th>โล่ในจดหมาย</th><th>ข้อควรตรวจ</th></tr></thead><tbody id="preview"></tbody></table></div><small id="more"></small></section>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
+<script>
+
+'use strict';
+const FB_CFG={"apiKey":"AIzaSyBxPtaSzWfEWeLUZffrgB5cbr1Mhtdpj7M","authDomain":"pixeldeck-battle-1a625.firebaseapp.com","projectId":"pixeldeck-battle-1a625","storageBucket":"pixeldeck-battle-1a625.firebasestorage.app","messagingSenderId":"520020450750","appId":"1:520020450750:web:c54dadd6f487038ab22def","databaseURL":"https://pixeldeck-battle-1a625-default-rtdb.asia-southeast1.firebasedatabase.app"};
+const CARDS={"h06":["Bone Raider","ST"],"h20":["Goblin Scrapper","ST"],"h11":["Stone Golem","ST"],"h17":["Goblin Berserker","C"],"h12":["Vampire Bat","C"],"h01":["Magma Golem","C"],"h02":["Leaf Ronin","UC"],"h16":["Elder Treant","UC"],"h21":["Sylvan Archer","UC"],"h05":["Soul Reaper","R"],"h09":["Lion Paladin","R"],"h10":["Frost Fenrir","R"],"h08":["Shadow Ninja","R"],"h15":["Glacier Sage","L"],"h13":["Crimson Lord","L"],"h14":["Scarlet Griffin","L"],"h19":["Inferno Drake","L"],"h04":["Frost Empress","L"],"h03":["Zeus","SL"],"h22":["Wukong","SL"],"h07":["Seraphina","SL"],"h18":["Aurum Hydra","LT"],"h23":["Ember Witch","C"],"h24":["Storm Shaman","UC"],"h25":["Ironbark Guardian","UC"],"h26":["Obsidian Colossus","L"],"h27":["Aegis Valkyrie","SL"],"h28":["Glacius Rex","LT"],"h29":["Vanarin","SL"],"h30":["Tenface Asura","SL"],"h31":["Indigo Dragonsteed","SL"],"h34":["Temple Yaksha","L"]};
+const AMS={"tiger":["เขี้ยวเสือ","R"],"turtle":["กระดองเต่า","R"],"hawk":["ตาเหยี่ยว","R"],"rock":["หินผา","R"],"dagger":["มีดนักฆ่า","R"],"dragon":["หัวใจมังกร","L"],"ruby":["ทับทิมโลหิต","L"],"feather":["ขนนกเทวา","L"],"kfang":["เขี้ยวราชันย์","SL"],"dscale":["เกราะมังกรเทพ","SL"],"deye":["เนตรมรณะ","SL"],"seraph":["ปีกเซราฟ","SL"],"grove":["มรกตพฤกษา","SL"],"lion":["หัวใจราชสีห์","SL"],"gstar":["ดาราพิทักษ์","SL"],"hallow":["โคมวิญญาณฟักทอง","LT"],"clover":["Lucky Clover","LT"]};
+
+const OWN = x => x !== null && typeof x === 'object' && !Array.isArray(x);
+const num = v => Number.isFinite(Number(v)) ? Number(v) : 0;
+const escCSV = v => {
+  let s = String(v==null?'':v);
+  if (/^[ \t\r\n]*[=+\-@]/.test(s)) s = "'" + s;
+  return '"' + s.replace(/"/g,'""') + '"';
+};
+function auditSave(uid,fields) {
+  let s,issues=[];
+  try { s = typeof fields.data === 'string' ? JSON.parse(fields.data) : fields.data; }
+  catch(e) { issues.push('เซฟ JSON อ่านไม่ได้'); s={}; }
+  if (!OWN(s)) { issues.push('รูปแบบเซฟผิดปกติ'); s={}; }
+  const owned=OWN(s.cards)?s.cards:{}, ev=OWN(s.ev)?s.ev:{}, am=OWN(s.am)?s.am:{};
+  const cardRows=[], amRows=[], shieldRows=[];
+  for(const [id,card] of Object.entries(owned)) {
+    if (!CARDS[id]) { issues.push('ไม่รู้จักรหัสการ์ด '+id); continue; }
+    if (CARDS[id][1] !== 'LT') continue;
+    const cp=num(card&&card.cp);
+    if (!Number.isInteger(cp)||cp<0) issues.push('จำนวนสำเนาการ์ดผิดปกติ '+id);
+    cardRows.push({id,name:CARDS[id][0],main:1,cp,ev:0,total:1+cp});
+  }
+  for(const [id,count] of Object.entries(ev)) {
+    if (!CARDS[id]) { if(num(count)>0)issues.push('ไม่รู้จักรหัสการ์ดกิจกรรม '+id); continue; }
+    if (CARDS[id][1]!=='LT' || num(count)<=0) continue;
+    if(!Number.isInteger(num(count))) issues.push('จำนวนการ์ดกิจกรรมผิดปกติ '+id);
+    const row=cardRows.find(r=>r.id===id);
+    if(row){ row.ev+=num(count);row.total+=num(count); }
+    else cardRows.push({id,name:CARDS[id][0],main:0,cp:0,ev:num(count),total:num(count)});
+  }
+  for (const [id,count] of Object.entries(am)) {
+    if(!AMS[id]) { if(num(count)>0)issues.push('ไม่รู้จักรหัสเครื่องราง '+id); continue; }
+    if (AMS[id][1] !== 'LT' || num(count)<=0) continue;
+    amRows.push({id,name:AMS[id][0],count:num(count)});
+  }
+  const equipped={};
+  for(const card of Object.values(owned)) if(card && card.am && AMS[card.am] && AMS[card.am][1]==='LT') equipped[card.am]=(equipped[card.am]||0)+1;
+  for(const [id,n] of Object.entries(equipped)) if(n>num(am[id])) issues.push('เครื่องราง Limited ที่สวมอยู่มากกว่าจำนวนในคลัง: '+id);
+  if(Array.isArray(s.sh)) for(const sh of s.sh) shieldRows.push(String(sh));
+  else if(s.sh!=null) issues.push('ข้อมูลโล่ไม่ใช่อาร์เรย์');
+  const mailShields=[];
+  if(Array.isArray(s.mail)) for(const m of s.mail) if(m && m.it && m.it.sh) mailShields.push(String(m.it.sh));
+  const name = s.me && s.me.name ? String(s.me.name) : String(fields.name||'?');
+  return {
+    uid,name,era:num(s.era)||1,seen:fields.at && fields.at.toDate?fields.at.toDate().toISOString():String(fields.at||''),
+    cards:cardRows,amulets:amRows,shields:shieldRows,mailShields,
+    founder:!!s.fd,founderGift:!!s.fdg,tag:s.shp||'',issues,
+    cardTotal:cardRows.reduce((n,v)=>n+v.total,0),
+    amTotal:amRows.reduce((n,v)=>n+v.count,0)
+  };
+}
+const flatAssets=rows=>rows.map(r=>({
+  uid:r.uid,name:r.name,era:r.era,lastSeen:r.seen,limitedCards:r.cards.map(c=>c.name+' ('+c.id+') ×'+c.total+' [main='+c.main+', copies='+c.cp+', event='+c.ev+']').join(' | '),
+  limitedCardCount:r.cardTotal,limitedAmulets:r.amulets.map(a=>a.name+' ('+a.id+') ×'+a.count).join(' | '),
+  limitedAmuletCount:r.amTotal,seasonShields:r.shields.join(' | '),mailboxShields:r.mailShields.join(' | '),
+  founder:r.founder?'YES':'',founderGift:r.founderGift?'YES':'',displayShield:r.tag||'',errors:r.issues.join(' | ')
+}));
+const makeCSV=records => {
+  const rows=flatAssets(records), keys=['uid','name','era','lastSeen','limitedCards','limitedCardCount','limitedAmulets','limitedAmuletCount','seasonShields','mailboxShields','founder','founderGift','displayShield','errors'];
+  return '\uFEFF'+[keys.map(escCSV).join(','),...rows.map(x=>keys.map(k=>escCSV(x[k])).join(','))].join('\r\n');
+};
+
+const $=id=>document.getElementById(id);
+let authUser=null,db=null,raw=[],rows=[],ready=false,summary=null,running=false;
+const line=(txt,red=false)=>{const p=document.createElement('p');p.className=red?'warn':'note';p.textContent=txt;$('log').appendChild(p)};
+const status=t=>{$('status').textContent=t};
+function download(name,text,typ) {
+  const a=document.createElement('a'),url=URL.createObjectURL(new Blob([text],{type:typ}));
+  a.href=url;a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),60000);
+}
+function render() {
+  const holders=rows.filter(x=>x.cardTotal||x.amTotal||x.shields.length||x.mailShields.length||x.founder||x.founderGift);
+  const cardHolders=rows.filter(x=>x.cardTotal>0);
+  const warnings=rows.filter(x=>x.issues.length);
+  $('counts').textContent='อ่าน '+rows.length+' บัญชี | ถือการ์ด LT '+cardHolders.length+' บัญชี ('+rows.reduce((s,x)=>s+x.cardTotal,0)+' ใบ) | มีสิทธิ์คงเหลือ '+holders.length+' บัญชี | ต้องตรวจเพิ่ม '+warnings.length+' บัญชี';
+  const top=holders.slice(0,100);
+  $('preview').replaceChildren();
+  for(const r of top){
+    const tr=document.createElement('tr');
+    for(const v of [r.name,r.uid,r.cardTotal,r.amTotal,r.shields.length,r.mailShields.length,r.issues.join('; ')]){
+      const td=document.createElement('td');td.textContent=String(v);tr.appendChild(td);
+    }
+    $('preview').appendChild(tr);
+  }
+  $('more').textContent=holders.length>100?'แสดง 100 บัญชีแรกเท่านั้น แต่ CSV และ JSON มีทุกรายการ':'';
+}
+function backupObj(){return {
+  purpose:'CBT pre-wipe player-save archive (NOT official consistent Firestore backup)',
+  createdUTC:new Date().toISOString(),projectId:FB_CFG.projectId,build:'b212',summary,
+  records:raw
+};}
+async function loadAll(){
+  if(running||!db||!authUser)return;
+  running=true;ready=false;raw=[];rows=[];summary=null;
+  $('log').replaceChildren();$('raw').disabled=true;$('csv').disabled=true;$('audit').disabled=true;
+  try {
+    status('กำลังยืนยันสิทธิ์เจ้าของ...');
+    await db.collection('adminlog').limit(1).get({source:'server'});
+    const configSnap=await db.collection('config').doc('main').get({source:'server'});
+    const cfg=configSnap.exists?configSnap.data():{};
+    const era=num(cfg.era)||1,maint=cfg.maint===true;
+    if(!maint)line('⚠ ยังไม่เปิดโหมดปิดปรับปรุง ข้อมูลผู้เล่นอาจเปลี่ยนระหว่างสำรอง',true);
+    if(era!==1)line('⚠ ERA = '+era+' ไม่ใช่ CBT ERA 1! อาจมีบัญชีถูกรีเซ็ตแล้ว',true);
+
+    const coll=db.collection('saves');
+    const signatures=new Map(),pageLimit=150;
+    async function scanPass(saveResults){
+      let q=coll.orderBy(firebase.firestore.FieldPath.documentId()).limit(pageLimit);
+      let seen=new Set(),changes=0;
+      while(true){
+        const page=await q.get({source:'server'});
+        if(page.empty)break;
+        for(const doc of page.docs){
+          if(seen.has(doc.id))throw Error('UID ซ้ำ: '+doc.id);
+          seen.add(doc.id);
+          const fields=doc.data(),stamp=JSON.stringify(fields);
+          if(saveResults){
+            signatures.set(doc.id,stamp);
+            raw.push({uid:doc.id,fields});
+            rows.push(auditSave(doc.id,fields));
+          }else if(!signatures.has(doc.id)||signatures.get(doc.id)!==stamp){changes++}
+        }
+        status((saveResults?'อ่าน':'ตรวจซ้ำ')+' '+seen.size+' บัญชี');
+        if(page.size<pageLimit)break;
+        q=coll.orderBy(firebase.firestore.FieldPath.documentId())
+           .startAfter(page.docs[page.docs.length-1]).limit(pageLimit);
+      }
+      if(!saveResults)for(const uid of signatures.keys())if(!seen.has(uid))changes++;
+      return {count:seen.size,changes};
+    }
+    const first=await scanPass(true),countBefore=first.count;
+    line('อ่านเซฟทั้งหมดครั้งแรก '+countBefore+' บัญชี');
+    const second=await scanPass(false),countAfter=second.count,changed=second.changes;
+    if(changed)line('❌ เซฟเปลี่ยนระหว่างตรวจ '+changed+' รายการ กรุณาตรวจใหม่หลังปิดปรับปรุง',true);
+    const invalid=rows.filter(r=>r.issues.length),oldEra=rows.filter(r=>r.era<era);
+    const inventoryChecksPassed=countBefore>0&&countBefore===countAfter&&countBefore===rows.length&&changed===0&&invalid.length===0&&era===1&&maint;
+    summary={countBefore,countAfter,scanned:rows.length,changedDuringScan:changed,era,maintenance:maint,invalidAccounts:invalid.length,olderEraAccounts:oldEra.length,inventoryChecksPassed,readyToWipe:false,reason:'Official Firestore backup and human verification required'};
+    if(countBefore!==countAfter||countBefore!==rows.length)line('❌ จำนวนบัญชีไม่ตรงกัน! ก่อน='+countBefore+' หลัง='+countAfter+' อ่าน='+rows.length,true);
+    if(invalid.length)line('❌ บัญชีที่ต้องตรวจเพิ่ม: '+invalid.length+' บัญชี (ดูรายงาน CSV)',true);
+    ready=inventoryChecksPassed;
+    render();
+    line(inventoryChecksPassed?'✅ รายงานผ่านการตรวจนับบัญชี แต่ยังห้ามล้างจนสำรอง Firestore อย่างเป็นทางการและตรวจไฟล์สำรองครบ':'⛔ ยังไม่พร้อมล้าง CBT: โปรดตรวจคำเตือนและสำรองก่อน',!inventoryChecksPassed);
+    status('ตรวจเสร็จ '+rows.length+' บัญชี');
+    $('raw').disabled=false;$('csv').disabled=false;
+  } catch(e){
+    line('❌ ตรวจไม่สำเร็จ: '+(e.message||e),true);
+    status('ล้มเหลว — ห้ามล้าง CBT');
+    summary={error:String(e),scanned:rows.length,readyToWipe:false,incomplete:true};
+    if(raw.length){$('raw').disabled=false;$('csv').disabled=false;line('สามารถดาวน์โหลดข้อมูลบางส่วนเพื่อสอบสวนได้ แต่ห้ามถือว่าครบ',true);render();}
+  } finally { running=false;$('audit').disabled=false; }
+}
+firebase.initializeApp(FB_CFG);db=firebase.firestore();
+$('login').onclick=()=>firebase.auth().signInWithPopup(new firebase.auth.GoogleAuthProvider()).catch(e=>line('เข้าสู่ระบบไม่สำเร็จ: '+(e.message||e),true));
+$('audit').onclick=loadAll;
+$('raw').onclick=()=>download('pixeldeck-CBT-saves-'+Date.now()+'.json',JSON.stringify(backupObj()),'application/json;charset=utf-8');
+$('csv').onclick=()=>download('pixeldeck-CBT-limited-'+Date.now()+'.csv',makeCSV(rows),'text/csv;charset=utf-8');
+firebase.auth().onAuthStateChanged(u=>{
+  authUser=u;$('login').hidden=!!u;$('audit').disabled=!u;$('raw').disabled=true;$('csv').disabled=true;
+  status(u?'ลงชื่อเข้าใช้แล้ว: '+u.email+' (ยังไม่ได้อ่านข้อมูล)':'กรุณาลงชื่อเข้าใช้ด้วยบัญชีเจ้าของ');
+});
+
+</script></body></html>
