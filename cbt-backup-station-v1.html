@@ -231,7 +231,7 @@ firebase.auth().onAuthStateChanged(u=>{
 <section id="more-backup">
 <h2>สำรอง Collections เพิ่มโดยใช้ Spark ฟรี</h2>
 <p>กดหลังจากเปิดโหมดปิดปรับปรุงและเข้าระบบด้วย Google เจ้าของ เหมาะสำหรับหลักฐานเติมเงิน ค่าตั้งเกม และการชดเชยที่ไม่ได้อยู่ในเซฟ JSON</p>
-<p class="warn">อ่านอย่างเดียวผ่านสิทธิ์ที่ Firestore Rules อนุญาต ค่าที่ส่งออกอาจไม่เก็บชนิด Timestamp เหมือนต้นฉบับ และไม่ใช่ไฟล์สำหรับ Import กลับโดยตรง</p>
+<p class="warn">อ่านอย่างเดียว ใช้จำนวนการอ่านในโควตา Spark (จำกัดไม่เกิน 3,000 เอกสารต่อครั้ง) ค่าที่ส่งออกอาจไม่เก็บชนิด Timestamp เหมือนต้นฉบับ และไม่ใช่ไฟล์สำหรับ Import กลับโดยตรง</p>
 <button id="scanMore" type="button">อ่านและเก็บชุดข้อมูลเพิ่มเติม (ไม่เขียนฐานข้อมูล)</button>
 <button id="downloadMore" type="button" disabled>ดาวน์โหลดข้อมูล Collections JSON</button>
 <pre id="moreResult" style="white-space:pre-wrap;overflow-wrap:anywhere;background:#10182d;padding:12px;border-radius:8px">ยังไม่ได้อ่าน Collections</pre>
@@ -349,12 +349,12 @@ document.getElementById('manifest').onclick=()=>{
   if(recoveryManifest)download('pixeldeck-CBT-OBT-entitlements-'+Date.now()+'.json',
     JSON.stringify(recoveryManifest,null,2),'application/json;charset=utf-8');
 };
-const extraCollections=['config','grants','slips','adminlog','refs','firsts','arena','market','trades','dmo','dmt','dmc','wb'];
+let readBudget=3000; const extraCollections=['config','grants','slips','adminlog','refs','firsts','arena','market','trades','dmo','dmt','dmc','wb'];
 async function exportCollection(name){
   const per=160,docs=[];let query=db.collection(name).orderBy(firebase.firestore.FieldPath.documentId()).limit(per);
   for(;;){
     const page=await query.get({source:'server'});
-    for(const d of page.docs)docs.push({path:d.ref.path,data:d.data()});
+    for(const d of page.docs){if(--readBudget<0)throw Error('เกินเพดานอ่านสำรอง 3000 เอกสาร');docs.push({path:d.ref.path,data:d.data()});}
     if(docs.length>=10000)throw Error('ถึงเพดาน 10,000 เอกสาร ต้องแยกชุด');
     if(page.size<per)break;
     query=db.collection(name).orderBy(firebase.firestore.FieldPath.documentId())
@@ -364,7 +364,7 @@ async function exportCollection(name){
 }
 document.getElementById('scanMore').onclick=async()=>{
   const btn=document.getElementById('scanMore');btn.disabled=true;
-  document.getElementById('downloadMore').disabled=true;moreArchive=null;
+  document.getElementById('downloadMore').disabled=true;moreArchive=null;readBudget=3000;
   try{
     if(!authUser)throw Error('ต้องล็อกอินด้วยบัญชี Google เจ้าของก่อน');
     await db.collection('adminlog').limit(1).get({source:'server'});
@@ -381,7 +381,7 @@ document.getElementById('scanMore').onclick=async()=>{
       project:FB_CFG.projectId,createdUTC:new Date().toISOString(),
       beforeEra:before.era||1,afterEra:after.era||1,
       beforeMaintenance:before.maint===true,afterMaintenance:after.maint===true,
-      complete:!Object.keys(errors).length&&before.era===after.era&&before.maint===true&&after.maint===true,
+      selectedCollectionsSucceeded:!Object.keys(errors).length&&before.era===after.era&&before.maint===true&&after.maint===true,fullFirestoreBackup:false,
       errors,excluded:['saves (already in V4 JSON)','Authentication users','payouts','dmpay','tower/*/s','wbr/*/s','other unknown subcollections'],
       items
     };
