@@ -133,29 +133,40 @@ async function loadAll(){
     const era=num(cfg.era)||1,maint=cfg.maint===true;
     if(!maint)line('⚠ ยังไม่เปิดโหมดปิดปรับปรุง ข้อมูลผู้เล่นอาจเปลี่ยนระหว่างสำรอง',true);
     if(era!==1)line('⚠ ERA = '+era+' ไม่ใช่ CBT ERA 1! อาจมีบัญชีถูกรีเซ็ตแล้ว',true);
+
     const coll=db.collection('saves');
-    const countBefore=(await coll.count().get()).data().count;
-    line('จำนวนเอกสารก่อนเริ่ม: '+countBefore);
-    let q=coll.orderBy(firebase.firestore.FieldPath.documentId()).limit(150),last=null,seen=new Set();
-    for (;;) {
-      const page=await q.get({source:'server'});
-      if(page.empty)break;
-      for (const doc of page.docs) {
-        if(seen.has(doc.id))throw Error('พบ UID ซ้ำ: '+doc.id);
-        seen.add(doc.id);
-        const fields=doc.data();
-        raw.push({uid:doc.id,fields});
-        rows.push(auditSave(doc.id,fields));
+    const signatures=new Map(),pageLimit=150;
+    async function scanPass(saveResults){
+      let q=coll.orderBy(firebase.firestore.FieldPath.documentId()).limit(pageLimit);
+      let seen=new Set(),changes=0;
+      while(true){
+        const page=await q.get({source:'server'});
+        if(page.empty)break;
+        for(const doc of page.docs){
+          if(seen.has(doc.id))throw Error('UID ซ้ำ: '+doc.id);
+          seen.add(doc.id);
+          const fields=doc.data(),stamp=JSON.stringify(fields);
+          if(saveResults){
+            signatures.set(doc.id,stamp);
+            raw.push({uid:doc.id,fields});
+            rows.push(auditSave(doc.id,fields));
+          }else if(!signatures.has(doc.id)||signatures.get(doc.id)!==stamp){changes++}
+        }
+        status((saveResults?'อ่าน':'ตรวจซ้ำ')+' '+seen.size+' บัญชี');
+        if(page.size<pageLimit)break;
+        q=coll.orderBy(firebase.firestore.FieldPath.documentId())
+           .startAfter(page.docs[page.docs.length-1]).limit(pageLimit);
       }
-      status('โหลดแล้ว '+rows.length+' / '+countBefore+' บัญชี');
-      last=page.docs[page.docs.length-1];
-      if(page.size<150)break;
-      q=coll.orderBy(firebase.firestore.FieldPath.documentId()).startAfter(last).limit(150);
+      if(!saveResults)for(const uid of signatures.keys())if(!seen.has(uid))changes++;
+      return {count:seen.size,changes};
     }
-    const countAfter=(await coll.count().get()).data().count;
+    const first=await scanPass(true),countBefore=first.count;
+    line('อ่านเซฟทั้งหมดครั้งแรก '+countBefore+' บัญชี');
+    const second=await scanPass(false),countAfter=second.count,changed=second.changes;
+    if(changed)line('❌ เซฟเปลี่ยนระหว่างตรวจ '+changed+' รายการ กรุณาตรวจใหม่หลังปิดปรับปรุง',true);
     const invalid=rows.filter(r=>r.issues.length),oldEra=rows.filter(r=>r.era<era);
-    const inventoryChecksPassed=countBefore===countAfter&&countBefore===rows.length&&invalid.length===0&&era===1&&maint;
-    summary={countBefore,countAfter,scanned:rows.length,era,maintenance:maint,invalidAccounts:invalid.length,olderEraAccounts:oldEra.length,inventoryChecksPassed,readyToWipe:false,reason:'Official Firestore backup and human verification required'};
+    const inventoryChecksPassed=countBefore>0&&countBefore===countAfter&&countBefore===rows.length&&changed===0&&invalid.length===0&&era===1&&maint;
+    summary={countBefore,countAfter,scanned:rows.length,changedDuringScan:changed,era,maintenance:maint,invalidAccounts:invalid.length,olderEraAccounts:oldEra.length,inventoryChecksPassed,readyToWipe:false,reason:'Official Firestore backup and human verification required'};
     if(countBefore!==countAfter||countBefore!==rows.length)line('❌ จำนวนบัญชีไม่ตรงกัน! ก่อน='+countBefore+' หลัง='+countAfter+' อ่าน='+rows.length,true);
     if(invalid.length)line('❌ บัญชีที่ต้องตรวจเพิ่ม: '+invalid.length+' บัญชี (ดูรายงาน CSV)',true);
     ready=inventoryChecksPassed;
