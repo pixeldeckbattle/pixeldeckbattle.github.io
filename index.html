@@ -1530,7 +1530,7 @@ $('ov').addEventListener('click',e=>{if(e.target.closest('[data-dmgo]')){mkTab='
 // ---- CBT wipe ----
 // ERA 1 = CBT. To end the CBT: set ERA to 2 and ERA_AT to the moment of the switch (ms, e.g. Date.parse('2026-12-01T00:00:00+07:00')), then deploy.
 // Every save from an older era is then rebuilt from scratch the first time it loads, on any device, from the local copy or the cloud copy.
-// Only Limited cards survive: real LT cards and the event LT cards from the Limited Pack, which become real playable cards (Lv 1, extra copies kept).
+// Only real, owned LT cards survive: one Lv 1 card per unique character ID. Duplicate copies and all event cards are removed. LT amulets survive at most one per unique type; Gold and diamonds reset to zero.
 // Shared data older than ERA_AT (market listings, sale payouts, arena entries, unclaimed diamond grants) is ignored by every client.
 let ERA=1,ERA_AT=0;
 // Live settings written by the owner's admin page (Firestore config/main, readable by everyone, writable only by the owner):
@@ -1540,11 +1540,42 @@ let ERA=1,ERA_AT=0;
 let CFG={};try{CFG=JSON.parse(localStorage.getItem('pdb_cfg'))||{}}catch(e){}
 if(CFG.era>ERA){ERA=CFG.era;ERA_AT=CFG.eraAt||0}
 function fresh(){return{gold:0,dia:0,cleared:0,cards:{},team:[],auto:false,era:ERA}}
-const eraKeep=s=>{const lt={};Object.keys(s.cards||{}).forEach(id=>{if(C[id]&&C[id].r==='LT')lt[id]=1+(s.cards[id].cp||0)});Object.keys(s.ev||{}).forEach(id=>{if(C[id]&&C[id].r==='LT'&&s.ev[id]>0)lt[id]=(lt[id]||0)+s.ev[id]});return lt};
+const eraKeep=s=>{const lt={};Object.keys(s.cards||{}).forEach(id=>{if(C[id]&&C[id].r==='LT'&&s.cards[id])lt[id]=1});return lt};
 function eraWipe(s){if((s.era||1)>=ERA)return s;const lt=eraKeep(s),n=fresh();
-  Object.keys(lt).forEach(id=>{n.cards[id]={lv:1,exp:0};if(lt[id]>1)n.cards[id].cp=lt[id]-1});
-  if(s.me&&s.me.name)n.me={name:s.me.name};['lang','snd','sfx','spd','fd','fdg','sh','shp','rv'].forEach(k=>{if(s[k]!=null)n[k]=s[k]});{const m=(s.mail||[]).filter(x=>x&&x.it&&x.it.sh).map(x=>({...x,it:{sh:x.it.sh}}));if(m.length)n.mail=m}   // b167: season shields are Limited too, also the ones still waiting in the mailbox
-  Object.keys(AM).forEach(k=>{if(AM[k].r==='LT'&&s.am&&s.am[k]>0){n.am=n.am||{};n.am[k]=s.am[k]}});   // Limited amulets (worn or spare) stay with whoever holds them
+  // OBT: exactly one owned, playable LT card per character. No copies and no event cards.
+  Object.keys(lt).forEach(id=>{n.cards[id]={lv:1,exp:0}});
+  if(s.me&&s.me.name)n.me={name:s.me.name};
+  // Limited collectibles must remain: FOUNDER, Tower/PvP seasonal shields,
+  // Pumpkin King world-boss shields, PUMPKIN SLAYER title and limited event frames.
+  ['lang','snd','sfx','spd','fd','fdg','sh','shp','rv','wbsh','wbt','pfx'].forEach(k=>{if(s[k]!=null)n[k]=s[k]});
+  if(Array.isArray(n.sh))n.sh=[...new Set(n.sh)];
+  if(Array.isArray(n.wbsh)){
+    const seen=new Set();
+    n.wbsh=n.wbsh.filter(x=>{if(!x||x.r==null)return false;const key=String(x.e||'')+':'+String(x.r);if(seen.has(key))return false;seen.add(key);return true});
+  }
+  // One per Limited amulet type. Copies and non-LT amulets do not carry over.
+  Object.keys(AM).forEach(k=>{if(AM[k].r==='LT'&&s.am&&s.am[k]>0){n.am=n.am||{};n.am[k]=1}});
+  // Preserve unclaimed Limited rewards while discarding the event-card and
+  // Gold/Diamond/consumable parts of mixed reward mail.
+  const pending=[],reservedAm=new Set(Object.keys(n.am||{})),reservedPf=new Set(Object.keys(n.pfx||{})),seenMail=new Set();
+  const reservedSh=new Set(n.sh||[]),reservedWb=new Set((n.wbsh||[]).map(x=>String(x.e||'')+':'+String(x.r)));
+  (Array.isArray(s.mail)?s.mail:[]).forEach(m=>{
+    if(!m||!m.it)return;
+    const id=String(m.id||'');
+    if(id&&seenMail.has(id))return;
+    if(id)seenMail.add(id);
+    const it=m.it,keep={};
+    if(it.sh&&!reservedSh.has(it.sh)){keep.sh=it.sh;reservedSh.add(it.sh)}
+    // Claiming an old world-boss mail reward uses WB.id in itGive; do not grant a second shield with the same event/rank.
+    if(it.wbsh){
+      const key=String(WB.id)+':'+String(it.wbsh);
+      if(!reservedWb.has(key)){keep.wbsh=it.wbsh;reservedWb.add(key)}
+    }
+    if(it.pfr&&!reservedPf.has(it.pfr)){keep.pfr=it.pfr;reservedPf.add(it.pfr)}
+    if(it.amk&&AM[it.amk]&&AM[it.amk].r==='LT'&&!reservedAm.has(it.amk)){keep.amk=it.amk;reservedAm.add(it.amk)}
+    if(Object.keys(keep).length)pending.push({...m,it:keep});
+  });
+  if(pending.length)n.mail=pending;
   n.wiped={era:ERA,lt};n.ts=Date.now();return n}
 const atMs=v=>v==null?Date.now():v.toMillis?v.toMillis():+v||Date.parse(v)||0,oldEra=v=>atMs(v)<ERA_AT;
 const TEST=false; // test build: every card of every rank is unlocked
@@ -1700,10 +1731,10 @@ const EX_GOLD=20000,EX_DIA=10; // 2,000 Gold a diamond, so the Pro Pack's two pr
 // Pro Pack: only Rare and above. VIP card: [days, diamonds, THB shown in the top-up shop]
 const PRO={dia:600,gold:1200000,n:3,odds:{R:.77,L:.2,SL:.03}};
 // Limited Pack (event): the cheapest pack. It gives EVENT cards of any rank, kept in S.ev {id:count}, never in S.cards, so they cannot enter a stage or PvP team.
-// Event cards below Limited can only be dismantled into points; an event Limited is kept (it is what survives the CBT wipe and becomes playable in the OBT).
+// All Event cards, including LT Event cards, are removed at CBT -> OBT. Only real owned LT cards in s.cards survive one per character.
 // The pity counter (LTD.pity, S.lp) still works but is deliberately not shown to players (b148, owner's call): the UI lists the odds only.
 // Opened with dismantle points (S.dp) or diamonds; while CBT is true the diamond price is off. Guaranteed Limited after LTD.pity opens.
-const CBT=true,DIS={C:1,UC:3,R:15,L:60,SL:300};
+const CBT=true,cbtOn=()=>CBT&&ERA<2,DIS={C:1,UC:3,R:15,L:60,SL:300};
 const LTD={dia:100,pts:200,n:1,pity:300,odds:{LT:.002,SL:.006,L:.032,R:.11,UC:.25}};const LT_RK=['C','UC','R','L','SL','LT'];
 const VIPS=[[7,120,59],[30,400,199],[365,3000,1490]];
 // VIP has 3 tiers (1 Bronze = 7 days, 2 Silver = 30 days, 3 Gold = 1 year). Every tier gives Exp x2, Gold x2 and arena coins x2; the table adds what differs:
@@ -1980,11 +2011,11 @@ function shopPacks(){const d=S.dia||0,nt=x=>`<i class="nt">${x}</i>`,L=[
    btn:`<button class="btn" data-act="opengold" ${S.gold<GPACK?'disabled':''}>${T('เปิด','Open')} ${nt(GPACK.toLocaleString('en')+' Gold')}</button>`},
   {k:'starter',n:'STARTER PACK',c:'#6fd8ff',sub:T('ได้แน่นอน Rare 2 ใบ + Uncommon 1 ใบ · สุ่มแค่ว่าได้ตัวไหน','Always 2 Rare + 1 Uncommon · only which characters is random'),odds:'',
    btn:`<button class="btn go" data-act="open" ${d<PACK?'disabled':''}>${T('เปิด','Open')} ${nt(PACK)} ${T('เพชร','diamonds')}</button>`},
-  {k:'pro',n:'PRO PACK',c:'#ff8a5c',sub:T(`การ์ด ${PRO.n} ใบ ระดับ Rare ขึ้นไปทุกใบ`,`${PRO.n} cards, all Rare or better`),odds:pctOf(PRO.odds,['R','L','SL']),lock:CBT&&!isDev(),
-   btn:CBT&&!isDev()?`<button class="btn" disabled>${T('เปิดขายตอน OBT','On sale in the OBT')} · ${nt(PRO.dia.toLocaleString('en'))} ${T('เพชร','diamonds')}</button>`
+  {k:'pro',n:'PRO PACK',c:'#ff8a5c',sub:T(`การ์ด ${PRO.n} ใบ ระดับ Rare ขึ้นไปทุกใบ`,`${PRO.n} cards, all Rare or better`),odds:pctOf(PRO.odds,['R','L','SL']),lock:cbtOn()&&!isDev(),
+   btn:cbtOn()&&!isDev()?`<button class="btn" disabled>${T('เปิดขายตอน OBT','On sale in the OBT')} · ${nt(PRO.dia.toLocaleString('en'))} ${T('เพชร','diamonds')}</button>`
     :`<button class="btn go" data-act="openpro" data-c="d" ${d<PRO.dia?'disabled':''}>${T('เปิด','Open')} ${nt(PRO.dia.toLocaleString('en'))} ${T('เพชร','diamonds')}</button><button class="btn" data-act="openpro" data-c="g" ${S.gold<PRO.gold?'disabled':''}>${T('เปิด','Open')} ${nt(PRO.gold.toLocaleString('en')+' Gold')}</button>`}];
-  if(CBT)L.push({k:'ltd',n:'LIMITED PACK',c:'#8fe9ff',tag:'CBT EVENT',sub:T('การ์ดอีเวนต์ 1 ใบ · มีเฉพาะช่วง CBT จบแล้วแพ็คนี้จะหายไป','1 event card · CBT only, gone when the CBT ends'),odds:LT_RK.map(r=>RAR[r].n+' '+P2(ltdP(r))).join(' · '),
-   note:T('การ์ดอีเวนต์ใช้ลงด่านและ PvP ไม่ได้ ย่อยเป็นแต้มได้อย่างเดียว ยกเว้น Limited เก็บไว้ใช้ได้ตอน OBT','Event cards cannot fight; they can only be dismantled for points, except a Limited, which is kept for the OBT')+` · ${T('แต้ม','Points')} <b>${(S.dp||0).toLocaleString('en')}</b>`,
+  if(cbtOn())L.push({k:'ltd',n:'LIMITED PACK',c:'#8fe9ff',tag:'CBT EVENT',sub:T('การ์ดอีเวนต์ 1 ใบ · มีเฉพาะช่วง CBT จบแล้วแพ็คนี้จะหายไป','1 event card · CBT only, gone when the CBT ends'),odds:LT_RK.map(r=>RAR[r].n+' '+P2(ltdP(r))).join(' · '),
+   note:T('การ์ด Event ทุกระดับรวม Limited จะถูกล้างก่อน OBT ใช้ลงด่านและ PvP ไม่ได้','All Event cards including Limited are removed before OBT; none can fight')+` · ${T('แต้ม','Points')} <b>${(S.dp||0).toLocaleString('en')}</b>`,
    btn:`<button class="btn go" data-act="openltd" data-c="p" ${(S.dp||0)<LTD.pts?'disabled':''}>${T('เปิด','Open')} ${nt(LTD.pts)} ${T('แต้ม','points')}</button><button class="btn" data-act="openltd" data-c="d" ${d<LTD.dia?'disabled':''}>${T('เปิด','Open')} ${nt(LTD.dia)} ${T('เพชร','diamonds')}</button><button class="btn alt" data-act="dis">${T('ย่อยการ์ด','Dismantle')}</button>`});
   return L}
 const shopInfo=p=>`<b class="pkn nt" style="color:${p.c}">${p.n}${p.tag?` <i>${p.tag}</i>`:''}</b><span class="pks">${p.sub}</span>${p.odds?`<span class="pko nt">${p.odds}</span>`:''}${p.note?`<span class="pkx nt">${p.note}</span>`:''}<div class="pkb">${p.btn}</div>`;
@@ -2001,12 +2032,12 @@ function shop(){const d=S.dia||0,L=shopPacks();shopSel=Math.max(0,Math.min(L.len
    <div class="chdots" id="chdots">${L.map((p,i)=>`<i class="${i===shopSel?'on':''}"></i>`).join('')}</div>
    <div class="pkd" id="pkd">${shopInfo(L[shopSel])}</div>
    <p class="shhint">${T('เลื่อนซ้ายขวาเพื่อเลือกแพ็ค · ใบซ้ำเก็บไว้อัปดาว ฟิวชั่น ขายในตลาดกลาง หรือย่อยเป็นแต้ม','Swipe left and right to choose a pack · duplicates go to stars, fusion, the market or dismantling')}</p>
-   ${pull?`<div class="shres"><b class="shrt">${T('ได้การ์ด','You got')}</b><div class="pull">${pull.map(p=>p.ev?`<div>${evCard(p.id)}<span class="sub">${C[p.id].r==='LT'?T('การ์ดอีเวนต์ Limited · เก็บไว้ใช้ตอน OBT','Limited event card · kept for the OBT'):T('การ์ดอีเวนต์ · ย่อยได้','Event card · dismantles for')+` <b class="nt">+${DIS[C[p.id].r]}</b> ${T('แต้ม','points')}`}</span></div>`:`<div>${full(p.id,`data-act="zoom" data-id="${p.id}"`,'glow')}<span class="sub">${p.dup?T(`ใบซ้ำ +1 (มี ${S.cards[p.id].cp||0})`,`copy +1 (${S.cards[p.id].cp||0} held)`):T('ใหม่!','New!')}</span></div>`).join('')}</div><div class="row"><button class="btn go" data-act="shopok">${T('ตกลง','OK')}</button></div></div>`:''}</div>`);
+   ${pull?`<div class="shres"><b class="shrt">${T('ได้การ์ด','You got')}</b><div class="pull">${pull.map(p=>p.ev?`<div>${evCard(p.id)}<span class="sub">${C[p.id].r==='LT'?T('การ์ดอีเวนต์ Limited · ล้างก่อน OBT','Limited event card · removed before OBT'):T('การ์ดอีเวนต์ · ย่อยได้','Event card · dismantles for')+` <b class="nt">+${DIS[C[p.id].r]}</b> ${T('แต้ม','points')}`}</span></div>`:`<div>${full(p.id,`data-act="zoom" data-id="${p.id}"`,'glow')}<span class="sub">${p.dup?T(`ใบซ้ำ +1 (มี ${S.cards[p.id].cp||0})`,`copy +1 (${S.cards[p.id].cp||0} held)`):T('ใหม่!','New!')}</span></div>`).join('')}</div><div class="row"><button class="btn go" data-act="shopok">${T('ตกลง','OK')}</button></div></div>`:''}</div>`);
   const tr=$('chrow');if(tr){shopPick(shopSel);tr.onscroll=()=>{clearTimeout(shopT);shopT=setTimeout(()=>{const mid=tr.scrollLeft+tr.clientWidth/2;let b=0,bd=1e9;[...tr.children].forEach((c,i)=>{const x=Math.abs(c.offsetLeft+c.offsetWidth/2-mid);if(x<bd){bd=x;b=i}});if(b!==shopSel){shopSel=b;try{sfx('tap')}catch(e){}shopMark();shopMid(1)}},90)}}
 }
 const ltdP=r=>r==='C'?1-Object.values(LTD.odds).reduce((a,b)=>a+b,0):LTD.odds[r],P2=v=>+(v*100).toFixed(v<.01?2:1)+'%';
 function ltdRoll(){S.lp=(S.lp||0)+1;let x=Math.random(),r='C';if(S.lp>=LTD.pity)r='LT';else for(const k of['LT','SL','L','R','UC'])if((x-=LTD.odds[k])<0){r=k;break}if(r==='LT')S.lp=0;return r}
-function openLtd(cur){if(!CBT)return;if(cur==='d'){if((S.dia||0)<LTD.dia)return;S.dia-=LTD.dia;ld('ltd',-LTD.dia)}else{if((S.dp||0)<LTD.pts)return;S.dp-=LTD.pts}
+function openLtd(cur){if(!cbtOn())return;if(cur==='d'){if((S.dia||0)<LTD.dia)return;S.dia-=LTD.dia;ld('ltd',-LTD.dia)}else{if((S.dp||0)<LTD.pts)return;S.dp-=LTD.pts}
   const id=randOf(ltdRoll());S.ev=S.ev||{};S.ev[id]=(S.ev[id]||0)+1;clPack('ltd');try{const L=clInit();L.src.ltd=(L.src.ltd||0)+1;if(C[id].r==='LT'){L.r.push([Date.now(),id,'ltd',0]);if(L.r.length>60)L.r.shift()}}catch(e){}pull=[{id,ev:true}];save();sfx('win');shop()}
 // An event card: the card picture and name only, with a stamp. No fire, lightning, sparkles, stars, level or stats.
 const evCard=id=>`<div class="cf evc r-${C[id].r}"><img src="${img(id)}" alt="${C[id].n}"><span class="cnm nt">${C[id].n}</span><span class="evst"><b class="nt">EVENT CARD</b><i>ใช้เล่นไม่ได้</i></span></div>`;
@@ -2100,7 +2131,7 @@ function dis(){const L=disList();disS.forEach(k=>{if(!L.includes(k))disS.delete(
     <button class="btn alt sm" data-act="fuse"><span class="nt">${T('ฟิวชั่นการ์ด','Card Fusion')}</span></button>
     <button class="btn alt sm" data-act="shop">ไปร้านค้า</button>
   </div><div class="main">${keep.length?`<p class="sub" style="color:#6fd8ff">การ์ดอีเวนต์ Limited ที่เก็บไว้ใช้ตอน OBT: <b class="nt">${keep.map(id=>C[id].n+' x'+S.ev[id]).join(', ')}</b></p>`:''}<div class="disg">${L.map(k=>`<button class="mkpick ${disS.has(k)?'on':''}" data-act="dissel" data-k="${k}" aria-pressed="${disS.has(k)}" aria-label="${C[disId(k)].n}">${mkIcon(disId(k),k.startsWith('e:'))}${k.startsWith('e:')?'<em class="evb nt">EV</em>':''}<small>x${disN(k)}</small></button>`).join('')||'<span class="sub">ไม่มีการ์ดให้ย่อย</span>'}</div></div></div>`)}
-function openPro(cur){if(CBT&&!isDev())return;if(cur==='d'){if((S.dia||0)<PRO.dia)return;S.dia-=PRO.dia;ld('pro',-PRO.dia)}else{if(S.gold<PRO.gold)return;S.gold-=PRO.gold;lg('pro',-PRO.gold)}
+function openPro(cur){if(cbtOn()&&!isDev())return;if(cur==='d'){if((S.dia||0)<PRO.dia)return;S.dia-=PRO.dia;ld('pro',-PRO.dia)}else{if(S.gold<PRO.gold)return;S.gold-=PRO.gold;lg('pro',-PRO.gold)}
   clPack('pro');pull=Array.from({length:PRO.n},()=>{const x=Math.random();return giveCard(randOf(x<PRO.odds.SL?'SL':x<PRO.odds.SL+PRO.odds.L?'L':'R'),'pro')});save();sfx('win');shop()}
 function vip(){const d=S.dia||0,tr=vipOwn(),ck=t=>`<li>${t}</li>`;
   const perks=i=>{const q=VIPT[i];return [T('Exp x2 · Gold x2 · เหรียญอารีน่า x2','Exp x2 · Gold x2 · arena coins x2'),T('โอกาสดรอป +'+Math.round((q.dr-1)*100)+'%','Drop chance +'+Math.round((q.dr-1)*100)+'%'),
@@ -3711,7 +3742,7 @@ function guide(){
    packs:[T('แพ็คการ์ด','Packs'),()=>tb([T('แพ็ค','Pack'),T('ราคา','Price'),T('ได้','Gives'),...['C','UC','R','L','SL'].map(rn)],
      [['Gold Pack',N(GPACK)+' Gold',GN+T(' ใบ',' cards'),...['C','UC','R','L','SL'].map(r=>P(GODDS[r]))],['Starter Pack',PACK+T(' เพชร',' diamonds'),T('3 ใบ','3 cards'),'–',T('1 ใบ','1 card'),T('2 ใบ','2 cards'),'–','–'],['Pro Pack',N(PRO.dia)+T(' เพชร หรือ ',' diamonds or ')+N(PRO.gold)+' Gold',PRO.n+T(' ใบ',' cards'),'–','–',...['R','L','SL'].map(r=>P(PRO.odds[r]))]])
      +`<p>${T('การ์ดดรอปจากด่านได้ด้วย: โอกาส ','Cards also drop from stages: ')}${P(CDROP)}${T(' ต่อการชนะ ด่านบอส ',' per win, boss stages ')}${P(CDROP_BOSS)} · ${CD_ODDS.slice().reverse().map(([r,pr,min])=>rn(r)+' '+P(pr)+(min>1?T(' (ด่าน ',' (stage ')+min+'+)':'')).join(' · ')}${T(' ที่เหลือเป็น Common',', the rest Common')}</p>`
-     +ul([T('Starter Pack ไม่มีการสุ่มระดับ: ได้ Rare 2 ใบ (ไม่ซ้ำกัน) และ Uncommon 1 ใบทุกกล่อง สุ่มแค่ตัวการ์ด','The Starter Pack has no rank roll: every box holds 2 different Rare cards and 1 Uncommon; only which cards is random'),T('Pro Pack เปิดขายตอน OBT ช่วง CBT ยังเปิดไม่ได้','The Pro Pack goes on sale in the OBT; it is closed during the CBT'),T(`Limited Pack (อีเวนต์ CBT): ${LTD.pts} แต้มย่อยการ์ด หรือ ${LTD.dia} เพชร ได้การ์ดอีเวนต์ 1 ใบ · ${LT_RK.map(r=>RAR[r].n+' '+P2(ltdP(r))).join(' · ')} · มีเฉพาะช่วง CBT พอเข้า OBT แพ็คนี้จะไม่มีแล้ว`,`Limited Pack (CBT event): ${LTD.pts} dismantle points or ${LTD.dia} diamonds for 1 event card · ${LT_RK.map(r=>RAR[r].n+' '+P2(ltdP(r))).join(' · ')} · only during the CBT; it is gone in the OBT`),T('การ์ดอีเวนต์มีป้าย EVENT CARD ไม่มีเอฟเฟกต์ ไม่มีเลเวลและค่าสเตตัส ใช้ลงด่านและ PvP ไม่ได้ ขายหรือส่งต่อไม่ได้ ทำได้อย่างเดียวคือย่อยเป็นแต้ม','Event cards carry an EVENT CARD stamp, have no effects, level or stats, cannot enter stages or PvP, cannot be sold or gifted, and can only be dismantled into points'),T('การ์ดอีเวนต์ระดับ Limited ย่อยไม่ได้ ระบบเก็บไว้ให้ และจะใช้เล่นได้จริงตอน OBT','An event card of Limited rank cannot be dismantled; it is kept for you and becomes playable in the OBT'),T(`ย่อยการ์ด (ในร้านค้า): การ์ดอีเวนต์และใบซ้ำของการ์ดจริงแลกเป็นแต้ม ${Object.keys(DIS).map(r=>RAR[r].n+' '+DIS[r]).join(' · ')} · ย่อยแล้วเอาคืนไม่ได้ การ์ดเริ่มต้นและ Limited ย่อยไม่ได้`,`Dismantle (in the pack shop): event cards and duplicate copies of real cards become points — ${Object.keys(DIS).map(r=>RAR[r].n+' '+DIS[r]).join(' · ')} · it cannot be undone; Starter and Limited cards cannot be dismantled`),T('การ์ดเริ่มต้นไม่มีในแพ็ค · Limited ตัวจริงดรอปจากด่าน 400 ขึ้นไปเท่านั้น','Starter cards are not in packs · a real Limited only drops from stage 400+'),T('จบช่วง CBT ข้อมูลทั้งหมดจะถูกล้าง (การ์ด Gold เพชร เลเวล ด่าน แรงก์) ยกเว้นการ์ด Limited ที่ครอบครองอยู่ ซึ่งจะได้คืนตอน OBT','When the CBT ends everything is wiped (cards, Gold, diamonds, levels, stages, rank) except Limited cards you own, which are returned in the OBT')])],
+     +ul([T('Starter Pack ไม่มีการสุ่มระดับ: ได้ Rare 2 ใบ (ไม่ซ้ำกัน) และ Uncommon 1 ใบทุกกล่อง สุ่มแค่ตัวการ์ด','The Starter Pack has no rank roll: every box holds 2 different Rare cards and 1 Uncommon; only which cards is random'),T('Pro Pack เปิดขายตอน OBT ช่วง CBT ยังเปิดไม่ได้','The Pro Pack goes on sale in the OBT; it is closed during the CBT'),T(`Limited Pack (อีเวนต์ CBT): ${LTD.pts} แต้มย่อยการ์ด หรือ ${LTD.dia} เพชร ได้การ์ดอีเวนต์ 1 ใบ · ${LT_RK.map(r=>RAR[r].n+' '+P2(ltdP(r))).join(' · ')} · มีเฉพาะช่วง CBT พอเข้า OBT แพ็คนี้จะไม่มีแล้ว`,`Limited Pack (CBT event): ${LTD.pts} dismantle points or ${LTD.dia} diamonds for 1 event card · ${LT_RK.map(r=>RAR[r].n+' '+P2(ltdP(r))).join(' · ')} · only during the CBT; it is gone in the OBT`),T('การ์ดอีเวนต์มีป้าย EVENT CARD ไม่มีเอฟเฟกต์ ไม่มีเลเวลและค่าสเตตัส ใช้ลงด่านและ PvP ไม่ได้ ขายหรือส่งต่อไม่ได้ ทำได้อย่างเดียวคือย่อยเป็นแต้ม','Event cards carry an EVENT CARD stamp, have no effects, level or stats, cannot enter stages or PvP, cannot be sold or gifted, and can only be dismantled into points'),T('การ์ดอีเวนต์ระดับ Limited ย่อยไม่ได้ และจะถูกล้างก่อน OBT','Limited-rank Event cards cannot be dismantled and will be removed before OBT'),T(`ย่อยการ์ด (ในร้านค้า): การ์ดอีเวนต์และใบซ้ำของการ์ดจริงแลกเป็นแต้ม ${Object.keys(DIS).map(r=>RAR[r].n+' '+DIS[r]).join(' · ')} · ย่อยแล้วเอาคืนไม่ได้ การ์ดเริ่มต้นและ Limited ย่อยไม่ได้`,`Dismantle (in the pack shop): event cards and duplicate copies of real cards become points — ${Object.keys(DIS).map(r=>RAR[r].n+' '+DIS[r]).join(' · ')} · it cannot be undone; Starter and Limited cards cannot be dismantled`),T('การ์ดเริ่มต้นไม่มีในแพ็ค · Limited ตัวจริงดรอปจากด่าน 400 ขึ้นไปเท่านั้น','Starter cards are not in packs · a real Limited only drops from stage 400+'),T('จบช่วง CBT ข้อมูลทั้งหมดจะถูกล้าง (การ์ด Gold เพชร เลเวล ด่าน แรงก์) ยกเว้นการ์ด Limited ที่ครอบครองอยู่ ซึ่งจะได้คืนตอน OBT','When the CBT ends everything is wiped (cards, Gold, diamonds, levels, stages, rank) except Limited cards you own, which are returned in the OBT')])],
    money:[T('Gold และเพชร','Gold and diamonds'),()=>ul([
      T('ชนะด่านครั้งแรก: Gold 150–450% ของค่าฐาน (ค่าฐาน = 6 + ด่าน÷3) · เล่นซ้ำ: 60–165%','First clear: 150–450% of the base (base = 6 + stage÷3) · replays: 60–165%'),
      T('ทุกครั้งที่ชนะมีโอกาส 5% ได้ JACKPOT x4','Every win has a 5% chance of a x4 JACKPOT'),
@@ -3842,7 +3873,7 @@ function titleScreen(){
    <p class="cfoot nt">PixelDeckBattle · CBT build ${BUILD}</p></div>`);
 }
 // ---------- Firebase: Google sign-in and one cloud save document per account (saves/{uid}) ----------
-const BUILD='b212';
+const BUILD='b213';
 // The game moved to its own address. Anyone opening the old address is sent on, but only once the new site answers, so a broken move cannot lock players out.
 const DISCORD='https://discord.gg/dHDzRyPG9',DC_SVG='<svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="currentColor" d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.4189-2.1568 2.4189Z"/></svg>';
 const NEW_HOME='https://pixeldeckbattle.github.io/';
@@ -3960,6 +3991,7 @@ document.addEventListener('focusin',ev=>{const n=ev.target,chat=n.id==='chi';if(
   $('kbo').onclick=()=>done(true);$('kbc').onclick=()=>done(false);i.onkeydown=e=>{if(e.key==='Enter')done(true)};setTimeout(()=>i.focus(),30)});
 S=load();try{const l=localStorage.getItem('pdb_lang');if(l&&!USER)S.lang=l}catch(e){}document.documentElement.lang=S.lang||'th';USER?loading(USER.sub?cloudPull().catch(()=>{}):null):titleScreen();
 </script>
+
 <a href="https://pixelpicked.com/game/3QqeaUhmbSp/pixeldeck-battle" target="_blank" rel="noopener">
 <img src="https://api.pixelpicked.com/api/badges/3QqeaUhmbSp/live.png?theme=dark" width="250" height="54" alt="Approved on PixelPicked">
 </a>
