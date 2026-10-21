@@ -1,0 +1,139 @@
+<!doctype html><html lang="th"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><title>PixelDeck OBT Limited Preview</title><style>:root{color-scheme:dark}body{font:16px/1.55 system-ui,sans-serif;max-width:780px;margin:auto;padding:18px;background:#10162f;color:#eaf2ff}section{background:#1f2949;border:1px solid #4c628f;padding:16px;border-radius:13px;margin:15px 0}h1{font-size:24px}button{font:inherit;background:#3459b2;color:white;border-radius:9px;padding:12px;border:1px solid #7896e1;margin:5px}button:disabled{opacity:.5}input{max-width:100%;display:block;margin:10px 0 20px}pre{white-space:pre-wrap;overflow-wrap:anywhere;padding:12px;background:#0c132a;border-radius:10px}.warn{color:#ffbcb3}</style></head><body><h1>PixelDeck OBT — ตรวจ Limited V2</h1><section><b>กฎหลังล้าง: การ์ด LT ตัวละ 1 ใบ, เครื่องราง LT ชนิดละ 1, ไม่มี Event / Gold / เพชร</b><p>เก็บป้าย FOUNDER โล่หอคอย/PvP โล่บอสโลก ฉายา PUMPKIN SLAYER และกรอบ Limited</p><p class="warn">ใช้เฉพาะไฟล์ CBT Saves JSON ในมือถือเท่านั้น ไม่มี Firebase SDK ไม่มีการส่งข้อมูล ไม่มีการเขียนเซฟ ไม่ใช่คำสั่งล้าง CBT</p></section><section><label>เลือกไฟล์ pixeldeck-CBT-saves-....json<input id="file" type="file" accept=".json,application/json"></label><button id="test">ตรวจ 140 บัญชีด้วยกฎใหม่</button><button id="download" disabled>ดาวน์โหลดสรุปผล (ไม่มี UID เต็ม)</button></section><section><h2>ผลตรวจ</h2><pre id="result">ยังไม่ได้เลือกไฟล์</pre></section><script>'use strict';const C={"h06":{"r":"ST"},"h20":{"r":"ST"},"h11":{"r":"ST"},"h17":{"r":"C"},"h12":{"r":"C"},"h01":{"r":"C"},"h02":{"r":"UC"},"h16":{"r":"UC"},"h21":{"r":"UC"},"h05":{"r":"R"},"h09":{"r":"R"},"h10":{"r":"R"},"h08":{"r":"R"},"h15":{"r":"L"},"h13":{"r":"L"},"h14":{"r":"L"},"h19":{"r":"L"},"h04":{"r":"L"},"h03":{"r":"SL"},"h22":{"r":"SL"},"h07":{"r":"SL"},"h18":{"r":"LT"},"h23":{"r":"C"},"h24":{"r":"UC"},"h25":{"r":"UC"},"h26":{"r":"L"},"h27":{"r":"SL"},"h28":{"r":"LT"},"h29":{"r":"SL"},"h30":{"r":"SL"},"h31":{"r":"SL"},"h34":{"r":"L"}},AM={"tiger":{"r":"R"},"turtle":{"r":"R"},"hawk":{"r":"R"},"rock":{"r":"R"},"dagger":{"r":"R"},"dragon":{"r":"L"},"ruby":{"r":"L"},"feather":{"r":"L"},"kfang":{"r":"SL"},"dscale":{"r":"SL"},"deye":{"r":"SL"},"seraph":{"r":"SL"},"grove":{"r":"SL"},"lion":{"r":"SL"},"gstar":{"r":"SL"},"hallow":{"r":"LT"},"clover":{"r":"LT"}},WB={id:'hw26'},ERA=2;
+function fresh(){return{gold:0,dia:0,cleared:0,cards:{},team:[],auto:false,era:ERA}}
+const eraKeep=s=>{const lt={};Object.keys(s.cards||{}).forEach(id=>{if(C[id]&&C[id].r==='LT'&&s.cards[id])lt[id]=1});return lt};
+function eraWipe(s){if((s.era||1)>=ERA)return s;const lt=eraKeep(s),n=fresh();
+  // OBT: exactly one owned, playable LT card per character. No copies and no event cards.
+  Object.keys(lt).forEach(id=>{n.cards[id]={lv:1,exp:0}});
+  if(s.me&&s.me.name)n.me={name:s.me.name};
+  // Limited collectibles must remain: FOUNDER, Tower/PvP seasonal shields,
+  // Pumpkin King world-boss shields, PUMPKIN SLAYER title and limited event frames.
+  ['lang','snd','sfx','spd','fd','fdg','sh','shp','rv','wbsh','wbt','pfx'].forEach(k=>{if(s[k]!=null)n[k]=s[k]});
+  if(Array.isArray(n.sh))n.sh=[...new Set(n.sh)];
+  if(Array.isArray(n.wbsh)){
+    const seen=new Set();
+    n.wbsh=n.wbsh.filter(x=>{if(!x||x.r==null)return false;const key=String(x.e||'')+':'+String(x.r);if(seen.has(key))return false;seen.add(key);return true});
+  }
+  // One per Limited amulet type. Copies and non-LT amulets do not carry over.
+  Object.keys(AM).forEach(k=>{if(AM[k].r==='LT'&&s.am&&s.am[k]>0){n.am=n.am||{};n.am[k]=1}});
+  // Preserve unclaimed Limited rewards while discarding the event-card and
+  // Gold/Diamond/consumable parts of mixed reward mail.
+  const pending=[],reservedAm=new Set(Object.keys(n.am||{})),reservedPf=new Set(Object.keys(n.pfx||{})),seenMail=new Set();
+  const reservedSh=new Set(n.sh||[]),reservedWb=new Set((n.wbsh||[]).map(x=>String(x.e||'')+':'+String(x.r)));
+  (Array.isArray(s.mail)?s.mail:[]).forEach(m=>{
+    if(!m||!m.it)return;
+    const id=String(m.id||'');
+    if(id&&seenMail.has(id))return;
+    if(id)seenMail.add(id);
+    const it=m.it,keep={};
+    if(it.sh&&!reservedSh.has(it.sh)){keep.sh=it.sh;reservedSh.add(it.sh)}
+    // Claiming an old world-boss mail reward uses WB.id in itGive; do not grant a second shield with the same event/rank.
+    if(it.wbsh){
+      const key=String(WB.id)+':'+String(it.wbsh);
+      if(!reservedWb.has(key)){keep.wbsh=it.wbsh;reservedWb.add(key)}
+    }
+    if(it.pfr&&!reservedPf.has(it.pfr)){keep.pfr=it.pfr;reservedPf.add(it.pfr)}
+    if(it.amk&&AM[it.amk]&&AM[it.amk].r==='LT'&&!reservedAm.has(it.amk)){keep.amk=it.amk;reservedAm.add(it.amk)}
+    if(Object.keys(keep).length)pending.push({...m,it:keep});
+  });
+  if(pending.length)n.mail=pending;
+  n.wiped={era:ERA,lt};n.ts=Date.now();return n}
+
+
+const safeNum=v=>Number.isFinite(+v)&&(+v)>=0?+v:0;
+function scanArchive(json){
+ const recs=json?.records;
+ if(!Array.isArray(recs))throw Error('ไม่ใช่ไฟล์ CBT Saves JSON (ไม่พบ records)');
+ if(json.projectId!=='pixeldeck-battle-1a625')throw Error('Project ID ไม่ใช่ PixelDeck Battle');
+ if(json.summary?.inventoryChecksPassed!==true||json.summary?.changedDuringScan!==0||json.summary?.scanned!==recs.length)
+  throw Error('ไฟล์สำรองต้นทางไม่มีผลตรวจความครบถ้วนที่ผ่าน');
+ const errors=[],warnings=[],seen=new Set();
+ let oldCards=0,oldOwners=0,eventCopies=0,keptCards=0,keptOwners=0,keptAm=0,keptShield=0,keptMail=0,founders=0,worldShields=0,frames=0,large=0;
+ let removedCopies=0,removedAmCopies=0,oldAm=0;
+ for(const item of recs){
+  const uid=String(item?.uid||'');
+  if(!uid||seen.has(uid)){errors.push('มี UID ซ้ำหรือว่าง');continue}
+  seen.add(uid);
+  try{
+   const s=typeof item.fields?.data==='string'?JSON.parse(item.fields.data):item.fields?.data;
+   if(!s||typeof s!=='object'||Array.isArray(s))throw Error('เซฟไม่ใช่ object');
+   if((s.era||1)!==1)throw Error('ERA เซฟไม่ใช่ CBT 1');
+   const n=eraWipe(s);
+   let current=0;
+   for(const [id,card] of Object.entries(s.cards||{}))if(C[id]?.r==='LT'){
+    const copies=safeNum(card?.cp);if(!Number.isInteger(copies))throw Error('จำนวนสำเนาการ์ดผิดปกติ '+id);
+    current+=1+copies;
+   }
+   let events=0;for(const [id,q] of Object.entries(s.ev||{}))if(C[id]?.r==='LT'){if(!Number.isInteger(+q))throw Error('จำนวน Event ผิดปกติ '+id);events+=safeNum(q)}
+   const before=current+events;if(before)oldOwners++;oldCards+=before;eventCopies+=events;
+   const ids=Object.keys(n.cards||{});if(ids.length)keptOwners++;
+   keptCards+=ids.length;removedCopies+=before-ids.length;
+   if(Object.values(n.cards).some(c=>c.lv!==1||c.exp!==0||c.cp!==undefined)||ids.some(id=>C[id]?.r!=='LT'))
+    throw Error('หลังล้างมีการ์ดผิดกฎ');
+   let beforeAm=0;for(const [id,v] of Object.entries(s.am||{}))if(AM[id]?.r==='LT')beforeAm+=safeNum(v);
+   oldAm+=beforeAm;
+   const countAm=Object.keys(n.am||{}).length;keptAm+=countAm;removedAmCopies+=beforeAm-countAm;
+   if(Object.values(n.am||{}).some(v=>v!==1)||Object.keys(n.am||{}).some(id=>AM[id]?.r!=='LT'))throw Error('เครื่องรางผิดกฎ');
+   if(beforeAm>=10){large++;warnings.push('เครื่องราง Limited จำนวนมาก: UID '+uid.slice(0,5)+'…'+uid.slice(-5)+' ('+beforeAm+')');}
+   if(n.ev!==undefined||n.gold!==0||n.dia!==0||n.cleared!==0)throw Error('Event หรือเงินไม่ถูกล้าง');
+   if(!!n.fd!==!!s.fd||!!n.fdg!==!!s.fdg||!!n.wbt!==!!s.wbt)throw Error('FOUNDER หรือฉายา Limited หาย');
+   if(s.pfx&&JSON.stringify(n.pfx)!==JSON.stringify(s.pfx))throw Error('กรอบ Limited หาย');
+   if(s.shp&&n.shp!==s.shp)throw Error('โล่ที่โชว์หาย');
+   if(new Set(n.sh||[]).size!==(n.sh||[]).length)throw Error('โล่ซ้ำในคลัง');
+   if((n.wbsh||[]).some((x,i,a)=>a.findIndex(y=>String(y.e)+':'+y.r===String(x.e)+':'+x.r)!==i))throw Error('โล่บอสซ้ำ');
+   if((n.mail||[]).some(m=>m.it?.dia||m.it?.gold||m.it?.ev||m.it?.card||m.it?.am))throw Error('จดหมายยังมีเงิน/การ์ด Event');
+   const msgSh=new Set(),msgWb=new Set();
+   for(const m of n.mail||[]){
+    const k=m.it||{};
+    if(k.sh){if(msgSh.has(k.sh)||(n.sh||[]).includes(k.sh))throw Error('โล่ในจดหมายซ้ำ');msgSh.add(k.sh)}
+    if(k.wbsh){const z=String(WB.id)+':'+k.wbsh;if(msgWb.has(z)||(n.wbsh||[]).some(x=>String(x.e)+':'+x.r===z))throw Error('โล่บอสในจดหมายซ้ำ');msgWb.add(z)}
+   }
+   keptShield+=(n.sh||[]).length;worldShields+=(n.wbsh||[]).length;keptMail+=(n.mail||[]).length;
+   if(n.fd)founders++;frames+=Object.keys(n.pfx||{}).length;
+  }catch(e){errors.push('UID '+uid.slice(0,5)+'…'+uid.slice(-5)+': '+e.message)}
+ }
+ if(seen.size!==recs.length)errors.push('จำนวน UID ไม่ตรง');
+ if(recs.length!==140)warnings.push('จำนวนบัญชีไม่เท่า Snapshot เดิม 140');
+ if(oldCards!==26||oldOwners!==11)warnings.push('ยอดการ์ดเดิมไม่ตรงกับ Audit V4: 11 บัญชี / 26 ใบ');
+ return {project:json.projectId,sourceBuild:json.build,accounts:recs.length,
+  cardsCBT:oldCards,cardOwnersCBT:oldOwners,eventCopiesDropped:eventCopies,
+  uniqueLTAfterOBT:keptCards,LTCardOwnersAfterOBT:keptOwners,LTCardDuplicatesRemoved:removedCopies,
+  amuletsCBT:oldAm,uniqueLTAmuletsAfterOBT:keptAm,amuletDuplicatesRemoved:removedAmCopies,
+  ownedTowerPvPShields:keptShield,ownedWorldBossShields:worldShields,mailRetained:keptMail,founderAccounts:founders,limitedFrames:frames,
+  unusualAmuletAccounts:large,errorCount:errors.length,errors,warnings,passed:errors.length===0,
+  note:'Preview uses draft OBT patch, not the current live b212. No Firebase writes. Does not guarantee full restoration.',
+  timestampUTC:new Date().toISOString()};
+}
+
+
+const $=id=>document.getElementById(id);let result;
+$('test').onclick=async()=>{const f=$('file').files?.[0];$('download').disabled=true;result=null;
+try{
+ if(!f)throw Error('เลือกไฟล์เซฟ CBT JSON ก่อน');
+ if(f.size>40*1024*1024)throw Error('ไฟล์ใหญ่เกิน 40MB');
+ $('result').textContent='กำลังจำลองกับเซฟในเครื่อง...';
+ result=scanArchive(JSON.parse(await f.text()));
+ const r=result;
+ $('result').textContent=(r.passed?'✅ ผ่านการจำลอง OBT':'❌ ต้องแก้ก่อนล้าง CBT')+
+ '\nบัญชี: '+r.accounts+
+ '\nการ์ด LT ใน CBT: '+r.cardsCBT+' ใบ จาก '+r.cardOwnersCBT+' บัญชี'+
+ '\nเหลือการ์ด LT หลัง OBT: '+r.uniqueLTAfterOBT+' ใบ / '+r.LTCardOwnersAfterOBT+' บัญชี'+
+ '\nตัด Event card: '+r.eventCopiesDropped+' ใบ'+
+ '\nตัดการ์ดซ้ำทั้งหมด: '+r.LTCardDuplicatesRemoved+' ใบ'+
+ '\nเครื่องราง LT เหลือ: '+r.uniqueLTAmuletsAfterOBT+' จาก '+r.amuletsCBT+' ชิ้น'+
+ '\nโล่หอคอย/PvP: '+r.ownedTowerPvPShields+
+ '\nโล่บอสโลก: '+r.ownedWorldBossShields+
+ '\nของ Limited ในจดหมาย: '+r.mailRetained+
+ '\nบัญชี Founder: '+r.founderAccounts+'\nกรอบ Limited: '+r.limitedFrames+
+ '\nข้อผิดพลาด: '+r.errorCount+
+ '\n\n'+r.errors.slice(0,12).join('\n')+
+ '\n\n'+r.warnings.slice(0,8).join('\n')+
+ '\n\nผลนี้ยังไม่อนุญาตล้าง CBT จนกว่าแพตช์จะถูก Deploy และมีแผนกู้คืนจริง';
+ $('download').disabled=false;
+}catch(e){$('result').textContent='❌ '+e.message}
+};
+$('download').onclick=()=>{if(!result)return;
+ const {errors,warnings,...safe}=result;
+ const str=JSON.stringify({...safe,errors,warnings},null,2);
+ const u=URL.createObjectURL(new Blob([str],{type:'application/json'})),a=document.createElement('a');a.href=u;a.download='pixeldeck-obt-unique-limited-check.json';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),60000);
+};
+</script></body></html>
