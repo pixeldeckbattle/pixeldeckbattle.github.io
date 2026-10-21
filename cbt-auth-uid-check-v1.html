@@ -1,0 +1,73 @@
+<!doctype html><html lang="th"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><title>PixelDeck Auth UID Audit</title><style>:root{color-scheme:dark}body{background:#111b34;color:#f0f4ff;max-width:760px;margin:auto;padding:18px;font:16px/1.6 system-ui}section{background:#1d2947;border:1px solid #52658c;padding:18px;border-radius:14px;margin:15px 0}h1{font-size:24px}h2{font-size:19px}input{display:block;margin:8px 0 16px;max-width:100%}button{background:#355db8;border:1px solid #879cda;padding:12px;border-radius:9px;color:white;font:inherit;margin:4px}button:disabled{opacity:.45}pre{white-space:pre-wrap;overflow-wrap:anywhere;background:#10172c;padding:12px;border-radius:9px}.warn{color:#ffb9b1}</style></head><body>
+<h1>PixelDeck Battle — เช็ก Auth เทียบเซฟ CBT</h1><section><b>ทำงานเฉพาะในเบราว์เซอร์</b><p>อ่านไฟล์จากมือถือเท่านั้น ไม่มีการอัปโหลดไฟล์ไปยัง Firebase, GitHub หรือเซิร์ฟเวอร์อื่น และไม่มีคำสั่งเขียนเซฟ</p><p class="warn">ไฟล์ Auth อาจมีอีเมลหรือ passwordHash อย่าส่งไฟล์ให้คนอื่น</p></section>
+<section><label>1. Firebase Auth Export JSON<input type="file" id="auth" accept=".json"></label><label>2. CBT Saves JSON (140 บัญชี)<input type="file" id="saves" accept=".json"></label>
+<button id="go">ตรวจ UID ทั้งสองไฟล์</button><button id="dl" disabled>ดาวน์โหลดรายงานแบบไม่รวมข้อมูลบัญชี</button></section>
+<section><h2>ผลตรวจ</h2><pre id="out">ยังไม่ได้เลือกไฟล์</pre><p class="warn">แม้ผลผ่าน ยังไม่ถือว่า Backup ทั้งระบบและยังไม่อนุมัติให้ล้าง CBT</p></section>
+<script>'use strict';
+function audit(auth,saves){
+ const users=Array.isArray(auth)?auth:auth?.users;
+ const recs=saves?.records;
+ if(!Array.isArray(users)||!Array.isArray(recs))throw Error("เลือกไฟล์ไม่ถูกชนิด: ต้องเป็น Auth export และ CBT saves");
+ let au=new Set(),su=new Set(),dupA=0,dupS=0,invalidA=0,invalidS=0;
+ for(const u of users){
+  const id=u?.localId||u?.uid;
+  if(typeof id!=='string'||!id){invalidA++;continue}
+  if(au.has(id))dupA++;au.add(id);
+ }
+ for(const s of recs){
+  const id=s?.uid;
+  if(typeof id!=='string'||!id){invalidS++;continue}
+  if(su.has(id))dupS++;su.add(id);
+ }
+ const missing=[...su].filter(id=>!au.has(id));
+ const extra=[...au].filter(id=>!su.has(id));
+ const errors=[];
+ if(dupA||dupS||invalidA||invalidS)errors.push("มี UID ว่างหรือซ้ำ");
+ if(missing.length)errors.push("เซฟเกมบางบัญชีไม่พบใน Firebase Authentication");
+ if(saves.summary?.inventoryChecksPassed!==true||saves.summary?.changedDuringScan!==0||saves.summary?.scanned!==recs.length)errors.push("ผล Audit ต้นทางไม่ยืนยันความครบถ้วน");
+ if(saves.projectId!=='pixeldeck-battle-1a625')errors.push("ไฟล์เซฟเป็นคนละโปรเจกต์");
+ return {authAccounts:users.length,authUID:au.size,saveAccounts:recs.length,saveUID:su.size,
+ matched:su.size-missing.length,missingCount:missing.length,authOnlyCount:extra.length,
+ duplicateOrInvalid:dupA+dupS+invalidA+invalidS,missing,errors,
+ passed:errors.length===0,
+ warnings:["บัญชี Authentication ที่ไม่มีเซฟอาจเป็นบัญชีที่ยังไม่ได้เริ่มเล่น",
+ "ไฟล์ Auth ไม่มีการระบุ Project ID ที่พิสูจน์ได้เสมอไป ต้องยืนยันว่า export มาจาก pixeldeck-battle-1a625",
+ "การตรวจ UID ไม่ใช่การรับรองว่ากู้ข้อมูล Firebase ทั้งระบบได้"]};
+}
+
+
+const $=id=>document.getElementById(id);
+const mask=s=>s.slice(0,5)+"…"+s.slice(-5);
+let report=null;
+$('go').onclick=async()=>{
+ $('go').disabled=true;$('dl').disabled=true;report=null;
+ $('out').textContent="กำลังตรวจไฟล์ในมือถือ...";
+ try{
+  const fa=$('auth').files[0],fs=$('saves').files[0];
+  if(!fa||!fs)throw Error("เลือกไฟล์ JSON ทั้งสองก่อน");
+  if(fa.size>30000000||fs.size>30000000)throw Error("ไฟล์ใหญ่เกิน 30 MB");
+  report=audit(JSON.parse(await fa.text()),JSON.parse(await fs.text()));
+  $('out').textContent=(report.passed?"✅ UID เซฟทุกบัญชีพบใน Auth":"❌ ต้องตรวจ UID ก่อน")+
+   "\nผู้ใช้ Auth: "+report.authAccounts+
+   "\nบัญชีเซฟ: "+report.saveAccounts+
+   "\nจับคู่ได้: "+report.matched+"/"+report.saveUID+
+   "\nเซฟที่ไม่พบ Auth: "+report.missingCount+
+   "\nAuth ที่ไม่มีเซฟ: "+report.authOnlyCount+
+   "\nUID ว่างหรือซ้ำ: "+report.duplicateOrInvalid+
+   "\n\n"+report.errors.join("\n")+
+   "\nUID ที่ไม่พบ (ย่อ): "+report.missing.slice(0,8).map(mask).join(", ")+
+   "\n\n"+report.warnings.join("\n")+
+   "\n\nอย่าใช้ผลนี้อนุมัติล้าง CBT โดยลำพัง";
+  $('dl').disabled=false;
+ }catch(e){$('out').textContent="❌ "+e.message}
+ finally{$('go').disabled=false}
+};
+$('dl').onclick=()=>{
+ if(!report)return;
+ const {missing,warnings,...safe}=report;
+ const content=JSON.stringify({...safe,warnings,checkedUTC:new Date().toISOString(),note:"Count-only: no UID, emails, hashes or salts included"},null,2);
+ const u=URL.createObjectURL(new Blob([content],{type:"application/json"})),a=document.createElement('a');
+ a.href=u;a.download='pixeldeck-auth-uid-summary.json';
+ document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),60000);
+};
+</script></body></html>
