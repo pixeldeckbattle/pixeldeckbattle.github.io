@@ -1,0 +1,134 @@
+<!doctype html><html lang="th"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow">
+<title>PixelDeck CBT Restore Dry Run</title><style>:root{color-scheme:dark}body{font:16px/1.5 system-ui,sans-serif;background:#101a36;color:#eaf2ff;max-width:800px;margin:auto;padding:20px}section{padding:15px;margin:12px 0;border:1px solid #6375a3;border-radius:13px;background:#1f2a4d}h1{font-size:24px}h2{font-size:18px}label,input{display:block}label{margin:12px 0}input{max-width:100%;margin-top:5px}button{padding:12px;border:1px solid #89a2e1;border-radius:10px;background:#3155ad;color:#fff;font:inherit;margin:5px}button:disabled{opacity:.4}pre{white-space:pre-wrap;overflow-wrap:anywhere;background:#0d1631;padding:12px;border-radius:9px}b{color:#b5f2d2}</style></head>
+<body><h1>PixelDeck Battle — CBT → OBT</h1>
+<section><h2>ทดสอบกู้คืนแบบจำลอง V1 (ฟรี)</h2><p><b>ไฟล์ทั้ง 4 ชุดอ่านบนมือถือเท่านั้น</b> ไม่มีการเชื่อม Firebase ไม่มีการเขียนฐานข้อมูล และไม่ส่งข้อมูลผู้เล่นขึ้น GitHub</p>
+<p>ระบบจำลองรีเซ็ตทุกบัญชีตามโค้ด b212 แล้วตรวจ Limited, เครื่องราง, โล่, ป้าย Founder และทดลองเติมสิทธิ์คืนสองครั้งเพื่อจับการได้ของซ้ำ</p></section>
+<section><h2>เลือกไฟล์สำรอง 4 ชุด</h2>
+<label>1. CBT saves JSON<input type="file" id="fSave" accept=".json"></label>
+<label>2. Limited CSV<input type="file" id="fCSV" accept=".csv"></label>
+<label>3. OBT entitlements JSON<input type="file" id="fPlan" accept=".json"></label>
+<label>4. Extra Collections JSON<input type="file" id="fExtra" accept=".json"></label>
+<button id="go">จำลองรีเซ็ตและกู้คืน (ไม่แตะเซิร์ฟเวอร์)</button>
+<button id="dl" disabled>บันทึกผลทดสอบ JSON</button></section>
+<section><h2>ผลการทดสอบ</h2><pre id="result">ยังไม่ได้เลือกไฟล์</pre>
+<p><b>สำคัญ:</b> Dry Run ไม่ใช่หลักฐานว่ากู้เซฟบน Firestore จริงได้ ห้ามกดล้าง CBT จนกว่าจะมีขั้นกู้คืนจริงที่ผ่านการทดสอบในสภาพแวดล้อมแยก</p></section>
+<script>'use strict';const CARDS={"h06":["Bone Raider","ST"],"h20":["Goblin Scrapper","ST"],"h11":["Stone Golem","ST"],"h17":["Goblin Berserker","C"],"h12":["Vampire Bat","C"],"h01":["Magma Golem","C"],"h02":["Leaf Ronin","UC"],"h16":["Elder Treant","UC"],"h21":["Sylvan Archer","UC"],"h05":["Soul Reaper","R"],"h09":["Lion Paladin","R"],"h10":["Frost Fenrir","R"],"h08":["Shadow Ninja","R"],"h15":["Glacier Sage","L"],"h13":["Crimson Lord","L"],"h14":["Scarlet Griffin","L"],"h19":["Inferno Drake","L"],"h04":["Frost Empress","L"],"h03":["Zeus","SL"],"h22":["Wukong","SL"],"h07":["Seraphina","SL"],"h18":["Aurum Hydra","LT"],"h23":["Ember Witch","C"],"h24":["Storm Shaman","UC"],"h25":["Ironbark Guardian","UC"],"h26":["Obsidian Colossus","L"],"h27":["Aegis Valkyrie","SL"],"h28":["Glacius Rex","LT"],"h29":["Vanarin","SL"],"h30":["Tenface Asura","SL"],"h31":["Indigo Dragonsteed","SL"],"h34":["Temple Yaksha","L"]},AMS={"tiger":["เขี้ยวเสือ","R"],"turtle":["กระดองเต่า","R"],"hawk":["ตาเหยี่ยว","R"],"rock":["หินผา","R"],"dagger":["มีดนักฆ่า","R"],"dragon":["หัวใจมังกร","L"],"ruby":["ทับทิมโลหิต","L"],"feather":["ขนนกเทวา","L"],"kfang":["เขี้ยวราชันย์","SL"],"dscale":["เกราะมังกรเทพ","SL"],"deye":["เนตรมรณะ","SL"],"seraph":["ปีกเซราฟ","SL"],"grove":["มรกตพฤกษา","SL"],"lion":["หัวใจราชสีห์","SL"],"gstar":["ดาราพิทักษ์","SL"],"hallow":["โคมวิญญาณฟักทอง","LT"],"clover":["Lucky Clover","LT"]};
+const obj=x=>x&&typeof x==='object'&&!Array.isArray(x);
+const clone=x=>JSON.parse(JSON.stringify(x));
+const equal=(a,b)=>JSON.stringify(a)===JSON.stringify(b);
+const qty=(v,k)=>{let n=Number(v);if(!Number.isSafeInteger(n)||n<0)throw Error('จำนวนผิดปกติ '+k);return n};
+function rights(s){
+ const cards={},ams={};
+ for(const [id,v] of Object.entries(s.cards||{}))if(CARDS[id]?.[1]==='LT')cards[id]=1+qty(v?.cp||0,id);
+ for(const [id,v] of Object.entries(s.ev||{}))if(CARDS[id]?.[1]==='LT'&&Number(v)>0)cards[id]=(cards[id]||0)+qty(v,id);
+ for(const [id,v] of Object.entries(s.am||{}))if(AMS[id]?.[1]==='LT'&&Number(v)>0)ams[id]=qty(v,id);
+ return {cards,ams,sh:Array.isArray(s.sh)?s.sh:[],
+  mailSh:Array.isArray(s.mail)?s.mail.filter(x=>x?.it?.sh).map(x=>String(x.it.sh)):[],
+  fd:!!s.fd,fdg:!!s.fdg,shp:s.shp||'',name:s.me?.name||''};
+}
+function wipe(s){
+ if((s.era||1)!==1)throw Error('พบเซฟ ERA ไม่เท่ากับ 1');
+ const r=rights(s),n={gold:0,dia:0,cleared:0,cards:{},team:[],auto:false,era:2};
+ for(const [id,count] of Object.entries(r.cards)){n.cards[id]={lv:1,exp:0};if(count>1)n.cards[id].cp=count-1}
+ if(s.me?.name)n.me={name:s.me.name};
+ for(const k of ['lang','snd','sfx','spd','fd','fdg','sh','shp','rv'])if(s[k]!=null)n[k]=clone(s[k]);
+ const mails=(s.mail||[]).filter(x=>x?.it?.sh).map(x=>({...x,it:{sh:x.it.sh}}));
+ if(mails.length)n.mail=mails;
+ for(const [id,v] of Object.entries(r.ams)){n.am=n.am||{};n.am[id]=v}
+ n.wiped={era:2,lt:r.cards};n.ts=0;
+ return n;
+}
+function restoreDry(n,r){
+ n=clone(n);n.cards=n.cards||{};n.am=n.am||{};n.sh=n.sh||[];n.mail=n.mail||[];
+ for(const [id,count] of Object.entries(r.cards)){
+  const current=n.cards[id]?1+qty(n.cards[id].cp||0,id):0;
+  if(current<count){if(!n.cards[id])n.cards[id]={lv:1,exp:0};n.cards[id].cp=count-1}
+ }
+ for(const [id,num] of Object.entries(r.ams))n.am[id]=Math.max(qty(n.am[id]||0,id),num);
+ for(const code of r.sh)if(!n.sh.includes(code))n.sh.push(code);
+ for(const code of r.mailSh)if(!n.sh.includes(code)&&!n.mail.some(x=>x?.it?.sh===code))n.mail.push({it:{sh:code}});
+ if(r.fd)n.fd=true;if(r.fdg)n.fdg=true;if(!n.shp)n.shp=r.shp;
+ if(r.name&&!n.me?.name)n.me={name:r.name};
+ return n;
+}
+function parseCSV(t){
+ t=t.replace(/^\uFEFF/,'');let q=false,cell='',row=[],rows=[];
+ for(let i=0;i<t.length;i++){let c=t[i];
+  if(q){if(c==='"'&&t[i+1]==='"'){cell+='"';i++}else if(c==='"')q=false;else cell+=c}
+  else if(c==='"'&&cell==='')q=true;
+  else if(c===','){row.push(cell);cell=''}
+  else if(c==='\n'){row.push(cell.replace(/\r$/,''));rows.push(row);row=[];cell=''}
+  else cell+=c;
+ }
+ if(q)throw Error('CSV quotation ไม่สมบูรณ์');
+ if(cell||row.length){row.push(cell.replace(/\r$/,''));rows.push(row)}
+ const keys=rows.shift();
+ if(!keys||!['uid','limitedCardCount','limitedAmuletCount'].every(k=>keys.includes(k)))throw Error('CSV ขาดคอลัมน์สำคัญ');
+ return rows.filter(r=>r.length&&r.some(x=>x!=='')).map(r=>Object.fromEntries(keys.map((k,i)=>[k,r[i]||''])));
+}
+function compareAll(raw,csv,plan,extra){
+ if(!Array.isArray(raw?.records)||!Array.isArray(plan?.entitlements)||!obj(extra?.items))throw Error('รูปแบบไฟล์ JSON ผิด');
+ if(raw.projectId!==plan.project||raw.projectId!==extra.project||raw.build!=='b212')throw Error('โปรเจกต์หรือ Build ไม่ตรง');
+ const errors=[],warnings=[],detail=[],csvMap=new Map(),planMap=new Map(),seen=new Set();
+ for(const x of csv){if(csvMap.has(x.uid))errors.push('UID ซ้ำใน CSV');csvMap.set(x.uid,x)}
+ for(const x of plan.entitlements){if(planMap.has(x.uid))errors.push('UID ซ้ำในแผน OBT');planMap.set(x.uid,x)}
+ let cardOwners=0,cardCount=0,holders=0,large=0;
+ for(const rec of raw.records){
+  const uid=rec.uid;if(!uid||seen.has(uid)){errors.push('UID ซ้ำในเซฟ');continue}seen.add(uid);
+  try{
+   const s=typeof rec.fields?.data==='string'?JSON.parse(rec.fields.data):rec.fields?.data;
+   if(!obj(s))throw Error('เซฟผิดรูปแบบ');
+   const r=rights(s),n=wipe(s),a=rights(n);
+   if(!equal(r,a)||n.gold!==0||n.dia!==0||n.cleared!==0||Object.values(n.cards).some(v=>v.lv!==1))throw Error('สิทธิ์หลัง wipe ไม่ตรง');
+   const cards=Object.values(r.cards).reduce((a,v)=>a+v,0),amulets=Object.values(r.ams).reduce((a,v)=>a+v,0);
+   if(cards)cardOwners++;cardCount+=cards;
+   if(cards||amulets||r.sh.length||r.mailSh.length||r.fd||r.fdg)holders++;
+   if(amulets>=10){large++;warnings.push('เครื่องราง LT มากเป็นพิเศษ: '+uid+' ('+amulets+' ชิ้น)')}
+   const cv=csvMap.get(uid),pv=planMap.get(uid);
+   if(!cv||Number(cv.limitedCardCount)!==cards||Number(cv.limitedAmuletCount)!==amulets)throw Error('จำนวนใน CSV ไม่ตรง');
+   if(!pv||Number(pv.cardTotal)!==cards||Number(pv.amuletTotal)!==amulets)throw Error('จำนวนในแผน OBT ไม่ตรง');
+   const stripped={...n,cards:{},am:{},sh:[],mail:[],fd:false,fdg:false,shp:''};
+   const one=restoreDry(stripped,r),two=restoreDry(one,r);
+   if(!equal(rights(one),r)||!equal(rights(two),rights(one)))throw Error('ทดลองกู้ซ้ำผิดพลาด');
+   detail.push({uid,LT:cards,amulets,shields:r.sh.length,mailShields:r.mailSh.length,founder:r.fd,result:'PASS'});
+  }catch(e){errors.push(uid+': '+e.message);detail.push({uid,result:'FAIL',reason:e.message})}
+ }
+ if(raw.records.length!==csv.length||raw.records.length!==plan.entitlements.length||csvMap.size!==seen.size||planMap.size!==seen.size)errors.push('บัญชีในไฟล์ทั้ง 3 ชุดไม่ตรงกัน');
+ if(raw.summary?.inventoryChecksPassed!==true||raw.summary?.changedDuringScan!==0||raw.summary?.scanned!==seen.size)errors.push('ผล Audit ต้นทางไม่ผ่าน');
+ if(plan.accountCount!==seen.size||plan.cardCount!==cardCount||plan.cardOwners!==cardOwners||plan.entitlementAccounts!==holders)errors.push('ยอดรวมในแผน OBT ไม่ตรง');
+ if(extra.beforeEra!==1||extra.afterEra!==1)errors.push('ERA ขณะสำรอง Collections ไม่ใช่ 1');
+ if(extra.beforeMaintenance!==true||extra.afterMaintenance!==true)warnings.push('Collections อาจสำรองระหว่างผู้เล่นยังแก้ข้อมูลได้');
+ for(const [key,value] of Object.entries(extra.errors||{}))errors.push('Collection '+key+': '+value);
+ for(const key of ['config','slips','adminlog','refs','arena','market','trades'])if(!Array.isArray(extra.items[key]))errors.push('ไม่มี Collection '+key);
+ if(large)warnings.push('เครื่องราง LT จำนวนมากต้องตรวจที่มาก่อนล้าง');
+ warnings.push('ไม่มี Authentication และบาง subcollections / payouts: ยังไม่ใช่ backup ทั้งระบบ');
+ if(seen.size!==140||cardOwners!==11||cardCount!==26||holders!==22)warnings.push('ตัวเลขต่างจากรายงานก่อนหน้า (140/11/26/22)');
+ return {checkedUTC:new Date().toISOString(),project:raw.projectId,build:'b212',accounts:seen.size,
+  cardOwners,cardCount,holders,largeAmuletAccounts:large,errors,warnings,passed:errors.length===0,
+  type:'OFFLINE DRY RUN ONLY; NO LIVE RESTORE TESTED',detail};
+}
+
+const $=id=>document.getElementById(id);
+async function read(id){const f=$(id).files[0];if(!f)throw Error('เลือกไฟล์ '+id+' ก่อน');return f.text()}
+let lastReport=null;
+$('go').onclick=async()=>{
+ $('go').disabled=true;$('dl').disabled=true;lastReport=null;$('result').textContent='กำลังอ่านข้อมูลในเครื่อง...';
+ try{
+  const [a,b,c,d]=await Promise.all(['fSave','fCSV','fPlan','fExtra'].map(read));
+  lastReport=compareAll(JSON.parse(a),parseCSV(b),JSON.parse(c),JSON.parse(d));
+  const x=lastReport;
+  $('result').textContent=(x.passed?'✅ ผ่านการจำลอง':'❌ พบปัญหา')+
+    '\nบัญชี '+x.accounts+' | LT '+x.cardOwners+' คน / '+x.cardCount+' ใบ'+
+    '\nมีสิทธิ์คงเหลือ '+x.holders+' | เครื่องรางต้องตรวจ '+x.largeAmuletAccounts+
+    '\nข้อผิดพลาด '+x.errors.length+' | ข้อเตือน '+x.warnings.length+
+    '\n\n'+x.errors.slice(0,30).join('\n')+'\n\n'+x.warnings.slice(0,30).join('\n')+
+    '\n\nห้ามกดล้าง CBT จากผล Dry Run เพียงอย่างเดียว';
+  $('dl').disabled=false;
+ }catch(e){$('result').textContent='❌ '+e.message}
+ finally{$('go').disabled=false}
+};
+$('dl').onclick=()=>{
+ if(!lastReport)return;
+ const u=URL.createObjectURL(new Blob([JSON.stringify(lastReport,null,2)],{type:'application/json'})),a=document.createElement('a');
+ a.href=u;a.download='pixeldeck-offline-dryrun-'+Date.now()+'.json';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),60000)
+};</script></body></html>
