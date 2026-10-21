@@ -87,6 +87,14 @@ function compareAll(raw,csv,plan,extra){
    const cv=csvMap.get(uid),pv=planMap.get(uid);
    if(!cv||Number(cv.limitedCardCount)!==cards||Number(cv.limitedAmuletCount)!==amulets)throw Error('จำนวนใน CSV ไม่ตรง');
    if(!pv||Number(pv.cardTotal)!==cards||Number(pv.amuletTotal)!==amulets)throw Error('จำนวนในแผน OBT ไม่ตรง');
+   if(pv){
+    const p=pv.carryOver;
+    if(!p||!equal(p.cards||{},r.cards)||!equal(p.amulets||{},r.ams)||
+       !equal(p.shields||[],r.sh)||!equal(p.mailShields||[],r.mailSh)||
+       !!p.founder!==r.fd||!!p.founderGift!==r.fdg||
+       (p.displayShield||'')!==r.shp||(p.name||'')!==r.name)
+        throw Error('รายละเอียด Limited / Founder / โล่ในแผน OBT ไม่ตรง');
+   }
    const stripped={...n,cards:{},am:{},sh:[],mail:[],fd:false,fdg:false,shp:''};
    const one=restoreDry(stripped,r),two=restoreDry(one,r);
    if(!equal(rights(one),r)||!equal(rights(two),rights(one)))throw Error('ทดลองกู้ซ้ำผิดพลาด');
