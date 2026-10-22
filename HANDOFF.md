@@ -170,3 +170,8 @@ Live build: **b191** (15 Oct 2026 22:25: the invite-for-diamonds menu / FOUNDER 
 - Passive "ช่วยชีวิต / Lifesaver" (supSave): first time in a battle an ally drops under 20% or takes a killing blow (left at 1 first), a ready support heals it SAVE_P of its max life (h16 40%, h04 50%, h07 60%, x heal amulet). Once per support per battle, both sides (arena too). Shown as a passive row in the card view.
 - Auto team-shield only when foes hit hard (boss/lord, or a hit ≥25% of the weakest ally's max life) or someone is low; no longer on rounds 1-2 by default.
 - After: 2 atk + sup ~279, atk+tank+sup ~307, 2 atk + tank ~299 (unchanged). Guide class line updated. Released live 18 Oct on the owner's word.
+
+## b237 (22 Oct 2026) — Adaptive audio system
+- Four owner-provided CC0 tracks for regular/elite PvP/boss/victory; the `audio/music/` files are deployed separately by the audio-asset GitHub workflow. The client uses original publisher links as fallbacks if local files have not been published.
+- `audio/audio_engine.js` hooks the existing battle/menu functions without replacing combat SFX: synthesized low-volume lobby ambience, different button cues, browser gesture unlock, crossfades, background tab pause, per-player music toggle and slider in Settings.
+- No game rules, Firestore rules, player economy or save migrations changed.
