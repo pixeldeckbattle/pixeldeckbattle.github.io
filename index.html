@@ -1150,6 +1150,98 @@ button:focus-visible{outline:2px solid #ffe9a2!important;outline-offset:2px!impo
 .pill img,.pchip img,.dk img,.ibtn img,.play img{image-rendering:pixelated}
 @media (prefers-reduced-motion:reduce){.btn,.dk,.px{transition:none!important}}
 
+
+/* b218 KENNEY UI FRAME OVERHAUL */
+/* Kenney Fantasy UI Borders (CC0). Source: original user-provided ZIP.
+   Frames are recolored pixel-preserving 48x48 PNGs embedded to avoid extra requests.
+   Entire change is styling only: no icon, card, character, game logic or data changes. */
+:root{
+ --kui-gold:url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAAA20lEQVR42mP8/2buf4YhDJgYhjhggTEYRZIZ8SmExRQhdZQCYu2BqRs+MYDus4EGuNyBHjPDLwaIzRO0ArjsxRUjQz4GRj0waPLAUKmR0d055GOAkV41LK1iYjQTD3gm/nJu9ZB0OMzdo0lo1AOjHhj1wKgHRj0w6oFRD4x6YNQDox4YwR2aPWsfDUmHw9w9moRGPUAhYFyfroV1RC5w5rVBNU6Ey53DJwkFzrzGONhCHVfKQHbnaCYe9QClNTGpuZ7W+QSXvSMnBnCFMKkhQ43SZmTXxKOlEJ0AAPpMT3tJSM24AAAAAElFTkSuQmCC");
+ --kui-blue:url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAAA8klEQVR42u2ZsRHCMAxFbS4dmzALxySMQ8sSXDaAGbhjCirqUKnRIRRfsGN9vjo7hfX+l+XEycmI8TVNqaPYb3P+NL9JwSN7ilvkrcLLK7wDg0Um5FqB2o54iuvn8feA1200eSsHLMXhutCwltKl/d9yBq8L9XISz10f9xzo7Z0H1oH4JXS+PkMmLnmzhAhAAAIQgAAEIAABCECAP/6geYy3kIlL3iwhAizdA3pid7x8vRG7nw5V741K18e9G9WknjK/jrnr4zigCWVcu+ZL94Qe4/wn1opbNbdWF9J5yRjPgdaKL3UEx4HSE7F1WJUQ3oE3hleAKbzscdkAAAAASUVORK5CYII=");
+ --kui-ornate:url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAABB0lEQVR42u1YwQnDMAy0Q7bIQJ2lQ/SVITpE++ir0IEM/XQG9yUwoo5j1caRuPvJDkink+Qg7xhiWKPbAb9cvGsIqd/JKcdcm+G9mZKi1q9+BXLM+Hnrmpf2BD9Xr8CUZjjNMrdHoRSXegU81RSx6j1lWk0pitPeO8DrPqdQr5e41o+dHlA/Rs0ihjWmKnF7tJ+59MH7edu0W0Hqx86vBAiAAAiAAAiAAAiAAAiAAAj8vZXgeNw/m3YrSP3o30pcTwu2EofogfMr/NyAkUJ0z+1WqPVD93Z6gDM/Knicdt+BXC2O6oFcZdhRgDM8Si+U4tKvAK/lXjUunTaluOxOoVE9UOtXvQJfSYS8Hq+ASM4AAAAASUVORK5CYII=");
+ --kui-danger:url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAAA2klEQVR42u2asQ3CQAxFbcQyFKzARsyAMgM1BXPQUdKmSJlRQmUJWYRY4rjE4f0uueY/2/9OOUWH+3mQN9LDUUVExtZracrHRpJrGyW19VqKTkb6Dmh0xpfSgfVlwFfWyJe6C3m/ZIAMlOpA7QqX6lD6DgAAwLcHWX+5pTRuvhkhAAAAAAAAAAAAAAAA+OMPmuujT2ncfDNCAACQXHra7UO3wE3XVr07jfrKfw74yhq5vY9W4lfyPrxfMkAGSm2jTdfqa5X985wZ+ORrPf9KTM3c3LvRmI/0HXgCak50Espm20QAAAAASUVORK5CYII=");
+ --kui-ink:#0c1128;--kui-deep:#111c3b;--kui-mid:#172c53;
+ --kui-text:#fff0c8;--kui-rim:#e6b453;
+}
+#stage{--night:#101728;--panel:#162749;--deep:#090e21;--ink:#f8eed7;--dim:#bdcee6}
+#view .main,#view .rail{scrollbar-color:#b88943 #111b34}
+#view .px,#view .tmenu,#view .inf,#view .tile,#view .roomb,
+#view .amrow,#view .chb,#view .lookb,#view .rkrow,#view .pvrow,#view .abar,#view .avsel{
+ border:9px solid transparent!important;
+ border-image-source:var(--kui-gold)!important;
+ border-image-slice:12!important;
+ border-image-width:9px!important;
+ border-image-repeat:stretch!important;
+ border-radius:0!important;
+ background:linear-gradient(180deg,#20365b 0%,#142447 20%,#0e1835 100%)!important;
+ box-shadow:inset 0 0 0 2px rgba(230,180,83,.13),0 4px 0 #070b17!important;
+}
+#view .main.px,#view .tmenu{
+ border-width:12px!important;border-image-width:12px!important;
+ background:linear-gradient(155deg,rgba(29,45,80,.98),rgba(8,16,40,.98))!important
+}
+#view .rail>.px,#view .pchip,#view .pill{
+ border:7px solid transparent!important;
+ border-image-source:var(--kui-blue)!important;
+ border-image-slice:12!important;border-image-width:7px!important;border-image-repeat:stretch!important;
+ border-radius:0!important;
+ background:linear-gradient(180deg,#233a60,#0e1835)!important;
+ box-shadow:0 3px 0 #080c1b!important;
+}
+#view .tile,#view .roomb{border-image-source:var(--kui-ornate)!important}
+#view .tile:hover,#view .roomb:hover,#view .lookb.on,#view .amrow.on,#view .chb.on,
+#view .rkrow.me{filter:brightness(1.14);outline:1px solid #ffdb83;outline-offset:0}
+#view .btn,#view .btn.alt,#view .btn.on,#view .tab,#view .clsb,#view .bagt button,
+#view .futile,#view .pvmenu .btn{
+ border:7px solid transparent!important;
+ border-image-source:var(--kui-gold)!important;
+ border-image-slice:12!important;border-image-width:7px!important;border-image-repeat:stretch!important;
+ border-radius:0!important;
+ background:linear-gradient(180deg,#39567b,#193057 45%,#102141)!important;
+ color:var(--kui-text)!important;
+ box-shadow:inset 0 1px rgba(255,220,128,.18),0 3px 0 #090c1e!important;
+ text-shadow:1px 2px #090b1b!important;
+}
+#view .btn.on,#view .tab.on,#view .clsb.on,#view .bagt button.on{
+ border-image-source:var(--kui-ornate)!important;
+ background:linear-gradient(180deg,#5a4b28,#29344a)!important;
+ color:#fff7cf!important
+}
+#view .btn.go,#view .btn.red{
+ border-image-source:var(--kui-danger)!important;
+ background:linear-gradient(180deg,#773b40,#3f213b)!important;
+ color:#fff1dd!important
+}
+#view .btn:active,#view .tab:active{transform:translateY(2px)}
+#view .btn:disabled,#view .tab:disabled{opacity:.55;filter:saturate(.6)}
+#view .play{
+ border:10px solid transparent!important;
+ border-image-source:var(--kui-ornate)!important;
+ border-image-slice:12!important;border-image-width:10px!important;border-image-repeat:stretch!important;
+ background:linear-gradient(180deg,#f6bf55,#bb711c 48%,#643516)!important;
+ color:#fff9e5!important;
+ box-shadow:inset 0 0 0 2px rgba(255,230,148,.2),0 5px 0 #130d12!important
+}
+#view .dk{
+ border:10px solid transparent!important;
+ border-image-source:var(--kui-ornate)!important;
+ border-image-slice:12!important;border-image-width:10px!important;border-image-repeat:stretch!important;
+ background:linear-gradient(180deg,#203659,#111c38)!important;
+ box-shadow:0 3px 0 #080c19!important;
+ filter:none!important;
+}
+#view .dk>.ico,#view .dk img,#view .ico img{image-rendering:pixelated}
+#view .dk>span:last-child{color:#ffe3a0;text-shadow:1px 1px #070a1a}
+#view .atop{background:rgba(8,13,33,.88)!important;border-bottom:2px solid #99682a}
+#view .gt th,#view .gt td{
+ border:1px solid #94734a!important;background:#142442!important;color:#e6edff
+}
+#view .gt th{background:#233a5f!important;color:#ffe0a5!important}
+#view .pill .plus{border-radius:0!important}
+@media (prefers-reduced-motion:reduce){
+ #view .btn,#view .dk{transition:none!important;animation:none!important}
+}
+
 </style>
 
 <div id="stage"><div id="view"></div><div id="ov"></div><div id="fsb" hidden></div><div id="tut"></div><div id="gate" hidden></div><div id="zoom" role="dialog" tabindex="-1" hidden></div></div>
@@ -4138,7 +4230,7 @@ function titleScreen(){
 }
 // ---------- Firebase: Google sign-in and one cloud save document per account (saves/{uid}) ----------
 const OBT_PAUSED_MODES=true; // b215: hide Tower, PvP and World Boss until relaunch
-const BUILD='b217';
+const BUILD='b218';
 // The game moved to its own address. Anyone opening the old address is sent on, but only once the new site answers, so a broken move cannot lock players out.
 const DISCORD='https://discord.gg/dHDzRyPG9',DC_SVG='<svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="currentColor" d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.4189-2.1568 2.4189Z"/></svg>';
 const NEW_HOME='https://pixeldeckbattle.github.io/';
@@ -4256,6 +4348,7 @@ document.addEventListener('focusin',ev=>{const n=ev.target,chat=n.id==='chi';if(
   $('kbo').onclick=()=>done(true);$('kbc').onclick=()=>done(false);i.onkeydown=e=>{if(e.key==='Enter')done(true)};setTimeout(()=>i.focus(),30)});
 S=load();try{const l=localStorage.getItem('pdb_lang');if(l&&!USER)S.lang=l}catch(e){}document.documentElement.lang=S.lang||'th';USER?loading(USER.sub?cloudPull().catch(()=>{}):null):titleScreen();
 </script>
+
 
 
 
