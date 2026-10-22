@@ -2908,8 +2908,8 @@ function cfgApply(){
 function cfgGate(){const g=$('gate');if(!g)return;const ban=USER&&USER.sub&&CFG.bans&&CFG.bans[USER.sub],mt=CFG.maint&&!isDev();
   if(!ban&&!mt){if(!g.hidden){g.hidden=true;g.innerHTML=''}return}const k=ban?'b'+ban:'m'+(CFG.maintMsg||'');if(g._k===k&&!g.hidden)return;g._k=k;g.hidden=false;
   g.innerHTML=ban?`<h2 class="nt">${T('บัญชีนี้ถูกระงับ','This account is suspended')}</h2><p class="nt">${T('เหตุผล: ','Reason: ')}${esc(String(ban===true?'-':ban).slice(0,200))}\n${T('หากคิดว่าเป็นความผิดพลาด ติดต่อทีมงานทาง Discord พร้อมรหัสผู้เล่น ','If you think this is a mistake, contact the team on Discord with your player ID ')}${esc(USER.sub)}</p><button class="btn nt" data-g="d">Discord</button>`
-   :`<h2 class="nt">🔧 ${T('ปิดปรับปรุงชั่วคราว','Down for maintenance')}</h2><p class="nt">${esc(String(CFG.maintMsg||T('ทีมงานกำลังปรับปรุงเกม อีกสักครู่กลับมาเล่นได้ ข้อมูลของคุณยังอยู่ครบ','The team is updating the game. It will be back shortly and your progress is safe')).slice(0,400))}</p><button class="btn nt" data-g="d">Discord</button><button class="btn alt sm nt" data-g="r">${T('ลองใหม่','Try again')}</button>`}
-$('gate').onclick=e=>{const a=e.target.dataset.g;if(a==='d'){const w=window.open(DISCORD,'_blank','noopener');if(!w)location.href=DISCORD}else if(a==='r'){cfgAt=0;cfgFetch()}};
+   :`<h2 class="nt">🔧 ${T('ปิดปรับปรุงชั่วคราว','Down for maintenance')}</h2><p class="nt">${esc(String(CFG.maintMsg||T('ทีมงานกำลังปรับปรุงเกม อีกสักครู่กลับมาเล่นได้ ข้อมูลของคุณยังอยู่ครบ','The team is updating the game. It will be back shortly and your progress is safe')).slice(0,400))}</p><button class="btn nt" data-g="d">Discord</button><button class="btn alt sm nt" data-g="r">${T('ลองใหม่','Try again')}</button><button class="btn nt" id="gateLogin" data-g="login">${T('เข้าสู่ระบบด้วย Google (บัญชี DEV)','Sign in with Google (DEV account)')}</button><p id="gateMsg" class="sub" role="status"></p>`}
+$('gate').onclick=e=>{const a=e.target.dataset.g;if(a==='d'){const w=window.open(DISCORD,'_blank','noopener');if(!w)location.href=DISCORD}else if(a==='r'){cfgAt=0;cfgFetch()}else if(a==='login'){gLogin()}};
 setTimeout(cfgFetch,1500);setInterval(cfgFetch,60e3);document.addEventListener('visibilitychange',()=>{if(!document.hidden)cfgFetch()});
 
 /* ---------- players online ----------
@@ -4069,7 +4069,7 @@ function titleScreen(){
 }
 // ---------- Firebase: Google sign-in and one cloud save document per account (saves/{uid}) ----------
 const OBT_PAUSED_MODES=true; // b215: hide Tower, PvP and World Boss until relaunch
-const BUILD='b215';
+const BUILD='b216';
 // The game moved to its own address. Anyone opening the old address is sent on, but only once the new site answers, so a broken move cannot lock players out.
 const DISCORD='https://discord.gg/dHDzRyPG9',DC_SVG='<svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="currentColor" d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.4189-2.1568 2.4189Z"/></svg>';
 const NEW_HOME='https://pixeldeckbattle.github.io/';
@@ -4118,8 +4118,8 @@ function cloudFlush(){clearTimeout(cloudT);cloudT=0;if(!cloudDirty||!FB_CFG||!US
   if(stale)return;if(Date.now()-cloudChk<300000)return void put().catch(()=>{cloudDirty=true});
   saveDoc().get().then(d=>{cloudChk=Date.now();let c=null;try{c=d.exists&&JSON.parse(d.data().data)}catch(e){}if(c&&c.cards&&rvOf(c)>rvOf(S)){cloudTake(c);return staleStop()}return put()}).catch(()=>{cloudDirty=true})}
 addEventListener('visibilitychange',()=>{if(document.hidden)cloudFlush()});addEventListener('pagehide',()=>cloudFlush());$('view').addEventListener('click',e=>{const t=e.target.closest('[data-act]');if(t&&CLOUD_NOW.includes(t.dataset.act))setTimeout(cloudFlush,1200)},true);
-function gLogin(){const b=$('gbtn'),m=$('gmsg'),say=t=>{if(m)m.textContent=t+' '};if(b)b.disabled=true;say(S.lang==='en'?'Connecting…':'กำลังเชื่อมต่อ…');
-  fbLoad().then(()=>firebase.auth().signInWithPopup(new firebase.auth.GoogleAuthProvider())).then(r=>{const u=r.user;signIn({sub:u.uid,name:(u.displayName||'Player').split(' ')[0],email:u.email,pic:u.photoURL})})
+function gLogin(){const b=$('gateLogin')||$('gbtn'),m=$('gateMsg')||$('gmsg'),say=t=>{if(m)m.textContent=t+' '};if(b)b.disabled=true;say(S.lang==='en'?'Connecting…':'กำลังเชื่อมต่อ…');
+  fbLoad().then(()=>firebase.auth().signInWithPopup(new firebase.auth.GoogleAuthProvider())).then(r=>{const u=r.user;signIn({sub:u.uid,name:(u.displayName||'Player').split(' ')[0],email:u.email,pic:u.photoURL});cfgGate();const gb=$('gateLogin');if(gb&&!isDev()){gb.disabled=false;const gm=$('gateMsg');if(gm)gm.textContent=T('บัญชีนี้ไม่มีสิทธิ์ DEV กรุณาเลือกบัญชี Google ของเจ้าของเกม','This Google account is not a DEV account. Choose the game owner account.')}})
    .catch(e=>{if(b)b.disabled=false;say((S.lang==='en'?'Sign-in failed: ':'ล็อกอินไม่สำเร็จ: ')+(e&&e.code||e&&e.message||''))})}
 // b171 link a guest player to a Google account. Only into an account that has never played (no save in the cloud or on this device), so nothing is ever overwritten.
 // The guest save on this device is then removed, so one guest player cannot be copied into several accounts. A linked save carries lnk (shown on the admin page).
@@ -4187,6 +4187,7 @@ document.addEventListener('focusin',ev=>{const n=ev.target,chat=n.id==='chi';if(
   $('kbo').onclick=()=>done(true);$('kbc').onclick=()=>done(false);i.onkeydown=e=>{if(e.key==='Enter')done(true)};setTimeout(()=>i.focus(),30)});
 S=load();try{const l=localStorage.getItem('pdb_lang');if(l&&!USER)S.lang=l}catch(e){}document.documentElement.lang=S.lang||'th';USER?loading(USER.sub?cloudPull().catch(()=>{}):null):titleScreen();
 </script>
+
 
 
 <a href="https://pixelpicked.com/game/3QqeaUhmbSp/pixeldeck-battle" target="_blank" rel="noopener">
