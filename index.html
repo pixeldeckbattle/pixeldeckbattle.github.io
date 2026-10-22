@@ -834,20 +834,20 @@ h1{color:#f2d98a;text-shadow:0 3px 0 #7a4a1c,0 6px 0 #0a1019}h2{color:#f2d98a;te
 @keyframes twpop{from{transform:scale(.6);opacity:0}}
 
 /* ---------- b198 GPT kit skin on the normal background (owner: orange/gold buttons and gold frames everywhere, background unchanged) — GPT UI kit in ui2/: gold frames on night blue. Layered over the Dark Ages skin; only sources, slices and colours change ---------- */
-.btn,.btn.alt,.btn.go,.btn.on,.btn.red,.btn:disabled,.tab,.tab.am,.roomb,.roomb.px,.play,.ibtn{border-image:url(ui2/btn-sub.webp) 48 70 fill/9px 14px stretch;filter:drop-shadow(0 3px 0 rgba(0,0,0,.45))}
+.btn,.btn.alt,.btn.go,.btn.on,.btn.red,.btn:disabled,.tab,.tab.am,.roomb,.roomb.px,.play,.ibtn{filter:drop-shadow(0 3px 0 rgba(0,0,0,.45))}
 .btn{--tx:#fff}.btn.alt,.roomb,.roomb.px,.ibtn{--tx:#eaf2ff}
-.btn:not(.alt):not(.red):not(.on),.btn.go,.play{border-image-source:url(ui2/btn-main.webp);border-image-slice:52 70 fill;--tx:#3a1400;text-shadow:0 1px 0 rgba(255,240,200,.55)}
-.btn.on{border-image-source:url(ui2/btn-main.webp);--tx:#3a1400;filter:drop-shadow(0 0 6px rgba(255,210,58,.7))}
+.btn:not(.alt):not(.red):not(.on),.btn.go,.play{--tx:#3a1400;text-shadow:0 1px 0 rgba(255,240,200,.55)}
+.btn.on{--tx:#3a1400;filter:drop-shadow(0 0 6px rgba(255,210,58,.7))}
 .btn.sm{border-width:7px 10px;border-image-width:7px 10px}
-.btn:disabled{border-image-source:url(ui2/btn-sub.webp);filter:grayscale(.85) brightness(.65);opacity:.85}
+.btn:disabled{filter:grayscale(.85) brightness(.65);opacity:.85}
 .play{border-width:16px 26px;border-image-width:16px 26px}.play b{color:#fff;text-shadow:0 2px 0 #7a2a00}.play small,.play span{color:#fff2cf}
-.tab,.tab.am,.tab:not([class*="r-"]){border-image:url(ui2/tabs-2.webp) 70 96 fill/7px 10px stretch;opacity:.85;--tx:#eaf2ff;color:var(--tx)}
-.tab.on{border-image-source:url(ui2/tabs-1.webp);border-image-slice:70 96 fill;border-width:7px 10px;border-image-width:7px 10px;margin-top:0;--tx:#3a1400;color:var(--tx);text-shadow:none}
+.tab,.tab.am,.tab:not([class*="r-"]){opacity:.85;--tx:#eaf2ff;color:var(--tx)}
+.tab.on{border-width:7px 10px;border-image-width:7px 10px;margin-top:0;--tx:#3a1400;color:var(--tx);text-shadow:none}
 .tab[class*="r-"].on{color:#3a1400}
-.px,.amrow,.chb,.lookb,.rkrow,.pvrow,.abar,.row.avsel{border-image:url(ui2/panel.webp) 44 fill/10px stretch}
-.chb.on,.amrow.on,.rkrow.me{border-image-source:url(ui2/panel.webp);border-image-slice:44 fill;filter:drop-shadow(0 0 6px rgba(255,210,58,.8)) brightness(1.15)}
-.tmenu{border-image:url(ui2/panel.webp) 44 fill/16px stretch}
-.dk{border:0;border-image:none;background:url(ui2/dock.webp) center/100% 100% no-repeat;padding:8px 4px 7px;--tx:#fff2cf;filter:drop-shadow(0 3px 0 rgba(0,0,0,.5))}
+.px,.amrow,.chb,.lookb,.rkrow,.pvrow,.abar,.row.avsel{}
+.chb.on,.amrow.on,.rkrow.me{filter:drop-shadow(0 0 6px rgba(255,210,58,.8)) brightness(1.15)}
+.tmenu{}
+.dk{border:0;border-image:none;padding:8px 4px 7px;--tx:#fff2cf;filter:drop-shadow(0 3px 0 rgba(0,0,0,.5))}
 .dk>span:last-child{font-size:13px;margin-top:2px}.dk small{display:none}
 .dk:disabled{filter:grayscale(.85) brightness(.6)}
 .pill,.pchip{border:2px solid #f2c14e;border-image:none;border-radius:20px;background:rgba(10,13,36,.88);padding:1px 10px 1px 3px;box-shadow:inset 0 0 0 2px rgba(0,0,0,.5)}
@@ -855,7 +855,7 @@ h1{color:#f2d98a;text-shadow:0 3px 0 #7a4a1c,0 6px 0 #0a1019}h2{color:#f2d98a;te
 .pill .plus{background:#1f9a3a;border-radius:50%;color:#fff}
 .ibtn{border:0;border-image:none;background:none;filter:drop-shadow(0 2px 0 rgba(0,0,0,.5));width:40px;height:40px}.ibtn .ico img,.ibtn>img{width:38px!important;height:38px!important}
 .atop{background:rgba(10,13,36,.75)!important;border-bottom:2px solid rgba(242,193,78,.5)}
-#ov .cd .px.cdbox,#ov .cdbox{border-image:url(ui2/panel.webp) 44 fill/18px stretch;padding:14px 20px}
+#ov .cd .px.cdbox,#ov .cdbox{padding:14px 20px}
 
 
 /* b199 balance: every label sits dead-centre in its frame */
@@ -863,7 +863,7 @@ h1{color:#f2d98a;text-shadow:0 3px 0 #7a4a1c,0 6px 0 #0a1019}h2{color:#f2d98a;te
 .btn.sm{padding:1px 2px}
 .play{flex-direction:column;gap:2px}
 .tab,.tab.am,.tab:not([class*="r-"]){display:flex;align-items:center;justify-content:center;text-align:center;line-height:1.2;padding:1px 4px}
-.dk{display:flex!important;flex-direction:column;align-items:center;justify-content:center;position:relative;overflow:visible;padding:0!important;background:none!important;border-style:solid!important;border-color:transparent!important;border-width:10px 10px 22px!important;border-image:url(ui2/dock.webp) 70 60 130 fill/10px 10px 22px stretch!important}
+.dk{display:flex!important;flex-direction:column;align-items:center;justify-content:center;position:relative;overflow:visible}
 .dk>.ico{display:grid!important;place-items:center}
 .dk>span:last-child{position:absolute;left:4px;right:4px;bottom:-19px;height:16px;display:flex;align-items:center;justify-content:center;text-align:center;line-height:1;font-size:clamp(9px,1.2vw,13px);white-space:nowrap;overflow:hidden;margin:0}
 .dk>span:last-child small{display:none}
@@ -888,359 +888,96 @@ h1{color:#f2d98a;text-shadow:0 3px 0 #7a4a1c,0 6px 0 #0a1019}h2{color:#f2d98a;te
 @media (prefers-reduced-motion:reduce){.logo3,.logo3 i{animation:none}}
 .wbsh1{display:inline-block;aspect-ratio:217/220;background:url(wb/sh1.webp) 0 0/1600% 100% no-repeat;animation:fx16 2s steps(16) infinite;vertical-align:middle;flex:none}.wbamk{width:40px;flex:none;display:block}
 
-/* ===== b214 · OBSIDIAN RELIC UI =====
-   Presentation-only upgrade. Icons, sprites, rarity art, hitboxes, layout
-   transforms, Firebase, ERA and gameplay functions are deliberately untouched.
-   Compact, square-edged SNES/GBA metalwork (no blur, no image filter).
-*/
+/* ===== b219 ROYAL GOLD UI — one frame layer for the whole game =====
+   Replaces the stacked b214 / b215 / b217 / b218 skins (removed) and the ui2/*.webp frame sources of b198.
+   Frames: Kenney Fantasy UI Borders (CC0) shapes, recoloured antique gold on deep navy by tools/kframes.py,
+   drawn as true 9-slice (border-image ... fill). Only frames, panel fills, buttons and decoration change:
+   icons, card art, sprites, rarity glows and game logic are untouched. Scoped to #stage so it wins without !important. */
 :root{
-  --night:#0b1328;
-  --panel:#182a49;
-  --deep:#080f22;
-  --ink:#fff2d4;
-  --dim:#b8c9df;
-  --pd-border:#bb9352;
-  --pd-edge:#f6d990;
-  --pd-recess:#071025;
-  --pd-surface:#172a49;
-  --pd-surface-low:#101d36;
-  --pd-ice:#8fe4e8;
+ --rg-win:url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAKAAAACgCAYAAACLz2ctAAAE1UlEQVR42u3dv28cRRjG8b1k08YgpQCF/8A1okpNkX/AsnJpQouDKJAiGmpHQqSMBBJwlrk6EqRJ5x5BYSlCQkKyI0VC/HDaAEubGdCNV7vrmd39fLvxe+c4N8897/vM7d0tqojrV680r65PT74K6iePH1ZtWK+Og/WDo7Ng/ezFy0WFbOTe70u2ADkhQBAg5ksdzwAx93f3wh5/+eNW/8BOdexRHhFD73est7r9n9jYpVkx7H63FmBDf/OS38D7zQGR1wHbnvvsVI/CGSE69/nm0j17NmG+P3gzoZftUC/LaqNe6v6fMBxSDx60BacMmwCn1YCH3U/ngMhKHZ/7HFYfBevdaj9RP+5k2alzSJTVgvvWCwdEXgdsH7u71jG2KXDIep28/aLnOsatv571ULdNPY9ufxf9JDr3qRL1pT0dE8n9jOrrVTs91amhk4OhzxAT60kIwdhCCNBfiKlTjnnw94fh+suwfuvypxtvn6qjLLrv57vB6vdffwnLbwzugI5p5uRgyXrzT9sWDPSZQTYLVAhBVhb7N68FEt1ZbntUMBjx9YAcEFkhQBAgZjwDdr0e7+6NrWC9+uuDYL2sP9tYR1mk9iuux5/9wgExKgY4B3QQPS28JwRTdsC2n8/X93s4fnv+s10oibe63b2tngp4KU5LnjNaMCYWQtpmEAY45wySPwX7JAUpGDADwgwoBWOGAqQ/LRiYkAM6h5GCOSC0YCBDC059PmVcb3ymdNkNeODt4YAQQiCEAFNxwKKeYCBACoQWDAIECmzBLkglwIsd6ZzCjAsH0eCALJAFckBIwcDUUrBvWOeAAAFCC+4pMzWt6g6iS8/AUjA44KBPMRAgBUIIAQECo2/BXgueWg4elwDpj/60YEjB536CsUAhBCBAaME5UojLsWadQjggtGBowZO1eHBA4AId0CshMsiYWrCDaC0YmFII0YP14DGlYPrTgoEJtWAWCA4IAgQytODUV2/FdV/VVXgGblwNAy0YkILBAYGpOSADJMCLVZTXgkeWg7VgmAGBac6ALkglQCMgsoVELRhSMKRgQAqGFpzB4bVgDggQILTgLBlYC55vBuaAmFwIcQzIAvOmYAqkQC0Ys23BxY25IED6Q6kzoGMYMyCQDQLE3GdALZgDAnMNIWKwEAJMxwFTI13zny/L5IBF+593xYEDmgHNgOMRYFH/P8zPASkQZkCYAc9XdzGCGVAGQbYJqb5+9QoJoDfa6kkIgRACISSjAXLAObNozg4DBZw8fuhRwWCsV8daMMyAAAGigBlw/+a1YAb84ux2q19wZ+vratP9U3WUxdD7Gd//f1Jw11TadKyjLIbdTy0YZkCYAV/p6cvgBk+/fTtYOyfEJuJzvlhPd7ZWQ8+AwPn1VNMfcmYYMyCykrwY4f7uXtjT/7wV9vTXDlrVHxydedQL5u6NrY77fSwFY8QOmHqPRtc6xjbCDasHDoiyHPDJ+z9EP9kOVjtVWF+vuv0Bz168XNiGfHR9T1BXvXBAlJ2C2w8NZsBpDYE+HxATZpGaAeJzoc//2N34C09/OgrWn7xzEqzjc0AzYFkzYNv9jnnv9cON+80BYQYEOCDKcMB4BkvNhE/2fkz8ynCGWK9OPcojJr3fVbTfm+ux3jggtGAQIJCFfwE5LtaDbYmMvAAAAABJRU5ErkJggg==");--rg-pan:url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAKAAAACgCAYAAACLz2ctAAAD7UlEQVR42u3dP49MURgH4FlLlP6HRqf0LVTiA5BdBUEUZDpfgm6j2YREsmxWTaLBNxCCSXQiCkthd7UiRyfOnbh3rpm559w9z9Ndu67kzi+/9z0zi4Wwsx4Gf/n8bHUwjZNnrw9meT/SmvXrubE2iq73eMSkJIAIIOVauH3uaLQDPvo1nOqGy4srg1nej7Rm/XpW76cBMYIRQEhib9M3vHl8Krpueh9oY63+fj+2v3nqfXIkvnxy6UXD6z9qtTNqQPJuwNkLnjoJAyh/tAngnaVhq5k+GJyJd76tr55yj1Vf70cP6r9/eXHkFEyPGzA0zMjQcoYGM7fXpn39mn6/BiSzHTA0RtqOV5Af31u+vsfa5UkDkvcpeJIpD/9LA5K2AW+txz+fdaHyWW/TZ7tBAVLj6eWXtXnSgPRtBwx2QOyA7A5jfyfk4c+btb9h5/ump8Y/HTh8ovbrF/fd1YDsqh0QZhjAIH5MIUwbwPGd74unysQa83K87QhWeXS7A3qfj+44BSOAGMH/nLh+2ICOd0CnEIxgBBAEkPJ2QKcQEgbQ29AYwQggpNkBx2awIYwGRAChixHsFExOARRB0gZQ/rADIoDQzQj2YRwpAyh/5HQIkT/sgJTbgDoQDUjBDagA0YAU04DV/9vL//WGBsQOCBqQAhtQBaIBKacB/cMIaEAK3gH9PBYaEAGEJCPYBCanAEogXQbQEQQ7IAWPYBVI2h1QAjGCEUBIMoINYDIKoB+HwQhGAKGjEextGFIGUP7I6hAigXQZQAWIQwhGsA4kjwDKH90G0BaIHRAjWAOiASmuAYN/HIaMRrD4YQfEDggCSAkj2CEEDYhDiEMIGpDSGjBUdr5gB0QDYgcEDYgAwnxHsDei0YA4hDiEkEEAxQ8NSMEBlD+SnoIlEKdg7IDQSQBNYIxgHEJUIDnsgOKHQwgFB1D+sAPiFAx2QDQgzLUBrYCkDGCoJC5IIEYwDiGgASmvAf29YDQgBTWg92HQgBTbgMEOSEaHEPFjnhbCznqUsc/PVqNv2FgbRdf3t5ej681Pbz1F/tgeXRu0ydPe9n+EQwoOIZSyAzYXogZkigDeWRpWdryl6PrKwZGnxMTa5mmCN6LtgEw1Iu2A9GgHbN9/GpD/7b9JPgkxgZljAo1g8hrBKhCHEEpuwHrPh+8qv7IYXVU/67u3dSG63vz42lPvkZ0PN6Lr6me7VRtr7e6vAelXA87/YI4Aih+5nILvbZ2Pr1fqb3j10MipeRepfrZbzcO409HVl4+v4i8fSj2C5a8swQ5Ixgl0CiavHfD58P1UN6y+DzR+v/2eeo80v55N9tfeTwOSlAAigJTrNwonMYsM14O0AAAAAElFTkSuQmCC");--rg-sel:url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAKAAAACgCAYAAACLz2ctAAAEM0lEQVR42u3dvY8NURzG8buCQkgk/gONKDQK7YpWgka8VCj4CygURHRa7xKhMRadeLka9upsdmWVOo1EL1FYyaiIc669s+OOe2bu+Xy7mc09u5l58jzP78zs7ky58qns/cnHK72x2HGu1+h6SEvD93NQ9IPjda4wUkKAIEDky8z8+e1BB3y05clYCx75erjX5HpIS9P3M16PAyIp6+MTZdnsN2h6PaSl6fvJAdEuB4y5eXZbeKJiH2hQjF7vw9JbV71DHN0R6eHA3Yr7H+7zzW1+wgHRKQdsurSVUYdQCjNrjRwQHe6Ag4v7okx/PPoDm08Fh8uLOl+Xie/33NOKztjrjyfAqoSsm6Ait+MBWv7fz4tgJIUA0e4OWMXy4sBVnGLq3t9jO8cWYFXo21ZBrRYogqEDAn+P4NlLr4MTs9Gz3qpnu80/OcE0cevgvZF6qj2ExJVPBYQIRncjePyphgXi3xn6nZBi09zID7xfmHfVsCq79+wd+fXj346KYOiAQFMdEGhSgJG+lhbeuEpYM0vvRuvl+C4RjHZHsG0WJBTgkPzoD6ZgECAwmQ5YFcrABAWoA0IEQwQDHBDT74DeeAYHRM4d0KM4tGgIEcEQwcjXAUUwOCDycUDbMDAFQwQDrRhCRDA4IPJ1QB0QHBD5OKBtGCSOYNswEMEgQKAFU7AOiKQC1AEhgpGRA9qGQdoItg0DEQwCBBJEsD9QicQdsEqSgAjG1DqgbRikjWDbMBDBIEAgQQQPb8OIYHBAECBAgJj2DtjTAcEBQYBAigiOI1cEgwOCAIEkU7CXEZBWgPSHlAKkP0xYgN4HREoB0h8MIcgF2zBolwOWkeOVHBBJI5j+IIJhCAEmIkDbMEjrgIYQ6IDQAX9ZIAcEBwQBAgki2BCCyQrQNgzSOiAFQgeEDvjLADkgJihAAQwRDEMID0RLOqCLhJQCpECkFCD5YbICLP2rJJiCQYCAIQS5CdA/rEZiB7QRDR0Q2TogA4QhBARIfmiFAxqDYQhBRg5oCgEHRK4O6GUYtGsIEcEQwch3CJHB4IDItgP661jggMjIAe1Do1VDCAVCBCMbBxz+nRAOCA4IHRBonply5VOosI9XgsNB0Q+O7/y4ERzPv3rsKuI3nxcv9Oroaf3Y35FBotkIrqs/CoQhBF11wMHFfWHHW7keHJ/e0I8sz9syWJ26euKAEMEwhKx5qPWkBPWGVA6ILjlg8xoHOCA644BVnc42DGoFZNlsBBcnnoUnTmwJDuNnfbe/XwuOX7986KZ0iC/Ll8MT0bPdmEEhgpHXENKsJcMQAqR0wDLqcFfD4/ujFzyzsT9yPds23SJ+thvrYZj9Yed/8SDUx6HEEUx+mQ3BtR2w/M8/gQ443Yqq2fl1QLSrAxYnn4/XGYqK9U5uddW71AGLMfUR3e94PQ6IpBAgCBD58hNQXFhx6kYv/gAAAABJRU5ErkJggg==");--rg-dock:url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAKAAAACgCAYAAACLz2ctAAAE2klEQVR42u3bv48VVRjG8XvNBROBpaGjszJZC2PPX0ClFSHZRkmIzdIbbYzRBCqs3FjhJoRCxY5WJWgNYSV06C4qhl28EBPjFmPlj5mEGQ8zc86593y+3SF3Zi7zPvs+z3v27HTSwfGVA9V/1zvblybA31w4vV5bX7w+r63vP96ftl3/nFeIlBAgCBDlMuvKfF1sX9sIeuCVzS1vPWNOra0Oer+mnpqZUAcECwYBAkmYdmW+5r5f38z35cqH3nrG3Pj40KD1bu4L6oBgwQABIgtm504cDfLsoffxHu09UIWseHHUejf1Nov+/6uq9jXK6oDR9dexBgGm7Ygoimk1v9yqgOZ5r6tHPgh6wGtP3m69/tHuL6qQEW8c/KhXvb/dODwJ0dMzdMC+HYsJLxbj1meWWn8cuGj9ZZABdUBDSJtHd7G3+3P7B573kpeJznpPjgTpqX8GDPZQHrzQHjxwvWY9v86kinw90gakoevVfwgJ/Ynoez0SK3DYek3PnzxWu+MXh96vfeC7T1Z6PaCZAZr333v4kyJnxN2rL41a79d/f6erA1axf6RUvagW2nsIGfjr0V/R2AdE3gIM3RfEYhO73rPonug8YGERMDADGkEQM2A5D4i8M+DnL7w36AN3f93x1jNm9HofTt4BdTwm3CrAcQVSsdwFT23D1tvfBSPvDPjwwY/eUkHErvesayjlmIjcAe3UISMLpj+kFSAFIqUAyQ9xBWgKQUTsA0IGBAE+VW4cGJE7oH1AyIAodwrmwchoCCE/pJ2CdUDIgDAFAymGEA6MtBlQB4QMiHIzIA9GTAEaQZDVEKIDQgZEuRmwYsKIK0AWDBYMFmwORgIBGoKRVwbUARFVgBwYOiAIkPyQxRRsCsGI2AeEDAgCfKrjcmCkzYA6IGRAlJsBeTBSCpD8EFeAphDIgGDBTBgpBOg8IBJ3QPuAkAFR7hTMg5HREEJ+SJsBdUCk7IB6IKIK0AyMvDogC8aI2IZB5kMIE0ZUAdIfTMFgwf+sCBBJp2AvCSwYS4ptGOSdAXVAxBWg41jIKQOSH1gwCp6C6Q9JBUiBYMEoeAr2ksCCUYoANUDogDCE/LskQIyHwwhgwSBAUwgyzYAUiJQW7G9CkDYD0h9YMJYV2zDI3YJ1QLBglCJA8kNeFkyCiCpALRA6IAwhBIgsOiD9gQWjWAGSHyJPwY7kgwWjEBxGQG4d0DYMcrJg+kNMATb19tvtN3s94MLp9dp6c/+t2vqHOzdUISPmt8+MWu/J5GaoBQ8Niy+LKtCC6Q/x9Pd/tmESf0MUPoR0eDwBLjfD1zu3Dkh/OqAQiHyGEA0QEZlW88tVSAbY/PNs0APWDm60Xn/v+29UISPefeVOr3rf+mw1KFOGd8C+p2OctlkwBx23Pg4jILchRApEQgGG7vvc2/q6/QOv0t8y0VnvyctBenqGDth3G8U2zIKFwFHrNev/daqo1yO1/BILUAPUAIdkev7ksdotL16f1z6ws32p1wOaGeDTP840MsVXipwRT+6uD1rvpp7OnThaW9uGQV5TcPoeDwKMKTi/CSlbgE2P7vL0U2ur+l9BbF/bGPR+Tb2xYBSeAemPACkQqZg2/+H4yoFWRTT3cUIZOkNiWK5sbg2a8Zrcf7xf05x9QCSFAEGAKJe/API21lPtMHsqAAAAAElFTkSuQmCC");
+ --rg-gold:url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAKAAAACgCAYAAACLz2ctAAAEh0lEQVR42u3cMYtUVxiH8btGFuzyDVJYiyIW1pImzkJSGLDQTxAQrFdJAglYKJKgGLCSNImF1S5YBCtRC9GVQBJItR8gIc3uYuGMjYTcu3Gvx3PnvGf2/p7uzuzeGc7587zve+/MLM22H86a/7C6Mmly+HZtvRnyfIhl6P3c2NxpHR+wxIhEACGAGC9Lpw8vt3rA9Re/ZJ1wcvTjZsjzIZah97N7PgZEKAd3PzQd+CWmVnlfMZ1zAGezYd/v0OdDLAPv5/8YsPMCHyy3DtOvA3XO93LTJi4wq59+tufz3et86xv3KzPgTElmzBQD5r+DzuErmzKuBDIgFtiAkyOn2jX92VraG9j50yYsMKn7PTm+MmcDphpSyR331Dt8D5gaQCV3P/dw5XvAmQAyYE0G3PrdJu1ntn4rbMDUAOrxEFqClViElmABRI4B13990Hqg914vAyKB1TPnUg2YqNSpHhDvT3oAlWCEBlAJxoDs/k7Ik5/2/o9/nlo1vJ0PT+z59OTk2R4D9l6GYTwkVMj0EiyAyEqgAGKRA9hV6N+PrSnenb8eDWxAxsMc6TegAKJoALtfPPZpF5Q1YN5YDWQasJs/AcT88ONEqMuAXeMxIEJLsB4QhQPIgDAFgwEFECFDSKMEo6YhxCIhcgiRQBhCMJ4esNEDItSApmBUNYQIICKHEAFE7BBikWAIgSEECBhCXIhG6BDCgAgeQgQQhhCM14AWCYE9IANCDwgGBAoFsE+JQEEDKsEoGkBfSkJdJVj+UHYKNoSgKgMKIIr2gAwIBoQAmkJgCIESbJFQdAhpGBCRBnQrDhWVYAZE6BDCgAgeQgQQJYcQP1CJ2BLMgKhqCLFIMIRgvAYUQOgBMR4DKsEIDKDfhkFdBnQdEJE9IAEidAqWQJTtAX0iGgwIPaD8IaQE+3k21GVAAURRAyrBqGgIYUAYQmAIAWIMOLVIKGlAUzDqGkIsEooaUA8IBoQekAHBgBidAV0HRKgB3QlBXSVYAhE6hFgkFDWgHhAMCEPIm8OpBKKkARsGRE0GlEAwIEzBgCkYIzCgHhBVDSEWCUWHED0gGBDjNaAeEAwIPSADIsKADQMi0oA+DYPYHlAJhhIMJZgBwYAYnwH1gGBAjNaAjR4QkQZ0Kw4MCAZkQMQMIaZgRJZgBkRVJdiHETBHlmbbD1sJW12ZtP5gY3OndXzj1let4z/WbltF/MsnV35sUvJ0MPkV3CnBfIeQnvw1ekQEBnC3ECUQGQGcHDnVeuD7m1+2ji988bUpGe9Map56rwP2Pc+ASGvaekpwX54YEBkzqx4QtQ8haRWYAZFTgfu/mN73PAMiJS8MiNoNmHY+BkRG/tINeOfa1T2f797ru/7d5dbxi3s/2JUF4vMbP7eOu/d2i/eAuT2AT9foAfN6wEwHq9hqcFYPmPv6ekb5SzLgteuXkl5w4+I3DLiP6N7b7cvD+c7x87u3GBDljNYk7rceEHNN4HvcC55vAhlwXAns2++l04eXW39x7KNDWW+vex0w93yIZej97J7vgCVGJAIIAcR4eQ3Ud7XVec/Q1wAAAABJRU5ErkJggg==");--rg-navy:url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAKAAAACgCAYAAACLz2ctAAAEhUlEQVR42u3dP28URxzG8XN0L8GkQyCEhAQdgsALCIUNFaUViZKOLg2IiggERBR0FImEDOZ4BS6MlAoJy0aksaIUIOOjQYiCV7B0iNlLdln2z4xvPt9u7L21PfPo+T2/2bnzQvFprRh9xXT9wagNB5cuj7q8H+LS9XpOVneC8Q+mGDEhQBAg8mXhzvnFIANun1hrdcNTOyujLu+HuHS9nuX7jWcvKTr+EwqrOFd0u55KMGRA5Mu47oKn1z4G47p9oMlO9f2m76ZmfT9lwNL495M3q9e/tM+3feJxMwEWHdf48v0KmTCzxFg0dMC+exD607M0KcGpd1GY8wx4d+VKMN46/qj6BcfD4d67PbO8jymv99bL6utPj35pK8A6h2roYAXHm+sa2vL1457lp+CSX8dNSGMFkiAF9tiE7E3fWqQ5pun6/tS+CWlmgQWHQwsL9CgOURn3rXCgUoC/rt0PvjBdvx2MJ/9U9xQqMKq4d6paT9/hgJ6tIaUSzAIRU4DkhzbMvCdk89jDyhfsvn1j1vC/HD50pPL7Z/69FIxtwyCtElx3gNCBUnSpj/F3/ARguCZkd/e1WcI3U6eXs7UCtNGMuA5ooxkJlWAOiKgC5IDoE/uASMsBCwdOwQGRbwYsdCFIqQs2RxhWgHaikZAD8kAM3AWTH6I2IUowhsM2DBLvgjkgOCB0wcAgXbAeBH2yUOuANmKQVBNikjCoA8qAiOmAKjCiNiH+sxEGxD4g0m5CdCGI2wWbIwzbhNiJRkolmAciagmmPwwrQBuBGA7bMEjLAWffFswBwQGRTQb0yQhIqgs2R4jaBXNARG1CzBFilmASROQmxCQhYgZ0IBVxSzD9QQZEPl2wXRiklAE5IJRgaEKAKCXYNgz6xHEsJOaAjmOBA0ITogsBB0R2DujftYIDQgaUAZGGAOkPwwrQYQQk5IDkh2EF6EkIdMGQARVhcEBk34TIgBhUgAowZEBkLED6Q1IZkAKhC0a2GdB5QHBAyIAAB0QGDug0DDggdMFfRhwQMZsQ+oMuGDIgMEwX7EOiEVGADsNABoQMCERyQBkQHBAyoAyIBASoAiNuBuSAkAGRjwM6DwgOCBlQBkQMAZIfIjugDAgZEBxQEUYMAQqBSKkL9q44yIDQBQMcEPllQF0IOCDyccDZtwVzQHBAyIDAIAKkP6QkQApEjywUn9YChU3XHwQXTFZ3gvGzH28F47+3/jKL+ML75xdGTfQ0bvwTfHoWdMHIKAPKiOhRgHdXroQZ78DNYPzz6KpZwjfTVE/tHVAGRJcluE5OtqnRZUAbN38JCaI7CY7pDzEtUBeMqNgHRFpNSNMa7Lwgus2ANfyx9CT8wlI4LD/r21j8LRi/2nxmTfYRHzYvBuPys90yk9XWDhi7MYcMCKSbAVs6nswoAzYpwRuLN8LxevX150bXzfkcUX62W9bDDIvh8NWLjVAfR2sE2LP/+ayZufaz/7q+6ych7RWIvBSYWAakQAqsEuCfy09b/XrlfaCZ+y1bwv1E7XrWsVx9P9swiAoBggCRL58Bm32a/raNA7EAAAAASUVORK5CYII=");--rg-red:url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAKAAAACgCAYAAACLz2ctAAAEl0lEQVR42u3dQYscRRjG8R7Zc06CEYyiGMg5C0bzAbIRv0EEFSHES3LLzZsExNz0klxEWFxyEU+yEu/JIYgiDGpkI5tEIkSEPeRc3iRVQ7pT6Z6qnunf/1Y7Mz1L1ZPned+q7c4sHOyE5jHu7V5t+nDk7XPNkNdDXYZez2vb82j8nClGTQgQBIjpMvvsneejGvCjkx/0uuCVG181Q14PdRl6PdPrcUBUZWPhJ2Hgbwgmea0ISxYg/aHkem50fcWh85vRuHMf6Gb79f7dv28VV5iD12+1vp7u85176/1MBxxY4un1AkuclmOGbAes/Bth4k3IitUQWDMBhsShLp+5EI3Pnniv9YJnT8Q14z9/3jXLK8zCet/u+sS8VU/lHVDkoqYA6Q95EdxRpYXMKi6o+la7i+25fl2fzz8JSV5/eGffKq0xD/f2+yp4yRHM4LDMLrjr9aDIQ4ZeBndA8kMvB7y483n0g4Wz3lv9FI5p8+jYT616yndAh7tYZg2YG7n0h6ICXBQkBeLZWbgn5MPNd1s/8Pcfd8wansjho6+1vv7lj1+3O2DnPjTDQ0aJ9gwRnLcPCPSRYL4DqvmwVAdMrvDg9z2ziqfmwW97PQXYOGpDOTpvSqI/FBVg/1QHRDBEMDBABHNAVI1gNSDKClAEo2oNKIJR1wF1wSiHJ6RCBIMAnwj9oWoXTIEoHMGhdQyIYKwusy4HDJoQVBSgoxCMK4LNEWp2wSIYVR2QBaKoAD3/DyOrAQkQJR2w0QSjahNiGwZjimACRNUINkeo6YAiGFVrQBEMXTAm3ISoAlE2gnUhqOqAakDUrAH9NQzGVQMCFSNYGwwRjAlHMP2hagSrAlE0ghsRjJoOqAcBB8RU8HxAjC2CHcVhTBFsjlDUARtNCMYkQB4IEYwJNSEiGOWwDQMRDALUBWMsDugp+dCEQA2oBsQYakBzhKoOSIGo64AUCBGMqQqQAqELhggGyjigjWjUdUBHcVADQg0ogsEBoQsGSgrQ8wEhgjEV3JQEXTAIUARDFwwCXOh6dcHggJhwDUiB4IAgQKBME9JoQlAMJyEQwSBAXTA4IAjQWTAqO6CjOHBAqAEJEEtgpgvGqAXIAVESJyEYeQ0og6ELhi4YKOKAng8IDgg1oCYEHBAc0ByhqANqQsABMRUcxWFsTYg/SIUuGGpAAoQuGBwQWB6zcLATaeze7tXoDde259H4zRdPR+PvfrhpFvE/n/7ySZOjp43cL3DPCIp2wbpkjEqAakQMKsDLZy5EP3jj8OnkLXMKxFOTqycRjLFFcMiSnP9RHX0saqOf/HTB6JeQIhjjiuAuR3PXHLIMKnBArJQD5taAJIiSNeDRU/ej8cVTL0fj9Kxv84WtaPzt9zesygrxxa+XonF6tpuSrv/gDtj3XwC/5ICP454QjKsGrN0VgQAjjic13O3rXZ+Y65rXiPRsN9XDol5eisbf7MY1/6vHO2vAYSUSHN2tWU0XBn1/5z0hQ1ehInjNu4rMkksXjGXqL38f8NjWX71+wZ+326/38dYrVnGFSPf1cvWRrnd6PdswqAoBggAxXf4DUPEZLewQSkwAAAAASUVORK5CYII=");--rg-green:url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAKAAAACgCAYAAACLz2ctAAAErElEQVR42u3dz4scRRjG8Z4wXkXBo4IQD+LVg4f8BeJNECRCRASjl8Bi9iCYmyAYMSBBDOjFgWXEQyKI8Q9QT97CCvmJ+UEwCELOatqbbPVot0V3V9V0f7632umt3a168jzvW90zWdT39+rqALcvnqv68MTzx6sh50Neht7P9Wo/GB+yxMgJAYIAMV8WH7zwWFADLj8902vCP9/cqYacD3kZej835mteUNfD/gFDz4e8DL2fy3/5EUP/ynZtWhJUA2I6dEbw24+El3SdA6075rvx+x2rvkU82Ri/9OPn7fvfPOf75KPYCN6uGgKTc8B6YMHVo86P0puWOtIBR+5B6gcEqGdpc8DGd5w+eiK84OyH7TM+Fw6v/nbLJmwzjf1ed12/Otmqp/4OGGlgInfaDja6Ay46XifAqesvbv8WkXoavQsmQPTqghcdr1+5d9MqTpjLv/4Sdf3TkXrq7YAMDoM6YGwTImIxahPS9ToBok8Ts9zd+zj4QvNe75oDogev/PRFq56W8YomQIxZA8Z2HQSIpALkgBiQjfeE/HHm/dZv+PnOdauG/+SZxw+3vv7QzjsdDthhaJ5mQVSTEBvBXYkqcTGkPqLflKTmw5AW2BnBl25dtab431y62a6XZzsj2J0OJKTTAQkQSQXIAcEBMWcHJEDkdMANAVokpHRAbyRHWQ5IgEjahHBAZI3gxtjDB0gbwRwQJTkgAYIDggMCaRywXZDAuA5YcUDkdEDngOCA4IAEiDKaEAJEygjmgOCA4IAEiCIc8IFFQlIHFMFQA0INSIDggJidAH0EL7JGMAdESQ5IgMhcA1okiGCIYIADggMCYzqgj+ZAWV0wASKpA4pgcEDMtwlprwmBcSPYhxNBBEMTQoAowQEr+kPWCKZA5OyC6Q+JHdA5DDggZtsF0x/K6oJJECIYc3VA+oMuGCIYyNOEUCBSCrDWBKMoByRA5K0BKRAZHZD8kFiAjmFQVARbJIhgzLcLJkGIYEyUQ5YARTmgN6ZDBEMTQoEoQoASGHkdkACRtgZ0Kw7pcAyDshzQf9OAzBGsBoQIxny7YHdCIIIxXwesKBAFCZD+kFKAzqFRmANSIMbDMQzKdkAGiLQCVARCBEMEc0DkEKAEhgjGnCOYBSJrF0x/0IRADQgUEMGehkFSAfpsGIhgiGARjCK6YBEMEYw5OaCTaKgBoQZkgChAgCwQIhjzEaCPZ0NKHMNABGO+LOr7e4HEbl88F1ywXu0H4xuvvxWMvz7/nVXEP9w9u1PF6EkEo7AI7kJEI6sANwRJgeghwNNHTwRfuP5aWOMdrvZb9UZ/OEisnrofRpDB6BeRY0ewJUbGGlAEI28TwgIxqACVgEhXAg7QhMhgDNmEMEAkNMD4CH73r+/D8YsPB+Pmvb5rrx4Pxhe++taubBH3PtsNxs17u03Wq94RPPY/CZ6JPk1ITw+mPxl8EE/DoDAHbEj22rE3gvF7HRM+1bjXxwK3m+a93aYeNjh2JBie//KbYLybO4K1zRNvayOvX6bXHwXOS39jP4ww9l+ASSt2Q4Cnqh96/bx1x3ynXn7UpmwR69XdXvpo7ndzPl0wskKAIEDMl78BQadjU8lnTE4AAAAASUVORK5CYII=");
+ --rg-off:url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAKAAAACgCAYAAACLz2ctAAADeElEQVR42u3bP2vUcBgH8JwcKrYionYRnERdHFRuOVpxEV+Ci0M3l+6Cg+B76CJ0LvR9HN2Eg46uTi1W/IvoEFeTwwtpfslzd/l8tuuVFJIvz/PNpTc42N/Ls39MJodZE5ub4yzl8YiV+npOp0eF1+ecYiIJIAJIfw22xqNCB7y88ajRAb8dv89SHo9Yqa9n+XgmIKGGMz/J87R/IfXxiJX4es4EMHVcxG/F8tf6BCzZfj4qvK76HGh64iKtsts3/8y//qXP+dZvPKwbQDOQ7q7/UP6I3Nk6IKGdsbID7u6+K7xeu/5g7u9Xvc9yKV/PDx9bvwnJG2Ya2uyA8kdkB5Q/Wu6AIkh3EfQsmFA6IIvWAfOK40kgdfJXcRe8s/Oy8IPys97pqZPI2d29lc/Nkw7IgnXApvfV0GYAdUBSmvlOyMWr950VWvPrs+8Fs9Ar2Hc46JAJyGJNQPOP4LtgESS0Azop6ID0twMagZiA6IBgAqIDggmIDghdBFACie2AoAPS3w5oBmICogOCCYgOCCYgAgid3IRYwYR2QCcFK5jeTkAjkNgOCDogVjC4CUEHBB0QHRB0QHRAOLtBdQcUQaxgBBBCOqAVTGgHdJKwghFACOiAdjCxNyHyhxWMFQwmIDogWMFYwSCA9KADWsGYgAggCCA6IJiACCB0sII9CSG4AzopWMFYwWACogOCFYwVDALIyq9gG5g2DapuQiQQKxgBhJgOaAUT2gHBCqa3K9gMJLYDOikEBlD+0AHRAUEHRAcEKxg3IaAD0ocOKIFYwQgghHRAKxgTkP7ehIAJiA4IJiA6IHS5gkWQ2A7opKAD0t8OaARiAqIDggmIDggmIDogdBFACSS2A4IOSH87oBmICUhPDA729wojbzI5LPzCdHpUeH36Y81Z47/evHqR1cnTsO4f8EE17XbA6gSCDsiKdMCt8agw0z59v1T4hWvrP7N570OdvJTfr/3PCDogKe8Z6j8Llj8S3jPogCzaXbARSHcjcCh+BG5gHZDYBFrBLNYKrvL08Z2575ef9Z18veAaLLG3r7cLr8vPdquuf+2bkLzT/KMDSiDL1QElkHTXf+ZZ8PGX843+3MaV31nK4xEr9fUsH08HJPR6tv+dEN8xWbEEpr2engUTamYCPntyr9EBy58DNT0esVJfz/LxTEBCCSACSH/9BZEQGZYqCKYkAAAAAElFTkSuQmCC");--rg-chip:url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAKAAAACgCAYAAACLz2ctAAAC3ElEQVR42u3bsWsUQRwF4Fk5W9OkCwF7ezs7bQxaS8A6lRcQro9tUsWkSRkOjqstTK12WgcErdzzDwhovdazkLusCzPLzvd1Z0yzPH7vXnKpmptFEzo42Z9Gr0+/3ATKtaovQ5/83PMIyUkAEUDKNdnU0W2vXj+KXs8WB55iweqri+j1cn7tAqKCQQAZvup4bzv6OeDZ75drv+HXp6ed3jNSlk35ebPzwQVkwCs4hMZToYemZwDlj3T5C1Xf3wW/X73w0AtWf34W+uRnkjzyYIQggBBCmLQ7uf273o2/22tUcMm6fnbABUQFgxXMIFQ7D+5HCTp8shX9h9P6uafEfzvc/RjnqfU3RCqYgVewlYsRggBCnhWsgnEBKXeEeEhkDGAjgahgBBCsYIwQcAHxHhAEkNFXsJ8DYoSggsEKxgUEAUQFQ5IA+pskVDAqGFxABBDSVrAVgguIAEKOCvZxLFxASh4hHhI5AyiBqGAEEFQwRgikDKD8oYIxQkAAUcFgBaOCQQUz/gCKHyqYkkeIG4gLiACCFYwLCAkvoA2CCkYFgwCigiFtAOUPFYwKhhwBFD9cQLwHBCsYFQwqGAEEFcz4A+jzgKhgVDC4gAggpK1gKwQXkGIvoPuHFYwKhkwjxENCBaOCQQBRwZAwgOKHFYwKBiMEAQQVjBECKpjxX8DGCcQFRAAhzwhRwbiACCDkqGArGBeQYi+gDYIKRgWDAKKCwQWkoAvoAJIzgD6OhQpGAMEKxggBFxDvAUEAGX8F+zkgRggqGKxgXEAQQEoaISoYF5CxXsBVfRn9Q311Eb2eLQ6i1yf70+j1u28PPcWC/fnxdu3X23kK4brrCraSUcEIICRYwct53NFhPrWSubP2RnABUcFw5wq2gkmpOt7bjhJ09HV37Tf8/Tnz1Lj1Pd+m/Bw9rjdcQAeNhIU4UankTKARwrBGyPfzrU6dD13ys5yvXECGQwARQMr1D1AuufPxEJFoAAAAAElFTkSuQmCC");
+ --rg-ink:#f7ecce;--rg-dark:#2e1503;--rg-rim:#e2a83f
 }
-body{background-color:var(--night)}
-/* Core window and inventory frames: pixel bevels, metallic layered corners. */
-.px,.tmenu,.amrow,.chb,.lookb,.rkrow,.pvrow,.abar,.row.avsel{
-  border-style:solid!important;
-  border-color:#a57c40!important;
-  border-image:none!important;
-  border-radius:0!important;
-  background:linear-gradient(180deg,#344c6d 0 3px,#1d3352 3px 11px,#14243f 11px 78%,#0d1b33 78% 100%)!important;
-  color:var(--ink);
-  box-shadow:
-    inset 0 0 0 2px #071228,
-    inset 0 3px 0 #d5b574,
-    inset 0 -3px 0 #0b1629,
-    0 4px 0 #050a16,
-    0 6px 0 rgba(0,0,0,.30)!important;
-}
-.px,.amrow,.chb,.lookb,.rkrow,.pvrow,.abar,.row.avsel{
-  border-width:4px!important;
-}
-.tmenu{border-width:5px!important;padding:12px 15px!important;
-  box-shadow:inset 0 0 0 3px #071124,inset 0 0 0 5px #355573,
-    inset 0 3px 0 3px #f1cf80,0 6px 0 #050b18,0 0 0 3px #071124!important}
-.px{background:linear-gradient(180deg,#304769 0 3px,#192c4c 3px 65%,#101e37 65% 100%)!important}
-.px:is(:focus-within,.on),.amrow.on,.chb.on,.lookb.on,.rkrow.me{
-  border-color:#f8d978!important;
-  outline:1px solid #fff0b4;outline-offset:0;
-  filter:none!important;
-  box-shadow:inset 0 0 0 2px #132744,inset 0 3px 0 #fff1b6,0 4px 0 #080e22,0 0 0 2px #746039!important;
-}
-.rkrow.me{outline:2px solid #f6d990;outline-offset:0}
-/* Title strips and scrollable reading panes. */
-.main{scrollbar-color:#826b43 #10182d}
-.rail{scrollbar-color:#6f91a9 #10182d}
-.inf{border-radius:0!important;border:3px solid #ac8a4e!important;
-  background:linear-gradient(180deg,#243954 0 5px,#0f1b35 5px 100%)!important;
-  box-shadow:inset 0 0 0 2px #071228,0 4px 0 #050c1a!important}
-h1,h2{color:#ffdc82;text-shadow:2px 2px 0 #17213d}
-.guide h3,.sthd b{color:#ffe39a}
-/* Buttons only, never nested icons or their images. */
-.btn,.btn.alt,.btn.go,.btn.on,.btn.red,.tile,.roomb{
-  border:3px solid #a88750!important;
-  border-image:none!important;border-radius:0!important;
-  background:linear-gradient(180deg,#3c5679 0 4px,#253f62 4px 48%,#142744 48% 100%)!important;
-  color:#fff1cf!important;
-  text-shadow:1px 2px 0 #071224!important;
-  box-shadow:inset 0 2px 0 #f6db9c,inset 0 -3px 0 #0b1b33,0 3px 0 #050b17!important;
-  filter:none!important;
-}
-.btn.alt{border-color:#70c4d4!important;color:#d8fcff!important;
-  box-shadow:inset 0 2px 0 #b9f4ff,inset 0 -3px 0 #112943,0 3px 0 #050b17!important}
-.btn.go,.play{border-color:#89d8a4!important;color:#e0ffdf!important;
-  background:linear-gradient(180deg,#31765a 0 4px,#23593f 4px 48%,#15402d 48% 100%)!important;
-  box-shadow:inset 0 2px 0 #a7efb9,inset 0 -3px 0 #08281c,0 4px 0 #050b17!important}
-.btn.red{border-color:#e99b8b!important;color:#fff4e9!important;
-  background:linear-gradient(180deg,#a64c4d 0 4px,#7a303b 4px 48%,#5b2532 48% 100%)!important;
-  box-shadow:inset 0 2px 0 #f8b5a7,inset 0 -3px 0 #341224,0 3px 0 #050b17!important}
-.btn.on{border-color:#ffe39b!important;background:linear-gradient(180deg,#916c2b 0 4px,#725324 4px 48%,#493719 48% 100%)!important;
-  color:#fff4c8!important}
-.btn:is(:active),.tile:active,.roomb:active{box-shadow:inset 0 2px 0 #091426,0 1px 0 #050b17!important}
-.btn:disabled,.tile:disabled,.roomb:disabled{opacity:.5;cursor:default}
-.btn.sm{border-width:2px!important}
-.tile,.roomb{padding:9px 12px!important}
-.tile span,.roomb small{color:#b9d7e0!important;opacity:1!important;text-shadow:none!important}
-.tiles .tile:nth-child(3n+2){border-color:#85c6d4!important}
-.tiles .tile:nth-child(3n){border-color:#b58fd6!important}
-/* Tabs, lists, selection and character roster windows. */
-.tab,.tab.am,.clsb,.bagt button,.fl button{
-  border:2px solid #5b7498!important;border-image:none!important;border-radius:0!important;
-  background:linear-gradient(180deg,#2a4465 0 3px,#132842 3px 100%)!important;
-  color:#d9e8f3!important;text-shadow:1px 1px 0 #081329;
-  box-shadow:inset 0 1px 0 #82a1b4,0 2px 0 #060b16!important;
-}
-.tab.on,.tab.am.on,.clsb.on,.bagt button.on,.fl button.on{
-  border-color:#e8c577!important;color:#ffedb1!important;
-  background:linear-gradient(180deg,#66512d 0 3px,#342b27 3px 100%)!important;
-  outline:none!important;margin-top:0;
-  box-shadow:inset 0 2px 0 #e9cd89,0 2px 0 #050b16!important;
-}
-.tab[class*="r-"].on{color:#fff2c5!important}
-.clsbar{background:linear-gradient(180deg,#08152beF,#0b1c35ef 88%,transparent)}
-.pvrow,.rkrow{border-color:#6f8fb3!important}
-.pvrow:focus-within,.rkrow:focus-within{border-color:#f0ce7b!important}
-/* Top currencies and mini status panels. */
-.pill,.pchip{
-  border:2px solid #b48d4c!important;border-image:none!important;border-radius:0!important;
-  background:linear-gradient(180deg,#304769 0 3px,#0d1b31 3px 100%)!important;
-  color:#f5eccc;
-  box-shadow:inset 0 0 0 2px #071328,0 2px 0 #050b17!important;
-}
-.pchip{border-color:#77acbd!important}
-.atop{background:rgba(8,17,35,.91)!important;border-bottom:2px solid #957a4c!important}
-/* Existing 16-bit dock frame stays intact so its icon and label hit areas remain unchanged. */
-.dk{filter:drop-shadow(0 4px 0 rgba(2,7,19,.85)) drop-shadow(0 0 2px #e9c274)!important}
-.dk:disabled{filter:grayscale(.8) brightness(.65)!important}
-.ibtn{filter:drop-shadow(0 3px 0 #071024)!important}
-/* Shop and guide grids use the same metal frame language. */
-.gt th,.gt td{border-color:#8a7956}
-.gt th{background:#233a54;color:#ffe1a1}
-.gt td{background:#13233b}
-input:not([type="checkbox"]):not([type="radio"]),select,textarea{
-  border-color:#8ba7be!important;border-radius:0!important;
-  background-color:#0e213b;color:#fff2d4;
-}
-/* Keep original icons, card art, sprite animations and all rarity glows intact. */
-@media (prefers-reduced-motion:reduce){
-  .btn,.tile,.roomb,.px{transition:none!important}
-}
+#stage{--night:#0b1328;--panel:#172a52;--deep:#080f22;--ink:#f7ecce;--dim:#c3d0ea}
+#stage .main{scrollbar-color:#b88943 #0e1834}#stage .rail{scrollbar-color:#b88943 #0e1834}
+#stage h1,#stage h2{color:#ffd877;text-shadow:2px 2px 0 #1a1004}
+#stage .atop{background:linear-gradient(180deg,rgba(14,24,52,.94),rgba(8,14,34,.9));border-bottom:2px solid #a8762c;box-shadow:0 2px 0 #1b0e05}
 
+/* --- panels: rows, boxes, cards-in-lists (gold rim, navy fill) --- */
+#stage :is(.px,.amrow,.chb,.lookb,.rkrow,.pvrow,.abar,.row.avsel,.afrow,.plbox,.shbox,.pkd,.pfb,.futile){
+ border-style:solid;border-color:transparent;border-width:6px;border-radius:0;
+ border-image:var(--rg-pan) 32 fill/16px stretch;
+ background:none;box-shadow:0 3px 0 rgba(3,6,18,.65);outline:0;color:var(--rg-ink)
+}
+#stage :is(.chb.on,.amrow.on,.lookb.on,.rkrow.me,.pfb.on,.futile.on){
+ border-image-source:var(--rg-sel);filter:none;box-shadow:0 0 0 1px #1b0e05,0 0 10px rgba(255,200,90,.45),0 3px 0 rgba(3,6,18,.65)
+}
+#stage .pfb.lock{filter:grayscale(.6) brightness(.8)}
 
-/* b215 IRONCREST: genuine replacement for legacy dock frames.
-   Only UI styling; all icon/symbol/sprite references remain unchanged. */
-:root{--ui-gold:#d9ae56;--ui-light:#ffedb0;--ui-fog:#9bd2e2}
-.dock{grid-template-columns:repeat(6,minmax(0,1fr))!important;gap:8px!important;align-items:stretch;padding:3px 0 4px}
-.dk,.dk.c1,.dk.c2,.dk.c3,.dk.c4,.dk.c5{
-  display:flex!important;position:relative!important;flex-direction:column!important;
-  align-items:center!important;justify-content:center!important;
-  gap:3px!important;min-width:0;min-height:66px;overflow:hidden!important;
-  padding:6px 5px 7px!important;
-  border:3px solid #d9ae56!important;border-image:none!important;
-  border-radius:0!important;clip-path:none!important;
-  background:linear-gradient(180deg,#7b6637 0 3px,#2b4467 3px 9px,#142b4d 9px 60%,#091932 60%)!important;
-  color:#fff1ca!important;text-shadow:1px 2px 0 #040b1d!important;
-  box-shadow:inset 0 0 0 2px #07152f,inset 0 3px 0 #ffebb4,inset 0 -4px 0 #050e21,0 4px 0 #030916,0 0 0 1px #513e20!important;
-  filter:none!important;transition:none!important
+/* --- windows and dialogs (ornate double rim) --- */
+#stage :is(.tmenu,.cdbox,.exbox,#zoom .inf){
+ border-style:solid;border-color:transparent;border-width:14px;border-radius:0;
+ border-image:var(--rg-win) 32 fill/16px stretch;
+ background:none;box-shadow:0 6px 18px rgba(0,0,0,.5);outline:0;color:var(--rg-ink)
 }
-.dk:nth-child(2n){border-color:#8bc3dc!important;background:linear-gradient(180deg,#729bb6 0 3px,#293e64 3px 9px,#172e4e 9px 60%,#0a1b35 60%)!important}
-.dk:nth-child(3n){border-color:#bf97de!important}
-.dk>.ico{display:grid!important;place-items:center!important;flex:none!important}
-.dk>span:last-child{
-  position:static!important;left:auto!important;right:auto!important;bottom:auto!important;
-  display:block!important;height:auto!important;min-height:15px!important;
-  width:100%!important;margin:2px 0 0!important;
-  font-size:clamp(10px,1.13vw,14px)!important;line-height:1.1!important;
-  text-align:center!important;white-space:nowrap!important;
-  overflow:hidden!important;text-overflow:ellipsis!important;color:#fff1ca!important
-}
-.dk:is(:focus-visible,:active){border-color:#fff4bd!important;box-shadow:inset 0 0 0 2px #14304b,inset 0 3px 0 #fffbd0,0 1px 0 #030916!important}
-.dk:disabled{filter:grayscale(.85) brightness(.68)!important}
-.lobby .side{gap:8px!important;padding:4px 0 4px}
-.lobby .side .play{
-  border:4px solid #ffd46d!important;border-image:none!important;
-  border-radius:0!important;clip-path:none!important;
-  background:linear-gradient(180deg,#fff0ad 0 4px,#b76e1f 4px 11px,#9a4816 11px 65%,#572b23 65%)!important;
-  color:#fff4d9!important;animation:none!important;filter:none!important;
-  box-shadow:inset 0 0 0 2px #532714,inset 0 4px 0 #fff2b4,inset 0 -4px 0 #3b1b14,0 5px 0 #080e1e,0 0 0 2px #3b281c!important;
-  text-shadow:1px 2px 0 #56240c!important
-}
-.lobby .side .play b{color:#fff8d6!important;text-shadow:2px 2px 0 #50220e}
-.lobby .side .play:active{transform:translateY(2px)!important}
-.lobby .side .row2 .btn{min-width:0}
-.lobby .hud .pchip,.lobby .hud .pill{
-  border-image:none!important;border:2px solid #cca353!important;
-  border-radius:0!important;clip-path:none!important;
-  background:linear-gradient(180deg,#435c7d 0 3px,#122a49 3px 100%)!important;
-  box-shadow:inset 0 0 0 2px #09182e,inset 0 2px 0 #e4cb83,0 3px 0 #071021!important
-}
-.lobby .hud .pchip{border-color:#8fd0df!important}
-.lobby .row2 .btn,.lobby .side .twb{
-  border-image:none!important;border:3px solid #ba985c!important;border-radius:0!important;
-  background:linear-gradient(180deg,#476383 0 3px,#223c62 3px 60%,#10233c 60%)!important;
-  box-shadow:inset 0 2px 0 #f6e5af,0 3px 0 #071022!important;color:#fff5d4!important
-}
-.lobby .row2 .btn.alt{border-color:#86c9d9!important}
-.px,.tmenu,.amrow,.chb,.lookb,.rkrow,.pvrow,.abar,.row.avsel,.inf,
-.tile,.roomb,.btn,.tab,.pchip,.pill,.twb{border-image:none!important}
-#tui .tmenu{border:5px solid #d5a94e!important;border-image:none!important}
-#ov .cdbox,.wbdlg,.wbpan{
-  border-image:none!important;border:4px solid #bd9858!important;
-  border-radius:0!important;background:linear-gradient(180deg,#344d70 0 4px,#172b4a 4px 100%)!important;
-  box-shadow:inset 0 0 0 2px #071629,inset 0 4px 0 #edcf82,0 5px 0 #050b1c!important
-}
-button:focus-visible{outline:2px solid #ffe9a2!important;outline-offset:2px!important}
-@media(max-width:780px){.dock{gap:5px!important}.dk{min-height:60px!important;padding:5px 2px!important}.dk>span:last-child{font-size:10px!important}}
-@media(prefers-reduced-motion:reduce){.dk,.lobby .side .play{animation:none!important;transition:none!important}}
+#stage :is(.cdbox,.exbox){padding:10px 16px}
+#stage #zoom .inf{padding:8px 10px 24px 6px}
 
+/* --- buttons: gold = main, navy = secondary, green = confirm, red = danger --- */
+#stage :is(.btn,.tab,.stab,.clsb,.bagt button,.charr,.roomb,.tile){
+ border-style:solid;border-color:transparent;border-width:4px;border-radius:0;
+ border-image:var(--rg-navy) 32 fill/12px stretch;
+ background:none;box-shadow:0 3px 0 rgba(3,6,18,.75);outline:0;filter:none;opacity:1;
+ color:var(--rg-ink);--tx:var(--rg-ink);text-shadow:1px 1px 0 #0a0f22
+}
+#stage .btn{border-image-source:var(--rg-gold);color:var(--rg-dark);--tx:var(--rg-dark);text-shadow:0 1px 0 rgba(255,244,200,.55)}
+#stage .btn.alt{border-image-source:var(--rg-navy);color:var(--rg-ink);--tx:var(--rg-ink);text-shadow:1px 1px 0 #0a0f22}
+#stage :is(.btn.go,.btn.on){border-image-source:var(--rg-green);color:#f4fff2;--tx:#f4fff2;text-shadow:1px 1px 0 #06260f}
+#stage .btn.red{border-image-source:var(--rg-red);color:#fff4ea;--tx:#fff4ea;text-shadow:1px 1px 0 #3a0a0c}
+#stage .btn.sm{border-width:4px}
+#stage :is(.tab,.stab,.clsb,.bagt button).on{border-image-source:var(--rg-gold);color:var(--rg-dark);--tx:var(--rg-dark);text-shadow:0 1px 0 rgba(255,244,200,.55);margin-top:0}
+#stage .tab[class*="r-"]:not(.on){color:var(--gl,var(--rg-ink))}
+#stage .tile span,#stage .roomb small{color:#c9d6ee;opacity:1;text-shadow:none}
+#stage :is(.btn,.tab,.stab,.clsb,.bagt button,.charr,.roomb,.tile,.dk,.play):active:not(:disabled){transform:translateY(2px);box-shadow:0 1px 0 rgba(3,6,18,.75);filter:brightness(.93)}
+#stage :is(.btn,.tab,.stab,.clsb,.bagt button,.roomb,.tile):disabled{border-image-source:var(--rg-off);color:#b2b7c6;--tx:#b2b7c6;text-shadow:none;opacity:.85;filter:none}
+#stage .charr{border-radius:0;min-width:34px}
 
-/* b217 — Kenney Fantasy UI Borders (CC0, 2023, from owner-supplied asset pack).
-   9-slice transparent outlines, recolored for PixelDeck Battle. Frames only:
-   no icon, sprite, skill, card art, save or game logic replacements. */
-:root{
---kn-gold:url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAABBElEQVR42u1aORKDMAyUGVf5jR+QP/BU/pAHUKfMA9KmhSaeAQaNhRLLx+x2QLFavNKYNY4YfB7jQhXhdp/c2f2BGofnHoRxJiKieQq7aytIeVkBz/fru2Rh2V9bQcbrtN7nPKmFlrf9HojKj8o470VvZjOOkDfWLeiBc2/mwlVeX+vcl/ZK8z0wbL1nPeu1PbKt03Nzv1Yc6/S17YWu8va3FyrVB1peL5/DVt5WTqHmxygEQAAEQAAEQAAEQAAEQAAEQEDz38RIp0uvQColqCWdTgpAOp0JSKdLo790mnvrtafTsW5fKgv910ok02mrk3otryCdtjmp1/K6X71ohW7/VlkBk/ikMklRNC0AAAAASUVORK5CYII=");
---kn-royal:url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAABYklEQVR42u1ZwQ3CMAxsUDZA4ssTdQj+DMAOzMQODMCfIRBPvkjMUB5VixRI75yGkLT2q0ojO1bPvotrHqddUwlstT+bb+v/8rOoCjfbPWwP18GNl2NNOUztp0/g9rybYZc19WlT+7FSDLrvfVhmzRfPt+7Gm04NIAx2mOvWWSyz5vr1xacT+MRgi7n3et3ETMD164s/uTZafAJGynyhDBvKtNP/ApvluhnqNqgLufsQAaF4bPy+C+FuM9yFMGOGdTf2XOZXqnIsE7Pxyq8BhFGEQSmEpDWBIGh5FRiG+fE1AbRQ7L4cy9hzzedGlsrYcwTcyNIYf462VlSNagKagCZQ2I1srPqMrU7LZ2Ip8+XGyFbKfLkxst7IslGjCIM6G6UxL5uN6mQuuxtZ6GROWhPIDxvfSjHo3yerCeSHja9qNFsekP49jK1C5zcXQioQzSxjqU5pnPJno7GxndpP8TXwAsq6Uze3iHJ2AAAAAElFTkSuQmCC");
---kn-silver:url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAAAy0lEQVR42u3ZsQ3CMBCFYRu5o8wAlEgpsgN7sEoqVmEPdqBASskAKVMf1aFgyXFIRGyj/5VO877o7Obs9T6Imci52VuTMLF+O1N4rAovp/rjQ3t7ZFU01M/pQdc//VGRnAChfu5b+daJTYJbIN86MgsQu+2pE+pX/it0rA4ynjV/5lOPkPbz74T2dKOCksnMz3p99Lz4EQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAXGsidOnPeOjD3xj7N4T5z79vL/XyE29esz+YNfyBxgNDIGtboAAAAASUVORK5CYII=");
---kn-surface:#152244;
---kn-surface-hi:#293960;
+/* --- lobby: big stage button, dock tiles, currency chips --- */
+#stage .play{
+ border-style:solid;border-color:transparent;border-width:8px;border-radius:0;
+ border-image:var(--rg-gold) 32 fill/16px stretch;background:none;filter:none;animation:none;
+ box-shadow:0 0 0 2px #1b0e05,0 5px 0 rgba(3,6,18,.8),0 0 18px rgba(255,190,70,.35);
+ color:var(--rg-dark);--tx:var(--rg-dark);text-shadow:0 1px 0 rgba(255,244,200,.6)
 }
-/* Common frame family across lobby, inventory, fusion, shop, arena, tower, modals */
-.px,.tmenu,.tile,.roomb,.amrow,.chb,.lookb,.rkrow,.pvrow,.row.avsel,.futile{
-  border:4px solid transparent!important;
-  border-image:var(--kn-gold) 16 / 10px stretch!important;
-  border-radius:0!important;
-  background:linear-gradient(180deg,rgba(38,53,103,.97),rgba(17,27,57,.98))!important;
-  box-shadow:inset 0 3px rgba(255,237,173,.10),0 4px 0 rgba(3,8,25,.75)!important;
+#stage .play b{color:#fffbea;text-shadow:-2px 0 0 #5a2a06,2px 0 0 #5a2a06,0 -2px 0 #5a2a06,0 3px 0 #5a2a06}
+#stage .play :is(small,span){color:#4a2204;text-shadow:0 1px 0 rgba(255,244,200,.6)}
+#stage .lobby .row2 .btn{border-image-source:var(--rg-navy);color:var(--rg-ink);--tx:var(--rg-ink);text-shadow:1px 1px 0 #0a0f22}
+#stage .dock{grid-template-columns:none;grid-auto-flow:column;grid-auto-columns:minmax(0,1fr);gap:8px;align-items:stretch}
+#stage .dk{
+ border-style:solid;border-color:transparent;border-width:8px;border-radius:0;
+ border-image:var(--rg-dock) 32 fill/16px stretch;background:none;filter:none;
+ box-shadow:0 3px 0 rgba(3,6,18,.75);min-height:64px;padding:4px 2px 2px;gap:2px;
+ color:#ffe3a0;--tx:#ffe3a0;overflow:hidden
 }
-.tmenu,.px.cdbox,#ov .cdbox{
-  border-image:var(--kn-royal) 16 / 12px stretch!important;
-  background:linear-gradient(165deg,#2c386b,#111b3b 80%)!important;
+#stage .dk>span:last-child{position:static;height:auto;width:100%;margin:0;line-height:1.15;
+ font-size:clamp(10px,1.2vw,14px);color:#ffe3a0;text-shadow:1px 1px 0 #070a1a;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#stage .dk:disabled{filter:grayscale(.85) brightness(.65)}
+#stage :is(.pill,.pchip){
+ border-style:solid;border-color:transparent;border-width:4px;border-radius:0;
+ border-image:var(--rg-chip) 32 fill/12px stretch;background:none;box-shadow:0 2px 0 rgba(3,6,18,.7)
 }
-.chb.on,.amrow.on,.lookb.on,.rkrow.me{
-  border-image:var(--kn-gold) 16 / 10px stretch!important;
-  box-shadow:inset 0 0 0 1px #e9c16a,0 0 10px rgba(255,196,62,.35)!important;
-  filter:none!important;
-}
-.btn,.btn.alt,.btn.go,.btn.red,.btn.on,.clsb,.bagt button,.pvmenu .btn{
-  border:4px solid transparent!important;
-  border-image:var(--kn-gold) 16 / 9px stretch!important;
-  border-radius:0!important;
-  box-shadow:inset 0 2px 0 rgba(255,252,192,.18),0 3px 0 #080b20!important;
-  text-align:center;
-}
-.btn,.bagt button{
-  background:linear-gradient(180deg,#a77327,#563419)!important;
-  color:#fff0c4!important;
-}
-.btn.alt,.pvmenu .btn,.clsb{background:linear-gradient(180deg,#304575,#15213f)!important;color:#f6e8c4!important}
-.btn.go,.btn.red{background:linear-gradient(180deg,#b34631,#702821)!important;color:#fff5d8!important}
-.btn.on,.clsb.on{background:linear-gradient(180deg,#317c55,#163f37)!important;color:#e8ffe8!important}
-.btn:active:not(:disabled){box-shadow:0 1px 0 #080b20!important}
-.btn:disabled,.dk:disabled{opacity:.54}
-.dk{
-  border-style:solid!important;
-  border-color:transparent!important;
-  border-width:10px 10px 22px!important;
-  border-image:var(--kn-royal) 16 / 10px 10px 22px stretch!important;
-  background:linear-gradient(180deg,#22355f,#0f1835)!important;
-  border-radius:0!important;
-  box-shadow:none!important;
-}
-.dk>span:last-child{color:#ffdf8d;text-shadow:1px 2px #140c20}
-.pill,.pchip{
-  border:3px solid transparent!important;
-  border-image:var(--kn-silver) 16 / 8px stretch!important;
-  border-radius:0!important;
-  background:linear-gradient(180deg,rgba(25,41,79,.97),rgba(11,20,42,.97))!important;
-  box-shadow:none!important;
-}
-.atop{background:rgba(12,20,43,.88)!important;border-bottom:2px solid #b8904e!important}
-.guide .gt th,.gt th{background:linear-gradient(#344676,#1a264d);color:#f7d68d}
-.guide .gt td,.gt td{background:rgba(20,30,62,.9)}
-/* Smaller status bars adopt crisp pixel borders without changing original icons */
-.bagt button,.clsb{border-image:var(--kn-silver) 16 / 8px stretch!important}
-.pill img,.pchip img,.dk img,.ibtn img,.play img{image-rendering:pixelated}
-@media (prefers-reduced-motion:reduce){.btn,.dk,.px{transition:none!important}}
+#stage .pill .plus{border-radius:0;box-shadow:inset 0 0 0 1px #0a3a16}
 
-
-/* b218 KENNEY UI FRAME OVERHAUL */
-/* Kenney Fantasy UI Borders (CC0). Source: original user-provided ZIP.
-   Frames are recolored pixel-preserving 48x48 PNGs embedded to avoid extra requests.
-   Entire change is styling only: no icon, card, character, game logic or data changes. */
-:root{
- --kui-gold:url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAAA20lEQVR42mP8/2buf4YhDJgYhjhggTEYRZIZ8SmExRQhdZQCYu2BqRs+MYDus4EGuNyBHjPDLwaIzRO0ArjsxRUjQz4GRj0waPLAUKmR0d055GOAkV41LK1iYjQTD3gm/nJu9ZB0OMzdo0lo1AOjHhj1wKgHRj0w6oFRD4x6YNQDox4YwR2aPWsfDUmHw9w9moRGPUAhYFyfroV1RC5w5rVBNU6Ey53DJwkFzrzGONhCHVfKQHbnaCYe9QClNTGpuZ7W+QSXvSMnBnCFMKkhQ43SZmTXxKOlEJ0AAPpMT3tJSM24AAAAAElFTkSuQmCC");
- --kui-blue:url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAAA8klEQVR42u2ZsRHCMAxFbS4dmzALxySMQ8sSXDaAGbhjCirqUKnRIRRfsGN9vjo7hfX+l+XEycmI8TVNqaPYb3P+NL9JwSN7ilvkrcLLK7wDg0Um5FqB2o54iuvn8feA1200eSsHLMXhutCwltKl/d9yBq8L9XISz10f9xzo7Z0H1oH4JXS+PkMmLnmzhAhAAAIQgAAEIAABCECAP/6geYy3kIlL3iwhAizdA3pid7x8vRG7nw5V741K18e9G9WknjK/jrnr4zigCWVcu+ZL94Qe4/wn1opbNbdWF9J5yRjPgdaKL3UEx4HSE7F1WJUQ3oE3hleAKbzscdkAAAAASUVORK5CYII=");
- --kui-ornate:url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAABB0lEQVR42u1YwQnDMAy0Q7bIQJ2lQ/SVITpE++ir0IEM/XQG9yUwoo5j1caRuPvJDkink+Qg7xhiWKPbAb9cvGsIqd/JKcdcm+G9mZKi1q9+BXLM+Hnrmpf2BD9Xr8CUZjjNMrdHoRSXegU81RSx6j1lWk0pitPeO8DrPqdQr5e41o+dHlA/Rs0ihjWmKnF7tJ+59MH7edu0W0Hqx86vBAiAAAiAAAiAAAiAAAiAAAj8vZXgeNw/m3YrSP3o30pcTwu2EofogfMr/NyAkUJ0z+1WqPVD93Z6gDM/Knicdt+BXC2O6oFcZdhRgDM8Si+U4tKvAK/lXjUunTaluOxOoVE9UOtXvQJfSYS8Hq+ASM4AAAAASUVORK5CYII=");
- --kui-danger:url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAAA2klEQVR42u2asQ3CQAxFbcQyFKzARsyAMgM1BXPQUdKmSJlRQmUJWYRY4rjE4f0uueY/2/9OOUWH+3mQN9LDUUVExtZracrHRpJrGyW19VqKTkb6Dmh0xpfSgfVlwFfWyJe6C3m/ZIAMlOpA7QqX6lD6DgAAwLcHWX+5pTRuvhkhAAAAAAAAAAAAAAAA+OMPmuujT2ncfDNCAACQXHra7UO3wE3XVr07jfrKfw74yhq5vY9W4lfyPrxfMkAGSm2jTdfqa5X985wZ+ORrPf9KTM3c3LvRmI/0HXgCak50Espm20QAAAAASUVORK5CYII=");
- --kui-ink:#0c1128;--kui-deep:#111c3b;--kui-mid:#172c53;
- --kui-text:#fff0c8;--kui-rim:#e6b453;
+/* --- inputs, tables --- */
+#stage :is(input:not([type=checkbox]):not([type=radio]),select,textarea){
+ border:2px solid #b8873a;border-radius:0;background:#0d1a38;color:var(--rg-ink);box-shadow:inset 0 2px 0 #050b1c
 }
-#stage{--night:#101728;--panel:#162749;--deep:#090e21;--ink:#f8eed7;--dim:#bdcee6}
-#view .main,#view .rail{scrollbar-color:#b88943 #111b34}
-#view .px,#view .tmenu,#view .inf,#view .tile,#view .roomb,
-#view .amrow,#view .chb,#view .lookb,#view .rkrow,#view .pvrow,#view .abar,#view .avsel{
- border:9px solid transparent!important;
- border-image-source:var(--kui-gold)!important;
- border-image-slice:12!important;
- border-image-width:9px!important;
- border-image-repeat:stretch!important;
- border-radius:0!important;
- background:linear-gradient(180deg,#20365b 0%,#142447 20%,#0e1835 100%)!important;
- box-shadow:inset 0 0 0 2px rgba(230,180,83,.13),0 4px 0 #070b17!important;
-}
-#view .main.px,#view .tmenu{
- border-width:12px!important;border-image-width:12px!important;
- background:linear-gradient(155deg,rgba(29,45,80,.98),rgba(8,16,40,.98))!important
-}
-#view .rail>.px,#view .pchip,#view .pill{
- border:7px solid transparent!important;
- border-image-source:var(--kui-blue)!important;
- border-image-slice:12!important;border-image-width:7px!important;border-image-repeat:stretch!important;
- border-radius:0!important;
- background:linear-gradient(180deg,#233a60,#0e1835)!important;
- box-shadow:0 3px 0 #080c1b!important;
-}
-#view .tile,#view .roomb{border-image-source:var(--kui-ornate)!important}
-#view .tile:hover,#view .roomb:hover,#view .lookb.on,#view .amrow.on,#view .chb.on,
-#view .rkrow.me{filter:brightness(1.14);outline:1px solid #ffdb83;outline-offset:0}
-#view .btn,#view .btn.alt,#view .btn.on,#view .tab,#view .clsb,#view .bagt button,
-#view .futile,#view .pvmenu .btn{
- border:7px solid transparent!important;
- border-image-source:var(--kui-gold)!important;
- border-image-slice:12!important;border-image-width:7px!important;border-image-repeat:stretch!important;
- border-radius:0!important;
- background:linear-gradient(180deg,#39567b,#193057 45%,#102141)!important;
- color:var(--kui-text)!important;
- box-shadow:inset 0 1px rgba(255,220,128,.18),0 3px 0 #090c1e!important;
- text-shadow:1px 2px #090b1b!important;
-}
-#view .btn.on,#view .tab.on,#view .clsb.on,#view .bagt button.on{
- border-image-source:var(--kui-ornate)!important;
- background:linear-gradient(180deg,#5a4b28,#29344a)!important;
- color:#fff7cf!important
-}
-#view .btn.go,#view .btn.red{
- border-image-source:var(--kui-danger)!important;
- background:linear-gradient(180deg,#773b40,#3f213b)!important;
- color:#fff1dd!important
-}
-#view .btn:active,#view .tab:active{transform:translateY(2px)}
-#view .btn:disabled,#view .tab:disabled{opacity:.55;filter:saturate(.6)}
-#view .play{
- border:10px solid transparent!important;
- border-image-source:var(--kui-ornate)!important;
- border-image-slice:12!important;border-image-width:10px!important;border-image-repeat:stretch!important;
- background:linear-gradient(180deg,#f6bf55,#bb711c 48%,#643516)!important;
- color:#fff9e5!important;
- box-shadow:inset 0 0 0 2px rgba(255,230,148,.2),0 5px 0 #130d12!important
-}
-#view .dk{
- border:10px solid transparent!important;
- border-image-source:var(--kui-ornate)!important;
- border-image-slice:12!important;border-image-width:10px!important;border-image-repeat:stretch!important;
- background:linear-gradient(180deg,#203659,#111c38)!important;
- box-shadow:0 3px 0 #080c19!important;
- filter:none!important;
-}
-#view .dk>.ico,#view .dk img,#view .ico img{image-rendering:pixelated}
-#view .dk>span:last-child{color:#ffe3a0;text-shadow:1px 1px #070a1a}
-#view .atop{background:rgba(8,13,33,.88)!important;border-bottom:2px solid #99682a}
-#view .gt th,#view .gt td{
- border:1px solid #94734a!important;background:#142442!important;color:#e6edff
-}
-#view .gt th{background:#233a5f!important;color:#ffe0a5!important}
-#view .pill .plus{border-radius:0!important}
-@media (prefers-reduced-motion:reduce){
- #view .btn,#view .dk{transition:none!important;animation:none!important}
-}
+#stage .gt th,#stage .gt td{border-color:#8a6a3a}
+#stage .gt th{background:#22386a;color:#ffdc8f}
+#stage .gt td{background:#111f42}
+#stage button:focus-visible{outline:2px solid #ffe9a2;outline-offset:2px}
+@media (max-width:780px){#stage .dock{gap:5px}#stage .dk{min-height:58px}#stage .dk>span:last-child{font-size:10px}}
 
 </style>
 
@@ -3696,7 +3433,7 @@ function wbRef(){return rtDb().ref('rooms/wb_'+wbp.code)}
 function wbWrite(o){if(!wbp)return;wbp.nodes=wbp.nodes||{};wbp.nodes[wbp.me]={...(wbp.nodes[wbp.me]||{}),...o};if(document.querySelector('.wbv.room'))wbRoom();if(wbp.solo)return;rtDb().ref('rooms/wb_'+wbp.code+'/'+wbp.me).update(o).catch(e=>toast(T('ส่งข้อมูลห้องไม่สำเร็จ ลองใหม่','Could not update the room, try again')))}
 function wbIdx(){if(!wbp||wbp.solo||!wbAmHost())return;const L=wbNodes(),b=(wbMine().bots||[]).length;rtDb().ref('rooms/wbidx/'+wbp.me).set({code:wbp.code,n:wbMe().n,cnt:L.length+b,at:Date.now()}).catch(()=>{})}
 function wbLeave(){if(!wbp)return;const p=wbp;wbp=null;clearInterval(p.beat);if(p.solo)return;try{p.ref.off();rtDb().ref('rooms/wb_'+p.code+'/'+p.me).remove();rtDb().ref('rooms/wbidx/'+p.me).remove()}catch(e){}}
-function wbJoin(code,create){if(!mkOn()){wbp={code:'LOCAL',me:'me',nodes:{},solo:true,t0:Date.now()};wbp.nodes.me={...wbMe(),j:Date.now(),hb:Date.now()};return wbRoom()}
+function wbJoin(code,create){if(OBT_PAUSED_MODES)return home();if(!mkOn()){wbp={code:'LOCAL',me:'me',nodes:{},solo:true,t0:Date.now()};wbp.nodes.me={...wbMe(),j:Date.now(),hb:Date.now()};return wbRoom()}
   code=String(code||'').replace(/\D/g,'').slice(0,4);if(code.length!==4)return toast(T('เลขห้องต้องมี 4 หลัก','A room number has 4 digits'));
   fbLoad().then(fbUser).then(u=>{if(!u)throw 0;return rtDb().ref('rooms/wb_'+code).once('value')}).then(sn=>{const v=sn.val()||{},live=Object.values(v).filter(x=>x&&x.j&&Date.now()-(x.hb||x.j)<90000);
     if(create&&live.length)return wbJoin(String(1000+Math.floor(Math.random()*9000)),true);
@@ -3814,6 +3551,7 @@ function wbRules(){ov(`<div class="cd dlg nt"><div class="wbdlg wide"><b class="
   <li>${T('รางวัลทั้งเซิร์ฟ (เลือด 75/50/25% และตอนตาย) ส่งเข้ากล่องจดหมายทุกคนที่เคยตี · คนตีดาบสุดท้ายได้ฉายา PUMPKIN SLAYER · ปราบครบ 5 เลเวล ทุกคนได้กรอบรูปฮาโลวีน','Server rewards (75/50/25% and each kill) go to the mailbox of everyone who hit · the last hit earns the PUMPKIN SLAYER title · all 5 levels down: everyone gets the Halloween frame')}</li></ul>
   <button class="wbb main" data-wbc="no">${T('เข้าใจแล้ว','Got it')}</button></div></div>`)}
 function wbClick(a,t){
+  if(OBT_PAUSED_MODES){ov('');home();return 1}
   if(a==='wbhub'){ov('');wbLeave();wbHub();return 1}
   if(a==='wbquit'){ov('');wbLeave();wbHub();return 1}
   if(a==='wbnew'){if(!wbTix())return toast(T('ตั๋ววันนี้หมดแล้ว','No tickets left today')),1;wbJoin(String(1000+Math.floor(Math.random()*9000)),true);return 1}
@@ -3907,7 +3645,7 @@ function tower(){if(OBT_PAUSED_MODES)return home();bt=null;busy=false;twTok++;lo
    </div><div class="main"><div class="clsbar">${tabs.map(([k,n])=>`<button class="clsb ${twTab===k?'on':''}" data-act="twtab" data-t="${k}">${n}</button>`).join('')}</div>${main}</div></div>`)}
 
 /* a tower fight and the run between floors */
-async function startTower(f,cont){const t=twGet();bt={n:twEq(f),tw:f,w:t.w,round:1,sel:0,log:'',pvp:null,farm:false,first:true,in:1,al:S.team.map(id=>fighter(id,S.cards[id].lv)),en:twDef(f)};c3Amu(bt);plBuff(bt);
+async function startTower(f,cont){if(OBT_PAUSED_MODES)return home();const t=twGet();bt={n:twEq(f),tw:f,w:t.w,round:1,sel:0,log:'',pvp:null,farm:false,first:true,in:1,al:S.team.map(id=>fighter(id,S.cards[id].lv)),en:twDef(f)};c3Amu(bt);plBuff(bt);
   const my=bt,boss=f%10===0;busy=true;draw();my.in=0;if(boss){sfx('ult');ov(`<div class="bn lose twbn"><span>⚠ BOSS</span></div>`);await W(RM?500:900);ov('');if(bt!==my)return}
   if(!cont){sfx('start');await banner(T('ชั้น ','FLOOR ')+f);if(bt!==my)return}else{await W(RM?150:380);if(bt!==my)return}
   const bs=my.en.find(e=>e.boss&&e.gim);busy=false;my.log=bs?gimT(bs.id).replace(/<[^>]+>/g,''):T('เลือกสกิล แล้วแตะศัตรู','Pick a skill, then tap an enemy');draw();if(S.auto)autoAct()}
@@ -4230,7 +3968,7 @@ function titleScreen(){
 }
 // ---------- Firebase: Google sign-in and one cloud save document per account (saves/{uid}) ----------
 const OBT_PAUSED_MODES=true; // b215: hide Tower, PvP and World Boss until relaunch
-const BUILD='b218';
+const BUILD='b219';
 // The game moved to its own address. Anyone opening the old address is sent on, but only once the new site answers, so a broken move cannot lock players out.
 const DISCORD='https://discord.gg/dHDzRyPG9',DC_SVG='<svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="currentColor" d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.4189-2.1568 2.4189Z"/></svg>';
 const NEW_HOME='https://pixeldeckbattle.github.io/';
@@ -4349,11 +4087,5 @@ document.addEventListener('focusin',ev=>{const n=ev.target,chat=n.id==='chi';if(
 S=load();try{const l=localStorage.getItem('pdb_lang');if(l&&!USER)S.lang=l}catch(e){}document.documentElement.lang=S.lang||'th';USER?loading(USER.sub?cloudPull().catch(()=>{}):null):titleScreen();
 </script>
 
-
-
-
-<a href="https://pixelpicked.com/game/3QqeaUhmbSp/pixeldeck-battle" target="_blank" rel="noopener">
-<img src="https://api.pixelpicked.com/api/badges/3QqeaUhmbSp/live.png?theme=dark" width="250" height="54" alt="Approved on PixelPicked">
-</a>
 </body>
 </html>
