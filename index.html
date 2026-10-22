@@ -887,6 +887,133 @@ h1{color:#f2d98a;text-shadow:0 3px 0 #7a4a1c,0 6px 0 #0a1019}h2{color:#f2d98a;te
 @keyframes fx16{from{background-position-x:0}to{background-position-x:106.6667%}}
 @media (prefers-reduced-motion:reduce){.logo3,.logo3 i{animation:none}}
 .wbsh1{display:inline-block;aspect-ratio:217/220;background:url(wb/sh1.webp) 0 0/1600% 100% no-repeat;animation:fx16 2s steps(16) infinite;vertical-align:middle;flex:none}.wbamk{width:40px;flex:none;display:block}
+
+/* ===== b214 · OBSIDIAN RELIC UI =====
+   Presentation-only upgrade. Icons, sprites, rarity art, hitboxes, layout
+   transforms, Firebase, ERA and gameplay functions are deliberately untouched.
+   Compact, square-edged SNES/GBA metalwork (no blur, no image filter).
+*/
+:root{
+  --night:#0b1328;
+  --panel:#182a49;
+  --deep:#080f22;
+  --ink:#fff2d4;
+  --dim:#b8c9df;
+  --pd-border:#bb9352;
+  --pd-edge:#f6d990;
+  --pd-recess:#071025;
+  --pd-surface:#172a49;
+  --pd-surface-low:#101d36;
+  --pd-ice:#8fe4e8;
+}
+body{background-color:var(--night)}
+/* Core window and inventory frames: pixel bevels, metallic layered corners. */
+.px,.tmenu,.amrow,.chb,.lookb,.rkrow,.pvrow,.abar,.row.avsel{
+  border-style:solid!important;
+  border-color:#a57c40!important;
+  border-image:none!important;
+  border-radius:0!important;
+  background:linear-gradient(180deg,#344c6d 0 3px,#1d3352 3px 11px,#14243f 11px 78%,#0d1b33 78% 100%)!important;
+  color:var(--ink);
+  box-shadow:
+    inset 0 0 0 2px #071228,
+    inset 0 3px 0 #d5b574,
+    inset 0 -3px 0 #0b1629,
+    0 4px 0 #050a16,
+    0 6px 0 rgba(0,0,0,.30)!important;
+}
+.px,.amrow,.chb,.lookb,.rkrow,.pvrow,.abar,.row.avsel{
+  border-width:4px!important;
+}
+.tmenu{border-width:5px!important;padding:12px 15px!important;
+  box-shadow:inset 0 0 0 3px #071124,inset 0 0 0 5px #355573,
+    inset 0 3px 0 3px #f1cf80,0 6px 0 #050b18,0 0 0 3px #071124!important}
+.px{background:linear-gradient(180deg,#304769 0 3px,#192c4c 3px 65%,#101e37 65% 100%)!important}
+.px:is(:focus-within,.on),.amrow.on,.chb.on,.lookb.on,.rkrow.me{
+  border-color:#f8d978!important;
+  outline:1px solid #fff0b4;outline-offset:0;
+  filter:none!important;
+  box-shadow:inset 0 0 0 2px #132744,inset 0 3px 0 #fff1b6,0 4px 0 #080e22,0 0 0 2px #746039!important;
+}
+.rkrow.me{outline:2px solid #f6d990;outline-offset:0}
+/* Title strips and scrollable reading panes. */
+.main{scrollbar-color:#826b43 #10182d}
+.rail{scrollbar-color:#6f91a9 #10182d}
+.inf{border-radius:0!important;border:3px solid #ac8a4e!important;
+  background:linear-gradient(180deg,#243954 0 5px,#0f1b35 5px 100%)!important;
+  box-shadow:inset 0 0 0 2px #071228,0 4px 0 #050c1a!important}
+h1,h2{color:#ffdc82;text-shadow:2px 2px 0 #17213d}
+.guide h3,.sthd b{color:#ffe39a}
+/* Buttons only, never nested icons or their images. */
+.btn,.btn.alt,.btn.go,.btn.on,.btn.red,.tile,.roomb{
+  border:3px solid #a88750!important;
+  border-image:none!important;border-radius:0!important;
+  background:linear-gradient(180deg,#3c5679 0 4px,#253f62 4px 48%,#142744 48% 100%)!important;
+  color:#fff1cf!important;
+  text-shadow:1px 2px 0 #071224!important;
+  box-shadow:inset 0 2px 0 #f6db9c,inset 0 -3px 0 #0b1b33,0 3px 0 #050b17!important;
+  filter:none!important;
+}
+.btn.alt{border-color:#70c4d4!important;color:#d8fcff!important;
+  box-shadow:inset 0 2px 0 #b9f4ff,inset 0 -3px 0 #112943,0 3px 0 #050b17!important}
+.btn.go,.play{border-color:#89d8a4!important;color:#e0ffdf!important;
+  background:linear-gradient(180deg,#31765a 0 4px,#23593f 4px 48%,#15402d 48% 100%)!important;
+  box-shadow:inset 0 2px 0 #a7efb9,inset 0 -3px 0 #08281c,0 4px 0 #050b17!important}
+.btn.red{border-color:#e99b8b!important;color:#fff4e9!important;
+  background:linear-gradient(180deg,#a64c4d 0 4px,#7a303b 4px 48%,#5b2532 48% 100%)!important;
+  box-shadow:inset 0 2px 0 #f8b5a7,inset 0 -3px 0 #341224,0 3px 0 #050b17!important}
+.btn.on{border-color:#ffe39b!important;background:linear-gradient(180deg,#916c2b 0 4px,#725324 4px 48%,#493719 48% 100%)!important;
+  color:#fff4c8!important}
+.btn:is(:active),.tile:active,.roomb:active{box-shadow:inset 0 2px 0 #091426,0 1px 0 #050b17!important}
+.btn:disabled,.tile:disabled,.roomb:disabled{opacity:.5;cursor:default}
+.btn.sm{border-width:2px!important}
+.tile,.roomb{padding:9px 12px!important}
+.tile span,.roomb small{color:#b9d7e0!important;opacity:1!important;text-shadow:none!important}
+.tiles .tile:nth-child(3n+2){border-color:#85c6d4!important}
+.tiles .tile:nth-child(3n){border-color:#b58fd6!important}
+/* Tabs, lists, selection and character roster windows. */
+.tab,.tab.am,.clsb,.bagt button,.fl button{
+  border:2px solid #5b7498!important;border-image:none!important;border-radius:0!important;
+  background:linear-gradient(180deg,#2a4465 0 3px,#132842 3px 100%)!important;
+  color:#d9e8f3!important;text-shadow:1px 1px 0 #081329;
+  box-shadow:inset 0 1px 0 #82a1b4,0 2px 0 #060b16!important;
+}
+.tab.on,.tab.am.on,.clsb.on,.bagt button.on,.fl button.on{
+  border-color:#e8c577!important;color:#ffedb1!important;
+  background:linear-gradient(180deg,#66512d 0 3px,#342b27 3px 100%)!important;
+  outline:none!important;margin-top:0;
+  box-shadow:inset 0 2px 0 #e9cd89,0 2px 0 #050b16!important;
+}
+.tab[class*="r-"].on{color:#fff2c5!important}
+.clsbar{background:linear-gradient(180deg,#08152beF,#0b1c35ef 88%,transparent)}
+.pvrow,.rkrow{border-color:#6f8fb3!important}
+.pvrow:focus-within,.rkrow:focus-within{border-color:#f0ce7b!important}
+/* Top currencies and mini status panels. */
+.pill,.pchip{
+  border:2px solid #b48d4c!important;border-image:none!important;border-radius:0!important;
+  background:linear-gradient(180deg,#304769 0 3px,#0d1b31 3px 100%)!important;
+  color:#f5eccc;
+  box-shadow:inset 0 0 0 2px #071328,0 2px 0 #050b17!important;
+}
+.pchip{border-color:#77acbd!important}
+.atop{background:rgba(8,17,35,.91)!important;border-bottom:2px solid #957a4c!important}
+/* Existing 16-bit dock frame stays intact so its icon and label hit areas remain unchanged. */
+.dk{filter:drop-shadow(0 4px 0 rgba(2,7,19,.85)) drop-shadow(0 0 2px #e9c274)!important}
+.dk:disabled{filter:grayscale(.8) brightness(.65)!important}
+.ibtn{filter:drop-shadow(0 3px 0 #071024)!important}
+/* Shop and guide grids use the same metal frame language. */
+.gt th,.gt td{border-color:#8a7956}
+.gt th{background:#233a54;color:#ffe1a1}
+.gt td{background:#13233b}
+input:not([type="checkbox"]):not([type="radio"]),select,textarea{
+  border-color:#8ba7be!important;border-radius:0!important;
+  background-color:#0e213b;color:#fff2d4;
+}
+/* Keep original icons, card art, sprite animations and all rarity glows intact. */
+@media (prefers-reduced-motion:reduce){
+  .btn,.tile,.roomb,.px{transition:none!important}
+}
+
 </style>
 
 <div id="stage"><div id="view"></div><div id="ov"></div><div id="fsb" hidden></div><div id="tut"></div><div id="gate" hidden></div><div id="zoom" role="dialog" tabindex="-1" hidden></div></div>
@@ -3873,7 +4000,7 @@ function titleScreen(){
    <p class="cfoot nt">PixelDeckBattle · CBT build ${BUILD}</p></div>`);
 }
 // ---------- Firebase: Google sign-in and one cloud save document per account (saves/{uid}) ----------
-const BUILD='b213';
+const BUILD='b214';
 // The game moved to its own address. Anyone opening the old address is sent on, but only once the new site answers, so a broken move cannot lock players out.
 const DISCORD='https://discord.gg/dHDzRyPG9',DC_SVG='<svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="currentColor" d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.4189-2.1568 2.4189Z"/></svg>';
 const NEW_HOME='https://pixeldeckbattle.github.io/';
