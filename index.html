@@ -888,6 +888,49 @@ h1{color:#f2d98a;text-shadow:0 3px 0 #7a4a1c,0 6px 0 #0a1019}h2{color:#f2d98a;te
 @media (prefers-reduced-motion:reduce){.logo3,.logo3 i{animation:none}}
 .wbsh1{display:inline-block;aspect-ratio:217/220;background:url(wb/sh1.webp) 0 0/1600% 100% no-repeat;animation:fx16 2s steps(16) infinite;vertical-align:middle;flex:none}.wbamk{width:40px;flex:none;display:block}
 
+/* b223 portal minigame */
+.vpt{position:absolute;width:86px;height:108px;margin:-100px 0 0 -43px;border:0;padding:0;background:none;cursor:pointer;filter:drop-shadow(0 0 10px rgba(170,90,255,.85));animation:vptbob 2.4s ease-in-out infinite}
+.vpt i{position:absolute;inset:0;background:url(ui/vault/portal.webp) 0 0/1600% 100% no-repeat;animation:fxs 2s steps(16,jump-none) infinite}
+.vpt span{position:absolute;left:50%;bottom:-16px;transform:translateX(-50%);font:700 11px var(--display);color:#f3d9ff;text-shadow:0 0 6px #8a3dff,1px 1px 0 #1a0630;white-space:nowrap}
+@keyframes vptbob{50%{transform:translateY(-4px)}}
+.vlt .vfl{background:radial-gradient(ellipse at 50% 40%,#3a2a6a,#0d0a20 75%)}
+.varena{position:absolute;background:url(bg/vault.webp) center/100% 100% no-repeat;image-rendering:auto}
+.vcage{position:absolute;pointer-events:none;image-rendering:pixelated}
+.vchest{position:absolute;width:13%;filter:drop-shadow(0 0 8px rgba(255,210,90,.6));aspect-ratio:200/160;transform:translate(-50%,-100%);pointer-events:none}
+.vchest i{position:absolute;inset:0;background:url(ui/vault/chest.webp) 0 0/1600% 100% no-repeat;animation:vchI 1s steps(8,jump-none) infinite}
+.vchest.open i{animation:vchO .9s steps(8,jump-none) 1 forwards}
+@keyframes vchI{from{background-position:0 0}to{background-position:46.6667% 0}}
+@keyframes vchO{from{background-position:53.3333% 0}to{background-position:100% 0}}
+.vlab{position:absolute;left:50%;bottom:104%;transform:translateX(-50%);white-space:nowrap;font:700 12px var(--display);color:#ffe9a0;background:rgba(14,10,36,.85);border:2px solid #d9a84a;padding:1px 8px;text-shadow:1px 1px 0 #000}
+.vchest.card .vlab{color:#9fd8ff;border-color:#6fb7ff;box-shadow:0 0 10px rgba(110,180,255,.7)}
+.vchest.open .vlab{opacity:.45}
+.vav{position:absolute;transform:translate(-50%,-100%) scale(.85);transform-origin:50% 100%;pointer-events:none;display:flex;flex-direction:column;align-items:center}
+.vav .vhp{display:block;width:46px;height:5px;background:#300;border:1px solid #000;margin-bottom:2px}
+.vav .vhp i{display:block;height:100%;width:calc(var(--hp,1)*100%);background:linear-gradient(#7dff8a,#24b34a)}
+.vav.me .vhp i{background:linear-gradient(#ffe36e,#f5a11a)}
+.vav.opening::before{content:"";position:absolute;left:50%;top:-14px;width:56px;height:7px;margin-left:-28px;background:linear-gradient(90deg,#b98bff calc(var(--op,0)*100%),rgba(0,0,0,.6) 0);border:1px solid #fff;z-index:2}
+.vav .vgh{display:none;width:58px;height:58px;background:url(ui/vault/ghost.webp) 0 0/1600% 100% no-repeat;animation:fxs 2s steps(16,jump-none) infinite;transform:scaleX(-1)}
+.vav.flip .vgh{transform:none}
+.vav.dead .wk,.vav.dead .vhp{display:none}.vav.dead .vgh{display:block;opacity:.85}.vav.dead{filter:drop-shadow(0 0 6px rgba(160,220,255,.8))}
+.vav .nm{font-size:11px}
+.vfx{position:absolute;pointer-events:none;transform:translate(-50%,-50%)}
+.vfx.slash{width:70px;height:79px;background:url(fx/slash.webp) 0 0/600% 100% no-repeat;animation:fxs .4s steps(6,jump-none) 1 forwards}
+.vfx.slash.fl{transform:translate(-50%,-50%) scaleX(-1)}
+.vfx.burst{width:120px;height:120px;background:url(ui/vault/burst.webp) 0 0/1600% 100% no-repeat;animation:fxs 1s steps(16,jump-none) 1 forwards}
+.vdmg{position:absolute;transform:translate(-50%,0);font:800 16px var(--display);color:#ff6b6b;text-shadow:1px 1px 0 #000,-1px -1px 0 #000;pointer-events:none;animation:vdmg .9s ease-out forwards;z-index:9500}
+.vdmg.me{color:#ffd23a}
+@keyframes vdmg{to{transform:translate(-50%,-26px);opacity:0}}
+.vmsg{position:absolute;left:50%;top:10px;transform:translateX(-50%);z-index:9600;font:700 14px var(--display);color:#fff;text-shadow:1px 1px 0 #000;background:rgba(10,8,30,.75);padding:4px 12px;border:1px solid #b98bff;opacity:0;pointer-events:none;white-space:nowrap;max-width:94%;overflow:hidden;text-overflow:ellipsis}
+.vmsg.on{animation:vmsg 3.2s ease forwards}
+@keyframes vmsg{0%,85%{opacity:1}100%{opacity:0}}
+.vbtn{position:absolute;z-index:9998;border:3px solid #f2c14e;border-radius:50%;color:#fff;font:800 22px var(--display);display:grid;place-items:center;line-height:1;text-shadow:1px 1px 0 #000;touch-action:manipulation}
+.vatk{right:16px;bottom:14px;width:78px;height:78px;background:radial-gradient(#d9433a,#7a1218)}
+.vatk small{font-size:11px}
+.vopen{right:104px;bottom:18px;width:auto;height:46px;border-radius:12px;padding:0 14px;font-size:14px;background:linear-gradient(#a06bff,#5a2ab5)}
+.vopen.busy{animation:vpulse .6s ease-in-out infinite alternate}
+@keyframes vpulse{to{filter:brightness(1.4)}}
+@media (prefers-reduced-motion:reduce){.vpt,.vopen.busy{animation:none}}
+
 /* ===== b219 ROYAL GOLD UI — one frame layer for the whole game =====
    Replaces the stacked b214 / b215 / b217 / b218 skins (removed) and the ui2/*.webp frame sources of b198.
    Frames: Kenney Fantasy UI Borders (CC0) shapes, recoloured antique gold on deep navy by tools/kframes.py,
@@ -1372,13 +1415,136 @@ function enterRoom(){
       if(mv){c.x+=dx/d*Math.min(sp,d);c.y+=dy/d*Math.min(sp,d);if(Math.abs(dx)>1)c.face=dx<0}
       c.el.style.left=c.x+'px';c.el.style.top=c.y+'px';c.el.style.transform=`scale(${(.8+.35*c.y/R.H).toFixed(3)})`;c.el.classList.toggle('walk',mv);c.el.style.zIndex=Math.round(c.y);c.el.classList.toggle('flip',!!c.face);
       }
-    const cam=Math.max(0,Math.min(W-fl.clientWidth,R.me.x-fl.clientWidth/2));wd.style.transform=`translateX(${-cam}px)`;
+    vltTick(R,t);if($('tfloor')!==fl)return;const cam=Math.max(0,Math.min(W-fl.clientWidth,R.me.x-fl.clientWidth/2));wd.style.transform=`translateX(${-cam}px)`;
     if(R.fx&&!RM){const f=R.fx,cv=f.cv,cw=Math.max(1,fl.clientWidth>>1),ch=Math.max(1,fl.clientHeight>>1);if(cv.width!==cw||cv.height!==ch){cv.width=cw;cv.height=ch}const x=cv.getContext('2d');x.clearRect(0,0,cw,ch);
       for(const l of f.leaf){l.x+=dt*.035*l.s;l.y+=dt*.05*l.s;if(l.x>1.05||l.y>1.05){l.x=-.05+Math.random()*.6;l.y=-.05}const px=l.x*cw+Math.sin(t/600+l.ph)*5,py=l.y*ch;x.globalAlpha=.85;x.fillStyle=l.c;x.fillRect(px,py,2,1);x.fillRect(px+(Math.sin(t/300+l.ph)>0?1:0),py+1,1,1)}
       for(const b of f.fly){b.x+=Math.sin(t/1700+b.ph)*dt*26;b.ph+=dt*.2;const sx=(((b.x%W)+W)%W-cam)/2,py=(b.y+Math.sin(t/900+b.ph*2)*.06)*ch,w=Math.sin(t/70+b.ph)>0?2:1;if(sx<-4||sx>cw+4)continue;x.globalAlpha=.95;x.fillStyle=b.c;x.fillRect(sx-w,py,w,1);x.fillRect(sx+1,py,w,1);x.fillStyle='#3a2a20';x.fillRect(sx,py,1,2)}
       x.globalAlpha=1}
     requestAnimationFrame(loop)})(last);
 }
+/* ---------- b223 portal minigame (owner's design, 22 Oct 2026) ----------
+   During event hours (Bangkok 03,07,12,17,22 for one hour) a black-hole portal appears in every trade room, at a spot
+   that changes every event. Walking into it warps the player to the vault arena (RTDB room "rooms/v<event>_<room>").
+   Everyone has 10 life and every hit takes exactly 1, whatever the card. Whoever stands at the cage gate for 5 s without
+   being hit opens it; the first to touch the chest gets what is written on it (Gold / diamonds / a Rare card, amount secret).
+   A new chest every 15 minutes (4 per event); the dead float as ghosts until the next chest. Dev can always test.
+   No new Firebase rules: every player writes only their own node; the chest goes to the earliest server-time claim. */
+const VLT_H=[3,7,12,17,22],VLT_RD=15,VLT_HP=10,VLT_CD=800,VLT_OPEN=5000,VLT_SP=.30;
+const VLT_FLOOR={cx:.5,cy:.63,rx:.47,ry:.29},VLT_CAGE={x0:.645,x1:.975,y0:.42,y1:.655},VLT_GATE={x:.81,y:.705},VLT_CHEST={x:.81,y:.545};
+let vlt=null,vltSeenWin='';
+const vltRng=s=>{let h=1779033703^s.length;for(let i=0;i<s.length;i++){h=Math.imul(h^s.charCodeAt(i),3432918353);h=h<<13|h>>>19}return()=>{h=Math.imul(h^h>>>16,2246822507);h=Math.imul(h^h>>>13,3266489909);return((h^=h>>>16)>>>0)/4294967296}};
+function vltWin(){const d=new Date(Date.now()+7*3600e3),h=d.getUTCHours(),m=d.getUTCMinutes(),s=d.getUTCSeconds(),live=VLT_H.includes(h);
+  if(!live&&!isDev())return null;const rd=Math.floor(m/VLT_RD);
+  return{id:d.toISOString().slice(0,10).replace(/-/g,'')+'h'+h,live,rd,rk:d.toISOString().slice(0,10).replace(/-/g,'')+'h'+h+'r'+rd,left:(VLT_RD-m%VLT_RD)*60-s,end:(60-m)*60-s}}
+// what each of the 4 chests of an event holds: Gold or diamonds, and at most one guaranteed-Rare card chest per event and room (rare)
+function vltKinds(id,no){const r=vltRng(id+'#'+no);let card=false;return[0,1,2,3].map(()=>{const x=r();if(x<.05&&!card){card=true;return'card'}return x<.35?'dia':'gold'})}
+const vltKindTxt=k=>k==='card'?T('การ์ด Rare (การันตี)','Rare card (guaranteed)'):k==='dia'?T('เพชร','Diamonds'):'Gold';
+const vltKindIco=k=>k==='card'?'🃏':k==='dia'?'💎':'💰';
+const vltMMSS=s=>Math.floor(s/60)+':'+String(Math.max(0,s%60)).padStart(2,'0');
+// ---- trade room side: the portal ----
+function vltTick(R,t){if(t-(R.vt||0)<1000)return;R.vt=t;const w=vltWin(),wd=$('tworld');if(!wd)return;
+  if(!w){if(R.pt){R.pt.el.remove();R.pt=null}return}
+  if(!R.pt||R.pt.id!==w.id){if(R.pt)R.pt.el.remove();const r=vltRng(w.id+'@portal'),x=R.W*(.1+.8*r()),y=R.H*(FLOOR_TOP+.1+.3*r()),el=document.createElement('button');
+    el.className='vpt';el.dataset.act='vltgo';el.setAttribute('aria-label',T('ประตูมิติ','Portal'));el.innerHTML='<i></i><span class="nt">'+T('ประตูมิติ','PORTAL')+'</span>';el.style.left=x+'px';el.style.top=y+'px';el.style.zIndex=Math.round(y);wd.append(el);
+    R.pt={id:w.id,x,y,el};const l=$('tlog');if(l)l.textContent=T('ประตูมิติเปิดแล้ว! เดินเข้าไปในหลุมดำเพื่อไปแย่งหีบสมบัติ','A portal has opened! Walk into the black hole to fight for the treasure chest')}
+  if(Math.hypot(R.me.x-R.pt.x,(R.me.y-R.pt.y)*1.6)<46&&!R.ptIn){R.ptIn=1;vltGo()}else if(Math.hypot(R.me.x-R.pt.x,R.me.y-R.pt.y)>90)R.ptIn=0}
+// a toast anywhere in the game when an event starts
+setInterval(()=>{try{if(!S||!USER||!document.querySelector('.lobby,.troom'))return;const w=vltWin();if(!w||!w.live||vltSeenWin===w.id)return;vltSeenWin=w.id;if(!vlt)toast(T('🌀 ประตูมิติเปิดในห้องเทรดแล้ว! ไปแย่งหีบสมบัติกัน (1 ชั่วโมง)','🌀 A portal has opened in the trade rooms! Go fight for the treasure (1 hour)'))}catch(e){}},15000);
+function vltGo(){const w=vltWin();if(!w)return toast(T('ประตูมิติปิดแล้ว','The portal has closed'));
+  if(!mkOn()&&!isDev())return toast(T('ล็อกอินด้วย Google ก่อนจึงจะเข้าประตูมิติได้','Sign in with Google to enter the portal'));
+  rtLeave();vltEnter(w)}
+// ---- the vault arena ----
+function vltEnter(w){ensureMe();const no=roomNo||0;
+  view(`<div class="troom px vlt"><div class="atop"><span class="num">${T('ห้องสมบัติมิติ','Vault')} ${no+1} · <span class="nt" id="vcount">1/${ROOM_CAP}</span> ${T('คน','players')}</span><span class="alog nt" id="vinfo"></span>
+    <span class="row"><button class="btn alt sm" data-act="vltout">${T('ออก','Leave')}</button></span></div>
+    <div class="tfloor vfl" id="vfl"><div class="varena" id="varena"><img class="vcage" id="vcage" src="ui/vault/cage0.webp" alt=""><div class="vchest" id="vchest"><i></i><span class="vlab nt" id="vlab"></span></div></div>
+      <div class="vmsg nt" id="vmsg"></div><div class="joy" id="joy"><i></i></div>
+      <button class="vbtn vopen nt" data-act="vltopen" id="vopen" hidden>${T('เปิดประตู','Open gate')}</button><button class="vbtn vatk nt" data-act="vltatk" id="vatk">⚔<small>${T('ตี','Hit')}</small></button></div></div>`);
+  const fl=$('vfl'),ar=$('varena');
+  vlt={w,no,base:null,me:null,data:{},P:{},seen:{},hp:VLT_HP,dead:0,op:0,rk:w.rk,cd:0,claim:null,x:.3,y:.68,tx:.3,ty:.68,face:false,joy:null,last:0,fl,ar};
+  const V=vlt,lay=()=>{const fw=fl.clientWidth,fh=fl.clientHeight,aw=Math.min(fw,fh*1672/941),ah=aw*941/1672;ar.style.width=aw+'px';ar.style.height=ah+'px';ar.style.left=(fw-aw)/2+'px';ar.style.top=(fh-ah)/2+'px';V.aw=aw;V.ah=ah};lay();V.lay=lay;
+  const cg=$('vcage');cg.style.left=(VLT_CAGE.x0-.02)*100+'%';cg.style.width=(VLT_CAGE.x1-VLT_CAGE.x0+.04)*100+'%';cg.style.bottom=(1-VLT_CAGE.y1-.035)*100+'%';cg.style.zIndex=Math.round((VLT_CAGE.y1+.01)*1000);
+  const ch=$('vchest');ch.style.left=VLT_CHEST.x*100+'%';ch.style.top=VLT_CHEST.y*100+'%';ch.style.zIndex=Math.round((VLT_CAGE.y1+.01)*1000)+1;   // drawn over the cage bars so the chest and its label stay readable
+  V.mine=vltAv('me',{n:S.me.name,l:S.me.look});
+  // joystick: same feel as the trade room, in arena units
+  {const j=$('joy'),k=j.firstElementChild;let pid=null;
+   const mv=e=>{const b=j.getBoundingClientRect(),p=innerHeight>innerWidth,cx=b.left+b.width/2,cy=b.top+b.height/2;let dx=e.clientX-cx,dy=e.clientY-cy;if(p)[dx,dy]=[dy,-dx];const r=b.width/2/(uiK()||1),sc=1/(uiK()||1);dx*=sc;dy*=sc;const d=Math.hypot(dx,dy)||1,m=Math.min(1,d/(r*.62));V.joy=m<.18?null:{x:dx/d*m,y:dy/d*m};k.style.transform=`translate(${dx/d*Math.min(d,r*.62)}px,${dy/d*Math.min(d,r*.62)}px)`};
+   j.onpointerdown=e=>{e.preventDefault();pid=e.pointerId;try{j.setPointerCapture(pid)}catch(x){}mv(e)};j.onpointermove=e=>{if(e.pointerId===pid)mv(e)};j.onpointerup=j.onpointercancel=e=>{if(e.pointerId===pid){pid=null;V.joy=null;k.style.transform='';vltSend(1)}}}
+  // keyboard on PC: arrows / WASD walk, space or J hits, E opens
+  V.keys={};V.kd=e=>{if(e.target&&e.target.tagName==='INPUT')return;const c=e.key.toLowerCase();V.keys[c]=e.type==='keydown';if(e.type==='keydown'&&(c===' '||c==='j')){e.preventDefault();vltAtk()}if(e.type==='keydown'&&c==='e')vltOpen()};
+  addEventListener('keydown',V.kd);addEventListener('keyup',V.kd);
+  if(mkOn())fbLoad().then(fbUser).then(u=>{if(!u||vlt!==V||!firebase.database)return;const base=rtDb().ref('rooms/v'+w.id+'_'+no),me=base.child(USER.sub);me.onDisconnect().remove();V.base=base;V.me=me;vltSend(1);
+    base.on('value',sn=>{if(vlt!==V)return;V.data=sn.val()||{};vltSync()},()=>{})}).catch(()=>{});
+  vltRound(true);let last=performance.now();
+  (function loop(t){if(vlt!==V||!$('vfl')){vltOff(V);return}const dt=Math.min(.05,(t-last)/1000);last=t;vltFrame(V,dt,t);requestAnimationFrame(loop)})(last)}
+function vltOff(V){if(!V)return;try{if(V.base){V.base.off();V.me.remove()}}catch(e){}removeEventListener('keydown',V.kd);removeEventListener('keyup',V.kd);if(vlt===V)vlt=null}
+function vltAv(uid,o){const V=vlt,b=document.createElement('div');b.className='av vav r-'+((C[o.l]||{}).r||'C')+(uid==='me'?' me':'');b.innerHTML=`<span class="vhp nt"><i></i></span><span class="wk">${hero(C[o.l]?o.l:GIFT[0],'',1)}</span><span class="vgh"></span><span class="nt nm"></span>`;b.querySelector('.nm').textContent=String(o.n||'?').slice(0,12);V.ar.append(b);return{el:b,x:.3,y:.68,tx:.3,ty:.68,face:false}}
+function vltSend(force){const V=vlt;if(!V||!V.me)return;const t=performance.now();if(!force&&t-V.last<150)return;V.last=t;
+  V.me.update({n:S.me.name,l:S.me.look,x:+V.x.toFixed(4),y:+V.y.toFixed(4),f:V.face?1:0,hp:V.hp,d:V.dead,rk:V.rk,op:V.op||0}).catch(()=>{})}
+const vltIn=(x,y)=>{const f=VLT_FLOOR,dx=(x-f.cx)/f.rx,dy=(y-f.cy)/f.ry;return dx*dx+dy*dy<=1};
+const vltInCage=(x,y)=>x>VLT_CAGE.x0&&x<VLT_CAGE.x1&&y>VLT_CAGE.y0&&y<VLT_CAGE.y1;
+// gate / chest state of the current chest, read from every player's node
+function vltState(){const V=vlt,rk=V.rk,d=V.data||{},me=USER&&USER.sub;let gate=V.gateLocal===rk,claims=[];
+  for(const [u,o] of Object.entries(d)){if(!o)continue;if(o.g===rk)gate=true;if(o.w&&o.w.r===rk&&typeof o.w.t==='number')claims.push({u,t:o.w.t,n:o.n,txt:o.wr&&o.wr.r===rk?o.wr.txt:''})}
+  if(V.wonLocal&&V.wonLocal.r===rk&&!claims.some(c=>c.u===me))claims.push({u:me||'me',t:0,n:S.me.name,txt:V.wonLocal.txt});
+  claims.sort((a,b)=>a.t-b.t||(a.u<b.u?-1:1));return{gate,win:claims[0]||null}}
+function vltRound(first){const V=vlt,w=vltWin();if(!w){$('vmsg').textContent=T('ประตูมิติปิดแล้ว กำลังกลับห้องเทรด…','The portal has closed. Back to the trade room…');setTimeout(()=>{if(vlt===V){vltOff(V);enterRoom()}},3000);V.closed=1;return}
+  V.w=w;if(first||w.rk!==V.rk){V.rk=w.rk;V.hp=VLT_HP;V.dead=0;V.op=0;V.claim=null;V.gateLocal=null;V.mine.el.classList.remove('dead');
+    V.kind=vltKinds(w.id,V.no)[w.rd];$('vlab').innerHTML=`${vltKindIco(V.kind)} ${vltKindTxt(V.kind)}`;$('vchest').classList.toggle('card',V.kind==='card');
+    if(!first)vltMsg(T('หีบใหม่มาแล้ว! ทุกคนฟื้นคืนชีพ','A new chest! Everyone is back to life'));vltSend(1)}}
+function vltMsg(t){const m=$('vmsg');if(!m)return;m.textContent=t;m.classList.remove('on');void m.offsetWidth;m.classList.add('on')}
+function vltFx(cls,x,y,ms){const V=vlt;if(!V)return;const e=document.createElement('span');e.className='vfx '+cls;e.style.left=x*100+'%';e.style.top=y*100+'%';e.style.zIndex=9000;V.ar.append(e);setTimeout(()=>e.remove(),ms)}
+function vltFloat(x,y,txt,cls){const V=vlt;if(!V)return;const e=document.createElement('span');e.className='vdmg nt '+(cls||'');e.textContent=txt;e.style.left=x*100+'%';e.style.top=y*100+'%';V.ar.append(e);setTimeout(()=>e.remove(),900)}
+function vltAtk(){const V=vlt;if(!V||V.dead||V.closed)return;const t=Date.now();if(t-V.cd<VLT_CD)return;V.cd=t;
+  const sp=V.mine.el.querySelector('.spr');if(sp){sp.classList.remove('atk');void sp.offsetWidth;sp.classList.add('atk');setTimeout(()=>sp.classList.remove('atk'),800)}
+  sfx&&sfx('slash');V.op=0;const fx=V.x+(V.face?-.05:.05);vltFx('slash'+(V.face?' fl':''),fx,V.y-.09,400);
+  for(const [u,p] of Object.entries(V.P))if(!p.dead&&vltHits(V.x,V.y,V.face,p.x,p.y))vltFloat(p.x,p.y-.2,'-1');
+  if(V.me)V.me.update({a:{t,x:+V.x.toFixed(4),y:+V.y.toFixed(4),f:V.face?1:0},op:0}).catch(()=>{})}
+const vltHits=(ax,ay,face,x,y)=>{const dx=x-ax;return Math.abs(y-ay)<.075&&(face?dx<.015&&dx>-.1:dx>-.015&&dx<.1)};
+function vltOpen(){const V=vlt;if(!V||V.dead||V.closed)return;const st=vltState();if(st.gate||st.win)return;if(Math.hypot(V.x-VLT_GATE.x,(V.y-VLT_GATE.y)*1.5)>.07)return vltMsg(T('ไปยืนหน้าประตูกรงก่อน','Stand at the cage gate first'));
+  V.op=Date.now();V.opX=V.x;V.opY=V.y;vltSend(1);vltMsg(T('กำลังเปิดประตู… ห้ามโดนตี!','Opening the gate… don\'t get hit!'))}
+function vltHurt(){const V=vlt;if(V.dead)return;V.hp=Math.max(0,V.hp-1);vltFloat(V.x,V.y-.2,'-1','me');vltFx('slash',V.x,V.y-.09,400);sfx&&sfx('slash');
+  if(V.op){V.op=0;vltMsg(T('โดนตี! การเปิดประตูถูกยกเลิก','Hit! Opening cancelled'))}
+  if(!V.hp){V.dead=1;vltFx('burst',V.x,V.y-.08,1000);V.mine.el.classList.add('dead');vltMsg(T('คุณตายแล้ว กลายเป็นวิญญาณ รอหีบใหม่เพื่อฟื้น หรือกดออก','You died and became a ghost. Wait for the next chest to revive, or leave'))}
+  vltSend(1)}
+function vltSync(){const V=vlt;if(!V)return;const d=V.data,me=USER&&USER.sub,ids=Object.keys(d).filter(u=>u!==me&&d[u]&&typeof d[u].x==='number').slice(0,ROOM_CAP-1);
+  for(const u of Object.keys(V.P))if(!ids.includes(u)){V.P[u].el.remove();delete V.P[u]}
+  for(const u of ids){const o=d[u];let p=V.P[u];if(p&&p.l!==o.l){p.el.remove();p=null}if(!p){p=V.P[u]=vltAv(u,o);p.l=o.l;p.x=p.tx=o.x;p.y=p.ty=o.y}
+    p.tx=o.x;p.ty=o.y;p.face=!!o.f;const dead=!!o.d&&o.rk===V.rk;if(dead&&!p.dead)vltFx('burst',p.x,p.y-.08,1000);p.dead=dead;p.el.classList.toggle('dead',dead);p.hp=o.rk===V.rk?o.hp:VLT_HP;p.op=o.rk===V.rk&&o.op?o.op:0;
+    if(o.a&&o.a.t&&o.a.t!==V.seen[u]){const fresh=V.seen[u]!==undefined&&Date.now()-o.a.t<4000;V.seen[u]=o.a.t;if(fresh){const sp=p.el.querySelector('.spr');if(sp){sp.classList.remove('atk');void sp.offsetWidth;sp.classList.add('atk');setTimeout(()=>sp.classList.remove('atk'),800)}
+      if(!V.dead&&vltHits(o.a.x,o.a.y,!!o.a.f,V.x,V.y))vltHurt()}}}
+  const c=$('vcount');if(c)c.textContent=(ids.length+1)+'/'+ROOM_CAP;vltClaimCheck()}
+function vltClaimCheck(){const V=vlt;if(!V||!V.claim||V.claim.done)return;if(performance.now()-V.claim.at<1500&&V.me)return setTimeout(vltClaimCheck,400);
+  V.claim.done=1;const st=vltState(),me=USER?USER.sub:'me';if(st.win&&st.win.u!==me&&V.me){vltMsg(T('ช้าไปนิด! ','Too slow! ')+st.win.n+T(' แตะหีบก่อน',' got there first'));return}
+  S.vltw=S.vltw||{};if(S.vltw[V.rk])return;S.vltw[V.rk]=1;{const ks=Object.keys(S.vltw).sort();while(ks.length>40)delete S.vltw[ks.shift()]}
+  let txt;if(V.kind==='card'){const g=giveCard(randOf('R'),'vault');txt=T('การ์ด ','Card ')+C[g.id].n+(g.dup?T(' (ใบซ้ำ)',' (copy)'):'')}
+  else if(V.kind==='dia'){const n=1+Math.floor(Math.random()*5);S.dia=(S.dia||0)+n;ld('vault',n);txt='💎 '+n}
+  else{const n=50+10*Math.floor(Math.random()*26);S.gold+=n;lg('vault',n);txt='Gold '+n}
+  save();sfx&&sfx('win');V.wonLocal={r:V.rk,txt};if(V.me)V.me.update({wr:{r:V.rk,txt}}).catch(()=>{});vltMsg(T('🎉 คุณได้ ','🎉 You got ')+txt)}
+function vltClaim(){const V=vlt;if(!V||V.claim||V.dead)return;const st=vltState();if(!st.gate||st.win)return;V.claim={at:performance.now()};
+  if(V.me)V.me.update({w:{r:V.rk,t:firebase.database.ServerValue.TIMESTAMP}}).catch(()=>{});vltClaimCheck()}
+function vltFrame(V,dt,t){if(V.closed)return;if(t-(V.rt||0)>1000){V.rt=t;vltRound(false);if(V.closed)return}
+  const st=vltState();
+  // walk
+  let jx=0,jy=0;if(V.joy){jx=V.joy.x;jy=V.joy.y}const K=V.keys;if(K.arrowleft||K.a)jx=-1;if(K.arrowright||K.d)jx=1;if(K.arrowup||K.w)jy=-1;if(K.arrowdown||K.s)jy=1;
+  if(jx||jy){const n=Math.hypot(jx,jy)||1,sp=VLT_SP*dt*Math.min(1,n),nx=V.x+jx/n*sp,ny=V.y+jy/n*sp*1.25;
+    const ok=(x,y)=>vltIn(x,y)&&(st.gate&&!V.dead||!vltInCage(x,y)||V.dead);
+    if(ok(nx,ny)){V.x=nx;V.y=ny}else if(ok(nx,V.y))V.x=nx;else if(ok(V.x,ny))V.y=ny;if(Math.abs(jx)>.15)V.face=jx<0;
+    if(V.op&&Math.hypot(V.x-V.opX,V.y-V.opY)>.02){V.op=0;vltMsg(T('ขยับตัว การเปิดประตูถูกยกเลิก','You moved; opening cancelled'))}vltSend()}
+  // opening the gate
+  if(V.op&&!st.gate&&!st.win&&Date.now()-V.op>=VLT_OPEN){V.op=0;V.gateLocal=V.rk;if(V.me)V.me.update({g:V.rk,op:0}).catch(()=>{});vltMsg(T('ประตูเปิดแล้ว! รีบไปแตะหีบ','The gate is open! Run to the chest'));sfx&&sfx('win')}
+  if(st.gate&&!st.win&&!V.dead&&Math.hypot(V.x-VLT_CHEST.x,(V.y-VLT_CHEST.y)*1.4)<.06)vltClaim();
+  // draw
+  $('vcage').src='ui/vault/cage'+(st.gate?1:0)+'.webp';$('vchest').classList.toggle('open',!!st.win);
+  const ob=$('vopen');if(ob){const near=!V.dead&&!st.gate&&!st.win&&Math.hypot(V.x-VLT_GATE.x,(V.y-VLT_GATE.y)*1.5)<.07;ob.hidden=!near;ob.classList.toggle('busy',!!V.op)}
+  const nowS=Date.now(),ar=V.ar;
+  const put=(p,x,y,face,dead,op,hp)=>{const e=p.el;e.style.left=x*100+'%';e.style.top=y*100+'%';e.style.zIndex=Math.round(y*1000)+(dead?2000:0);e.classList.toggle('flip',!!face);e.style.setProperty('--hp',Math.max(0,hp)/VLT_HP);
+    e.style.setProperty('--op',op?Math.min(1,(nowS-op)/VLT_OPEN):0);e.classList.toggle('opening',!!op)};
+  put(V.mine,V.x,V.y,V.face,V.dead,V.op,V.hp);V.mine.el.classList.toggle('walk',!!(jx||jy));
+  for(const p of Object.values(V.P)){const dx=p.tx-p.x,dy=p.ty-p.y,d=Math.hypot(dx,dy),mv=d>.002;if(mv){const s=Math.min(d,VLT_SP*1.3*dt);p.x+=dx/d*s;p.y+=dy/d*s}p.el.classList.toggle('walk',mv);put(p,p.x,p.y,p.face,p.dead,p.op,p.hp)}
+  const inf=$('vinfo');if(inf&&t-(V.it||0)>500){V.it=t;const w=vltWin();if(w)inf.textContent=(st.win?(st.win.n+T(' ได้ ',' got ')+(st.win.txt||vltKindTxt(V.kind))+' · '):'')+T('หีบใบที่ ','Chest ')+(w.rd+1)+'/4 · '+T('ใบถัดไปใน ','next in ')+vltMMSS(w.left)+(w.live?'':' · DEV')}}
+function vltClick(a){if(a==='vltgo')return vltGo();if(a==='vltatk')return vltAtk();if(a==='vltopen')return vltOpen();if(a==='vltout'){const V=vlt;vltOff(V);if(room)room.ptIn=1;enterRoom()}}
+
 let trGive=null;
 // trading is a one-way gift: one player is the sender, the other the receiver, nothing has to come back; every transfer needs an explicit confirmation of the role
 // b190: the invite menu (and with it the FOUNDER invite event) is switched off; b191: holders keep showing the FOUNDER title
@@ -2905,6 +3071,7 @@ $('view').onclick=ev=>{{const w=ev.target.closest('.dk,.ibtn,.pill,.row2 .btn');
   else if(a==='fstog'){const on=!fsPref();try{localStorage.setItem(fsKey(),on?'1':'0')}catch(e){}if(on){fsTried=true;goLandscape()}else if(document.fullscreenElement){try{screen.orientation.unlock()}catch(e){}document.exitFullscreen()}settings()}
   else if(a==='chsend')chatSend()
   else if(a==='roomgo'){roomNo=+t.dataset.i;room=null;enterRoom()}
+  else if(a.startsWith('vlt'))vltClick(a,t)
   else if(a==='charedit'||a==='profile'){dressBack=a==='profile'?'home':'room';charMake()}
   else if(a==='dress'){S.me.name=($('nm').value.trim()||'ผู้เล่น').slice(0,12);S.me.look=t.dataset.i;save();const m=document.querySelector('.main'),y=m.scrollTop;charMake();document.querySelector('.main').scrollTop=y}
   else if(a==='pfpick'){plGet().f=t.dataset.f;save();charMake()}
@@ -3874,6 +4041,7 @@ function guide(){
      T('<b>ประวัติการขาย</b>: หน้าตลาดกลาง โหมดขาย แสดงของที่ตั้งขายอยู่ (รอผู้ซื้อ) และ 30 รายการล่าสุดที่ขายได้ พร้อมชื่อผู้ซื้อ วันเวลา และ Gold ที่ได้รับ · ถ้าขายได้ตอนคุณอยู่ล็อบบี้ เกมจะแจ้งและโอน Gold ให้เอง','<b>Sales history</b>: the market\'s Sell mode shows your open listings (waiting for a buyer) and your last 30 sales with the buyer, the time and the Gold received · if something sells while you are in the lobby the game tells you and credits the Gold'),
      T(`<b>ตลาดกลาง</b>: ลงขายเครื่องรางที่ไม่ได้ใส่ และการ์ดทุกใบ (ยกเว้นการ์ดเริ่มต้น) มีใบซ้ำจะขายใบซ้ำก่อน ไม่มีใบซ้ำจะขายการ์ดตัวจริง ยกเว้นการ์ดที่อยู่ในทีม ทีม PvP หรือเป็นตัวละคร · ล็อคการ์ดได้ในหน้ารายละเอียดการ์ด ล็อคเครื่องรางได้ในหน้าเครื่องราง ของที่ล็อคจะขาย เทรด และย่อยไม่ได้ · ตั้งราคาเอง 100–${N(MK_MAX)} Gold · ค่าวางขาย ${P(MK_FEE)} ของราคา ขั้นต่ำ 50 Gold จ่ายตอนลงขายและไม่คืน · ผู้ขายถูกหักภาษี ${P(TAX)} เมื่อขายได้`,`<b>Market</b>: list unequipped amulets and any card except starters. A duplicate copy is sold first; with no copy the card itself is sold, unless it is in your team, PvP team or used as your avatar · lock a card on its detail screen and an amulet on the Amulets screen; locked items cannot be sold, traded or dismantled · set your own price, 100–${N(MK_MAX)} Gold · listing fee ${P(MK_FEE)} of the price, at least 50 Gold, paid up front and not refunded · the seller pays ${P(TAX)} tax when it sells`),
      T(`<b>ห้องเทรด</b>: มี ${ROOMS} ห้อง ห้องละ ${ROOM_CAP} คน ใช้จอยสติกเดิน พิมพ์แชทได้ ข้อความลอยเหนือหัว`,`<b>Trade rooms</b>: ${ROOMS} rooms of ${ROOM_CAP} players; use the joystick to walk; chat appears over your head`),
+     T(`<b>ประตูมิติ</b>: ทุกวันเวลา 03:00, 07:00, 12:00, 17:00 และ 22:00 (นาน 1 ชั่วโมง) หลุมดำจะโผล่ในห้องเทรด จุดเปลี่ยนทุกครั้ง เดินเข้าไปจะวาปไปห้องสมบัติ ทุกคนเลือด ${VLT_HP} ขีด โดนตีครั้งละ 1 เท่ากันหมด ใครยืนหน้าประตูกรงครบ 5 วินาทีโดยไม่โดนตีจะเปิดกรงได้ คนแรกที่แตะหีบได้ของตามที่เขียนบนหีบ (ทอง / เพชร / การ์ด Rare) หีบใหม่ทุก 15 นาที คนตายจะลอยเป็นวิญญาณจนกว่าหีบใบใหม่มา`,`<b>Portal</b>: every day at 03:00, 07:00, 12:00, 17:00 and 22:00 for one hour a black hole appears in the trade rooms, in a new spot each time. Walk in to warp to the vault. Everyone has ${VLT_HP} life and each hit takes 1. Stand at the cage gate for 5 s without being hit to open it; the first to touch the chest gets what is written on it (Gold / diamonds / a Rare card). A new chest every 15 minutes; the fallen float as ghosts until the next chest`),
      T(`การเทรดคือการ<b>ให้ของ</b>ทางเดียว: แตะผู้เล่นอื่น เลือกของที่จะส่ง ผู้ส่งจ่ายค่าธรรมเนียม ${N(TRADE_TAX)} Gold และผู้รับต้องกดยืนยัน`,`A trade is a one-way <b>gift</b>: tap a player, pick an amulet; the sender pays a ${N(TRADE_TAX)} Gold fee and the receiver must confirm`),
      T('ถ้าผู้รับปฏิเสธหรือออกจากห้อง ของและค่าธรรมเนียมจะคืนให้ผู้ส่ง','If the receiver declines or leaves, the item and fee return to the sender'),
      T('ตัวละครที่เดินในห้องคือการ์ดที่เรามี เปลี่ยนได้ที่รูปโปรไฟล์ เอฟเฟกต์รอบตัวบอกระดับการ์ด','Your avatar is one of your own cards (change it from your profile); its effect shows the card\'s rank'),
@@ -3976,7 +4144,7 @@ function titleScreen(){
 }
 // ---------- Firebase: Google sign-in and one cloud save document per account (saves/{uid}) ----------
 const OBT_PAUSED_MODES=true; // b215: hide Tower, PvP and World Boss until relaunch
-const BUILD='b222';
+const BUILD='b223';
 // The game moved to its own address. Anyone opening the old address is sent on, but only once the new site answers, so a broken move cannot lock players out.
 const DISCORD='https://discord.gg/dHDzRyPG9',DC_SVG='<svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="currentColor" d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.4189-2.1568 2.4189Z"/></svg>';
 const NEW_HOME='https://pixeldeckbattle.github.io/';
