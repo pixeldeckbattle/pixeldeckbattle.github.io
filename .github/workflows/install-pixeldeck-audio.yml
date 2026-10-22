@@ -1,0 +1,45 @@
+name: Install PixelDeck CC0 soundtrack
+on:
+  push:
+    paths:
+      - '.github/workflows/install-pixeldeck-audio.yml'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  install:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - name: Download and optimise the four CC0 tracks
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p audio/music .audio-temp
+          curl -fLSs --retry 3 --connect-timeout 20 --max-time 180 'https://opengameart.org/sites/default/files/battleThemeA.mp3' -o .audio-temp/battle.mp3
+          curl -fLSs --retry 3 --connect-timeout 20 --max-time 180 'https://opengameart.org/sites/default/files/hard_battle_1_bpm170.mp3' -o .audio-temp/hard.mp3
+          curl -fLSs --retry 3 --connect-timeout 20 --max-time 180 'https://opengameart.org/sites/default/files/Juhani%20Junkala%20-%20Epic%20Boss%20Battle%20%5BSeamlessly%20Looping%5D.wav' -o .audio-temp/boss.wav
+          curl -fLSs --retry 3 --connect-timeout 20 --max-time 180 'https://opengameart.org/sites/default/files/Victory1_1.mp3' -o .audio-temp/victory.mp3
+          for x in battle hard boss victory; do
+            input=".audio-temp/$x.mp3"
+            if [ "$x" = boss ]; then input=".audio-temp/boss.wav"; fi
+            ffmpeg -hide_banner -nostdin -loglevel error -y -i "$input" -vn -ac 2 -ar 44100 -c:a libmp3lame -b:a 112k "audio/music/$x.mp3"
+            ffprobe -v error -show_entries format=duration -of default=noprint_wrappers=1 "audio/music/$x.mp3"
+            test "$(stat -c%s "audio/music/$x.mp3")" -gt 100000
+          done
+          rm -rf .audio-temp
+      - name: Commit the optimised audio assets
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'PixelDeck Audio Bot'
+          git config user.email 'actions@users.noreply.github.com'
+          git add audio/music/*.mp3
+          if ! git diff --cached --quiet; then
+            git commit -m 'b237: install compressed CC0 battle soundtrack'
+            git pull --rebase origin main
+            git push origin HEAD:main
+          fi
