@@ -979,6 +979,14 @@ h1{color:#f2d98a;text-shadow:0 3px 0 #7a4a1c,0 6px 0 #0a1019}h2{color:#f2d98a;te
 #stage button:focus-visible{outline:2px solid #ffe9a2;outline-offset:2px}
 @media (max-width:780px){#stage .dock{gap:5px}#stage .dk{min-height:58px}#stage .dk>span:last-child{font-size:10px}}
 
+
+/* b220 battle result: one centred window on every screen (big screens no longer leave it in the top-left corner) */
+.resw{height:100%;display:grid;justify-items:center;align-items:safe center;overflow:auto;overscroll-behavior:contain}
+#stage .resv{height:auto;width:auto;max-width:100%;grid-template-columns:190px minmax(0,600px);gap:14px 18px;zoom:var(--rz,1);
+ border-style:solid;border-color:transparent;border-width:14px;border-image:var(--rg-win) 32 fill/16px stretch;padding:4px 10px 6px;box-shadow:0 8px 24px rgba(0,0,0,.5)}
+#stage .resv>.rail,#stage .resv>.main{overflow:visible;min-height:0;padding:4px 2px}
+#stage .resv .lprow{margin-bottom:10px}
+@media (max-width:700px){#stage .resv{grid-template-columns:150px minmax(0,1fr)}}
 </style>
 
 <div id="stage"><div id="view"></div><div id="ov"></div><div id="fsb" hidden></div><div id="tut"></div><div id="gate" hidden></div><div id="zoom" role="dialog" tabindex="-1" hidden></div></div>
@@ -2685,13 +2693,13 @@ async function finish(won){
   else if(loop)fsAdd(false)
   else if(first){S.ls={n,k:lossK(n)+1};save()}
   const next=Math.min(MAXST,n+1);
-  view(`<div class="cols"><div class="rail">
+  view(`<div class="resw"><div class="cols resv"><div class="rail">
     <h1>${won?'ชนะ!':'แพ้'}</h1><p class="num">ด่าน ${n}</p>
     ${won?`${sw?`<p class="stw nt">${[1,2,3].map(i=>`<i class="${i<=sw?'on':''}">★</i>`).join('')}${swNew?` <small>+${swNew}</small>`:''}</p>`:''}<p class="num gold">Gold +${g}${jp?' <b class="nt">JACKPOT x4</b>':''}</p>${rsg?`<p class="num nt" style="color:#8fe9ff">💠 ${T('ผลึกอาณาจักร','Realm crystal')} +${rsg}</p>`:''}${n>ST1&&stKind(n)==='lord'&&first?`<p class="num nt" style="color:#8fe9ff">💎 +${LORD_DIA}</p>`:''}${chestsLeft()>0?`<button class="btn go sm nt" data-act="schest">🎁 ${T('เปิดหีบดาว','Open star chest')} ×${chestsLeft()}</button>`:''}${bb?`<p class="num gold">โบนัสชนะบอสครั้งแรก +${bb}</p>`:''}${eb?`<p class="num gold nt">${T('โบนัสผ่านด่านใหม่','New stage bonus')} +${eb}</p>`:''}${vipOn()?'<p class="sub nt" style="color:#f2d98a">VIP · Exp x2 · Gold x2</p>':''}${bcs.map(bcRow).join('')}${cdrop?`<div class="row"><span class="pvc r-${C[cdrop.id].r}" style="width:38px">${art(cdrop.id)}</span><span>${cdrop.lucky?'<b class="nt" style="color:#7dff8a;text-shadow:0 0 8px #2fff6a">🍀 LUCKY DROP!</b> ':''}ได้การ์ด${cdrop.dup?' (ใบซ้ำ)':''}<br><b class="nt r-${C[cdrop.id].r}" style="color:var(--gl)">${C[cdrop.id].n}</b></span></div>`:''}${drop?`<div class="row"><span style="width:38px">${amu(drop)}</span><span>ได้เครื่องราง<br><b>${AM[drop].n}</b></span></div>`:''}`:`<p class="sub">ลองเก็บเลเวลจากด่านก่อนหน้า หรือเปิดแพ็คหาการ์ดใหม่</p>${first?`<p class="sub nt" style="color:#8fe9ff">${T('ศัตรูในด่านนี้เหนื่อยล้าลงเล็กน้อย ลองอีกครั้งมีโอกาสผ่านมากขึ้น','The enemies here are a little worn down. Another try has a better chance')}</p>`:''}`}
     ${won&&n<MAXST?`<button class="btn go" data-act="go" data-n="${next}">ด่าน ${next}</button>`:''}
     ${won?'':`<button class="btn go" data-act="go" data-n="${n}">เล่นด่านนี้อีก</button>`}
     <button class="btn alt sm" data-act="home">หน้าหลัก</button>
-  </div><div class="main">${won&&S.tut==null?`<div class="lprow">${n<MAXST?`<button class="btn lpb nt" data-act="lpnext" data-n="${next}"><b>⏩ ${T('เปลี่ยนด่านอัตโนมัติ','Auto next stage')}</b><small>${T('ชนะแล้วไปด่านถัดไปเอง · ดรอปตามปกติ','Wins lead to the next stage · normal drops')}</small></button>`:''}<button class="btn lpb rp nt" data-act="lprep" data-n="${n}"><b>🔁 ${T('เล่นซ้ำด่านเดิม','Replay this stage')}</b><small>${T('วนด่านนี้เอง · ได้ Gold, Exp และลุ้นดรอป','Loops this stage · Gold, Exp and drops')}</small></button></div><div class="lprw">${lprBtn()}</div>`:''}${won?`<div class="res">${rows}</div>`:''}</div></div>`);
+  </div><div class="main">${won&&S.tut==null?`<div class="lprow">${n<MAXST?`<button class="btn lpb nt" data-act="lpnext" data-n="${next}"><b>⏩ ${T('เปลี่ยนด่านอัตโนมัติ','Auto next stage')}</b><small>${T('ชนะแล้วไปด่านถัดไปเอง · ดรอปตามปกติ','Wins lead to the next stage · normal drops')}</small></button>`:''}<button class="btn lpb rp nt" data-act="lprep" data-n="${n}"><b>🔁 ${T('เล่นซ้ำด่านเดิม','Replay this stage')}</b><small>${T('วนด่านนี้เอง · ได้ Gold, Exp และลุ้นดรอป','Loops this stage · Gold, Exp and drops')}</small></button></div><div class="lprw">${lprBtn()}</div>`:''}${won?`<div class="res">${rows}</div>`:''}</div></div></div>`);
   if(loop){if(won){loopL=0;loopW=n}else loopL++;let nx=won?(loop===2?n:n<MAXST?next:0):0,info=won?'Gold +'+(g+bb+eb).toLocaleString('en'):'';
     if(!won&&lprOn()){if(loopL>=LP_RETRY){info='';toast(T(`แพ้ติดกัน ${LP_RETRY} ครั้ง หยุดวนด่านแล้ว`,`Lost ${LP_RETRY} in a row, loop stopped`))}else{if(loop===1&&loopW){loop=2;nx=loopW}else nx=n;info=T(`แพ้ · ลองใหม่ ${loopL}/${LP_RETRY}`,`Lost · retry ${loopL}/${LP_RETRY}`)}}
     if(!nx){loop=0;loopL=0;loopW=0;fsEnd()}else{loopCount(nx,info);fsPanel(false)}}
@@ -3968,7 +3976,7 @@ function titleScreen(){
 }
 // ---------- Firebase: Google sign-in and one cloud save document per account (saves/{uid}) ----------
 const OBT_PAUSED_MODES=true; // b215: hide Tower, PvP and World Boss until relaunch
-const BUILD='b219';
+const BUILD='b220';
 // The game moved to its own address. Anyone opening the old address is sent on, but only once the new site answers, so a broken move cannot lock players out.
 const DISCORD='https://discord.gg/dHDzRyPG9',DC_SVG='<svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="currentColor" d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.4189-2.1568 2.4189Z"/></svg>';
 const NEW_HOME='https://pixeldeckbattle.github.io/';
@@ -4065,7 +4073,7 @@ function loading(wait){
 }
 // UI size: the stage is laid out smaller or larger than the screen and scaled back to fill it, so every screen grows or shrinks together (kept per device)
 const uiK=()=>{let k=1;try{k=+localStorage.getItem('pdb_ui')||1}catch(e){}return Math.max(.8,Math.min(1.3,k))};
-function fit(){const w=innerWidth,h=innerHeight,p=h>w&&!isPC(),s=$('stage'),k=uiK();s.style.width=(p?h:w)/k+'px';s.style.height=(p?w:h)/k+'px';s.style.setProperty('--H',(p?w:h)/k+'px');s.style.transform=(p?`rotate(90deg) translateY(${-w}px) `:'')+(k===1?'':`scale(${k})`)||'none'}
+function fit(){const w=innerWidth,h=innerHeight,p=h>w&&!isPC(),s=$('stage'),k=uiK();s.style.width=(p?h:w)/k+'px';s.style.height=(p?w:h)/k+'px';s.style.setProperty('--H',(p?w:h)/k+'px');s.style.setProperty('--rz',Math.max(1,Math.min(1.8,(p?w:h)/k/440)).toFixed(3));s.style.transform=(p?`rotate(90deg) translateY(${-w}px) `:'')+(k===1?'':`scale(${k})`)||'none'}
 fit();addEventListener('resize',fit);
 // real landscape: go fullscreen and lock the device to landscape so the phone's own keyboard comes up sideways too (Android browsers; elsewhere it fails quietly and the upright text box below is used)
 // b182: on a computer (mouse, no touch) the game starts windowed and never forces fullscreen on a click; the settings switch still turns it on,
