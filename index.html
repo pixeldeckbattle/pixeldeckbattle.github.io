@@ -1081,6 +1081,75 @@ button:focus-visible{outline:2px solid #ffe9a2!important;outline-offset:2px!impo
 @media(max-width:780px){.dock{gap:5px!important}.dk{min-height:60px!important;padding:5px 2px!important}.dk>span:last-child{font-size:10px!important}}
 @media(prefers-reduced-motion:reduce){.dk,.lobby .side .play{animation:none!important;transition:none!important}}
 
+
+/* b217 — Kenney Fantasy UI Borders (CC0, 2023, from owner-supplied asset pack).
+   9-slice transparent outlines, recolored for PixelDeck Battle. Frames only:
+   no icon, sprite, skill, card art, save or game logic replacements. */
+:root{
+--kn-gold:url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAABBElEQVR42u1aORKDMAyUGVf5jR+QP/BU/pAHUKfMA9KmhSaeAQaNhRLLx+x2QLFavNKYNY4YfB7jQhXhdp/c2f2BGofnHoRxJiKieQq7aytIeVkBz/fru2Rh2V9bQcbrtN7nPKmFlrf9HojKj8o470VvZjOOkDfWLeiBc2/mwlVeX+vcl/ZK8z0wbL1nPeu1PbKt03Nzv1Yc6/S17YWu8va3FyrVB1peL5/DVt5WTqHmxygEQAAEQAAEQAAEQAAEQAAEQEDz38RIp0uvQColqCWdTgpAOp0JSKdLo790mnvrtafTsW5fKgv910ok02mrk3otryCdtjmp1/K6X71ohW7/VlkBk/ikMklRNC0AAAAASUVORK5CYII=");
+--kn-royal:url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAABYklEQVR42u1ZwQ3CMAxsUDZA4ssTdQj+DMAOzMQODMCfIRBPvkjMUB5VixRI75yGkLT2q0ojO1bPvotrHqddUwlstT+bb+v/8rOoCjfbPWwP18GNl2NNOUztp0/g9rybYZc19WlT+7FSDLrvfVhmzRfPt+7Gm04NIAx2mOvWWSyz5vr1xacT+MRgi7n3et3ETMD164s/uTZafAJGynyhDBvKtNP/ApvluhnqNqgLufsQAaF4bPy+C+FuM9yFMGOGdTf2XOZXqnIsE7Pxyq8BhFGEQSmEpDWBIGh5FRiG+fE1AbRQ7L4cy9hzzedGlsrYcwTcyNIYf462VlSNagKagCZQ2I1srPqMrU7LZ2Ip8+XGyFbKfLkxst7IslGjCIM6G6UxL5uN6mQuuxtZ6GROWhPIDxvfSjHo3yerCeSHja9qNFsekP49jK1C5zcXQioQzSxjqU5pnPJno7GxndpP8TXwAsq6Uze3iHJ2AAAAAElFTkSuQmCC");
+--kn-silver:url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAAAy0lEQVR42u3ZsQ3CMBCFYRu5o8wAlEgpsgN7sEoqVmEPdqBASskAKVMf1aFgyXFIRGyj/5VO877o7Obs9T6Imci52VuTMLF+O1N4rAovp/rjQ3t7ZFU01M/pQdc//VGRnAChfu5b+daJTYJbIN86MgsQu+2pE+pX/it0rA4ynjV/5lOPkPbz74T2dKOCksnMz3p99Lz4EQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAXGsidOnPeOjD3xj7N4T5z79vL/XyE29esz+YNfyBxgNDIGtboAAAAASUVORK5CYII=");
+--kn-surface:#152244;
+--kn-surface-hi:#293960;
+}
+/* Common frame family across lobby, inventory, fusion, shop, arena, tower, modals */
+.px,.tmenu,.tile,.roomb,.amrow,.chb,.lookb,.rkrow,.pvrow,.row.avsel,.futile{
+  border:4px solid transparent!important;
+  border-image:var(--kn-gold) 16 / 10px stretch!important;
+  border-radius:0!important;
+  background:linear-gradient(180deg,rgba(38,53,103,.97),rgba(17,27,57,.98))!important;
+  box-shadow:inset 0 3px rgba(255,237,173,.10),0 4px 0 rgba(3,8,25,.75)!important;
+}
+.tmenu,.px.cdbox,#ov .cdbox{
+  border-image:var(--kn-royal) 16 / 12px stretch!important;
+  background:linear-gradient(165deg,#2c386b,#111b3b 80%)!important;
+}
+.chb.on,.amrow.on,.lookb.on,.rkrow.me{
+  border-image:var(--kn-gold) 16 / 10px stretch!important;
+  box-shadow:inset 0 0 0 1px #e9c16a,0 0 10px rgba(255,196,62,.35)!important;
+  filter:none!important;
+}
+.btn,.btn.alt,.btn.go,.btn.red,.btn.on,.clsb,.bagt button,.pvmenu .btn{
+  border:4px solid transparent!important;
+  border-image:var(--kn-gold) 16 / 9px stretch!important;
+  border-radius:0!important;
+  box-shadow:inset 0 2px 0 rgba(255,252,192,.18),0 3px 0 #080b20!important;
+  text-align:center;
+}
+.btn,.bagt button{
+  background:linear-gradient(180deg,#a77327,#563419)!important;
+  color:#fff0c4!important;
+}
+.btn.alt,.pvmenu .btn,.clsb{background:linear-gradient(180deg,#304575,#15213f)!important;color:#f6e8c4!important}
+.btn.go,.btn.red{background:linear-gradient(180deg,#b34631,#702821)!important;color:#fff5d8!important}
+.btn.on,.clsb.on{background:linear-gradient(180deg,#317c55,#163f37)!important;color:#e8ffe8!important}
+.btn:active:not(:disabled){box-shadow:0 1px 0 #080b20!important}
+.btn:disabled,.dk:disabled{opacity:.54}
+.dk{
+  border-style:solid!important;
+  border-color:transparent!important;
+  border-width:10px 10px 22px!important;
+  border-image:var(--kn-royal) 16 / 10px 10px 22px stretch!important;
+  background:linear-gradient(180deg,#22355f,#0f1835)!important;
+  border-radius:0!important;
+  box-shadow:none!important;
+}
+.dk>span:last-child{color:#ffdf8d;text-shadow:1px 2px #140c20}
+.pill,.pchip{
+  border:3px solid transparent!important;
+  border-image:var(--kn-silver) 16 / 8px stretch!important;
+  border-radius:0!important;
+  background:linear-gradient(180deg,rgba(25,41,79,.97),rgba(11,20,42,.97))!important;
+  box-shadow:none!important;
+}
+.atop{background:rgba(12,20,43,.88)!important;border-bottom:2px solid #b8904e!important}
+.guide .gt th,.gt th{background:linear-gradient(#344676,#1a264d);color:#f7d68d}
+.guide .gt td,.gt td{background:rgba(20,30,62,.9)}
+/* Smaller status bars adopt crisp pixel borders without changing original icons */
+.bagt button,.clsb{border-image:var(--kn-silver) 16 / 8px stretch!important}
+.pill img,.pchip img,.dk img,.ibtn img,.play img{image-rendering:pixelated}
+@media (prefers-reduced-motion:reduce){.btn,.dk,.px{transition:none!important}}
+
 </style>
 
 <div id="stage"><div id="view"></div><div id="ov"></div><div id="fsb" hidden></div><div id="tut"></div><div id="gate" hidden></div><div id="zoom" role="dialog" tabindex="-1" hidden></div></div>
@@ -4069,7 +4138,7 @@ function titleScreen(){
 }
 // ---------- Firebase: Google sign-in and one cloud save document per account (saves/{uid}) ----------
 const OBT_PAUSED_MODES=true; // b215: hide Tower, PvP and World Boss until relaunch
-const BUILD='b216';
+const BUILD='b217';
 // The game moved to its own address. Anyone opening the old address is sent on, but only once the new site answers, so a broken move cannot lock players out.
 const DISCORD='https://discord.gg/dHDzRyPG9',DC_SVG='<svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="currentColor" d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.4189-2.1568 2.4189Z"/></svg>';
 const NEW_HOME='https://pixeldeckbattle.github.io/';
