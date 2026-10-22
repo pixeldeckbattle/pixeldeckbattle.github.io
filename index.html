@@ -958,6 +958,8 @@ h1{color:#f2d98a;text-shadow:0 3px 0 #7a4a1c,0 6px 0 #0a1019}h2{color:#f2d98a;te
 .asb .asi img{width:64px;height:64px}.asb .asi .aspf{width:64px;height:64px;object-fit:cover;object-position:0 0}.aslim{color:#ffd877;font-weight:700}.asb.asout{filter:saturate(.5) brightness(.85)}
 .asgot .amu{width:84px;height:84px;flex:none}.lselb{max-width:min(900px,94vw);width:900px}.cdbox .lselg{display:grid;width:100%;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:8px;max-height:min(60vh,520px);overflow:auto;padding:4px}.cdbox .lselg .sub{margin:2px 0 0;text-align:center;font-size:12px}.cdbox .lselg>div{display:grid;justify-items:center}
 .ssw{color:#ffd84a;font-weight:700}
+#stage .lobby .oetab{position:absolute;left:0;top:44%;z-index:5;display:grid;justify-items:center;gap:1px;width:62px;padding:8px 4px 7px;border:2px solid #ffd84a;border-left:0;border-radius:0 10px 10px 0;background:linear-gradient(180deg,#b3261e,#6e0f0b);color:#fff6dc;box-shadow:0 0 0 2px #1b0e05,0 0 14px rgba(255,200,80,.55);cursor:pointer;animation:oepulse 1.8s ease-in-out infinite}.oetab i{font-style:normal;font-size:24px;line-height:1}.oetab b{font-size:12px;letter-spacing:.5px}@keyframes oepulse{0%,100%{box-shadow:0 0 0 2px #1b0e05,0 0 8px rgba(255,200,80,.35)}50%{box-shadow:0 0 0 2px #1b0e05,0 0 18px rgba(255,210,90,.85)}}@media (prefers-reduced-motion:reduce){.oetab{animation:none}}
+.oebox{max-width:min(620px,94vw);text-align:left}.oesec{margin:8px 0;padding:8px 10px;background:rgba(10,16,30,.55);border:1px solid #8a6a3a}.oesec h4{margin:0 0 6px;font-size:16px;color:#ffd877;display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap}.oesec h4 small{color:#ff9a8a;font-size:13px}.oerow{display:grid;grid-template-columns:72px minmax(0,1fr) auto;gap:8px;align-items:center;padding:4px 0;border-top:1px solid rgba(138,106,58,.35);font-size:14px}.oerow.ok .oest{color:#6cf586}.oen{font-weight:700;color:#fff6dc}.oest{color:#c9d2f5;font-size:13px;text-align:right}.oesec p{margin:4px 0 0;font-size:14px}
 /* ===== b219 ROYAL GOLD UI — one frame layer for the whole game =====
    Replaces the stacked b214 / b215 / b217 / b218 skins (removed) and the ui2/*.webp frame sources of b198.
    Frames: Kenney Fantasy UI Borders (CC0) shapes, recoloured antique gold on deep navy by tools/kframes.py,
@@ -2135,10 +2137,10 @@ function devGrant(){if(!isDev())return;let ch=0;
   if(!S.fd||!S.fdg){S.fd=1;S.fdg=1;ch=1}['T1.1','T2.1','T3.1','P5.1','P3.1'].forEach(c=>{if(!(S.sh||[]).includes(c)){shAdd(c);ch=1}});   // b166: the Dev account carries the FOUNDER title too
   if(ch)save()}
 function home(){wbSpdBack();if(BETA&&USER&&USER.sub&&!isDev()){location.replace('./');return}
-  bt=null;busy=false;if((S.era||1)<ERA){S=unlock(S);save();cloudFlush();return welcome()}ldInit(0);devGrant();ensureMe();grantFetch();mkPayCheck();dmRefundAll();giftTake();compTake();bcLate();if(S.f1100==='try')f1100Claim();if(!OBT_PAUSED_MODES||!PV_PAUSED)twRoll();news233()||news231()||news189()||news182()||news180()||news176()||news174()||news167()||news165();vipDaily();plDaily();if(!OBT_PAUSED_MODES&&mkOn())wbInbox();if(!OBT_PAUSED_MODES&&wbPopQ){const q=wbPopQ;wbPopQ=null;setTimeout(()=>wbPop(q),800)}if(!S.afk){S.afk=Date.now();save()}const own=Object.keys(S.cards).length,next=Math.min(MAXST,S.cleared+1);
+  bt=null;busy=false;if((S.era||1)<ERA){S=unlock(S);save();cloudFlush();return welcome()}ldInit(0);devGrant();ensureMe();grantFetch();mkPayCheck();dmRefundAll();giftTake();compTake();oeQuest();bcLate();if(S.f1100==='try')f1100Claim();if(!OBT_PAUSED_MODES||!PV_PAUSED)twRoll();news233()||oePop()||news231()||news189()||news182()||news180()||news176()||news174()||news167()||news165();vipDaily();plDaily();if(!OBT_PAUSED_MODES&&mkOn())wbInbox();if(!OBT_PAUSED_MODES&&wbPopQ){const q=wbPopQ;wbPopQ=null;setTimeout(()=>wbPop(q),800)}if(!S.afk){S.afk=Date.now();save()}const own=Object.keys(S.cards).length,next=Math.min(MAXST,S.cleared+1);
   const ico=(src,d=0)=>`<span class="ico" style="--m:url(${src});--d:${d}s"><img src="${src}" alt=""></span>`;
   const dk=(act,ic,c,t,sub,dis,d)=>{const lk=plLock({troom:'troom',market:'market',pvp:'pvp'}[act]);return `<button class="dk ${c}${lk?' dklk':''}" ${dis?'disabled':`data-act="${act}"`}>${lk?`<i class="dklb nt">🔒 Lv${lk}</i>`:''}${ico(ic,d)}<span>${t}<small>${sub}</small></span></button>`};
-  view(`<div class="lobby" style="--bg:url(${mapImg(next)})"><div class="lbg"></div>
+  view(`<div class="lobby" style="--bg:url(${mapImg(next)})"><div class="lbg"></div>${oeAny()?`<button class="oetab nt" data-act="evp" aria-label="${T('กิจกรรม','Events')}"><i>🎉</i><b>${T('กิจกรรม','EVENTS')}</b></button>`:''}
    <div class="hud">
     <button class="pchip" data-act="profile">${plAv(46)}<span><b class="nt">${S.me.name.replace(/</g,'&lt;')} <i class="plv">Lv.${plLv()}</i>${shBadge(shMine(),18)}</b><small class="nt">${isDev()?'<b style="color:#ff5a3c">DEV</b> · ':vipOn()&&!vipOwn()?`<b style="color:${VIPC[vipTier()]}">${vipName()}</b> · `:''}${C[S.me.look].n}</small></span></button>
     ${isOwn()?`<button class="pill nt devb" data-act="dev" title="Dev menu">🛠 DEV</button>`:''}
@@ -2278,7 +2280,8 @@ async function slipSend(file){if(!payOpen()){slip={busy:false,msg:T('ตอน�
   if(document.querySelector('[data-tu]'))topup()}
 function grantFetch(force){if(!mkOn()||(!force&&Date.now()-grantAt<600000))return;grantAt=Date.now();
   fbLoad().then(fbUser).then(u=>{if(!u)return null;return mkDb().collection('grants').where('to','==',USER.sub).get()}).then(q=>{if(!q||!q.docs.length)return;let n=0;S.gr=S.gr||[];
-    q.docs.forEach(d=>{const x=Math.max(0,Math.min(100000,d.data().dia|0));if(x>0&&!S.gr.includes(d.id)&&!oldEra(d.data().at)){n+=x;ld(d.data().by==='auto'?'topup':'grant',x);S.gr.push(d.id);if(S.gr.length>60)S.gr.shift();S.pay=S.pay||[];S.pay.push({d:x,t:Date.now(),id:d.id})}d.ref.delete().catch(()=>{})});
+    let bonus=0;q.docs.forEach(d=>{const x=Math.max(0,Math.min(100000,d.data().dia|0));if(x>0&&!S.gr.includes(d.id)&&!oldEra(d.data().at)){n+=x;if(!S.ftb&&!bonus&&oeOn('t')&&!isDev()){bonus=x;S.ftb={d:x,t:Date.now()}}ld(d.data().by==='auto'?'topup':'grant',x);S.gr.push(d.id);if(S.gr.length>60)S.gr.shift();S.pay=S.pay||[];S.pay.push({d:x,t:Date.now(),id:d.id})}d.ref.delete().catch(()=>{})});
+    if(bonus){S.dia=(S.dia||0)+bonus;ld('ftbonus',bonus);setTimeout(()=>toast(T(`🎉 โบนัสเติมเพชรครั้งแรก +${bonus.toLocaleString('en')} 💎`,`🎉 First top-up bonus +${bonus.toLocaleString('en')} 💎`)),900)}
     if(n){S.dia=(S.dia||0)+n;save();cloudFlush();sfx('win');fx.push(['view','+'+n.toLocaleString('en')+' 💎','g']);const v=document.querySelector('.lobby')?home:document.querySelector('[data-tu]')?topup:null;if(v)v()}}).catch(()=>{})}
 function topup(){const on=mkOn(),auto=!!PAYINFO.api,open=!!(PAYINFO.pp&&(auto||PAYINFO.line)),pk=dSel!=null?DPACKS[dSel]:null;grantFetch();
   const rate=DPACKS.map(([d,b,p])=>(d+b)/p),best=rate.indexOf(Math.max(...rate)),hot=2;   // the best-value tag is worked out from the price table, never written by hand
@@ -3133,6 +3136,7 @@ $('view').onclick=ev=>{{const w=ev.target.closest('.dk,.ibtn,.pill,.row2 .btn');
   else if(a==='pvp'){pv.tab='hub';arena();pvpFetch(1)}
   else if(a==='pvtab'){pv.tab=t.dataset.t;pv.got=null;arena()}
   else if(a==='asbuy')asBuy(t.dataset.k);
+  else if(a==='evp')oePanel();
   else if(a==='lselgo')lselGo(id);
   else if(a==='lselopen')lselPick();
   else if(a==='pvfind'){const o=pvOpps();if(o.length){const near=o.slice(0,Math.min(3,o.length));pv.sel=o.indexOf(near[Math.floor(Math.random()*near.length)]);pvPick()}}
@@ -3971,6 +3975,26 @@ function twResult(f){const t=twGet(),R=twRun||{from:f,g:0,x:0,n:0,got:[]},r=twRa
     <p class="sub">${T('ทีมคุณ','Your team')}: ${T('กายภาพ','physical')} ${S.team.filter(id=>!C[id].m).length} · ${T('เวท','magic')} ${S.team.filter(id=>C[id].m).length}</p>
     ${R.got.length?`<h3>${T('ของที่ได้รอบนี้','Loot this run')}</h3><div class="itl">${R.got.map(itChip).join('')}</div>`:''}</div></div>`)}
 // b189 one-time note: tank SL amulets now also work in the tower (and the coming world boss)
+
+/* ---------- b245 OBT opening events ---------- */
+const OE_Q=[[50,{gold:20000,ss:2}],[100,{dia:30,ss:3}],[300,{gold:100000,card:'R'}],[500,{dia:100,am:'L'}]],OE_QD=7,OE_TD=3;
+const oeStart=()=>CFG&&CFG.obtAt?+CFG.obtAt:Date.parse('2026-10-23T11:00:00+07:00'),oeEnd=k=>oeStart()+(k==='t'?OE_TD:OE_QD)*864e5,
+  oeOn=k=>{const n=Date.now();return n>=oeStart()&&n<oeEnd(k)},oeSee=k=>isDev()||oeOn(k),oeAny=()=>oeSee('q')||oeSee('t');
+const oeLeft=k=>{const m=Math.max(0,oeEnd(k)-Date.now()),d=Math.floor(m/864e5),h=Math.floor(m%864e5/36e5);return d?T(`เหลือ ${d} วัน ${h} ชม.`,`${d} d ${h} h left`):T(`เหลือ ${h} ชม.`,`${h} h left`)};
+function oeQuest(){if(!S||!(oeOn('q')||isDev()))return;S.evq=S.evq||{};let got=0;
+  OE_Q.forEach(([n,it])=>{if((S.cleared||0)>=n&&!S.evq[n]){S.evq[n]=1;if(mailAdd({id:'evq'+n,k:'ev',title:T(`กิจกรรมเปิดเซิร์ฟ · ผ่านด่าน ${n}`,`Opening event · stage ${n} cleared`),it}))got++}});
+  if(got){save();cloudFlush();const b=$('mailbdg');if(b){b.hidden=false;b.textContent=mailN()}toast(T('🎉 ได้รางวัลกิจกรรมเปิดเซิร์ฟ เปิดกล่องจดหมายเพื่อรับ','🎉 Opening event reward: open your mailbox'))}}
+function oePanel(){const q=S.evq||{},cl=S.cleared||0,ftb=S.ftb;
+  ov(`<div class="cd dlg nt"><div class="px cdbox oebox"><b>🎉 ${T('กิจกรรมเปิดเซิร์ฟ OBT','OBT opening events')}</b>
+   <div class="oesec"><h4>🗺️ ${T('ภารกิจ 7 วัน: ผ่านด่านรับรางวัล','7-day quest: clear stages for rewards')} <small>${oeOn('q')?oeLeft('q'):Date.now()<oeStart()?T('เริ่มพร้อมเปิดเซิร์ฟ','starts at the opening'):T('จบแล้ว','ended')}</small></h4>
+    ${OE_Q.map(([n,it])=>`<div class="oerow ${q[n]?'ok':''}"><span class="oen">${T('ด่าน','Stage')} ${n}</span><span class="oeit">${itText(it)}</span><span class="oest">${q[n]?'✓ '+T('ส่งเข้ากล่องจดหมายแล้ว','sent to your mailbox'):`${Math.min(cl,n)}/${n}`}</span></div>`).join('')}
+    <p class="sub">${T('ผ่านด่านครบตามขั้นภายใน 7 วันหลังเปิดเซิร์ฟ รางวัลเข้ากล่องจดหมายอัตโนมัติ','Clear each stage within 7 days of the opening; rewards go to your mailbox automatically')}</p></div>
+   <div class="oesec"><h4>💎 ${T('เติมเพชรครั้งแรก รับเพชร x2','First top-up: diamonds x2')} <small>${oeOn('t')?oeLeft('t'):Date.now()<oeStart()?T('เริ่มพร้อมเปิดเซิร์ฟ','starts at the opening'):T('จบแล้ว','ended')}</small></h4>
+    <p>${ftb?`<b style="color:#6cf586">✓ ${T('ใช้สิทธิ์แล้ว ได้โบนัส','Used: bonus')} +${(ftb.d||0).toLocaleString('en')} 💎</b>`:T('เติมเพชรครั้งแรกภายใน 3 วันหลังเปิดเซิร์ฟ ได้เพชรเพิ่มอีกเท่าตัว (ครั้งเดียวต่อบัญชี)','Your first diamond top-up within 3 days of the opening gives the same amount again (once per account)')}</p></div>
+   <div class="row">${!ftb&&oeOn('t')?`<button class="btn go" data-evgo="topup">${T('ไปเติมเพชร','Top up')}</button>`:''}<button class="btn alt" data-evgo="close">${T('ปิด','Close')}</button></div></div></div>`)}
+let oeShown=0;
+function oePop(){if(oeShown||!oeAny()||S.tut!=null)return false;oeShown=1;let k=0;const t=setInterval(()=>{if(++k>60)return clearInterval(t);if(bt||$('ov').innerHTML.trim()||!document.querySelector('.lobby'))return;clearInterval(t);oePanel()},800);return false}   /* waits until other popups are closed; returns false so the one-time news still shows first */
+$('ov').addEventListener('click',e=>{const t=e.target.closest('[data-evgo]');if(!t)return;ov('');if(t.dataset.evgo==='topup')topup()});
 function news233(){if(S.tut!=null||S.n233)return false;if(!S.cleared){S.n233=1;return false}
   setTimeout(()=>{if(bt||S.n233||$('ov').innerHTML.trim()||!document.querySelector('.lobby,.dk'))return;S.n233=1;save();
   ov(`<div class="cd dlg nt"><div class="px cdbox swbox"><b>⚔ ${T('PvP เปิดแล้ว!','PvP is open!')}</b><div class="newsl"><span>${T('สู้กับผู้เล่นจริง เก็บดาวไต่แร้งค์ ได้ Gold และเหรียญอารีน่า (ปลดล็อกที่เลเวลโปรไฟล์ '+PL_LOCK.pvp+')','Fight real players, climb the ranks, earn Gold and arena coins (unlocks at profile level '+PL_LOCK.pvp+')')}</span>
@@ -4280,7 +4304,7 @@ function titleScreen(){
 }
 // ---------- Firebase: Google sign-in and one cloud save document per account (saves/{uid}) ----------
 const OBT_PAUSED_MODES=true,PV_PAUSED=false; // b215: hide Tower, PvP and World Boss until relaunch
-const BUILD='b244';
+const BUILD='b245';
 // The game moved to its own address. Anyone opening the old address is sent on, but only once the new site answers, so a broken move cannot lock players out.
 const DISCORD='https://discord.gg/dHDzRyPG9',DC_SVG='<svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="currentColor" d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.4189-2.1568 2.4189Z"/></svg>';
 const NEW_HOME='https://pixeldeckbattle.github.io/';
