@@ -1893,7 +1893,7 @@ function eraWipe(s){if((s.era||1)>=ERA)return s;const lt=eraKeep(s),n=fresh();
   });
   if(pending.length)n.mail=pending;
   n.wiped={era:ERA,lt};n.ts=Date.now();return n}
-const atMs=v=>v==null?Date.now():v.toMillis?v.toMillis():+v||Date.parse(v)||0,oldEra=v=>atMs(v)<ERA_AT;
+const atMs=v=>v==null?Date.now():v.toMillis?v.toMillis():+v||Date.parse(v)||0,oldEra=v=>atMs(v)<ERA_AT||(!!(CFG&&CFG.obtAt)&&atMs(v)<+CFG.obtAt);
 const TEST=false; // test build: every card of every rank is unlocked
 function unlock(s){s=eraWipe(s);s.am=s.am||{};
   {const old=Object.keys(s.cards).filter(id=>/^c\d\d$/.test(id));if(old.length){const n=old.filter(id=>!['c02','c19','c24'].includes(id)).length;s.gold=(s.gold||0)+n*300;s.cards={};s.team=[];s.cleared=0;s.gift=false;s.mig=n*300;if(s.me)delete s.me.look}}
@@ -3010,14 +3010,21 @@ let dv={msg:'',err:0,busy:false};
 const dtl=ms=>{const d=new Date(ms-new Date(ms).getTimezoneOffset()*6e4);return d.toISOString().slice(0,16)},giftOn=g=>!!(g&&g.id&&g.days>0&&Date.now()<(+g.to||0));
 // b169 compensation from the owner (admin page): config/main.comp[<player id>] = {id, cards:[{id,lv,star}], am:{<amulet>:n}, gold, dia, note}.
 // Taken once per id (S.cpd). A card the player lacks is added at that level and stars; one they own is raised to at least that level and those stars. Everything is clamped to what the game allows.
-function compTake(){const all=CFG.comp;if(!all||!mkOn()||S.tut!=null||bt)return;const c=all[USER.sub];if(!c||!c.id)return;S.cpd=S.cpd||[];if(S.cpd.includes(c.id))return;const got=[];
+function compTake(){const all=CFG.comp;if(!all||!mkOn()||S.tut!=null||bt)return;const c=all[USER.sub];if(!c||!c.id)return;S.cpd=S.cpd||[];if(S.cpd.includes(c.id))return;
+  if(!c.at||oldEra(c.at)){S.cpd.push(c.id);save();return}   /* b242: CBT / pre-OBT compensation is never paid again */const got=[];
   (Array.isArray(c.cards)?c.cards:[]).slice(0,60).forEach(x=>{const id=x&&x.id;if(!C[id]||C[id].mon)return;const st=Math.max(0,Math.min(5,x.star|0));if(!S.cards[id]){S.cards[id]={lv:1,exp:0};clAdd(id,'comp')}const o=S.cards[id];
     if(st>starOf(id))o.star=st;const lv=Math.max(1,Math.min(capOf(id),x.lv|0));if(lv>o.lv){o.lv=lv;o.exp=0}got.push(`<span class="pvc r-${C[id].r}" style="width:34px;display:inline-block;vertical-align:middle">${art(id)}</span> <b class="r-${C[id].r}" style="color:var(--gl)">${C[id].n}</b> Lv ${o.lv}${starOf(id)?' ★'+starOf(id):''}`)});
-  Object.keys(c.am&&typeof c.am==='object'?c.am:{}).forEach(k=>{const n=Math.max(0,Math.min(999,c.am[k]|0));if(!AM[k]||!n)return;S.am=S.am||{};S.am[k]=(S.am[k]||0)+n;got.push(`${T('เครื่องราง','Amulet')} <b>${AM[k].n}</b> ×${n}`)});
+  Object.keys(c.am&&typeof c.am==='object'?c.am:{}).forEach(k=>{let n=Math.max(0,Math.min(999,c.am[k]|0));if(!AM[k]||!n)return;S.am=S.am||{};if(AM[k].r==='LT'){if((S.am[k]||0)>=1)return;n=1}S.am[k]=(S.am[k]||0)+n;got.push(`${T('เครื่องราง','Amulet')} <b>${AM[k].n}</b> ×${n}`)});
+  {const L=c.ltd&&typeof c.ltd==='object'?c.ltd:null;if(L){   // b243 Limited safety net, one of each
+    if(L.fd&&!S.fd){S.fd=1;got.push('<b style="color:#ffd84a">FOUNDER</b>')}
+    if(L.wbt&&!S.wbt){S.wbt=1;got.push('<b style="color:#ff9a3c">PUMPKIN SLAYER</b>')}
+    (Array.isArray(L.pf)?L.pf:[]).forEach(f=>{if(PF.some(x=>x[0]===f&&!x[1])&&!(S.pfx&&S.pfx[f])){S.pfx=S.pfx||{};S.pfx[f]=1;got.push(T('กรอบรูป ','Frame ')+'<b>'+(PF.find(x=>x[0]===f)||[,,f,f])[3]+'</b>')}});
+    const wr=L.wbsh|0;if(wr>=1&&wr<=3){S.wbsh=S.wbsh||[];if(!S.wbsh.some(x=>x&&x.r===wr&&x.e===WB.id)){S.wbsh.push({r:wr,e:WB.id});got.push(T('โล่ราชาฟักทอง อันดับ ','Pumpkin King shield, rank ')+wr)}}
+    (Array.isArray(L.sh)?L.sh:[]).forEach(x=>{const k=shOk(x);if(k&&!(S.sh||[]).includes(k)){shAdd(k);got.push(T('โล่ ','Shield ')+k)}});}}
   const g=Math.max(0,Math.min(1e8,Math.floor(+c.gold||0))),d=Math.max(0,Math.min(1e6,Math.floor(+c.dia||0)));if(g){S.gold+=g;lg('comp',g);got.push(`<b class="gold">Gold +${g.toLocaleString('en')}</b>`)}if(d){S.dia=(S.dia||0)+d;ld('comp',d);got.push(`<b style="color:#6fd8ff">💎 +${d.toLocaleString('en')}</b>`)}
   S.cpd.push(c.id);if(S.cpd.length>30)S.cpd.shift();save();cloudFlush();if(!got.length)return;
   setTimeout(()=>{sfx('win');ov(`<div class="cd dlg nt"><div class="px cdbox swbox"><b>🎁 ${T('ของชดเชยจากทีมงาน','A gift from the team')}</b>${c.note?`<p style="margin:0">${esc(String(c.note).slice(0,200))}</p>`:''}<div class="newsl">${got.map(x=>`<span>${x}</span>`).join('')}</div><div class="row"><button class="btn go" data-lp="no">${T('รับทราบ','OK')}</button></div></div></div>`)},600)}
-function giftTake(){const g=CFG.gift,now=Date.now();if(!g||!g.id||!mkOn()||!(g.days>0)||now<(+g.from||0)||now>=(+g.to||0))return;S.gf=S.gf||[];if(S.gf.includes(g.id))return;
+function giftTake(){const g=CFG.gift,now=Date.now();if(!g||!g.id||!mkOn()||!(g.days>0)||now<(+g.from||0)||now>=(+g.to||0)||oldEra(+g.from||0))return;S.gf=S.gf||[];if(S.gf.includes(g.id))return;
   const tier=Math.max(1,Math.min(3,g.tier|0)),days=Math.max(1,Math.min(60,g.days|0));vipAdd(days,tier);S.gf.push(g.id);if(S.gf.length>20)S.gf.shift();save();cloudFlush();sfx('win');
   setTimeout(()=>{if(!bt)ov(`<div class="cd dlg nt"><div class="px cdbox"><b>🎁 ${T('ของขวัญจากทีมงาน','A gift from the team')}</b><p>${T(`คุณได้รับ <u>VIP ${VIPN[tier]} ${days} วัน</u> ฟรี<br>ขอบคุณที่เข้ามาเล่นช่วง CBT`,`You received <u>VIP ${VIPN[tier]} for ${days} days</u>, free.<br>Thank you for playing the CBT`)}</p><div class="row"><button class="btn go" data-lp="no">${T('รับทราบ','OK')}</button></div></div></div>`)},350)}
 function devMenu(){if(!isOwn())return home();const g=CFG.gift;
@@ -3576,7 +3583,7 @@ function pvPick(){const o=pv.opp[pv.sel],me=pvGet(),tm=pvTeam(),can=isDev()||me.
     <button class="btn go" data-act="pvstart" ${tm.length&&can?'':'disabled'}>${T('เริ่ม','Start')} (${tm.length}/3)</button></div>
    <div class="main"><p class="sub nt" style="margin-bottom:14px">${T('แตะการ์ดเพื่อเลือกเข้าทีม สูงสุด 3 ใบ','Tap cards to add them, up to 3')}</p><div class="grid big">
     ${byRank(Object.keys(C).filter(id=>S.cards[id])).map(id=>{const k=tm.indexOf(id);return `<div>${full(id,`data-act="pvpick" data-id="${id}" aria-pressed="${k>=0}"`,'glow'+(k>=0?' sel':'')).replace('</button>',(k>=0?`<span class="ord">${k+1}</span>`:'')+'</button>')}<p class="sub cap nt">Lv ${S.cards[id].lv}</p></div>`}).join('')}</div></div></div>`)}
-function pvpResult(won,opp){plGain(won?'pvpw':'pvpl');const me=pvGet(),was=me.st,[g,c]=pvPay(won,was),r0=rankOf(was);if(!isDev()){me.st=Math.max(0,Math.min(ST_MAX,me.st+(won?1:-1)));me.hi=Math.max(me.hi||0,me.st);won?me.w++:me.l++;me.ws=won?(me.ws||0)+1:0;me.bs=Math.max(me.bs||0,me.ws)}   // b241: Dev fights are testsS.gold+=g;lg('pvp',g);S.ac=(S.ac||0)+c;save();pvpPush();
+function pvpResult(won,opp){plGain(won?'pvpw':'pvpl');const me=pvGet(),was=me.st,[g,c]=pvPay(won,was),r0=rankOf(was);if(!isDev()){me.st=Math.max(0,Math.min(ST_MAX,me.st+(won?1:-1)));me.hi=Math.max(me.hi||0,me.st);won?me.w++:me.l++;me.ws=won?(me.ws||0)+1:0;me.bs=Math.max(me.bs||0,me.ws)}   /* b241: Dev fights are tests */S.gold+=g;lg('pvp',g);S.ac=(S.ac||0)+c;save();pvpPush();
   const r1=rankOf(me.st),up=r1.i*4+r1.d>r0.i*4+r0.d,dn=r1.i*4+r1.d<r0.i*4+r0.d;
   view(`<div class="cols arenav"><div class="rail nt"><h1>${won?T('ชนะ!','Victory!'):T('แพ้','Defeat')}</h1><p class="num">PvP · vs ${esc(opp.name)}</p>
     <div style="justify-self:center">${shield(me.st,'md')}</div><p class="num" style="font-size:18px">${tierTag(me.st)} <b style="color:${me.st>was?'#6cf586':'#ff8492'}">${me.st>was?'★+1':me.st<was?'★−1':''}</b></p>
@@ -3874,7 +3881,7 @@ function pvRoll(){const me=pvGet(),w=twWeek(),w0=pvW0();if(w0==null||isDev())ret
   if(me.w+me.l>0){const i=rankOf(Math.max(me.hi||0,me.st)).i;mailAdd({id:'pv'+me.sw,k:'pv',w:me.sw,r:i,it:{sh:'P'+i+'.'+pvSeasonNo(me.sw),ac:PV_END_AC[i]}})}
   me.st=Math.floor(me.st/2);me.hi=me.st;me.w=0;me.l=0;me.ws=0;me.bs=0;me.sw=w;save();pvpPush()}
 let twBusy=0;
-function twSettle(){const P=S.twp||[];if(!P.length||twBusy)return;const p=P[0],done=r=>{if(r||p.f>=TW_PART_F){if(p.f>=TW_PART_F)mailAdd({id:'tw'+p.w,k:'tw',w:p.w,r:r||0,f:p.f,it:twPrize(r||0,p.w)})}S.twp=S.twp.filter(x=>x!==p);S.twd=Math.max(S.twd||0,p.w);save();cloudFlush();const b=$('mailbdg');if(b){b.hidden=!mailN();b.textContent=mailN()}twSettle()};
+function twSettle(){const P=S.twp||[];if(OBT_PAUSED_MODES||!P.length||twBusy)return;const p=P[0],done=r=>{if(r||p.f>=TW_PART_F){if(p.f>=TW_PART_F)mailAdd({id:'tw'+p.w,k:'tw',w:p.w,r:r||0,f:p.f,it:twPrize(r||0,p.w)})}S.twp=S.twp.filter(x=>x!==p);S.twd=Math.max(S.twd||0,p.w);save();cloudFlush();const b=$('mailbdg');if(b){b.hidden=!mailN();b.textContent=mailN()}twSettle()};
   if(p.f<TW_PART_F||!mkOn())return done(0);
   twBusy=1;twFetch(p.w).then(()=>{twBusy=0;const b=twB[p.w];if(!b||b.state!=='ok')return;const i=b.list.findIndex(o=>o.uid===USER.sub);done(i>=0?i+1:0)})}
 function twRoll(){if(mkOn()&&!tSync)return srvSync();twGet();pvRoll();twSettle()}
@@ -4272,7 +4279,7 @@ function titleScreen(){
 }
 // ---------- Firebase: Google sign-in and one cloud save document per account (saves/{uid}) ----------
 const OBT_PAUSED_MODES=true,PV_PAUSED=false; // b215: hide Tower, PvP and World Boss until relaunch
-const BUILD='b241';
+const BUILD='b243';
 // The game moved to its own address. Anyone opening the old address is sent on, but only once the new site answers, so a broken move cannot lock players out.
 const DISCORD='https://discord.gg/dHDzRyPG9',DC_SVG='<svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="currentColor" d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.4189-2.1568 2.4189Z"/></svg>';
 const NEW_HOME='https://pixeldeckbattle.github.io/';
