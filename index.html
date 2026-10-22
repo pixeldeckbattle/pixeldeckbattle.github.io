@@ -1966,13 +1966,13 @@ const full=(id,attr='',cls='')=>`<button class="cf r-${C[id].r} ${cls} ${fr(id)}
 // enemy strength follows LNAT[n], the level a card reaches by clearing every earlier stage once, measured against a Rare card;
 // the first 30 stages ramp up from half strength so the starter team gets through
 const LNAT=[1];{let lv=1,ex=0;for(let n=1;n<=MAXST;n++){LNAT[n]=lv;ex+=10+2*n;while(ex>=20+10*lv){ex-=20+10*lv;lv++}}}
-let DIFF=3.0,EA=.3,EH=1.3,E0=.42,LATE=.003,LATE_N=250,LATE_W=50;   // b160: enemies gain up to +15% between stages 250 and 300 (then it stays), which offsets the new Legend tank so Legend teams still stop near stage 300
+let DIFF=3.0,EA=.3*0.92,EH=1.3,E0=.42,LATE=.003,LATE_N=250,LATE_W=50;   // b160: enemies gain up to +15% between stages 250 and 300 (then it stays), which offsets the new Legend tank so Legend teams still stop near stage 300
 // b160 soft walls, only on a stage the player has not cleared: each loss there weakens its enemies by PITY (ATK and HP), up to PITY_MAX, until the stage is won (S.ls = {n, k losses});
 // and every attempt rolls the enemies' strength within +-VARY, so a near miss can become a win on the next try. Cleared stages and the replay loop stay fixed.
 const PITY=.04,PITY_MAX=.12,VARY=.10,lossK=n=>S.ls&&S.ls.n===n?S.ls.k|0:0,softMul=n=>n>(S.cleared||0)?(1-Math.min(PITY_MAX,PITY*lossK(n)))*(1-VARY+2*VARY*Math.random()):1;
 // b173 Chapter 2: six realms of 100 stages after stage 500. Enemies start from stage 500's strength and grow CH2_G a stage (+ the realm's battlefield rule);
 // every 10th stage is the realm boss with two minions, every 100th the realm lord (bigger, with its own gimmick), x5 is an elite (one big monster), x7 a survival stage (live through 5 rounds).
-let CH2_G=.0012,CH2_K=1.5,CH2_RAMP=100,LORD_M=[1.25,2.4],CH3_K=.82,CH3_G=.0008;const RLM=[
+let CH2_G=.0012,CH2_K=1.5,CH2_RAMP=100,LORD_M=[1.25,2.4],CH3_K=.79,CH3_G=.0008;const RLM=[
  {n:'Deep Sea',th:'ทะเลลึก',m:['x11','x12','x13'],b:'x14',l:'x15',r:'tide',bg:['r11','r12'],fx:[{glow:'#2ad8ff',p:[['bubble','#9ff3ff',22],['spark','#9ff3ff',18],['fly','#7ae8ff',12]]},{glow:'#3affd8',p:[['bubble','#bff8ff',26],['spark','#ffffff',16],['dust','#bfeaff',20]]}]},
  {n:'Raging Volcano',th:'ภูเขาไฟคลั่ง',m:['x21','x22','x23'],b:'x24',l:'x25',r:'burn',bg:['r21','r22'],fx:[{glow:'#ff6a1a',volc:[[24,36],[57,22]],p:[['ember','#ffb04a',56],['ash','#c9b0a8',22]]},{glow:'#ff7a2a',p:[['ember','#ffc04a',60],['ash','#bfa8a0',16]]}]},
  {n:'Eternal Glacier',th:'ธารน้ำแข็งนิรันดร์',m:['x31','x32','x33'],b:'x34',l:'x35',r:'frost',bg:['r31','r32'],fx:[{aur:1,p:[['snow','#ffffff',56],['spark','#bfe6ff',14]]},{fog:'#e8f4ff',p:[['snow','#ffffff',40],['spark','#dff4ff',22]]}]},
@@ -1995,16 +1995,17 @@ const RULES={tide:['🌊','คลื่นยักษ์','Tidal Wave','ทุ�
 const ruleTxt=(k,full)=>{const r=RULES[k];return r?`${r[0]} ${T(r[1],r[2])}${full?': '+T(r[3],r[4]):''}`:''};
 const KIND_T={lord:['เจ้าอาณาจักร','Realm Lord'],boss:['บอส','Boss'],elite:['ศัตรูยักษ์','Elite'],surv:['เอาตัวรอด 5 รอบ','Survive 5 rounds']};
 const stBud=n=>{const ease=Math.min(1,E0+(1-E0)*(n-1)/29);return 135*(1+.09*(LNAT[n]-1))*DIFF*ease*(1+LATE*Math.min(LATE_W,Math.max(0,n-LATE_N)))};
+const CH3A=1;
 function stageDef2(n){const R=RLM[realmOf(n)],k=n-ST1,kd=stKind(n),bud=stBud(ST1)*(1+(CH2_K-1)*Math.min(1,k/CH2_RAMP))*(1+CH2_G*k)*(n>1100?CH3_K*(1+CH3_G*(n-1100)):1),one=(id,ma,mh,x)=>{const sh=.35+.3*C[id].a/(C[id].a+C[id].h+C[id].d);
-    return{id,boss:!!C[id].boss,atk:Math.round(bud*sh*EA*ma),hp:Math.round(bud*(1-sh)*EH*mh),crit:C[id].c/200,cx:1.5,sh:0,...x}},M=i=>R.m[(k*7+i*5+(k>>2))%3];
-  if(kd==='lord')return[one(M(0),1,1),one(R.l,LORD_M[0],LORD_M[1],{lord:1,gim:C[R.l].gim,gate:C[R.l].gim==='gate'?3:0}),one(M(1),1,1)];
+    return{id,boss:!!C[id].boss,atk:Math.round(bud*sh*EA*ma*(n>1100?CH3A:1)),hp:Math.round(bud*(1-sh)*EH*mh*HPK),crit:C[id].c/200,cx:1.5,sh:0,...x}},M=i=>R.m[(k*7+i*5+(k>>2))%3];
+  if(kd==='lord')return[one(M(0),1,1),one(R.l,LORD_M[0],LORD_M[1]*(n>1100?.875:1),{lord:1,gim:C[R.l].gim,gate:C[R.l].gim==='gate'?3:0}),one(M(1),1,1)];
   if(kd==='boss')return[one(M(0),1,1),one(R.b,1.2,2.2),one(M(2),1,1)];
-  if(kd==='elite')return[one(M(1),1.9,3.2,{elite:1})];
+  if(kd==='elite')return[one(M(1),1.9,2.4,{elite:1})];
   return[0,1,2].map(i=>kd==='surv'?one(M(i),.7,1.8):one(M(i),1,1))}   // survival: tougher but softer-hitting, the point is to last 5 rounds
 function stageDef(n){if(n>ST1)return stageDef2(n);
   const ease=Math.min(1,E0+(1-E0)*(n-1)/29),bud=135*(1+.09*(LNAT[n]-1))*DIFF*ease*(1+LATE*Math.min(LATE_W,Math.max(0,n-LATE_N))),cnt=n<=3?1:n<=10?2:3,EP=MSM,size=Math.min(EP.length,3+Math.floor(n/5)),boss=n%10===0;
   return Array.from({length:cnt},(_,i)=>{const b=boss&&i===(cnt>1?1:0),id=b&&MBS.length?MBS[(n/10-1)%MBS.length]:EP[(n*7+i*5+(n>>2))%size],sh=.35+.3*C[id].a/(C[id].a+C[id].h+C[id].d);
-    return{id,boss:b,atk:Math.round(bud*sh*EA*(b?1.2:1)),hp:Math.round(bud*(1-sh)*EH*(b?2.2:1)),crit:C[id].c/200,cx:1.5,sh:0}});
+    return{id,boss:b,atk:Math.round(bud*sh*EA*(b?1.2:1)),hp:Math.round(bud*(1-sh)*EH*(b?2.2:1)*HPK),crit:C[id].c/200,cx:1.5,sh:0}});
 }
 const expOf=n=>10+2*n,goldBase=n=>6+Math.floor(n/3);
 // Gold drops from every win: a first clear rolls 150-450% of the stage's base, a replay a little less (60-165%) - both x GOLD_UP (b146: +50%, stage drops only; the offline farm still uses the plain base), with a 5% jackpot of x4; the first win over a boss adds a fixed bonus
@@ -2014,7 +2015,7 @@ const GOLD_UP=1.5,goldRange=n=>{const b=goldBase(n)*GOLD_UP;return n>S.cleared?[
 const EARLY_N=50,EARLY_G=200,AFK_MIN=400,earlyB=n=>n<=EARLY_N&&n%10!==0&&n>S.cleared?EARLY_G:0;
 const VIP_RS=1.5,LORD_DIA=20,STAR_CH=15,CHEST_G=5000,RS_DROP=.012,RS_BOSS=.05,RS_LORD=3,
   c2Stars=()=>Object.values(S.cs||{}).reduce((a,b)=>a+b,0),chestsLeft=()=>Math.floor(c2Stars()/STAR_CH)-(S.csc||0),
-  starsOf=(my)=>1+(my.al.every(x=>x.hp>0)?1:0)+((my.surv?my.al.reduce((a,x)=>a+Math.max(0,x.hp),0)>=my.al.reduce((a,x)=>a+x.max,0)/2:my.round<=4)?1:0),BOSS_GIFT={10:5000,20:5000},bossBonus=n=>n%10===0&&n>S.cleared?(BOSS_GIFT[n]||100+5*n):0;
+  starsOf=(my)=>1+(my.al.every(x=>x.hp>0)?1:0)+((my.surv?my.al.reduce((a,x)=>a+Math.max(0,x.hp),0)>=my.al.reduce((a,x)=>a+x.max,0)/2:my.round<=STAR_RD)?1:0),STAR_RD=7,BOSS_GIFT={10:5000,20:5000},bossBonus=n=>n%10===0&&n>S.cleared?(BOSS_GIFT[n]||100+5*n):0;
 function rollGold(n){const jp=Math.random()<.05,[lo,hi]=goldRange(n);return{g:(lo+Math.floor(Math.random()*(hi-lo+1)))*(jp?4:1),jp}}
 
 /* ---------- screens ---------- */
@@ -2184,7 +2185,7 @@ function prep(){
     <div class="row"><button class="btn alt sm" data-act="home">กลับ</button><h2>ด่าน ${prepN}</h2></div>
     <div class="row"><button class="btn alt sm" data-act="stg" data-d="-10">-10</button><button class="btn alt sm" data-act="stg" data-d="-1">-1</button><button class="btn alt sm" data-act="stg" data-d="1">+1</button><button class="btn alt sm" data-act="stg" data-d="10">+10</button></div>${isDev()?'<div class="row"><button class="btn alt sm" data-act="stg" data-d="-100">-100</button><button class="btn alt sm" data-act="stg" data-d="100">+100</button><button class="btn alt sm" data-act="stg" data-d="-999">1</button><button class="btn alt sm" data-act="stg" data-d="999">500</button></div>':''}
     <div class="mapth" style="background-image:url(${mapImg(prepN)})" role="img" aria-label="${mapName(prepN)}"></div>
-    ${prepN>ST1?'':`<p class="sub">แผนที่: ${mapName(prepN)}</p>`}${prepN>ST1?`<p class="sub nt rlp">${T('อาณาจักร','Realm')} ${realmOf(prepN)+1}: <b>${T(RLM[realmOf(prepN)].th,RLM[realmOf(prepN)].n)}</b>${stKind(prepN)?` · <b style="color:#ffe45c">${T(...KIND_T[stKind(prepN)])}</b>`:''}<br>${T('กฎสนาม','Battlefield rule')} ${ruleTxt(ruleOf(prepN),1)}</p>${prepN===1100&&S.f1100!=='got'&&S.f1100!=='full'?`<p class="sub nt" style="color:#8fe9ff">🏆 ${T(`${F1100_N} ท่านแรกของเซิร์ฟเวอร์ที่ผ่านด่านนี้ ได้การ์ด Limited Glacius Rex (ไม่มีขาย)`,`The first ${F1100_N} players on the server to clear this stage get the Limited card Glacius Rex (never sold)`)}</p>`:''}<p class="sub nt stw sm">${[1,2,3].map(i=>`<i class="${i<=((S.cs||{})[prepN]||0)?'on':''}">★</i>`).join('')} <small>${T('ชนะ · ไม่มีใครตาย · ชนะใน 4 รอบ','win · nobody falls · win within 4 rounds')}${stKind(prepN)==='surv'?T(' (ด่านเอาตัวรอด: เลือดทีมเหลือครึ่ง)',' (survival: team keeps half its life)'):''}</small></p><p class="sub nt">${T('ดาวบท 2','Chapter 2 stars')} ★${c2Stars()} · ${T('หีบถัดไป','next chest')} ${c2Stars()%STAR_CH}/${STAR_CH} · 💠 ${S.rs||0}${chestsLeft()>0?` <button class="btn go sm" data-act="schest">🎁 ×${chestsLeft()}</button>`:''}</p>`:''}
+    ${prepN>ST1?'':`<p class="sub">แผนที่: ${mapName(prepN)}</p>`}${prepN>ST1?`<p class="sub nt rlp">${T('อาณาจักร','Realm')} ${realmOf(prepN)+1}: <b>${T(RLM[realmOf(prepN)].th,RLM[realmOf(prepN)].n)}</b>${stKind(prepN)?` · <b style="color:#ffe45c">${T(...KIND_T[stKind(prepN)])}</b>`:''}<br>${T('กฎสนาม','Battlefield rule')} ${ruleTxt(ruleOf(prepN),1)}</p>${prepN===1100&&S.f1100!=='got'&&S.f1100!=='full'?`<p class="sub nt" style="color:#8fe9ff">🏆 ${T(`${F1100_N} ท่านแรกของเซิร์ฟเวอร์ที่ผ่านด่านนี้ ได้การ์ด Limited Glacius Rex (ไม่มีขาย)`,`The first ${F1100_N} players on the server to clear this stage get the Limited card Glacius Rex (never sold)`)}</p>`:''}<p class="sub nt stw sm">${[1,2,3].map(i=>`<i class="${i<=((S.cs||{})[prepN]||0)?'on':''}">★</i>`).join('')} <small>${T('ชนะ · ไม่มีใครตาย · ชนะใน 7 รอบ','win · nobody falls · win within 7 rounds')}${stKind(prepN)==='surv'?T(' (ด่านเอาตัวรอด: เลือดทีมเหลือครึ่ง)',' (survival: team keeps half its life)'):''}</small></p><p class="sub nt">${T('ดาวบท 2','Chapter 2 stars')} ★${c2Stars()} · ${T('หีบถัดไป','next chest')} ${c2Stars()%STAR_CH}/${STAR_CH} · 💠 ${S.rs||0}${chestsLeft()>0?` <button class="btn go sm" data-act="schest">🎁 ×${chestsLeft()}</button>`:''}</p>`:''}
     <p class="sub">ศัตรู: ${en.map(e=>elIco(e.id,16)+' '+(e.boss?'บอส ':'')+C[e.id].n+(weakOf(e.id,prepN)?` <b class="nt" style="color:${weakOf(e.id,prepN)==='m'?'#b9a2ff':'#ffb27a'}">(${weakTxt(weakOf(e.id,prepN))})</b>`:'')).join(', ')}</p>${(()=>{let up=0,dn=0;S.team.forEach(id=>en.forEach(e=>{const m=elMul(id,e.id);if(m>1)up++;else if(m<1)dn++}));return `<p class="sub nt elhint">${T('ธาตุ','Elements')}: ${S.team.map(id=>elIco(id,16)).join('')} ${T('ทีมคุณตีชนะทาง','your hits that are strong')} <b style="color:#7dff9a">▲ ${up}</b> · ${T('แพ้ทาง','weak')} <b style="color:#ff9a8a">▼ ${dn}</b>${dn>up?' · '+T('ลองเปลี่ยนการ์ดธาตุที่ชนะทาง','try cards with a stronger element'):''}</p>`})()}${en.some(e=>weakOf(e.id,prepN))?`<p class="sub nt" style="color:#c9d2f5">${T('ทีมคุณ','Your team')}: ${T('กายภาพ','physical')} ${S.team.filter(id=>!C[id].m).length} · ${T('เวท','magic')} ${S.team.filter(id=>C[id].m).length}</p>`:''}${lossK(prepN)&&prepN>S.cleared?`<p class="sub nt" style="color:#8fe9ff">${T('ศัตรูเหนื่อยล้าลง','Enemies worn down')} ${'●'.repeat(Math.min(3,lossK(prepN)))}${'○'.repeat(3-Math.min(3,lossK(prepN)))} <small style="display:inline">(${T('แพ้ด่านนี้','lost here')} ${lossK(prepN)} ${T('ครั้ง','times')})</small></p>`:''}
     <p class="sub">รางวัล: Gold ${goldRange(prepN).join('–')}${bossBonus(prepN)?' + โบนัสบอส '+bossBonus(prepN):''}${earlyB(prepN)?' + '+T('โบนัสด่านใหม่','new stage bonus')+' '+earlyB(prepN):''}${BOSS_CARD[prepN]&&prepN>S.cleared?' + <b class="nt" style="color:#ffe45c">'+T('การ์ดการันตี: ','guaranteed cards: ')+BOSS_CARD[prepN].map(r=>C[r]?C[r].n:RAR[r].n).join(' + ')+'</b>':''} · Exp ${expOf(prepN)} ต่อใบ${prepN<=S.cleared?' (เล่นซ้ำ)':''}</p>
     ${hasLuck()?`<p class="sub nt" style="color:#7dff8a">Lucky Clover: ${'🍀'.repeat(luckLv(prepN))} ${T(['','โชคเล็กน้อย','โชคพอมี','โชคดี','โชคดีมาก','โชคสูงสุด'][luckLv(prepN)],['','a little luck','some luck','lucky','very lucky','top luck'][luckLv(prepN)])} <small style="display:inline">(${T('ลุ้นการ์ด Legend','a shot at a Legend card')})</small></p>`:''}<p class="sub nt">${T('โอกาสดรอป','Drop chance')}: ${T('เครื่องราง','amulet')} <b style="color:#ffe45c">${P2(dropP(prepN,DROP,DROP_BOSS,prepN>S.cleared))}</b> · ${T('การ์ด','card')} <b style="color:#ffe45c">${P2(dropP(prepN,CDROP,CDROP_BOSS,prepN>S.cleared))}</b></p>
@@ -2607,7 +2608,8 @@ function off(el){let x=0,y=0;while(el&&el.id!=='stage'){x+=el.offsetLeft;y+=el.o
 async function lunge(from,to,dir){const f=$(from);if(!f||RM)return;let dx=dir*140,dy=0;
   if(to&&$(to)){const A=off(f),B=off($(to));dx=B.x-A.x-dir*f.offsetWidth*.85;dy=B.y-A.y}
   ghost(f,dx*.2,dy*.2);setTimeout(()=>ghost(f,dx*.55,dy*.55),70/(S.spd||1));f.style.transition=`transform ${170/(S.spd||1)}ms cubic-bezier(.5,0,.2,1)`;f.style.zIndex=6;f.style.transform=`translate(${dx}px,${dy}px) scale(1.12)`;ret={id:from,dx,dy};await W(180)}
-const fighter=(id,lv,o)=>{const v=stat(id,lv,o),s4=!!(SK[id]&&SK[id][3]&&(o?o.star||0:starOf(id))>=10);const f={id,lv,atk:v.atk,base:v.atk,hp:v.hp,max:v.hp,def:v.def,crit:v.crit,cx:v.cx,hb:v.hb,sh:0,done:false,sk4:s4,s4l:s4Lv(id,o),cds:s4?[0,0,ULT_CD0,SK4_CD0]:[0,0,ULT_CD0]};
+let HPK=2;const HK=()=>bt&&bt.pvp?1:HPK;   // b232 battle length: life multiplier for every fighter, cards and monsters alike
+const fighter=(id,lv,o)=>{const v=stat(id,lv,o),s4=!!(SK[id]&&SK[id][3]&&(o?o.star||0:starOf(id))>=10);const f={id,lv,atk:v.atk,base:v.atk,hp:Math.round(v.hp*HPK),max:Math.round(v.hp*HPK),def:v.def,crit:v.crit,cx:v.cx,hb:v.hb,sh:0,done:false,sk4:s4,s4l:s4Lv(id,o),cds:s4?[0,0,ULT_CD0,SK4_CD0]:[0,0,ULT_CD0]};
   const am=o?(o.am&&AM[o.am]&&amFit(o.am,id)?AM[o.am]:null):amOf(id);if(am){if(am.hg){f.cds[2]=0;if(f.cds[3])f.cds[3]=Math.max(0,f.cds[3]-1)}if(am.pr)f.pr=am.pr;if(am.rg)f.rg=am.rg;if(am.fc)f.fc=1}return f};   // b228 amulet specials
 // opp = an arena opponent {name,pts,team:[{id,lv,star,am}]}: its cards fight with their own skills instead of stage monsters
 async function startBattle(n,opp){
@@ -2615,7 +2617,7 @@ async function startBattle(n,opp){
     al:(opp?pvTeam():S.team).map(id=>fighter(id,S.cards[id].lv)),
     en:opp?opp.team.map(c=>fighter(c.id,c.lv,c)):(m=>stageDef(n).map(e=>{const hp=Math.max(1,Math.round(e.hp*m)),atk=Math.max(1,Math.round(e.atk*m));return{...e,atk,base:atk,hp,max:hp}}))(softMul(n))};
   if(!opp){bt.rule=ruleOf(n);bt.surv=stKind(n)==='surv'}
-  if(opp)[...bt.al,...bt.en].forEach(f=>{f.hp=f.max=f.max*PV_HP}); // cards hit each other far harder than stage monsters do, so arena fights give everyone more life
+  if(opp)[...bt.al,...bt.en].forEach(f=>{f.hp=f.max=Math.round(f.max*PV_HP/HPK)}); // cards hit each other far harder than stage monsters do, so arena fights give everyone more life
   c3Amu(bt);plBuff(bt);const my=bt;busy=true;draw();await vsIntro();if(bt!==my)return;
   if(opp)for(const n of[3,2,1]){beep();ov(`<div class="bn cd"><span>${n}</span></div>`);await sleep(RM?600:1000);if(bt!==my)return}
   sfx('start');await banner('START');if(bt!==my)return;
@@ -2784,16 +2786,16 @@ function cast(a,k,ti,mine=true){SD=sideOf(mine);
   const sk=SK[a.id][k],[name,,type,v]=sk,ai=SD.A.indexOf(a),t=SD.F[ti];hitM=!!C[a.id].m;hitA=a.atk;bt.log=`${C[a.id].n} ใช้ ${name}`;
   if(['hit','exec','drain','sure'].includes(type)){
     const [d,cr]=roll(a,v*(type==='exec'&&t.hp<=t.max/2?2:1),type==='sure');hurt(SD.F,SD.fp,ti,d,'d',cr);
-    if(type==='drain')mend(ai,d/2);else if(C[a.id].ls&&a.hp>0)mend(ai,d*C[a.id].ls)}
-  else if(type==='aoe'){let sum=0;const lone=SD.F.filter(e=>e.hp>0).length===1?AOE_LONE:1;SD.F.forEach((e,j)=>{if(e.hp>0){const [d,cr]=roll(a,v*lone);sum+=d;hurt(SD.F,SD.fp,j,d,'d',cr)}});if(C[a.id].ls&&a.hp>0)mend(ai,sum*C[a.id].ls)}
-  else if(type==='heal'){let b=-1;SD.A.forEach((x,j)=>{if(x.hp>0&&(b<0||x.hp/x.max<SD.A[b].hp/SD.A[b].max))b=j});mend(b,a.atk*v*a.hb,1)}
-  else if(type==='healall')SD.A.forEach((x,j)=>{if(x.hp>0)mend(j,a.atk*v*a.hb,1)});
+    if(type==='drain')mend(ai,d/2*HK());else if(C[a.id].ls&&a.hp>0)mend(ai,d*C[a.id].ls*HK())}
+  else if(type==='aoe'){let sum=0;const lone=SD.F.filter(e=>e.hp>0).length===1?AOE_LONE:1;SD.F.forEach((e,j)=>{if(e.hp>0){const [d,cr]=roll(a,v*lone);sum+=d;hurt(SD.F,SD.fp,j,d,'d',cr)}});if(C[a.id].ls&&a.hp>0)mend(ai,sum*C[a.id].ls*HK())}
+  else if(type==='heal'){let b=-1;SD.A.forEach((x,j)=>{if(x.hp>0&&(b<0||x.hp/x.max<SD.A[b].hp/SD.A[b].max))b=j});mend(b,a.atk*v*a.hb*HK(),1)}
+  else if(type==='healall')SD.A.forEach((x,j)=>{if(x.hp>0)mend(j,a.atk*v*a.hb*HK(),1)});
   else if(type==='guard'){ward(ai,a.max*v*a.hb);a.taunt=TAUNT_N}
   else if(type==='shieldall')SD.A.forEach((x,j)=>{if(x.hp>0)ward(j,a.max*v*a.hb)});
   else if(type==='buff')pump(a,ai,v);
   else if(type==='rally')SD.A.forEach((x,j)=>{if(x.hp>0)pump(x,j,v)});
   else if(S4T.includes(type))cast4(a,ai,type,type==='stand'?v:v*(1+S4_K*((a.s4l||1)-1)),ti);
-  if(SK_HIT[type]&&a.hp>0){const tj=hitTgt(SD.F,ti);if(tj>=0){hitA=a.atk;hitM=!!C[a.id].m;const [d,cr]=roll(a,SK_HIT[type]);hurt(SD.F,SD.fp,tj,d,'d',cr);if(C[a.id].ls)mend(ai,d*C[a.id].ls)}}
+  if(SK_HIT[type]&&a.hp>0){const tj=hitTgt(SD.F,ti);if(tj>=0){hitA=a.atk;hitM=!!C[a.id].m;const [d,cr]=roll(a,SK_HIT[type]);hurt(SD.F,SD.fp,tj,d,'d',cr);if(C[a.id].ls)mend(ai,d*C[a.id].ls*HK())}}
   a.cds=a.cds.map((c,j)=>j===k?CD[k]:Math.max(0,c-1));
 }
 // b173 skill 4 (k=3). SD is set by cast(); HIT_SRC lets dodge-counters and reflections find the caster.
@@ -2806,11 +2808,11 @@ function cast4(a,ai,type,v,ti){const F=SD.F,live=()=>F.map((x,j)=>x.hp>0?j:-1).f
   else if(type==='dive'){let t=lowest();hit(t,v);if(t>=0&&F[t].hp<=0){t=lowest();if(t>=0)hit(t,v*.6)}}
   else if(type==='scorch'){live().forEach(j=>{F[j].burn={d:Math.round(a.atk*v),n:3};hit(j,v)})}
   else if(type==='rebirth'){const dead=SD.A.map((x,j)=>x.hp<=0?j:-1).filter(j=>j>=0);if(dead.length&&!a.reb){const j=dead.reduce((b,k)=>SD.A[k].max>SD.A[b].max?k:b);const x=SD.A[j];x.hp=Math.round(x.max*v);x.sh=0;x.done=true;x.taunt=0;a.reb=1;q(SD.ap+j,T('ฟื้น!','RISE!'),'g')}
-    else{let b=-1;SD.A.forEach((x,j)=>{if(x.hp>0&&(b<0||x.hp/x.max<SD.A[b].hp/SD.A[b].max))b=j});if(b>=0)mend(b,a.atk*1.2*a.hb,1)}}
+    else{let b=-1;SD.A.forEach((x,j)=>{if(x.hp>0&&(b<0||x.hp/x.max<SD.A[b].hp/SD.A[b].max))b=j});if(b>=0)mend(b,a.atk*1.2*a.hb*HK(),1)}}
   else if(type==='chain'){const n=live().length>1?5:3;for(let i=0;i<n;i++){const j=rnd();if(j<0)break;hit(j,v*(1+.1*i))}}
   else if(type==='forms'){a.forms=2;a.formsP=v;q(SD.ap+ai,T('72 ร่าง','72 FORMS'),'s')}
   else if(type==='halo'){SD.A.forEach((x,j)=>{if(x.hp>0){x.halo=2;x.haloP=v;q(SD.ap+j,'✨','g')}})}
-  else if(type==='hydra'){let sum=0;for(let i=0;i<3;i++)sum+=hit(rnd(),v);if(a.hp>0&&sum>0)mend(ai,sum*.5)}
+  else if(type==='hydra'){let sum=0;for(let i=0;i<3;i++)sum+=hit(rnd(),v);if(a.hp>0&&sum>0)mend(ai,sum*.5*HK())}
   else if(type==='reflect'){a.reflect=2;a.reflectP=v;a.taunt=TAUNT_N;ward(ai,a.max*.2*a.hb)}
   else if(type==='fort'){a.taunt=TAUNT_N;SD.A.forEach((x,j)=>{if(x.hp>0)ward(j,a.max*v*a.hb)})}
   else if(type==='stand'){SD.A.forEach((x,j)=>{if(x.hp>0){x.stand=(a.s4l||1)>=3?2:1;q(SD.ap+j,'🛡','s')}})}
@@ -2829,7 +2831,7 @@ const C3_HUNT=b=>!!b&&!b.pvp&&!b.tw&&b.n>1100;
 function foeHit(e,j){hitM=!!C[e.id].m;hitA=e.atk;HIT_SRC=[bt.en,'e',bt.en.indexOf(e)];const [d,cr]=roll(e,1);hurt(bt.al,'a',j,d,'d',cr);HIT_SRC=null;
   if(bt.rule==='frost'&&!e.fz0){e.fz0=1;const t=bt.al[j];if(t.hp>0&&Math.random()<FROST_P){t.frz=1;q('a'+j,'❄ FROZEN','s')}}}
 // b173 realm rules, run at the start of every round (draw() follows). Rule damage goes through shields and never kills (it leaves at least 1 life).
-const FROST_P=.35,TIDE=.08,BURN=.03,GEAR=.06,GEAR_MAX=.6;
+const FROST_P=.35,TIDE=.045,BREATH_N=5,BURN=.016,GEAR=.035,GEAR_MAX=.6;
 function rlmChip(L,pre,f){L.forEach((x,i)=>{if(x.hp<=1)return;let d=Math.max(1,Math.round(x.max*f));if(x.sh>0){const a=Math.min(x.sh,d);x.sh-=a;d-=a}d=Math.min(d,x.hp-1);if(d>0){x.hp-=d;q(pre+i,'-'+d,'d');hits.add(pre+i)}})}
 // b182 arena storm: from round PV_STORM on, an arena fight hurts both sides for PV_STORM_F of max life per round past it (rising, through shields),
 // so two tanks that can no longer hurt each other still settle the fight instead of running to the round cap
@@ -2864,7 +2866,7 @@ async function act(ti){
     for(let i=0;i<my.en.length;i++){const e=my.en[i];if(e.hp<=0)continue;
       if(e.frz){e.frz=0;q('e'+i,'❄','s');e.done=true;continue}
       if(my.pvp){if(e.done)continue;if(!await foeGo(i))return;if(my.al.every(x=>x.hp<=0))break;continue}
-      if(e.gim==='breath'&&my.round%3===0){const L=my.al.map((x,k)=>x.hp>0?k:-1).filter(k=>k>=0);if(!L.length)break;my.log=`${C[e.id].n}: ${T(GIM.breath[0],GIM.breath[1])}`;draw();FK=null;await strike('e'+i,e.id,L.map(k=>'a'+k),-1);if(bt!==my)return;if(my.wb)L.forEach(k=>fx8('a'+k,'wb-pumpkin',{t:1,f16:1}));
+      if(e.gim==='breath'&&my.round%BREATH_N===0){const L=my.al.map((x,k)=>x.hp>0?k:-1).filter(k=>k>=0);if(!L.length)break;my.log=`${C[e.id].n}: ${T(GIM.breath[0],GIM.breath[1])}`;draw();FK=null;await strike('e'+i,e.id,L.map(k=>'a'+k),-1);if(bt!==my)return;if(my.wb)L.forEach(k=>fx8('a'+k,'wb-pumpkin',{t:1,f16:1}));
         hitM=!!C[e.id].m;hitA=e.atk;L.forEach(k=>{const [d,cr]=roll(e,.6);hurt(my.al,'a',k,d,'d',cr)});quake=true;draw();await W(440);if(bt!==my)return;continue}
       const j=foePick();if(j<0)break;my.log=`${C[e.id].n} โจมตี ${C[my.al[j].id].n}`;draw();
       FK=null;await strike('e'+i,e.id,['a'+j],-1);if(bt!==my)return;if(my.wb)fx8('a'+j,'wb-curse',{t:1,f16:1});foeHit(e,j);draw();await W(440);if(bt!==my)return}
@@ -3588,7 +3590,7 @@ const twZone=f=>Math.floor((Math.max(1,f)-1)/20)%TWZ.length,twBg=f=>bgCore(101+t
 const GIM={gate:['ประตูเหล็ก','Iron Gate','กันการโจมตี 3 ครั้งแรกทั้งหมด','blocks the first 3 hits completely'],
  raise:['ชุบชีวิต','Raise Dead','ตั้งแต่รอบ 3 ชุบลูกน้องที่ตายขึ้นมา 1 ครั้ง (เลือด 50%)','from round 3, raises its fallen minions once (50% life)'],
  rage:['คลั่ง','Rage','เลือดยิ่งน้อย ATK ยิ่งสูง สูงสุด 2 เท่า','the lower its life, the higher its ATK, up to double'],
- breath:['ลมหายใจพายุ','Storm Breath','ทุกรอบที่ 3 โจมตีทั้งทีม 60%','every 3rd round it hits your whole team for 60%'],
+ breath:['ลมหายใจพายุ','Storm Breath','ทุกรอบที่ 5 โจมตีทั้งทีม 60%','every 5th round it hits your whole team for 60%'],
  shift:['สลับเกราะ','Shifting Aegis','รอบคี่กันกายภาพ (แพ้เวท) รอบคู่กันเวท (แพ้กายภาพ)','odd rounds it resists physical (weak to magic), even rounds the reverse']};
 const gimT=id=>{const g=GIM[C[id].gim];return g?`<b>${T(g[0],g[1])}</b>: ${T(g[2],g[3])}`:''};
 function twDef(f){const s=twEq(f),z=TWZ[twZone(f)],ease=Math.min(1,E0+(1-E0)*(s-1)/29),top=ST1/TW_K,over=f>top?Math.pow(TW_GROW,f-top):1,
@@ -4090,7 +4092,7 @@ function guide(){
      T(`ผ่านด่าน ${ST1} แล้วเข้าบท 2: 6 อาณาจักร อาณาจักรละ 100 ด่าน ศัตรูเริ่มแรงกว่าด่าน ${ST1} และแรงขึ้นทีละด่าน`,`After stage ${ST1} comes Chapter 2: 6 realms of 100 stages each. Enemies start stronger than stage ${ST1} and grow stage by stage`),
      ...RLM.slice(0,6).map((R,i)=>T(`<b>${ST1+1+i*100}–${ST1+100+i*100} ${R.th}</b> · กฎสนาม ${ruleTxt(R.r==='void'?'':R.r,1)||'สลับกฎของทุกอาณาจักรทีละด่าน'} · เจ้าอาณาจักร ${C[R.l].n} (${gimT(R.l)})`,`<b>${ST1+1+i*100}–${ST1+100+i*100} ${R.n}</b> · rule ${ruleTxt(R.r==='void'?'':R.r,1)||'each stage takes one of the other realms\' rules'} · lord ${C[R.l].n} (${gimT(R.l)})`)),
      T('ชนิดด่าน: ด่านลงท้าย 0 = บอส · ด่านลงท้าย 00 = เจ้าอาณาจักร (ตัวใหญ่ ป้าย LORD มีท่าพิเศษ) · ลงท้าย 5 = ศัตรูยักษ์ตัวเดียว (ELITE) · ลงท้าย 7 = ด่านเอาตัวรอด ศัตรูอึดแต่ตีเบา อยู่รอดครบ 5 รอบก็ชนะ','Stage kinds: ending in 0 = boss · ending in 00 = realm lord (big, LORD tag, a special trick) · ending in 5 = one giant elite enemy · ending in 7 = survival: tough but soft-hitting enemies, live through 5 rounds to win'),
-     T('ดาวด่าน 3 ดวง: ★ ชนะ · ★ ไม่มีใครในทีมตาย · ★ ชนะภายใน 4 รอบ (ด่านเอาตัวรอด: เลือดรวมทีมเหลืออย่างน้อยครึ่ง) · เก็บดาวที่ดีที่สุดของแต่ละด่าน เล่นซ้ำเพื่อเก็บดาวที่ขาดได้','Stage stars: ★ win · ★ nobody in the team falls · ★ win within 4 rounds (survival: the team keeps at least half its life) · the best result per stage counts, replay to fill the missing stars'),
+     T('ดาวด่าน 3 ดวง: ★ ชนะ · ★ ไม่มีใครในทีมตาย · ★ ชนะภายใน 7 รอบ (ด่านเอาตัวรอด: เลือดรวมทีมเหลืออย่างน้อยครึ่ง) · เก็บดาวที่ดีที่สุดของแต่ละด่าน เล่นซ้ำเพื่อเก็บดาวที่ขาดได้','Stage stars: ★ win · ★ nobody in the team falls · ★ win within 7 rounds (survival: the team keeps at least half its life) · the best result per stage counts, replay to fill the missing stars'),
      T(`หีบดาว: ทุก ${STAR_CH} ดาวเปิดหีบได้ 1 ใบ ได้ผลึกอาณาจักร 💠1 + ${N(CHEST_G)} Gold (ปุ่ม 🎁 ในหน้าเลือกด่านและหน้าผลด่าน)`,`Star chests: every ${STAR_CH} stars opens a chest with 1 realm crystal 💠 + ${N(CHEST_G)} Gold (the 🎁 button on the stage and result screens)`),
      T(`ผลึกอาณาจักร 💠 ยังดรอปจากด่านบท 2: ด่านปกติ ${P(RS_DROP)} ด่านบอส ${P(RS_BOSS)} (คูณโอกาสดรอปของด่าน · VIP ×${VIP_RS}) · ชนะเจ้าอาณาจักรครั้งแรกได้ 💠${RS_LORD} + 💎${LORD_DIA} · ภารกิจรายวัน "ชนะ 10 ด่าน" ได้ 💠1 ทุกวัน (ด่านไหนก็ได้ เก็บได้ก่อนเข้าบท 2) · ด่าน 501–600 ความยากค่อยๆ ไต่ขึ้น · 🏆 ${F1100_N} ท่านแรกของเซิร์ฟเวอร์ที่ผ่านด่าน 1100 ได้การ์ด Limited Glacius Rex (ไม่มีขาย) คนถัดไปได้ 💠${F1100_LATE}`,`Realm crystals 💠 also drop in Chapter 2: ${P(RS_DROP)} on normal stages, ${P(RS_BOSS)} on bosses (times the stage drop bonus; VIP ×${VIP_RS}) · a realm lord's first defeat gives 💠${RS_LORD} + 💎${LORD_DIA} · the daily quest "win 10 stages" gives 💠1 every day (any stages, so you can collect before Chapter 2) · stages 501–600 ramp up gradually · 🏆 the first ${F1100_N} players on the server to clear stage 1100 get the Limited card Glacius Rex (never sold), later ones get 💠${F1100_LATE}`),
      T('การจัดทัพ: ทั้งสองฝ่ายยืนเป็นทรงสามเหลี่ยม ตัวที่ 2 ในทีมยืนหน้าสุดตรงกลาง ตัวที่ 1 และ 3 ยืนหลังซ้ายขวา (ตำแหน่งยืนไม่มีผลต่อดาเมจ)','Formation: both sides stand in a triangle, the 2nd card in front in the middle, the 1st and 3rd behind on either side (where a fighter stands does not change damage)')])],
@@ -4178,6 +4180,7 @@ function guide(){
      T(`Exp โปรไฟล์: ผ่านด่านใหม่ +${PL_GAIN.stage} · ภารกิจ +${PL_GAIN.quest} · PvP ชนะ +${PL_GAIN.pvpw} แพ้ +${PL_GAIN.pvpl} · หอคอยทุก 10 ชั้น +${PL_GAIN.tower} · บอสโลก +${PL_GAIN.wb} · ล็อกอินรายวัน +${PL_GAIN.login} · วันละไม่เกิน ${PL_CAP} · สูงสุด Lv.${PL_MAX}`,`Profile Exp: new stage +${PL_GAIN.stage} · quest +${PL_GAIN.quest} · PvP win +${PL_GAIN.pvpw} / loss +${PL_GAIN.pvpl} · every 10 tower floors +${PL_GAIN.tower} · world boss +${PL_GAIN.wb} · daily login +${PL_GAIN.login} · up to ${PL_CAP} a day · max Lv.${PL_MAX}`),
      T('ขึ้นเลเวล: Gold = เลเวล × 500 · ทุก 5 เลเวล +10 💎 · กรอบรูปใหม่ที่ Lv.10, 20, 30, 40, 50 · การ์ดแรงขึ้น 0.1% ต่อเลเวล (สูงสุด 5%) ไม่มีผลใน PvP','Level up: Gold = level × 500 · +10 💎 every 5 levels · new frames at Lv.10, 20, 30, 40, 50 · cards +0.1% per level (max 5%), not in PvP'),
      T('ธาตุ: ไฟ ชนะ ไม้ · ไม้ ชนะ ดิน · ดิน ชนะ น้ำ · น้ำ ชนะ ไฟ · แสงกับมืดชนะกันเอง · ตีธาตุที่ชนะทาง แรงขึ้น 20% (▲) · ตีธาตุที่แพ้ทาง เบาลง 15% (▼) · ดูธาตุได้ที่ไอคอนบนป้ายชื่อในการต่อสู้และหน้าการ์ด · มีผลทุกโหมดรวม PvP','Elements: Fire beats Wood · Wood beats Earth · Earth beats Water · Water beats Fire · Light and Dark beat each other · a strong hit deals +20% (▲), a weak hit -15% (▼) · see the icon on the battle name plate and the card page · works in every mode, PvP included'),
+     T('การต่อสู้ยาวขึ้น (b232): เลือดของทุกตัวทั้งการ์ดและมอนสเตอร์ x2 การฮีลและดูดเลือดแรงขึ้นตาม ได้ใช้สกิลครบมากขึ้น · ดาว 3 ดวงต้องชนะภายใน 7 รอบ · กฎอาณาจักร (น้ำขึ้น ไฟลวก เฟือง) เบาลงต่อรอบ · ลมหายใจบอสมาทุกรอบที่ 5 · PvP เหมือนเดิม','Longer fights (b232): every card and monster has x2 life, heals and life steal grow with it, so more skills get used · 3 stars = win within 7 rounds · realm rules (tide, burn, gears) are lighter per round · boss breath every 5th round · PvP unchanged'),
      T('อัปเดต OBT: การ์ด Rare ใหม่ Lotus Herbalist (ฮีล) และ Brass Gunner (สายยิง) · เครื่องรางใหม่ SuperLegend 3 ชิ้น (นาฬิกาทรายสะท้อน ขนนกฟีนิกซ์ เข็มทิศพายุ) จากฟิวชั่น และ Legend 3 ชิ้น (กระต่ายจันทร์ ตาพราน ไข่มุกห้วงลึก) ดรอปจากด่าน · แผนที่ใหม่ 3 แผนที่ · ทีมและมอนสเตอร์ยืนตำแหน่งต่างกันไปตามพื้นที่ของแต่ละแผนที่ · การ์ด Limited เลเวลสูงสุด 270','OBT update: new Rare cards Lotus Herbalist (healer) and Brass Gunner (shooter) · new SuperLegend amulets (Echo Hourglass, Phoenix Plume, Storm Compass) from fusion and Legend amulets (Moon Rabbit, Hunter Eye, Abyss Pearl) from stages · 3 new maps · teams and monsters line up differently to fit each map · Limited cards now reach Lv 270'),
      T(`ปลดล็อกโหมด: ห้องเทรดและตลาดกลาง Lv.${PL_LOCK.troom} · ประตูมิติและ PvP Lv.${PL_LOCK.pvp} · หอคอย Lv.${PL_LOCK.tower} · บอสโลก Lv.${PL_LOCK.wb} · วนฟาร์มด่านที่ผ่านแล้ว +${PL_GAIN.replay} Exp ต่อครั้ง`,`Mode unlocks: trade room and market Lv.${PL_LOCK.troom} · portal and PvP Lv.${PL_LOCK.pvp} · tower Lv.${PL_LOCK.tower} · world boss Lv.${PL_LOCK.wb} · replaying a cleared stage +${PL_GAIN.replay} Exp each`),
      T('หน้าโปรไฟล์: เลือกกรอบรูป และใส่รูปจากเครื่องได้ (เห็นแค่คุณ ผู้เล่นอื่นเห็นหน้าการ์ด)','Profile screen: pick a frame and use your own photo (only you see it; others see your card)')])],
@@ -4239,7 +4242,7 @@ function titleScreen(){
 }
 // ---------- Firebase: Google sign-in and one cloud save document per account (saves/{uid}) ----------
 const OBT_PAUSED_MODES=true; // b215: hide Tower, PvP and World Boss until relaunch
-const BUILD='b231';
+const BUILD='b232';
 // The game moved to its own address. Anyone opening the old address is sent on, but only once the new site answers, so a broken move cannot lock players out.
 const DISCORD='https://discord.gg/dHDzRyPG9',DC_SVG='<svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="currentColor" d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.4189-2.1568 2.4189Z"/></svg>';
 const NEW_HOME='https://pixeldeckbattle.github.io/';
