@@ -1014,6 +1014,73 @@ input:not([type="checkbox"]):not([type="radio"]),select,textarea{
   .btn,.tile,.roomb,.px{transition:none!important}
 }
 
+
+/* b215 IRONCREST: genuine replacement for legacy dock frames.
+   Only UI styling; all icon/symbol/sprite references remain unchanged. */
+:root{--ui-gold:#d9ae56;--ui-light:#ffedb0;--ui-fog:#9bd2e2}
+.dock{grid-template-columns:repeat(6,minmax(0,1fr))!important;gap:8px!important;align-items:stretch;padding:3px 0 4px}
+.dk,.dk.c1,.dk.c2,.dk.c3,.dk.c4,.dk.c5{
+  display:flex!important;position:relative!important;flex-direction:column!important;
+  align-items:center!important;justify-content:center!important;
+  gap:3px!important;min-width:0;min-height:66px;overflow:hidden!important;
+  padding:6px 5px 7px!important;
+  border:3px solid #d9ae56!important;border-image:none!important;
+  border-radius:0!important;clip-path:none!important;
+  background:linear-gradient(180deg,#7b6637 0 3px,#2b4467 3px 9px,#142b4d 9px 60%,#091932 60%)!important;
+  color:#fff1ca!important;text-shadow:1px 2px 0 #040b1d!important;
+  box-shadow:inset 0 0 0 2px #07152f,inset 0 3px 0 #ffebb4,inset 0 -4px 0 #050e21,0 4px 0 #030916,0 0 0 1px #513e20!important;
+  filter:none!important;transition:none!important
+}
+.dk:nth-child(2n){border-color:#8bc3dc!important;background:linear-gradient(180deg,#729bb6 0 3px,#293e64 3px 9px,#172e4e 9px 60%,#0a1b35 60%)!important}
+.dk:nth-child(3n){border-color:#bf97de!important}
+.dk>.ico{display:grid!important;place-items:center!important;flex:none!important}
+.dk>span:last-child{
+  position:static!important;left:auto!important;right:auto!important;bottom:auto!important;
+  display:block!important;height:auto!important;min-height:15px!important;
+  width:100%!important;margin:2px 0 0!important;
+  font-size:clamp(10px,1.13vw,14px)!important;line-height:1.1!important;
+  text-align:center!important;white-space:nowrap!important;
+  overflow:hidden!important;text-overflow:ellipsis!important;color:#fff1ca!important
+}
+.dk:is(:focus-visible,:active){border-color:#fff4bd!important;box-shadow:inset 0 0 0 2px #14304b,inset 0 3px 0 #fffbd0,0 1px 0 #030916!important}
+.dk:disabled{filter:grayscale(.85) brightness(.68)!important}
+.lobby .side{gap:8px!important;padding:4px 0 4px}
+.lobby .side .play{
+  border:4px solid #ffd46d!important;border-image:none!important;
+  border-radius:0!important;clip-path:none!important;
+  background:linear-gradient(180deg,#fff0ad 0 4px,#b76e1f 4px 11px,#9a4816 11px 65%,#572b23 65%)!important;
+  color:#fff4d9!important;animation:none!important;filter:none!important;
+  box-shadow:inset 0 0 0 2px #532714,inset 0 4px 0 #fff2b4,inset 0 -4px 0 #3b1b14,0 5px 0 #080e1e,0 0 0 2px #3b281c!important;
+  text-shadow:1px 2px 0 #56240c!important
+}
+.lobby .side .play b{color:#fff8d6!important;text-shadow:2px 2px 0 #50220e}
+.lobby .side .play:active{transform:translateY(2px)!important}
+.lobby .side .row2 .btn{min-width:0}
+.lobby .hud .pchip,.lobby .hud .pill{
+  border-image:none!important;border:2px solid #cca353!important;
+  border-radius:0!important;clip-path:none!important;
+  background:linear-gradient(180deg,#435c7d 0 3px,#122a49 3px 100%)!important;
+  box-shadow:inset 0 0 0 2px #09182e,inset 0 2px 0 #e4cb83,0 3px 0 #071021!important
+}
+.lobby .hud .pchip{border-color:#8fd0df!important}
+.lobby .row2 .btn,.lobby .side .twb{
+  border-image:none!important;border:3px solid #ba985c!important;border-radius:0!important;
+  background:linear-gradient(180deg,#476383 0 3px,#223c62 3px 60%,#10233c 60%)!important;
+  box-shadow:inset 0 2px 0 #f6e5af,0 3px 0 #071022!important;color:#fff5d4!important
+}
+.lobby .row2 .btn.alt{border-color:#86c9d9!important}
+.px,.tmenu,.amrow,.chb,.lookb,.rkrow,.pvrow,.abar,.row.avsel,.inf,
+.tile,.roomb,.btn,.tab,.pchip,.pill,.twb{border-image:none!important}
+#tui .tmenu{border:5px solid #d5a94e!important;border-image:none!important}
+#ov .cdbox,.wbdlg,.wbpan{
+  border-image:none!important;border:4px solid #bd9858!important;
+  border-radius:0!important;background:linear-gradient(180deg,#344d70 0 4px,#172b4a 4px 100%)!important;
+  box-shadow:inset 0 0 0 2px #071629,inset 0 4px 0 #edcf82,0 5px 0 #050b1c!important
+}
+button:focus-visible{outline:2px solid #ffe9a2!important;outline-offset:2px!important}
+@media(max-width:780px){.dock{gap:5px!important}.dk{min-height:60px!important;padding:5px 2px!important}.dk>span:last-child{font-size:10px!important}}
+@media(prefers-reduced-motion:reduce){.dk,.lobby .side .play{animation:none!important;transition:none!important}}
+
 </style>
 
 <div id="stage"><div id="view"></div><div id="ov"></div><div id="fsb" hidden></div><div id="tut"></div><div id="gate" hidden></div><div id="zoom" role="dialog" tabindex="-1" hidden></div></div>
@@ -1944,7 +2011,7 @@ function devGrant(){if(!isDev())return;let ch=0;
   if(!S.fd||!S.fdg){S.fd=1;S.fdg=1;ch=1}['T1.1','T2.1','T3.1','P5.1','P3.1'].forEach(c=>{if(!(S.sh||[]).includes(c)){shAdd(c);ch=1}});   // b166: the Dev account carries the FOUNDER title too
   if(ch)save()}
 function home(){wbSpdBack();if(BETA&&USER&&USER.sub&&!isDev()){location.replace('./');return}
-  bt=null;busy=false;if((S.era||1)<ERA){S=unlock(S);save();cloudFlush();return welcome()}ldInit(0);devGrant();ensureMe();grantFetch();mkPayCheck();dmRefundAll();giftTake();compTake();bcLate();if(S.f1100==='try')f1100Claim();twRoll();news189()||news182()||news180()||news176()||news174()||news167()||news165();vipDaily();plDaily();if(mkOn())wbInbox();if(wbPopQ){const q=wbPopQ;wbPopQ=null;setTimeout(()=>wbPop(q),800)}if(!S.afk){S.afk=Date.now();save()}const own=Object.keys(S.cards).length,next=Math.min(MAXST,S.cleared+1);
+  bt=null;busy=false;if((S.era||1)<ERA){S=unlock(S);save();cloudFlush();return welcome()}ldInit(0);devGrant();ensureMe();grantFetch();mkPayCheck();dmRefundAll();giftTake();compTake();bcLate();if(S.f1100==='try')f1100Claim();if(!OBT_PAUSED_MODES)twRoll();news189()||news182()||news180()||news176()||news174()||news167()||news165();vipDaily();plDaily();if(!OBT_PAUSED_MODES&&mkOn())wbInbox();if(!OBT_PAUSED_MODES&&wbPopQ){const q=wbPopQ;wbPopQ=null;setTimeout(()=>wbPop(q),800)}if(!S.afk){S.afk=Date.now();save()}const own=Object.keys(S.cards).length,next=Math.min(MAXST,S.cleared+1);
   const ico=(src,d=0)=>`<span class="ico" style="--m:url(${src});--d:${d}s"><img src="${src}" alt=""></span>`;
   const dk=(act,ic,c,t,sub,dis,d)=>`<button class="dk ${c}" ${dis?'disabled':`data-act="${act}"`}>${ico(ic,d)}<span>${t}<small>${sub}</small></span></button>`;
   view(`<div class="lobby" style="--bg:url(${mapImg(next)})"><div class="lbg"></div>
@@ -1955,7 +2022,7 @@ function home(){wbSpdBack();if(BETA&&USER&&USER.sub&&!isDev()){location.replace(
     ${vipOwn()?`<button class="pill vipp nt" data-act="vip" style="--vc:${VIPC[vipOwn()]}" title="VIP ${VIPN[vipOwn()]}"><img src="ic2/vip${vipOwn()}.webp" alt=""><b>${VIPN[vipOwn()]}</b><small>${(m=>m>=864e5?T(Math.floor(m/864e5)+' วัน',Math.floor(m/864e5)+' d'):T(Math.max(1,Math.floor(m/36e5))+' ชม.',Math.max(1,Math.floor(m/36e5))+' h'))(S.vip-Date.now())}</small></button>`:''}
     <span class="pill gold nt" title="Gold">${ico(UI.coin,.3)}${S.gold.toLocaleString('en')}</span>
     <button class="pill exb nt" data-act="exg" title="${T('แลก Gold เป็นเพชร','Gold to diamonds')}">⇄ <b>${T('แลกเพชร','Exchange')}</b></button>
-    <button class="pill acp nt" data-act="pvp" title="Arena coin">${ico(UI.acoin,1.5)}${(S.ac||0).toLocaleString('en')}</button>
+    ${!OBT_PAUSED_MODES?`<button class="pill acp nt" data-act="pvp" title="Arena coin">${ico(UI.acoin,1.5)}${(S.ac||0).toLocaleString('en')}</button>`:''}
     <button class="pill dia nt" data-act="topup" title="Diamond">${ico(UI.gem,2.7)}${(S.dia||0).toLocaleString('en')}<b class="plus">+</b></button>
     <button class="ibtn mailb nt" data-act="mail" title="${T('กล่องจดหมาย','Mailbox')}" aria-label="Mailbox">📬<i class="badge" id="mailbdg" ${mailN()?'':'hidden'}>${mailN()}</i></button>
     <button class="ibtn dcb" data-act="discord" title="Discord" aria-label="Discord">${DC_SVG}</button>
@@ -1968,8 +2035,8 @@ function home(){wbSpdBack();if(BETA&&USER&&USER.sub&&!isDev()){location.replace(
     <div class="side">
      <div class="row2"><button class="btn sm" data-act="afk" ${afkGold()<1?'disabled':''}>${ico(UI.afk,2)}<span>ออฟไลน์</span> <i class="nt" id="afkv">+${afkGold().toLocaleString('en')}</i></button><button class="btn alt sm" data-act="quests">${ico(UI.quest,4.2)}<span>ภารกิจ</span>${qReady()?` <i class="nt badge">${qReady()}</i>`:''}</button></div>
      ${wbOpen()||wbShopOpen()?'':`<div class="pgl"><span>ผ่านแล้ว ${S.cleared}/${MAXST} ด่าน · มีการ์ด ${own}/${NC} ใบ</span><div class="hp xp"><i style="width:${S.cleared/MAXST*100}%"></i></div></div>`}
-     ${wbOpen()||wbShopOpen()?`<button class="twb wbl nt" data-act="wbhub"><span class="wbdki"></span><span><b>${T('บอสโลก 🎃','WORLD BOSS 🎃')}</b><small>${wbOpen()?T('ปาร์ตี้','Party')+' · '+wbLeft():T('ร้านลูกอมยังเปิด','Candy shop open')}</small></span></button>`:''}
-     <button class="twb nt" data-act="tower">${shBadge('T1.'+twSeason(twWeek()),34)}<span><b>TOWER</b><small>S${twSeason(twWeek())} · ${T('ชั้น','floor')} ${twGet().f}${twRank()?' · #'+twRank():''} · ${T('เหลือ','ends in')} ${twLeft()}</small></span></button>
+     ${!OBT_PAUSED_MODES&&(wbOpen()||wbShopOpen())?`<button class="twb wbl nt" data-act="wbhub"><span class="wbdki"></span><span><b>${T('บอสโลก 🎃','WORLD BOSS 🎃')}</b><small>${wbOpen()?T('ปาร์ตี้','Party')+' · '+wbLeft():T('ร้านลูกอมยังเปิด','Candy shop open')}</small></span></button>`:''}
+     ${!OBT_PAUSED_MODES?`<button class="twb nt" data-act="tower">${shBadge('T1.'+twSeason(twWeek()),34)}<span><b>TOWER</b><small>S${twSeason(twWeek())} · ${T('ชั้น','floor')} ${twGet().f}${twRank()?' · #'+twRank():''} · ${T('เหลือ','ends in')} ${twLeft()}</small></span></button>`:''}
      <button class="play" data-act="prep"><small>ด่านถัดไป</small><b class="nt">STAGE ${next}</b><span>ตะลุยด่าน <i class="nt" style="font-style:normal">▶</i></span></button>
     </div>
    </div>
@@ -1980,7 +2047,7 @@ function home(){wbSpdBack();if(BETA&&USER&&USER.sub&&!isDev()){location.replace(
     ${dk('fusehub',UI.fuse,'c4','ฟิวชั่น',T('การ์ด / เครื่องราง','Cards / amulets'),0,1.5)}
     ${dk('market',UI.market,'c4','ตลาดกลาง','ซื้อขายด้วย Gold',0,1.8)}
     ${dk('troom',UI.trade,'c5','ห้องเทรด','ห้องละ 10 คน',0,2.4)}
-    ${dk('pvp',UI.cup,'c2','PvP','อารีน่า',0,3)}
+    ${!OBT_PAUSED_MODES?dk('pvp',UI.cup,'c2','PvP','อารีน่า',0,3):''}
    </nav>
    </div>`);onlShow();onlineTick();refReport();refFetch();
 }
@@ -2892,6 +2959,7 @@ setInterval(()=>{if(typeof S!=='undefined'&&S&&S.tut!=null)tutSync()},350);addEv
 /* ---------- input ---------- */
 $('view').onclick=ev=>{{const w=ev.target.closest('.dk,.ibtn,.pill,.row2 .btn');if(w&&!w.disabled&&w.dataset.act&&w.querySelector('.ico')&&!w._w&&!RM){w._w=1;w.classList.add('wig');try{sfx('tap')}catch(e){}setTimeout(()=>{if(w.isConnected)w.click()},170);return}}
   const t=ev.target.closest('[data-act]');if(!t||t.disabled)return;const a=t.dataset.act,id=t.dataset.id;
+  if(OBT_PAUSED_MODES&&(a==='tower'||a==='pvp'||a==='asbuy'||a.startsWith('wb')||a.startsWith('tw')||a.startsWith('pv')))return;
   if(a.slice(0,2)==='wb'&&wbClick(a,t))return;
   if(a!=='reset')armed=false;
   if(a==='home')home();
@@ -3293,7 +3361,7 @@ function asBuy(k){const c=AS_COST[k];if(!c||(S.ac||0)<c)return;S.ac-=c;let got;
   else if(k==='stone'){S.ss=(S.ss||0)+1;got={k}}
   else if(vbHold()){vbStore(AS_VIP,1,1);got={k,bag:1}}else{vipAdd(AS_VIP,1,1);got={k}}
   pv.got=got;save();sfx('win');arena()}
-function arena(){const me=pvGet(),r=rankOf(me.st),left=isDev()?'∞':Math.max(0,PV_DAILY-me.n),can=(isDev()||me.n<PV_DAILY)&&Object.keys(S.cards).length>0,tab=pv.tab||'hub';pvOpps();
+function arena(){if(OBT_PAUSED_MODES)return home();const me=pvGet(),r=rankOf(me.st),left=isDev()?'∞':Math.max(0,PV_DAILY-me.n),can=(isDev()||me.n<PV_DAILY)&&Object.keys(S.cards).length>0,tab=pv.tab||'hub';pvOpps();
   const st={guest:T('ล็อกอิน Google เพื่อเจอผู้เล่นจริง ตอนนี้สู้กับบอทได้','Sign in with Google to meet real players. Bots are available now.'),load:T('กำลังโหลด…','Loading…'),err:T('เชื่อมต่ออารีน่าไม่ได้ ตอนนี้สู้กับบอทได้','Arena offline. Bots are available.'),ok:'',idle:''}[pv.state];
   const head=t=>`<div class="row" style="align-self:start;justify-self:start"><button class="btn alt sm" data-act="pvtab" data-t="hub">${T('กลับ','Back')}</button><h2>${t}</h2></div>`;
   if(tab==='shop'){const ac=S.ac||0,g=pv.got,box=(k,ic,name,desc)=>`<div class="dpk px asb"><span class="asi">${ic}</span><b>${name}</b><small>${desc}</small><button class="btn go sm" data-act="asbuy" data-k="${k}" ${ac<AS_COST[k]?'disabled':''}>${acoin(AS_COST[k])}</button></div>`;
@@ -3499,7 +3567,7 @@ const wbIc=(k,h=28)=>`<img class="wbic" src="${{cdy:'wb/candy.webp',sl:'wb/soul.
 const wbCur=()=>`<div class="wbcur nt"><span>${wbIc('cdy',20)}${(S.cdy||0).toLocaleString('en')}</span><span>${wbIc('sl',20)}${S.sl||0}</span><span>${wbIc('dia',20)}${(S.dia||0).toLocaleString('en')}</span></div>`;
 const wbTop=(t,back)=>`<header class="wbh"><button class="wbrd" data-act="${back}" aria-label="${T('กลับ','Back')}"><img src="ui2/round-2.webp" alt=""></button><div class="wbrib nt"><span>${t}</span></div><span class="wbleft nt">${wbOpen()?wbLeft():''}</span>${wbCur()}</header>`;
 const wbPage=(cls,head,body)=>`<div class="wbv nt ${cls}"><div class="wbbg"></div>${head}<div class="wbbody">${body}</div></div>`;
-function wbHub(){wbSpdBack();if(!wbOpen()&&!wbShopOpen())return home();wbS();wbInbox();const draw=()=>{const s=wbAt(wbSrv.dmg),w=wbS(),rage=wbRage(s),r=wbMyRank(),can=wbOpen()&&!s.done;
+function wbHub(){if(OBT_PAUSED_MODES)return home();wbSpdBack();if(!wbOpen()&&!wbShopOpen())return home();wbS();wbInbox();const draw=()=>{const s=wbAt(wbSrv.dmg),w=wbS(),rage=wbRage(s),r=wbMyRank(),can=wbOpen()&&!s.done;
   view(wbPage('hub'+(rage?' rage':''),wbTop('🎃 '+T('บอสโลก','World Boss'),'home'),`
    <section class="wbshow"><div class="wbname"><b>${WB.n}</b><i>Lv.${s.L}</i></div><div class="wbstage"><span class="spr f16"><i><img src="spr/${rage?'wb1r':'wb1'}.webp" alt=""></i></span></div>
     <p class="wbtip">${rage?`<b>${T('คลั่ง!','RAGE!')}</b> ${T('ตีแรงขึ้น · ลูกอม ×1.5','harder hits · candy ×1.5')}`:T('แพ้เวท · พาแท้งค์ไปรับคำสาป','Weak to magic · bring a tank')}</p></section>
@@ -3652,7 +3720,7 @@ function twTable(w,live){const b=twB[w]||{state:'idle',list:[]},uid=USER&&USER.s
 
 /* tower screen */
 const twEnemies=f=>twDef(f).map(e=>(e.boss?'<b style="color:#ff8a7a">BOSS</b> ':'')+C[e.id].n+(resRamp(twEq(f))>0&&resKind(e.id)&&e.gim!=='shift'?` <b style="color:${weakOf(e.id,twEq(f))==='m'?'#b9a2ff':'#ffb27a'}">(${weakTxt(weakOf(e.id,twEq(f)))})</b>`:'')).join(', ');
-function tower(){bt=null;busy=false;twTok++;loop=0;const t=twGet(),w=t.w,next=t.f+1,z=TWZ[twZone(next)],open=isDev()||(S.cleared||0)>=TW_OPEN,r=twRank(),nb=Math.ceil(next/10)*10,bz=TWZ[twZone(nb)],nm=Object.keys(TW_MS).map(Number).find(k=>k>t.f);
+function tower(){if(OBT_PAUSED_MODES)return home();bt=null;busy=false;twTok++;loop=0;const t=twGet(),w=t.w,next=t.f+1,z=TWZ[twZone(next)],open=isDev()||(S.cleared||0)>=TW_OPEN,r=twRank(),nb=Math.ceil(next/10)*10,bz=TWZ[twZone(nb)],nm=Object.keys(TW_MS).map(Number).find(k=>k>t.f);
   S.team=S.team.filter(id=>S.cards[id]);if(twTab==='board')twFetch(w,1);else if(twTab==='last'&&w>TW_W0)twFetch(w-1,1);twPush();
   const tabs=[['board',T('อันดับ','Ranking')],['last',T('ซีซั่นก่อน','Last season')],['prize',T('รางวัล','Rewards')],['team',T('จัดทีม','Team')]];
   const main=twTab==='team'?`<p class="sub" style="margin-bottom:6px">${T('แตะการ์ดเพื่อเลือกเข้าทีม สูงสุด 3 ใบ (ทีมเดียวกับด่านปกติ)','Tap cards to add them, up to 3 (the same team as normal stages)')}</p><div class="grid big">${byRank(Object.keys(C).filter(id=>S.cards[id])).map(id=>{const k=S.team.indexOf(id);return `<div>${full(id,`data-act="twpick" data-id="${id}" aria-pressed="${k>=0}"`,'glow'+(k>=0?' sel':'')).replace('</button>',(k>=0?`<span class="ord">${k+1}</span>`:'')+'</button>')}<p class="sub cap">Lv ${S.cards[id].lv}</p></div>`}).join('')}</div>`
@@ -4000,7 +4068,8 @@ function titleScreen(){
    <p class="cfoot nt">PixelDeckBattle · CBT build ${BUILD}</p></div>`);
 }
 // ---------- Firebase: Google sign-in and one cloud save document per account (saves/{uid}) ----------
-const BUILD='b214';
+const OBT_PAUSED_MODES=true; // b215: hide Tower, PvP and World Boss until relaunch
+const BUILD='b215';
 // The game moved to its own address. Anyone opening the old address is sent on, but only once the new site answers, so a broken move cannot lock players out.
 const DISCORD='https://discord.gg/dHDzRyPG9',DC_SVG='<svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="currentColor" d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.4189-2.1568 2.4189Z"/></svg>';
 const NEW_HOME='https://pixeldeckbattle.github.io/';
@@ -4118,6 +4187,7 @@ document.addEventListener('focusin',ev=>{const n=ev.target,chat=n.id==='chi';if(
   $('kbo').onclick=()=>done(true);$('kbc').onclick=()=>done(false);i.onkeydown=e=>{if(e.key==='Enter')done(true)};setTimeout(()=>i.focus(),30)});
 S=load();try{const l=localStorage.getItem('pdb_lang');if(l&&!USER)S.lang=l}catch(e){}document.documentElement.lang=S.lang||'th';USER?loading(USER.sub?cloudPull().catch(()=>{}):null):titleScreen();
 </script>
+
 
 
 <a href="https://pixelpicked.com/game/3QqeaUhmbSp/pixeldeck-battle" target="_blank" rel="noopener">
