@@ -893,30 +893,34 @@ h1{color:#f2d98a;text-shadow:0 3px 0 #7a4a1c,0 6px 0 #0a1019}h2{color:#f2d98a;te
 .vpt i{position:absolute;inset:0;background:url(ui/vault/portal.webp) 0 0/1600% 100% no-repeat;animation:fxs 2s steps(16,jump-none) infinite}
 .vpt span{position:absolute;left:50%;bottom:-16px;transform:translateX(-50%);font:700 11px var(--display);color:#f3d9ff;text-shadow:0 0 6px #8a3dff,1px 1px 0 #1a0630;white-space:nowrap}
 @keyframes vptbob{50%{transform:translateY(-4px)}}
-.vlt .vfl{background:radial-gradient(ellipse at 50% 40%,#3a2a6a,#0d0a20 75%)}
-.varena{position:absolute;background:url(bg/vault.webp) center/100% 100% no-repeat;image-rendering:auto}
+.vlt .vfl{background:#0d0a20}.vlt .vfl::before{content:"";position:absolute;inset:-30px;background:url(bg/vault.webp) center/cover;filter:blur(18px) brightness(.5) saturate(1.2)}
+.varena{position:absolute;background:url(bg/vault.webp) center/100% 100% no-repeat;image-rendering:auto;box-shadow:0 0 40px 20px rgba(13,10,32,.85)}
 .vcage{position:absolute;pointer-events:none;image-rendering:pixelated}
-.vchest{position:absolute;width:13%;filter:drop-shadow(0 0 8px rgba(255,210,90,.6));aspect-ratio:200/160;transform:translate(-50%,-100%);pointer-events:none}
+.vchest{position:absolute;filter:drop-shadow(0 0 8px rgba(255,210,90,.5));aspect-ratio:200/160;transform:translate(-50%,-100%);pointer-events:none}
 .vchest i{position:absolute;inset:0;background:url(ui/vault/chest.webp) 0 0/1600% 100% no-repeat;animation:vchI 1s steps(8,jump-none) infinite}
 .vchest.open i{animation:vchO .9s steps(8,jump-none) 1 forwards}
 @keyframes vchI{from{background-position:0 0}to{background-position:46.6667% 0}}
 @keyframes vchO{from{background-position:53.3333% 0}to{background-position:100% 0}}
-.vlab{position:absolute;left:50%;bottom:104%;transform:translateX(-50%);white-space:nowrap;font:700 12px var(--display);color:#ffe9a0;background:rgba(14,10,36,.85);border:2px solid #d9a84a;padding:1px 8px;text-shadow:1px 1px 0 #000}
-.vchest.card .vlab{color:#9fd8ff;border-color:#6fb7ff;box-shadow:0 0 10px rgba(110,180,255,.7)}
-.vchest.open .vlab{opacity:.45}
-.vav{position:absolute;transform:translate(-50%,-100%) scale(.85);transform-origin:50% 100%;pointer-events:none;display:flex;flex-direction:column;align-items:center}
+.vlab{position:absolute;transform:translateX(-50%);white-space:nowrap;font:700 12px var(--display);color:#ffe9a0;background:rgba(14,10,36,.85);border:2px solid #d9a84a;padding:1px 8px;text-shadow:1px 1px 0 #000}
+.vlab.card{color:#9fd8ff;border-color:#6fb7ff;box-shadow:0 0 10px rgba(110,180,255,.7)}
+.vlab.done{opacity:.45}
+.vav{position:absolute;margin:0;width:auto;transform:translate(-50%,-100%) scale(var(--dz,1));transform-origin:50% 100%;pointer-events:none;display:flex;flex-direction:column;align-items:center}
+.vav .spr{height:calc(var(--ah,400px)*.21)}
+.vav.hurt .wk{animation:vhurt .35s steps(2) 1}@keyframes vhurt{50%{filter:brightness(2.2) sepia(1) hue-rotate(-40deg) saturate(4);transform:translateX(3px)}}
+.vring{position:absolute;width:calc(var(--aw,800px)*.15);aspect-ratio:1/.45;transform:translate(-50%,-50%);border-radius:50%;border:2px solid rgba(255,214,110,.75);background:radial-gradient(closest-side,rgba(255,200,80,.0) 60%,rgba(255,200,80,.22));box-shadow:0 0 10px rgba(255,200,80,.35),inset 0 0 8px rgba(255,200,80,.25);pointer-events:none}
+.vring.hit{animation:vring .35s ease-out 1}@keyframes vring{0%{background:radial-gradient(closest-side,rgba(255,240,180,.55) 40%,rgba(255,200,80,.35));border-color:#fff6c8}100%{}}
 .vav .vhp{display:block;width:46px;height:5px;background:#300;border:1px solid #000;margin-bottom:2px}
 .vav .vhp i{display:block;height:100%;width:calc(var(--hp,1)*100%);background:linear-gradient(#7dff8a,#24b34a)}
 .vav.me .vhp i{background:linear-gradient(#ffe36e,#f5a11a)}
 .vav.opening::before{content:"";position:absolute;left:50%;top:-14px;width:56px;height:7px;margin-left:-28px;background:linear-gradient(90deg,#b98bff calc(var(--op,0)*100%),rgba(0,0,0,.6) 0);border:1px solid #fff;z-index:2}
-.vav .vgh{display:none;width:58px;height:58px;background:url(ui/vault/ghost.webp) 0 0/1600% 100% no-repeat;animation:fxs 2s steps(16,jump-none) infinite;transform:scaleX(-1)}
+.vav .vgh{display:none;width:calc(var(--ah,400px)*.15);height:calc(var(--ah,400px)*.15);background:url(ui/vault/ghost.webp) 0 0/1600% 100% no-repeat;animation:fxs 2s steps(16,jump-none) infinite;transform:scaleX(-1)}
 .vav.flip .vgh{transform:none}
 .vav.dead .wk,.vav.dead .vhp{display:none}.vav.dead .vgh{display:block;opacity:.85}.vav.dead{filter:drop-shadow(0 0 6px rgba(160,220,255,.8))}
 .vav .nm{font-size:11px}
 .vfx{position:absolute;pointer-events:none;transform:translate(-50%,-50%)}
-.vfx.slash{width:70px;height:79px;background:url(fx/slash.webp) 0 0/600% 100% no-repeat;animation:fxs .4s steps(6,jump-none) 1 forwards}
+.vfx.slash{width:calc(var(--aw,800px)*.13);aspect-ratio:133/150;background:url(fx/slash.webp) 0 0/600% 100% no-repeat;animation:fxs .4s steps(6,jump-none) 1 forwards}
 .vfx.slash.fl{transform:translate(-50%,-50%) scaleX(-1)}
-.vfx.burst{width:120px;height:120px;background:url(ui/vault/burst.webp) 0 0/1600% 100% no-repeat;animation:fxs 1s steps(16,jump-none) 1 forwards}
+.vfx.burst{width:calc(var(--aw,800px)*.14);height:calc(var(--aw,800px)*.14);background:url(ui/vault/burst.webp) 0 0/1600% 100% no-repeat;animation:fxs 1s steps(16,jump-none) 1 forwards}
 .vdmg{position:absolute;transform:translate(-50%,0);font:800 16px var(--display);color:#ff6b6b;text-shadow:1px 1px 0 #000,-1px -1px 0 #000;pointer-events:none;animation:vdmg .9s ease-out forwards;z-index:9500}
 .vdmg.me{color:#ffd23a}
 @keyframes vdmg{to{transform:translate(-50%,-26px);opacity:0}}
@@ -924,7 +928,10 @@ h1{color:#f2d98a;text-shadow:0 3px 0 #7a4a1c,0 6px 0 #0a1019}h2{color:#f2d98a;te
 .vmsg.on{animation:vmsg 3.2s ease forwards}
 @keyframes vmsg{0%,85%{opacity:1}100%{opacity:0}}
 .vbtn{position:absolute;z-index:9998;border:3px solid #f2c14e;border-radius:50%;color:#fff;font:800 22px var(--display);display:grid;place-items:center;line-height:1;text-shadow:1px 1px 0 #000;touch-action:manipulation}
-.vatk{right:16px;bottom:14px;width:78px;height:78px;background:radial-gradient(#d9433a,#7a1218)}
+.vatk{right:max(16px,env(safe-area-inset-right,0px));bottom:14px;width:84px;height:84px;background:radial-gradient(circle at 50% 35%,#ff6a55,#b0221e 60%,#5e0d12);box-shadow:0 4px 0 #2a0508,0 0 14px rgba(255,90,60,.45)}
+.vatk:active{transform:translateY(2px);box-shadow:0 2px 0 #2a0508}
+.vatk::after{content:"";position:absolute;inset:-3px;border-radius:50%;pointer-events:none;background:conic-gradient(rgba(0,0,0,.55) var(--cd,0%),transparent 0)}
+.vatk.vcd::after{animation:vcd .8s linear 1 forwards}@property --cd{syntax:'<percentage>';inherits:false;initial-value:0%}@keyframes vcd{from{--cd:100%}to{--cd:0%}}
 .vatk small{font-size:11px}
 .vopen{right:104px;bottom:18px;width:auto;height:46px;border-radius:12px;padding:0 14px;font-size:14px;background:linear-gradient(#a06bff,#5a2ab5)}
 .vopen.busy{animation:vpulse .6s ease-in-out infinite alternate}
@@ -1429,8 +1436,8 @@ function enterRoom(){
    being hit opens it; the first to touch the chest gets what is written on it (Gold / diamonds / a Rare card, amount secret).
    A new chest every 15 minutes (4 per event); the dead float as ghosts until the next chest. Dev can always test.
    No new Firebase rules: every player writes only their own node; the chest goes to the earliest server-time claim. */
-const VLT_H=[3,7,12,17,22],VLT_RD=15,VLT_HP=10,VLT_CD=800,VLT_OPEN=5000,VLT_SP=.30;
-const VLT_FLOOR={cx:.5,cy:.63,rx:.47,ry:.29},VLT_CAGE={x0:.645,x1:.975,y0:.42,y1:.655},VLT_GATE={x:.81,y:.705},VLT_CHEST={x:.81,y:.545};
+const VLT_H=[3,7,12,17,22],VLT_RD=15,VLT_HP=10,VLT_CD=800,VLT_OPEN=5000,VLT_SP=.30,VLT_R=.075,VLT_AR=941/1672;   // VLT_R: hit radius in arena widths (the ring drawn under your feet)
+const VLT_FLOOR={cx:.5,cy:.63,rx:.47,ry:.29},VLT_CAGE={x0:.645,x1:.975,y0:.42,y1:.655},VLT_GATE={x:.81,y:.705},VLT_CHEST={x:.81,y:.60},VLT_CHEST_ART={x:.81,y:.483,yo:.568,w:.115};   // ART y = chest base behind the closed gate, yo = on the open cage floor   // CHEST = where you touch it, ART = its base on the cage floor
 let vlt=null,vltSeenWin='';
 const vltRng=s=>{let h=1779033703^s.length;for(let i=0;i<s.length;i++){h=Math.imul(h^s.charCodeAt(i),3432918353);h=h<<13|h>>>19}return()=>{h=Math.imul(h^h>>>16,2246822507);h=Math.imul(h^h>>>13,3266489909);return((h^=h>>>16)>>>0)/4294967296}};
 function vltWin(){const d=new Date(Date.now()+7*3600e3),h=d.getUTCHours(),m=d.getUTCMinutes(),s=d.getUTCSeconds(),live=VLT_H.includes(h);
@@ -1457,15 +1464,15 @@ function vltGo(){const w=vltWin();if(!w)return toast(T('ประตูมิต
 function vltEnter(w){ensureMe();const no=roomNo||0;
   view(`<div class="troom px vlt"><div class="atop"><span class="num">${T('ห้องสมบัติมิติ','Vault')} ${no+1} · <span class="nt" id="vcount">1/${ROOM_CAP}</span> ${T('คน','players')}</span><span class="alog nt" id="vinfo"></span>
     <span class="row"><button class="btn alt sm" data-act="vltout">${T('ออก','Leave')}</button></span></div>
-    <div class="tfloor vfl" id="vfl"><div class="varena" id="varena"><img class="vcage" id="vcage" src="ui/vault/cage0.webp" alt=""><div class="vchest" id="vchest"><i></i><span class="vlab nt" id="vlab"></span></div></div>
+    <div class="tfloor vfl" id="vfl"><div class="varena" id="varena"><img class="vcage" id="vcage" src="ui/vault/cage0.webp" alt=""><img class="vcage" id="vcagef" src="ui/vault/cage0f.webp" alt=""><div class="vchest" id="vchest"><i></i><span class="vlab nt" id="vlab"></span></div></div>
       <div class="vmsg nt" id="vmsg"></div><div class="joy" id="joy"><i></i></div>
       <button class="vbtn vopen nt" data-act="vltopen" id="vopen" hidden>${T('เปิดประตู','Open gate')}</button><button class="vbtn vatk nt" data-act="vltatk" id="vatk">⚔<small>${T('ตี','Hit')}</small></button></div></div>`);
   const fl=$('vfl'),ar=$('varena');
   vlt={w,no,base:null,me:null,data:{},P:{},seen:{},hp:VLT_HP,dead:0,op:0,rk:w.rk,cd:0,claim:null,x:.3,y:.68,tx:.3,ty:.68,face:false,joy:null,last:0,fl,ar};
-  const V=vlt,lay=()=>{const fw=fl.clientWidth,fh=fl.clientHeight,aw=Math.min(fw,fh*1672/941),ah=aw*941/1672;ar.style.width=aw+'px';ar.style.height=ah+'px';ar.style.left=(fw-aw)/2+'px';ar.style.top=(fh-ah)/2+'px';V.aw=aw;V.ah=ah};lay();V.lay=lay;
-  const cg=$('vcage');cg.style.left=(VLT_CAGE.x0-.02)*100+'%';cg.style.width=(VLT_CAGE.x1-VLT_CAGE.x0+.04)*100+'%';cg.style.bottom=(1-VLT_CAGE.y1-.035)*100+'%';cg.style.zIndex=Math.round((VLT_CAGE.y1+.01)*1000);
-  const ch=$('vchest');ch.style.left=VLT_CHEST.x*100+'%';ch.style.top=VLT_CHEST.y*100+'%';ch.style.zIndex=Math.round((VLT_CAGE.y1+.01)*1000)+1;   // drawn over the cage bars so the chest and its label stay readable
-  V.mine=vltAv('me',{n:S.me.name,l:S.me.look});
+  const V=vlt,lay=()=>{const fw=fl.clientWidth,fh=fl.clientHeight,aw=Math.min(fw,fh*1672/941),ah=aw*941/1672;ar.style.width=aw+'px';ar.style.height=ah+'px';ar.style.left=(fw-aw)/2+'px';ar.style.top=(fh-ah)/2+'px';ar.style.setProperty('--aw',aw+'px');ar.style.setProperty('--ah',ah+'px');V.aw=aw;V.ah=ah};addEventListener('resize',lay);lay();V.lay=lay;
+  for(const id of ['vcage','vcagef']){const cg=$(id);cg.style.left=(VLT_CAGE.x0-.02)*100+'%';cg.style.width=(VLT_CAGE.x1-VLT_CAGE.x0+.04)*100+'%';cg.style.bottom=(1-VLT_CAGE.y1-.035)*100+'%'}
+  const ch=$('vchest');ch.style.left=VLT_CHEST_ART.x*100+'%';ch.style.top=VLT_CHEST_ART.y*100+'%';ch.style.width=VLT_CHEST_ART.w*100+'%';const lb=$('vlab');ar.append(lb);lb.style.left=VLT_CHEST.x*100+'%';lb.style.top='9%';lb.style.zIndex=8000;
+  V.ring=document.createElement('i');V.ring.className='vring';ar.append(V.ring);V.mine=vltAv('me',{n:S.me.name,l:S.me.look});
   // joystick: same feel as the trade room, in arena units
   {const j=$('joy'),k=j.firstElementChild;let pid=null;
    const mv=e=>{const b=j.getBoundingClientRect(),p=innerHeight>innerWidth,cx=b.left+b.width/2,cy=b.top+b.height/2;let dx=e.clientX-cx,dy=e.clientY-cy;if(p)[dx,dy]=[dy,-dx];const r=b.width/2/(uiK()||1),sc=1/(uiK()||1);dx*=sc;dy*=sc;const d=Math.hypot(dx,dy)||1,m=Math.min(1,d/(r*.62));V.joy=m<.18?null:{x:dx/d*m,y:dy/d*m};k.style.transform=`translate(${dx/d*Math.min(d,r*.62)}px,${dy/d*Math.min(d,r*.62)}px)`};
@@ -1490,20 +1497,21 @@ function vltState(){const V=vlt,rk=V.rk,d=V.data||{},me=USER&&USER.sub;let gate=
   claims.sort((a,b)=>a.t-b.t||(a.u<b.u?-1:1));return{gate,win:claims[0]||null}}
 function vltRound(first){const V=vlt,w=vltWin();if(!w){$('vmsg').textContent=T('ประตูมิติปิดแล้ว กำลังกลับห้องเทรด…','The portal has closed. Back to the trade room…');setTimeout(()=>{if(vlt===V){vltOff(V);enterRoom()}},3000);V.closed=1;return}
   V.w=w;if(first||w.rk!==V.rk){V.rk=w.rk;V.hp=VLT_HP;V.dead=0;V.op=0;V.claim=null;V.gateLocal=null;V.mine.el.classList.remove('dead');
-    V.kind=vltKinds(w.id,V.no)[w.rd];$('vlab').innerHTML=`${vltKindIco(V.kind)} ${vltKindTxt(V.kind)}`;$('vchest').classList.toggle('card',V.kind==='card');
+    V.kind=vltKinds(w.id,V.no)[w.rd];$('vlab').innerHTML=`${vltKindIco(V.kind)} ${vltKindTxt(V.kind)}`;$('vlab').classList.toggle('card',V.kind==='card');
     if(!first)vltMsg(T('หีบใหม่มาแล้ว! ทุกคนฟื้นคืนชีพ','A new chest! Everyone is back to life'));vltSend(1)}}
 function vltMsg(t){const m=$('vmsg');if(!m)return;m.textContent=t;m.classList.remove('on');void m.offsetWidth;m.classList.add('on')}
 function vltFx(cls,x,y,ms){const V=vlt;if(!V)return;const e=document.createElement('span');e.className='vfx '+cls;e.style.left=x*100+'%';e.style.top=y*100+'%';e.style.zIndex=9000;V.ar.append(e);setTimeout(()=>e.remove(),ms)}
 function vltFloat(x,y,txt,cls){const V=vlt;if(!V)return;const e=document.createElement('span');e.className='vdmg nt '+(cls||'');e.textContent=txt;e.style.left=x*100+'%';e.style.top=y*100+'%';V.ar.append(e);setTimeout(()=>e.remove(),900)}
 function vltAtk(){const V=vlt;if(!V||V.dead||V.closed)return;const t=Date.now();if(t-V.cd<VLT_CD)return;V.cd=t;
   const sp=V.mine.el.querySelector('.spr');if(sp){sp.classList.remove('atk');void sp.offsetWidth;sp.classList.add('atk');setTimeout(()=>sp.classList.remove('atk'),800)}
-  sfx&&sfx('slash');V.op=0;const fx=V.x+(V.face?-.05:.05);vltFx('slash'+(V.face?' fl':''),fx,V.y-.09,400);
+  sfx&&sfx('slash');V.op=0;V.at=t;vltFx('slash'+(V.face?' fl':''),V.x+(V.face?-.012:.012),V.y-.06,400);V.ring.classList.remove('hit');void V.ring.offsetWidth;V.ring.classList.add('hit');
+  const ab=$('vatk');if(ab){ab.classList.remove('vcd');void ab.offsetWidth;ab.classList.add('vcd')}
   for(const [u,p] of Object.entries(V.P))if(!p.dead&&vltHits(V.x,V.y,V.face,p.x,p.y))vltFloat(p.x,p.y-.2,'-1');
   if(V.me)V.me.update({a:{t,x:+V.x.toFixed(4),y:+V.y.toFixed(4),f:V.face?1:0},op:0}).catch(()=>{})}
-const vltHits=(ax,ay,face,x,y)=>{const dx=x-ax;return Math.abs(y-ay)<.075&&(face?dx<.015&&dx>-.1:dx>-.015&&dx<.1)};
+const vltHits=(ax,ay,face,x,y)=>Math.hypot(x-ax,(y-ay)*VLT_AR/.45)<=VLT_R;   // the ring is an ellipse 0.45 as tall as wide
 function vltOpen(){const V=vlt;if(!V||V.dead||V.closed)return;const st=vltState();if(st.gate||st.win)return;if(Math.hypot(V.x-VLT_GATE.x,(V.y-VLT_GATE.y)*1.5)>.07)return vltMsg(T('ไปยืนหน้าประตูกรงก่อน','Stand at the cage gate first'));
   V.op=Date.now();V.opX=V.x;V.opY=V.y;vltSend(1);vltMsg(T('กำลังเปิดประตู… ห้ามโดนตี!','Opening the gate… don\'t get hit!'))}
-function vltHurt(){const V=vlt;if(V.dead)return;V.hp=Math.max(0,V.hp-1);vltFloat(V.x,V.y-.2,'-1','me');vltFx('slash',V.x,V.y-.09,400);sfx&&sfx('slash');
+function vltHurt(){const V=vlt;if(V.dead)return;V.hp=Math.max(0,V.hp-1);vltFloat(V.x,V.y-.2,'-1','me');V.mine.el.classList.remove('hurt');void V.mine.el.offsetWidth;V.mine.el.classList.add('hurt');sfx&&sfx('slash');
   if(V.op){V.op=0;vltMsg(T('โดนตี! การเปิดประตูถูกยกเลิก','Hit! Opening cancelled'))}
   if(!V.hp){V.dead=1;vltFx('burst',V.x,V.y-.08,1000);V.mine.el.classList.add('dead');vltMsg(T('คุณตายแล้ว กลายเป็นวิญญาณ รอหีบใหม่เพื่อฟื้น หรือกดออก','You died and became a ghost. Wait for the next chest to revive, or leave'))}
   vltSend(1)}
@@ -1511,7 +1519,7 @@ function vltSync(){const V=vlt;if(!V)return;const d=V.data,me=USER&&USER.sub,ids
   for(const u of Object.keys(V.P))if(!ids.includes(u)){V.P[u].el.remove();delete V.P[u]}
   for(const u of ids){const o=d[u];let p=V.P[u];if(p&&p.l!==o.l){p.el.remove();p=null}if(!p){p=V.P[u]=vltAv(u,o);p.l=o.l;p.x=p.tx=o.x;p.y=p.ty=o.y}
     p.tx=o.x;p.ty=o.y;p.face=!!o.f;const dead=!!o.d&&o.rk===V.rk;if(dead&&!p.dead)vltFx('burst',p.x,p.y-.08,1000);p.dead=dead;p.el.classList.toggle('dead',dead);p.hp=o.rk===V.rk?o.hp:VLT_HP;p.op=o.rk===V.rk&&o.op?o.op:0;
-    if(o.a&&o.a.t&&o.a.t!==V.seen[u]){const fresh=V.seen[u]!==undefined&&Date.now()-o.a.t<4000;V.seen[u]=o.a.t;if(fresh){const sp=p.el.querySelector('.spr');if(sp){sp.classList.remove('atk');void sp.offsetWidth;sp.classList.add('atk');setTimeout(()=>sp.classList.remove('atk'),800)}
+    if(o.a&&o.a.t&&o.a.t!==V.seen[u]){const fresh=V.seen[u]!==undefined&&Date.now()-o.a.t<4000;V.seen[u]=o.a.t;if(fresh){p.at=Date.now();vltFx('slash'+(o.a.f?' fl':''),o.a.x+(o.a.f?-.012:.012),o.a.y-.06,400);const sp=p.el.querySelector('.spr');if(sp){sp.classList.remove('atk');void sp.offsetWidth;sp.classList.add('atk');setTimeout(()=>sp.classList.remove('atk'),800)}
       if(!V.dead&&vltHits(o.a.x,o.a.y,!!o.a.f,V.x,V.y))vltHurt()}}}
   const c=$('vcount');if(c)c.textContent=(ids.length+1)+'/'+ROOM_CAP;vltClaimCheck()}
 function vltClaimCheck(){const V=vlt;if(!V||!V.claim||V.claim.done)return;if(performance.now()-V.claim.at<1500&&V.me)return setTimeout(vltClaimCheck,400);
@@ -1535,13 +1543,15 @@ function vltFrame(V,dt,t){if(V.closed)return;if(t-(V.rt||0)>1000){V.rt=t;vltRoun
   if(V.op&&!st.gate&&!st.win&&Date.now()-V.op>=VLT_OPEN){V.op=0;V.gateLocal=V.rk;if(V.me)V.me.update({g:V.rk,op:0}).catch(()=>{});vltMsg(T('ประตูเปิดแล้ว! รีบไปแตะหีบ','The gate is open! Run to the chest'));sfx&&sfx('win')}
   if(st.gate&&!st.win&&!V.dead&&Math.hypot(V.x-VLT_CHEST.x,(V.y-VLT_CHEST.y)*1.4)<.06)vltClaim();
   // draw
-  $('vcage').src='ui/vault/cage'+(st.gate?1:0)+'.webp';$('vchest').classList.toggle('open',!!st.win);
+  // closed: cage over the chest, front gate over both, players outside draw by depth; open: the cage becomes floor so players inside stay visible
+  {const cz=Math.round((VLT_CAGE.y1+.01)*1000),cg=$('vcage'),cf=$('vcagef');cg.src='ui/vault/cage'+(st.gate?1:0)+'.webp';cg.style.zIndex=st.gate?300:cz-2;const che=$('vchest');che.style.zIndex=st.gate?301:cz-1;che.style.top=(st.gate?VLT_CHEST_ART.yo:VLT_CHEST_ART.y)*100+'%';cf.hidden=!!st.gate;cf.style.zIndex=cz}$('vchest').classList.toggle('open',!!st.win);$('vlab').classList.toggle('done',!!st.win);
   const ob=$('vopen');if(ob){const near=!V.dead&&!st.gate&&!st.win&&Math.hypot(V.x-VLT_GATE.x,(V.y-VLT_GATE.y)*1.5)<.07;ob.hidden=!near;ob.classList.toggle('busy',!!V.op)}
   const nowS=Date.now(),ar=V.ar;
-  const put=(p,x,y,face,dead,op,hp)=>{const e=p.el;e.style.left=x*100+'%';e.style.top=y*100+'%';e.style.zIndex=Math.round(y*1000)+(dead?2000:0);e.classList.toggle('flip',!!face);e.style.setProperty('--hp',Math.max(0,hp)/VLT_HP);
+  const put=(p,x,y,face,dead,op,hp)=>{const e=p.el;e.style.left=x*100+'%';e.style.top=y*100+'%';e.style.setProperty('--dz',(.82+.36*(y-.34)/.58).toFixed(3));e.style.zIndex=Math.round(y*1000)+(dead?2000:0);e.classList.toggle('flip',!!face);e.style.setProperty('--hp',Math.max(0,hp)/VLT_HP);
     e.style.setProperty('--op',op?Math.min(1,(nowS-op)/VLT_OPEN):0);e.classList.toggle('opening',!!op)};
-  put(V.mine,V.x,V.y,V.face,V.dead,V.op,V.hp);V.mine.el.classList.toggle('walk',!!(jx||jy));
-  for(const p of Object.values(V.P)){const dx=p.tx-p.x,dy=p.ty-p.y,d=Math.hypot(dx,dy),mv=d>.002;if(mv){const s=Math.min(d,VLT_SP*1.3*dt);p.x+=dx/d*s;p.y+=dy/d*s}p.el.classList.toggle('walk',mv);put(p,p.x,p.y,p.face,p.dead,p.op,p.hp)}
+  put(V.mine,V.x,V.y,V.face,V.dead,V.op,V.hp);V.mine.el.classList.toggle('walk',!!(jx||jy)&&nowS-(V.at||0)>520);
+  V.ring.style.left=V.x*100+'%';V.ring.style.top=V.y*100+'%';V.ring.style.zIndex=Math.round(V.y*1000)-1;V.ring.hidden=!!V.dead;
+  for(const p of Object.values(V.P)){const dx=p.tx-p.x,dy=p.ty-p.y,d=Math.hypot(dx,dy),mv=d>.002;if(mv){const s=Math.min(d,VLT_SP*1.3*dt);p.x+=dx/d*s;p.y+=dy/d*s}p.el.classList.toggle('walk',mv&&nowS-(p.at||0)>520);put(p,p.x,p.y,p.face,p.dead,p.op,p.hp)}
   const inf=$('vinfo');if(inf&&t-(V.it||0)>500){V.it=t;const w=vltWin();if(w)inf.textContent=(st.win?(st.win.n+T(' ได้ ',' got ')+(st.win.txt||vltKindTxt(V.kind))+' · '):'')+T('หีบใบที่ ','Chest ')+(w.rd+1)+'/4 · '+T('ใบถัดไปใน ','next in ')+vltMMSS(w.left)+(w.live?'':' · DEV')}}
 function vltClick(a){if(a==='vltgo')return vltGo();if(a==='vltatk')return vltAtk();if(a==='vltopen')return vltOpen();if(a==='vltout'){const V=vlt;vltOff(V);if(room)room.ptIn=1;enterRoom()}}
 
@@ -4144,7 +4154,7 @@ function titleScreen(){
 }
 // ---------- Firebase: Google sign-in and one cloud save document per account (saves/{uid}) ----------
 const OBT_PAUSED_MODES=true; // b215: hide Tower, PvP and World Boss until relaunch
-const BUILD='b223';
+const BUILD='b224';
 // The game moved to its own address. Anyone opening the old address is sent on, but only once the new site answers, so a broken move cannot lock players out.
 const DISCORD='https://discord.gg/dHDzRyPG9',DC_SVG='<svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="currentColor" d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.4189-2.1568 2.4189Z"/></svg>';
 const NEW_HOME='https://pixeldeckbattle.github.io/';
