@@ -8,11 +8,13 @@
 (()=>{'use strict';
 const MUSIC={lobby:'lobby',stage:'stage',hard:'hard',boss:'boss',pvp:'pvp',wboss:'wboss',tavern:'tavern',portal:'portal',victory:'victory'};
 const SFX_GAIN={tap:.35,nav:.45,back:.4,confirm:.5,error:.4,tick:.45,coins:.6,pack:.7,fan:.55,latch:.55,door:.5,portal:.5,reward:.55,rare:.7,defeat:.55,start:.5};
-const V='?v=b239',bad={};
-let unlocked=false,want='lobby',current=null,fade=0,seq=0,ctx=null,bus=null,lastCue=0;
+const V="?v=b240",bad={};
+let unlocked=false,want='lobby',current=null,fade=0,seq=0,ctx=null,bus=null,lastCue=0,hushed=false,hushFrom='';
 const enabled=()=>typeof S!=='undefined'&&S&&S.bgm!==false;
 const sfxOn=()=>typeof S!=='undefined'&&S&&S.sfx!==false&&S.snd!==false;
-function level(){let n=55;try{const v=localStorage.getItem('pdb_bgm_volume');if(v!==null)n=Number(v)}catch(e){}return Math.max(0,Math.min(100,Number.isFinite(n)?n:55))}
+// b240 (owner): everyone starts at 25%; earlier saved levels are reset once
+try{if(!localStorage.getItem('pdb_bgm_v2')){localStorage.setItem('pdb_bgm_volume','25');localStorage.setItem('pdb_bgm_v2','1')}}catch(e){}
+function level(){let n=25;try{const v=localStorage.getItem('pdb_bgm_volume');if(v!==null)n=Number(v)}catch(e){}return Math.max(0,Math.min(100,Number.isFinite(n)?n:25))}
 const musicVolume=()=>level()/100*.5;
 
 /* ---------- sound effects ---------- */
@@ -28,7 +30,7 @@ function play(k,delay=0,gain=1){if(!unlocked||!sfxOn())return false;const A=AC()
 function retire(a){if(!a)return;try{a.pause();a.removeAttribute('src');a.load()}catch(e){}}
 function quiet(a){if(!a)return;const v0=a.volume;let k=0;const t=setInterval(()=>{if(++k>=10){clearInterval(t);retire(a);return}a.volume=Math.max(0,v0*(1-k/10))},50)}
 function stopAll(){clearInterval(fade);if(current){quiet(current);current=null}}
-function choose(k){if(!MUSIC[k])k='lobby';want=k;if(!unlocked||!enabled()){stopAll();return}
+function choose(k){if(!MUSIC[k])k='lobby';want=k;if(hushed)return;if(!unlocked||!enabled()){stopAll();return}
  if(current&&current._kind===k){if(current.paused&&!document.hidden)current.play().catch(()=>{});return}
  if(bad[k]){stopAll();return}
  const token=++seq,previous=current,a=new Audio();current=a;a._kind=k;a.preload='auto';a.loop=k!=='victory';a.volume=0;
@@ -40,6 +42,10 @@ function choose(k){if(!MUSIC[k])k='lobby';want=k;if(!unlocked||!enabled()){stopA
  if(!document.hidden){const p=a.play();if(p&&p.then)p.then(fadeIn).catch(()=>{});else fadeIn()}
 }
 function changeVolume(n){const v=Math.round(Math.max(0,Math.min(100,Number(n)||0)));try{localStorage.setItem('pdb_bgm_volume',String(v))}catch(e){}if(current)current.volume=musicVolume();const p=document.getElementById('pd-music-pct');if(p)p.textContent=v+'%'}
+/* b240 (owner): music goes quiet for the exciting moments (packs, fusion, amulet forge, arena boxes, Legend pick) until the player leaves that screen */
+function hush(from){hushFrom=from;if(hushed)return;hushed=true;clearInterval(fade);const a=current;if(!a)return;const v0=a.volume;let k=0;const t=setInterval(()=>{if(++k>=8||current!==a){clearInterval(t);if(current===a)a.pause();return}a.volume=Math.max(0,v0*(1-k/8))},40)}
+function unhush(){if(!hushed)return;hushed=false;hushFrom='';const a=current;if(a&&a._kind===want&&enabled()&&unlocked){a.volume=0;a.play().then(()=>{let i=0;clearInterval(fade);fade=setInterval(()=>{i++;a.volume=musicVolume()*Math.min(1,i/14);if(i>=14)clearInterval(fade)},55)}).catch(()=>{})}else choose(want)}
+function screen(name){if(!hushed)return;let pl=null;try{pl=pull}catch(e){}if(name!==hushFrom||(name==='shop'&&!pl))unhush()}
 function unlock(){if(unlocked)return;unlocked=true;AC();loadSfx();if(enabled())choose(want)}
 
 /* ---------- settings row ---------- */
@@ -58,9 +64,9 @@ function cue(act){if(/^(home|back|close|wbclose|disno|dressdone)$/.test(act))ret
  if(/^(open|openpro|opengold|openltd|asbuy)$/.test(act))return '';   // these get their own sounds below
  return 'tap'}
 document.addEventListener('pointerdown',e=>{const t=e.target.closest&&e.target.closest('button:not(:disabled),[role=button],[data-act]');unlock();if(!t)return;
- const c=cue(t.dataset.act||'');if(c&&play(c))lastCue=performance.now();if(enabled()&&!current&&!bad[want])choose(want)},true);
+ const c=cue(t.dataset.act||'');if(c&&play(c))lastCue=performance.now();if(enabled()&&!hushed&&!current&&!bad[want])choose(want)},true);
 document.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' ')unlock()},true);
-document.addEventListener('visibilitychange',()=>{if(document.hidden){if(current)current.pause()}else if(unlocked&&enabled()){if(current)current.play().catch(()=>{});else choose(want)}});
+document.addEventListener('visibilitychange',()=>{if(document.hidden){if(current)current.pause()}else if(unlocked&&enabled()&&!hushed){if(current)current.play().catch(()=>{});else choose(want)}});
 window.addEventListener('pagehide',()=>{if(current)current.pause()});
 
 /* ---------- hooks into the game ---------- */
@@ -75,17 +81,18 @@ try{
   return oldSfx(kind)};
  const oldBeep=beep;window.beep=beep=function(){unlock();if(!play('tick'))oldBeep()};
 }catch(e){console.warn('PixelDeck audio sfx hook',e)}
-['home','titleScreen','coll','shop','prep'].forEach(n=>wrap(n,null,()=>choose('lobby')));
+['home','titleScreen','coll','shop','prep','fuse','fuseAm','guide'].forEach(n=>wrap(n,null,()=>{screen(n);choose('lobby')}));
 wrap('settings',null,()=>injectSettings());
-['market','roomList'].forEach(n=>wrap(n,null,()=>choose('tavern')));
-wrap('enterRoom',()=>{play('door')},()=>choose('tavern'));
-['arena','pvPick'].forEach(n=>wrap(n,null,()=>choose('pvp')));
-['wbHub','wbJoin'].forEach(n=>wrap(n,null,()=>choose('wboss')));
-wrap('vltEnter',()=>{play('portal')},()=>choose('portal'));
-['openPack','openGold','openPro','openLtd'].forEach(n=>wrap(n,()=>{play('pack');play('fan',.28)},()=>{if(best())play('rare',.7)}));
+['market','roomList'].forEach(n=>wrap(n,null,()=>{screen(n);choose('tavern')}));
+wrap('enterRoom',()=>{play('door')},()=>{screen('enterRoom');choose('tavern')});
+['arena','pvPick'].forEach(n=>wrap(n,null,()=>{screen(n);choose('pvp')}));
+['wbHub','wbJoin'].forEach(n=>wrap(n,null,()=>{screen(n);choose('wboss')}));
+wrap('vltEnter',()=>{play('portal')},()=>{screen('vltEnter');choose('portal')});
+['openPack','openGold','openPro','openLtd'].forEach(n=>wrap(n,()=>{hush('shop');play('pack');play('fan',.28)},()=>{if(best())play('rare',.7)}));
 wrap('asBuy',function(k){this.__ac=typeof S!=='undefined'?S.ac:0},function(r,k){if(typeof S==='undefined'||S.ac===this.__ac)return;
- if(k==='gold')play('coins');else if(k==='pack'){play('pack');play('fan',.28)}else{play('latch');play('reward',.25)}});
-wrap('startBattle',(n,opp)=>{let k='stage';if(opp)k='pvp';else{const t=typeof stKind==='function'?stKind(n):'';if(t==='lord'||t==='boss'||(typeof ST1!=='undefined'&&n<=ST1&&n%10===0))k='boss';else if(t==='elite'||t==='surv')k='hard'}choose(k)});
+ if(k==='gold')play('coins');else{hush('arena');if(k==='pack'){play('pack');play('fan',.28)}else{play('latch');play('reward',.25)}}});
+['fuDo','fuAllDo'].forEach(n=>wrap(n,()=>hush('fuse')));wrap('afDo',()=>hush('fuseAm'));wrap('lselPick',()=>hush('lsel'));
+wrap('startBattle',(n,opp)=>{screen('battle');let k='stage';if(opp)k='pvp';else{const t=typeof stKind==='function'?stKind(n):'';if(t==='lord'||t==='boss'||(typeof ST1!=='undefined'&&n<=ST1&&n%10===0))k='boss';else if(t==='elite'||t==='surv')k='hard'}choose(k)});
 try{const oldFinish=finish;window.finish=finish=function(won,...a){const farm=won&&typeof loop!=='undefined'&&loop===2;
  if(won&&!farm)choose('victory');else if(!won){stopAll();want='lobby'}return oldFinish.call(this,won,...a)}}catch(e){console.warn('PixelDeck audio finish hook',e)}
 window.PDAudio={choose,play,level,changeVolume,mute:()=>{S.bgm=false;save();stopAll()}};
