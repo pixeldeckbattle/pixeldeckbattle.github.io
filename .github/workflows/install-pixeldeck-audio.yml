@@ -18,6 +18,10 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
+          if ! command -v ffmpeg >/dev/null 2>&1; then
+            sudo apt-get update -qq
+            sudo DEBIAN_FRONTEND=noninteractive apt-get install -y -qq ffmpeg
+          fi
           mkdir -p audio/music .audio-temp
           curl -fLSs --retry 3 --connect-timeout 20 --max-time 180 'https://opengameart.org/sites/default/files/battleThemeA.mp3' -o .audio-temp/battle.mp3
           curl -fLSs --retry 3 --connect-timeout 20 --max-time 180 'https://opengameart.org/sites/default/files/hard_battle_1_bpm170.mp3' -o .audio-temp/hard.mp3
