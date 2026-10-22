@@ -929,7 +929,7 @@ h1{color:#f2d98a;text-shadow:0 3px 0 #7a4a1c,0 6px 0 #0a1019}h2{color:#f2d98a;te
 @keyframes vmsg{0%,85%{opacity:1}100%{opacity:0}}
 .vbtn{position:absolute;z-index:9998;border:3px solid #f2c14e;border-radius:50%;color:#fff;font:800 22px var(--display);display:grid;place-items:center;line-height:1;text-shadow:1px 1px 0 #000;touch-action:manipulation}
 .vatk{right:max(16px,env(safe-area-inset-right,0px));bottom:14px;width:84px;height:84px;background:radial-gradient(circle at 50% 35%,#ff6a55,#b0221e 60%,#5e0d12);box-shadow:0 4px 0 #2a0508,0 0 14px rgba(255,90,60,.45)}
-.vatk:active{transform:translateY(2px);box-shadow:0 2px 0 #2a0508}
+.vatk:active,.vatk.down{transform:translateY(2px);box-shadow:0 2px 0 #2a0508}.vbtn{touch-action:none;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none}
 .vatk::after{content:"";position:absolute;inset:-3px;border-radius:50%;pointer-events:none;background:conic-gradient(rgba(0,0,0,.55) var(--cd,0%),transparent 0)}
 .vatk.vcd::after{animation:vcd .8s linear 1 forwards}@property --cd{syntax:'<percentage>';inherits:false;initial-value:0%}@keyframes vcd{from{--cd:100%}to{--cd:0%}}
 .vatk small{font-size:11px}
@@ -937,6 +937,18 @@ h1{color:#f2d98a;text-shadow:0 3px 0 #7a4a1c,0 6px 0 #0a1019}h2{color:#f2d98a;te
 .vopen.busy{animation:vpulse .6s ease-in-out infinite alternate}
 @keyframes vpulse{to{filter:brightness(1.4)}}
 @media (prefers-reduced-motion:reduce){.vpt,.vopen.busy{animation:none}}
+.vwin{position:absolute;inset:0;z-index:9990;display:grid;place-items:center;background:rgba(6,4,20,.55);animation:vwIn .25s ease-out}
+.vwin.out{animation:vwOut .25s ease-in forwards}
+.vwbox{position:relative;display:grid;justify-items:center;gap:8px;min-width:min(320px,80%);padding:18px 26px 16px;border:14px solid transparent;border-image:var(--rg-win) 32 fill/16px stretch;animation:vwPop .45s cubic-bezier(.2,1.6,.4,1)}
+.vwrays{position:absolute;left:50%;top:46%;width:260px;height:260px;margin:-130px 0 0 -130px;z-index:-1;background:repeating-conic-gradient(rgba(255,214,110,.35) 0 8deg,transparent 8deg 22deg);border-radius:50%;-webkit-mask:radial-gradient(closest-side,#000 30%,transparent);mask:radial-gradient(closest-side,#000 30%,transparent);animation:vwSpin 6s linear infinite}
+.vwt{font:800 26px var(--display);color:#ffe27a;text-shadow:0 3px 0 #5a2a06,0 0 14px rgba(255,200,80,.7);letter-spacing:.04em}
+.vwi img{image-rendering:pixelated;width:84px!important;height:84px!important;filter:drop-shadow(0 0 12px rgba(255,220,120,.8))}
+.vwc{width:118px}.vwc .cf{width:100%;pointer-events:none}
+.vwr{font:800 20px var(--display);color:#fff;text-shadow:1px 2px 0 #000;text-align:center}
+@keyframes vwIn{from{opacity:0}}@keyframes vwOut{to{opacity:0}}
+@keyframes vwPop{0%{transform:scale(.4);opacity:0}100%{transform:none}}
+@keyframes vwSpin{to{transform:rotate(360deg)}}
+@media (prefers-reduced-motion:reduce){.vwrays,.vwbox{animation:none}}
 
 /* ===== b219 ROYAL GOLD UI — one frame layer for the whole game =====
    Replaces the stacked b214 / b215 / b217 / b218 skins (removed) and the ui2/*.webp frame sources of b198.
@@ -1449,12 +1461,13 @@ const vltKindTxt=k=>k==='card'?T('การ์ด Rare (การันตี)',
 const vltKindIco=k=>k==='card'?'🃏':k==='dia'?'💎':'💰';
 const vltMMSS=s=>Math.floor(s/60)+':'+String(Math.max(0,s%60)).padStart(2,'0');
 // ---- trade room side: the portal ----
-function vltTick(R,t){if(t-(R.vt||0)<1000)return;R.vt=t;const w=vltWin(),wd=$('tworld');if(!wd)return;
+function vltTick(R,t){if(R.pt&&!R.ptIn&&Math.abs(R.me.x-R.pt.x)<40&&R.me.y>R.pt.y-95&&R.me.y<R.pt.y+22){R.ptIn=1;return vltGo()}   // stepping onto the swirl warps at once
+  if(t-(R.vt||0)<1000)return;R.vt=t;const w=vltWin(),wd=$('tworld');if(!wd)return;
   if(!w){if(R.pt){R.pt.el.remove();R.pt=null}return}
   if(!R.pt||R.pt.id!==w.id){if(R.pt)R.pt.el.remove();const r=vltRng(w.id+'@portal'),x=R.W*(.1+.8*r()),y=R.H*(FLOOR_TOP+.1+.3*r()),el=document.createElement('button');
     el.className='vpt';el.dataset.act='vltgo';el.setAttribute('aria-label',T('ประตูมิติ','Portal'));el.innerHTML='<i></i><span class="nt">'+T('ประตูมิติ','PORTAL')+'</span>';el.style.left=x+'px';el.style.top=y+'px';el.style.zIndex=Math.round(y);wd.append(el);
     R.pt={id:w.id,x,y,el};const l=$('tlog');if(l)l.textContent=T('ประตูมิติเปิดแล้ว! เดินเข้าไปในหลุมดำเพื่อไปแย่งหีบสมบัติ','A portal has opened! Walk into the black hole to fight for the treasure chest')}
-  if(Math.hypot(R.me.x-R.pt.x,(R.me.y-R.pt.y)*1.6)<46&&!R.ptIn){R.ptIn=1;vltGo()}else if(Math.hypot(R.me.x-R.pt.x,R.me.y-R.pt.y)>90)R.ptIn=0}
+  if(R.ptIn&&(Math.abs(R.me.x-R.pt.x)>70||R.me.y<R.pt.y-130||R.me.y>R.pt.y+60))R.ptIn=0}
 // a toast anywhere in the game when an event starts
 setInterval(()=>{try{if(!S||!USER||!document.querySelector('.lobby,.troom'))return;const w=vltWin();if(!w||!w.live||vltSeenWin===w.id)return;vltSeenWin=w.id;if(!vlt)toast(T('🌀 ประตูมิติเปิดในห้องเทรดแล้ว! ไปแย่งหีบสมบัติกัน (1 ชั่วโมง)','🌀 A portal has opened in the trade rooms! Go fight for the treasure (1 hour)'))}catch(e){}},15000);
 function vltGo(){const w=vltWin();if(!w)return toast(T('ประตูมิติปิดแล้ว','The portal has closed'));
@@ -1466,7 +1479,7 @@ function vltEnter(w){ensureMe();const no=roomNo||0;
     <span class="row"><button class="btn alt sm" data-act="vltout">${T('ออก','Leave')}</button></span></div>
     <div class="tfloor vfl" id="vfl"><div class="varena" id="varena"><img class="vcage" id="vcage" src="ui/vault/cage0.webp" alt=""><img class="vcage" id="vcagef" src="ui/vault/cage0f.webp" alt=""><div class="vchest" id="vchest"><i></i><span class="vlab nt" id="vlab"></span></div></div>
       <div class="vmsg nt" id="vmsg"></div><div class="joy" id="joy"><i></i></div>
-      <button class="vbtn vopen nt" data-act="vltopen" id="vopen" hidden>${T('เปิดประตู','Open gate')}</button><button class="vbtn vatk nt" data-act="vltatk" id="vatk">⚔<small>${T('ตี','Hit')}</small></button></div></div>`);
+      <button class="vbtn vopen nt" id="vopen" hidden>${T('เปิดประตู','Open gate')}</button><button class="vbtn vatk nt" id="vatk">⚔<small>${T('ตี','Hit')}</small></button></div></div>`);
   const fl=$('vfl'),ar=$('varena');
   vlt={w,no,base:null,me:null,data:{},P:{},seen:{},hp:VLT_HP,dead:0,op:0,rk:w.rk,cd:0,claim:null,x:.3,y:.68,tx:.3,ty:.68,face:false,joy:null,last:0,fl,ar};
   const V=vlt,lay=()=>{const fw=fl.clientWidth,fh=fl.clientHeight,aw=Math.min(fw,fh*1672/941),ah=aw*941/1672;ar.style.width=aw+'px';ar.style.height=ah+'px';ar.style.left=(fw-aw)/2+'px';ar.style.top=(fh-ah)/2+'px';ar.style.setProperty('--aw',aw+'px');ar.style.setProperty('--ah',ah+'px');V.aw=aw;V.ah=ah};addEventListener('resize',lay);lay();V.lay=lay;
@@ -1477,6 +1490,8 @@ function vltEnter(w){ensureMe();const no=roomNo||0;
   {const j=$('joy'),k=j.firstElementChild;let pid=null;
    const mv=e=>{const b=j.getBoundingClientRect(),p=innerHeight>innerWidth,cx=b.left+b.width/2,cy=b.top+b.height/2;let dx=e.clientX-cx,dy=e.clientY-cy;if(p)[dx,dy]=[dy,-dx];const r=b.width/2/(uiK()||1),sc=1/(uiK()||1);dx*=sc;dy*=sc;const d=Math.hypot(dx,dy)||1,m=Math.min(1,d/(r*.62));V.joy=m<.18?null:{x:dx/d*m,y:dy/d*m};k.style.transform=`translate(${dx/d*Math.min(d,r*.62)}px,${dy/d*Math.min(d,r*.62)}px)`};
    j.onpointerdown=e=>{e.preventDefault();pid=e.pointerId;try{j.setPointerCapture(pid)}catch(x){}mv(e)};j.onpointermove=e=>{if(e.pointerId===pid)mv(e)};j.onpointerup=j.onpointercancel=e=>{if(e.pointerId===pid){pid=null;V.joy=null;k.style.transform='';vltSend(1)}}}
+  // hit / open fire on pointerdown, not click: a second finger tapping while the first holds the joystick never produces a click on phones
+  for(const [id,fn] of [['vatk',vltAtk],['vopen',vltOpen]]){const bt=$(id);bt.onpointerdown=e=>{e.preventDefault();e.stopPropagation();bt.classList.add('down');fn()};bt.onpointerup=bt.onpointercancel=bt.onpointerleave=()=>bt.classList.remove('down');bt.oncontextmenu=e=>e.preventDefault()}
   // keyboard on PC: arrows / WASD walk, space or J hits, E opens
   V.keys={};V.kd=e=>{if(e.target&&e.target.tagName==='INPUT')return;const c=e.key.toLowerCase();V.keys[c]=e.type==='keydown';if(e.type==='keydown'&&(c===' '||c==='j')){e.preventDefault();vltAtk()}if(e.type==='keydown'&&c==='e')vltOpen()};
   addEventListener('keydown',V.kd);addEventListener('keyup',V.kd);
@@ -1525,10 +1540,14 @@ function vltSync(){const V=vlt;if(!V)return;const d=V.data,me=USER&&USER.sub,ids
 function vltClaimCheck(){const V=vlt;if(!V||!V.claim||V.claim.done)return;if(performance.now()-V.claim.at<1500&&V.me)return setTimeout(vltClaimCheck,400);
   V.claim.done=1;const st=vltState(),me=USER?USER.sub:'me';if(st.win&&st.win.u!==me&&V.me){vltMsg(T('ช้าไปนิด! ','Too slow! ')+st.win.n+T(' แตะหีบก่อน',' got there first'));return}
   S.vltw=S.vltw||{};if(S.vltw[V.rk])return;S.vltw[V.rk]=1;{const ks=Object.keys(S.vltw).sort();while(ks.length>40)delete S.vltw[ks.shift()]}
-  let txt;if(V.kind==='card'){const g=giveCard(randOf('R'),'vault');txt=T('การ์ด ','Card ')+C[g.id].n+(g.dup?T(' (ใบซ้ำ)',' (copy)'):'')}
+  let txt;V.card=null;if(V.kind==='card'){const g=giveCard(randOf('R'),'vault');V.card=g.id;txt=T('การ์ด ','Card ')+C[g.id].n+(g.dup?T(' (ใบซ้ำ)',' (copy)'):'')}
   else if(V.kind==='dia'){const n=1+Math.floor(Math.random()*5);S.dia=(S.dia||0)+n;ld('vault',n);txt='💎 '+n}
   else{const n=50+10*Math.floor(Math.random()*26);S.gold+=n;lg('vault',n);txt='Gold '+n}
-  save();sfx&&sfx('win');V.wonLocal={r:V.rk,txt};if(V.me)V.me.update({wr:{r:V.rk,txt}}).catch(()=>{});vltMsg(T('🎉 คุณได้ ','🎉 You got ')+txt)}
+  save();sfx&&sfx('win');V.wonLocal={r:V.rk,txt};if(V.me)V.me.update({wr:{r:V.rk,txt}}).catch(()=>{});vltWinPop(V.kind,txt,V.card)}
+function vltWinPop(kind,txt,card){const fl=$('vfl');if(!fl)return;const old=$('vwin');if(old)old.remove();const d=document.createElement('div');d.id='vwin';d.className='vwin';
+  const art=kind==='card'&&card?`<div class="vwc">${full(card,'tabindex="-1"')}</div>`:`<div class="vwi"><img src="${kind==='dia'?UI.gem:UI.coin}" alt=""></div>`;
+  d.innerHTML=`<div class="vwbox"><i class="vwrays"></i><b class="vwt nt">${T('ได้รับรางวัล!','REWARD!')}</b>${art}<span class="vwr nt">${txt}</span><button class="btn go" id="vwok">${T('รับทราบ','OK')}</button></div>`;
+  fl.append(d);const close=()=>{d.classList.add('out');setTimeout(()=>d.remove(),250)};$('vwok').onpointerdown=e=>{e.preventDefault();close()};setTimeout(()=>{if(d.isConnected)close()},4500)}
 function vltClaim(){const V=vlt;if(!V||V.claim||V.dead)return;const st=vltState();if(!st.gate||st.win)return;V.claim={at:performance.now()};
   if(V.me)V.me.update({w:{r:V.rk,t:firebase.database.ServerValue.TIMESTAMP}}).catch(()=>{});vltClaimCheck()}
 function vltFrame(V,dt,t){if(V.closed)return;if(t-(V.rt||0)>1000){V.rt=t;vltRound(false);if(V.closed)return}
@@ -4154,7 +4173,7 @@ function titleScreen(){
 }
 // ---------- Firebase: Google sign-in and one cloud save document per account (saves/{uid}) ----------
 const OBT_PAUSED_MODES=true; // b215: hide Tower, PvP and World Boss until relaunch
-const BUILD='b224';
+const BUILD='b225';
 // The game moved to its own address. Anyone opening the old address is sent on, but only once the new site answers, so a broken move cannot lock players out.
 const DISCORD='https://discord.gg/dHDzRyPG9',DC_SVG='<svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="currentColor" d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.4189-2.1568 2.4189Z"/></svg>';
 const NEW_HOME='https://pixeldeckbattle.github.io/';
