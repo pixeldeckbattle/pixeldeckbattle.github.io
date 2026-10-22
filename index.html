@@ -960,6 +960,7 @@ h1{color:#f2d98a;text-shadow:0 3px 0 #7a4a1c,0 6px 0 #0a1019}h2{color:#f2d98a;te
 .ssw{color:#ffd84a;font-weight:700}
 #stage .lobby .oetab{position:absolute;left:0;top:44%;z-index:5;display:grid;justify-items:center;gap:1px;width:62px;padding:8px 4px 7px;border:2px solid #ffd84a;border-left:0;border-radius:0 10px 10px 0;background:linear-gradient(180deg,#b3261e,#6e0f0b);color:#fff6dc;box-shadow:0 0 0 2px #1b0e05,0 0 14px rgba(255,200,80,.55);cursor:pointer;animation:oepulse 1.8s ease-in-out infinite}.oetab i{font-style:normal;font-size:24px;line-height:1}.oetab b{font-size:12px;letter-spacing:.5px}@keyframes oepulse{0%,100%{box-shadow:0 0 0 2px #1b0e05,0 0 8px rgba(255,200,80,.35)}50%{box-shadow:0 0 0 2px #1b0e05,0 0 18px rgba(255,210,90,.85)}}@media (prefers-reduced-motion:reduce){.oetab{animation:none}}
 .oebox{max-width:min(620px,94vw);text-align:left}.oesec{margin:8px 0;padding:8px 10px;background:rgba(10,16,30,.55);border:1px solid #8a6a3a}.oesec h4{margin:0 0 6px;font-size:16px;color:#ffd877;display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap}.oesec h4 small{color:#ff9a8a;font-size:13px}.oerow{display:grid;grid-template-columns:72px minmax(0,1fr) auto;gap:8px;align-items:center;padding:4px 0;border-top:1px solid rgba(138,106,58,.35);font-size:14px}.oerow.ok .oest{color:#6cf586}.oen{font-weight:700;color:#fff6dc}.oest{color:#c9d2f5;font-size:13px;text-align:right}.oesec p{margin:4px 0 0;font-size:14px}
+#stage .cols.mk3{grid-template-columns:minmax(210px,25%) minmax(0,1fr) minmax(210px,23%)}.mkside{overflow:auto;min-height:0;padding:10px;display:grid;align-content:start;gap:8px;background:rgba(8,14,30,.72);border:2px solid #8a6a3a;box-shadow:inset 0 0 0 1px #1b0e05}.mksh{display:flex;align-items:center;justify-content:space-between;gap:6px}.mksh b{color:#ffd877;font-size:15px}.mksh .btn{min-width:36px;padding:2px 8px}.mkside h4{margin:4px 0 0;font-size:13px;color:#f2d98a;border-top:1px solid rgba(138,106,58,.5);padding-top:6px}.mkfoc{display:grid;grid-template-columns:44px minmax(0,1fr);gap:8px;align-items:center;padding:6px;background:rgba(255,216,74,.06);border:1px solid rgba(255,216,74,.35)}.mkfoc span{display:grid;gap:1px;min-width:0}.mkfoc small{font-size:12px;color:#c9d2f5}.mkth{display:block;width:40px;height:40px;overflow:hidden;border:2px solid var(--gl,#8a6a3a);background:#0a1020}.mkth img{width:100%;height:100%;object-fit:cover}.mkth.am{border:0;background:none}.mkth.am .amu{width:40px;height:40px}.mkhr{display:grid;grid-template-columns:30px minmax(0,1fr) auto;gap:6px;align-items:center;font-size:13px}.mkhr .mkth{width:28px;height:28px;border-width:1px}.mkhr .mkth.am .amu{width:28px;height:28px}.mkhn{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;display:grid}.mkhn small{font-size:11px;color:var(--dim)}.mkguide{display:grid;gap:3px;padding:7px 8px;margin:4px 0;background:rgba(10,16,30,.6);border:1px solid #8a6a3a;font-size:13px}.mkguide>b{color:#ffd877;font-size:13px}.mkw{font-weight:700}.mkw.bad{color:#ff8a7a}.mkw.hi{color:#ffd84a}.mkw.ok{color:#6cf586}.mkq{display:flex;flex-wrap:wrap;gap:4px;margin-top:2px}.mkq .btn{font-size:12px}.mkdeal{font-size:12px;color:var(--dim)}.mkdeal.good{color:#6cf586;font-weight:700}.mkdeal.bad{color:#ff8a7a}@media (max-width:760px){#stage .cols.mk3{grid-template-columns:minmax(200px,34%) minmax(0,1fr)}.mkside{display:none}}
 /* ===== b219 ROYAL GOLD UI — one frame layer for the whole game =====
    Replaces the stacked b214 / b215 / b217 / b218 skins (removed) and the ui2/*.webp frame sources of b198.
    Frames: Kenney Fantasy UI Borders (CC0) shapes, recoloured antique gold on deep navy by tools/kframes.py,
@@ -1637,7 +1638,7 @@ function mkLog(v){try{mkDb().collection('trades').add({k:v.k,p:v.p|0,sn:String(v
 function mkHFetch(force){if(!mkOn())return;if(!force&&mkh.state==='ok'&&Date.now()-mkh.at<300000)return;mkh.state='load';
   fbLoad().then(fbUser).then(u=>{if(!u)throw new Error('auth');return mkDb().collection('trades').orderBy('at','desc').limit(40).get()})
    .then(q=>{mkh.list=q.docs.map(d=>({id:d.id,...d.data()})).filter(t=>!oldEra(t.at)&&(AM[t.k]||(C[t.k]&&C[t.k].r!=='ST'))&&t.p>0);mkh.state='ok';mkh.at=Date.now()})
-   .catch(e=>{mkh.state='err';mkh.err=e&&e.code||e&&e.message||''}).then(()=>{if(document.querySelector('[data-mk]')&&mkMode==='hist')market()})}
+   .catch(e=>{mkh.state='err';mkh.err=e&&e.code||e&&e.message||''}).then(()=>{if(document.querySelector('[data-mk]')){const sd=$('mkside');if(sd)sd.innerHTML=mkSide();const r=$('mkres');if(r&&mkMode==='buy')r.innerHTML=mkRes()}})}
 // Sale history: every collected payout is kept in S.mkh (newest first, 30 max) = {k,g:gold received,p:price,by:buyer name,at:ms}; S.mkn = sales not looked at yet.
 // The buyer writes p and by into the payout (b149); payouts made by an older build have neither and show "-".
 function mkPayIn(docs){let got=0;const dels=[];docs.forEach(d=>{const v=d.data();if(!oldEra(v.at)){const g=Math.max(0,v.gold|0);got+=g;if(AM[v.k]||C[v.k]){S.mkh=S.mkh||[];S.mkh.unshift({k:v.k,g,p:v.p|0,by:String(v.by||'').slice(0,12),at:atMs(v.at)});S.mkn=(S.mkn||0)+1}}dels.push(d.ref.delete())});if(S.mkh){S.mkh.sort((a,b)=>b.at-a.at);S.mkh.length=Math.min(S.mkh.length,30)}S.gold+=got;lg('mksell',got);return[got,dels]}
@@ -1673,7 +1674,7 @@ function mkHRes(){const uid=USER&&USER.sub,me=String(S.me&&S.me.name||'').slice(
 function mkRes(){const on=mkOn(),uid=USER&&USER.sub,am=mkTab==='am';
   // a listed card is shown as the buyer will get it: level 1, no stars, no amulet - not with my own copy's level
   const base=mkBase;
-  const row=(l,me)=>`<div class="amrow">${base(l.k)}<span><b class="nt">${AM[l.k]?T(AM[l.k].n,EN[AM[l.k].n]||AM[l.k].n):mkName(l.k)}</b>${AM[l.k]?`<small><b class="nt art-${AM[l.k].r}">${RAR[AM[l.k].r].n}</b> · ${AM[l.k].t}</small>`:`<small><b class="nt r-${C[l.k].r}" style="color:var(--gl)">${RAR[C[l.k].r].n}</b> · ${T('การ์ด','card')}</small>`}<small class="gold nt">${l.p.toLocaleString('en')} Gold${me?'':' · '+esc(l.name||'')}</small></span>${me?`<button class="btn alt sm" style="grid-column:1/-1" data-act="mkcancel" data-id="${l.id}">${T('ยกเลิกการขาย','Cancel listing')}</button>`:`<button class="btn sm" style="grid-column:1/-1" data-act="mkbuy" data-id="${l.id}" ${S.gold<l.p?'disabled':''}>${T('ซื้อ','Buy')} <i class="nt" style="font-style:normal">${l.p.toLocaleString('en')} Gold</i></button>`}</div>`;
+  const row=(l,me)=>`<div class="amrow">${base(l.k)}<span><b class="nt">${AM[l.k]?T(AM[l.k].n,EN[AM[l.k].n]||AM[l.k].n):mkName(l.k)}</b>${AM[l.k]?`<small><b class="nt art-${AM[l.k].r}">${RAR[AM[l.k].r].n}</b> · ${AM[l.k].t}</small>`:`<small><b class="nt r-${C[l.k].r}" style="color:var(--gl)">${RAR[C[l.k].r].n}</b> · ${T('การ์ด','card')}</small>`}<small class="gold nt">${l.p.toLocaleString('en')} Gold${me?'':' · '+esc(l.name||'')}</small>${me?'':mkDeal(l)}</span>${me?`<button class="btn alt sm" style="grid-column:1/-1" data-act="mkcancel" data-id="${l.id}">${T('ยกเลิกการขาย','Cancel listing')}</button>`:`<button class="btn sm" style="grid-column:1/-1" data-act="mkbuy" data-id="${l.id}" ${S.gold<l.p?'disabled':''}>${T('ซื้อ','Buy')} <i class="nt" style="font-style:normal">${l.p.toLocaleString('en')} Gold</i></button>`}</div>`;
   if(!on)return '';if(mkMode==='hist')return mkHRes();if(mk.state==='load'&&!mk.list.length)return `<p class="sub">${T('กำลังโหลดตลาด…','Loading the market…')}</p>`;
   if(mkMode==='buy'){const others=mkSort(mk.list.filter(l=>mkPass(l)&&l.seller!==uid));
     return `<p class="sub nt" style="margin-bottom:10px">${am?T('เครื่องรางที่ผู้เล่นอื่นขาย','Amulets other players are selling'):T('การ์ดที่ผู้เล่นอื่นขาย','Cards other players are selling')} (${others.length})</p>
@@ -1684,20 +1685,50 @@ function mkRes(){const on=mkOn(),uid=USER&&USER.sub,am=mkTab==='am';
     ${mkSel&&mkHave(mkSel)>0?`<p class="sub nt" style="margin:8px 0">${T('2. ตั้งราคาทางซ้าย แล้วกดตั้งขาย','2. Set the price on the left, then press List')}</p>`:''}
     <p class="sub nt" style="margin:14px 0 10px">${am?T('เครื่องรางที่คุณตั้งขายอยู่','Your amulet listings'):T('การ์ดที่คุณตั้งขายอยู่','Your card listings')} (${mine.length}) · <span style="color:#ffd84a">${T('สถานะ: รอผู้ซื้อ','status: waiting for a buyer')}</span></p>
     ${mine.length?`<div class="amlist">${mine.map(l=>row(l,1)).join('')}</div>`:`<p class="sub nt">${T('ยังไม่ได้ตั้งขายอะไร','You have nothing listed')}</p>`}${mkHist()}`}
-function market(){if(mkTab==='dm')mkTab='am';
+
+/* ---------- b248 market price guide + sidebar ---------- */
+let mkPx={};
+const mkAgo=ms=>{if(!ms)return '-';const m=Math.max(0,Math.floor((Date.now()-ms)/6e4));return m<1?T('เมื่อกี้','just now'):m<60?T(m+' นาทีที่แล้ว',m+' min ago'):m<1440?T(Math.floor(m/60)+' ชม.ที่แล้ว',Math.floor(m/60)+' h ago'):T(Math.floor(m/1440)+' วันที่แล้ว',Math.floor(m/1440)+' d ago')};
+const mkNm=k=>AM[k]?T(AM[k].n,EN[AM[k].n]||AM[k].n):mkName(k);
+const mkThumb=k=>AM[k]?`<span class="mkth am">${amu(k)}</span>`:C[k]?`<span class="mkth r-${C[k].r}"><img src="${artSrc(k)}" alt=""></span>`:'';
+function mkPxFetch(k){if(!k||!mkOn())return;const c=mkPx[k];if(c&&(c.st==='load'||(c.st==='ok'&&Date.now()-c.at<300000)||(c.st==='err'&&Date.now()-c.at<60000)))return;mkPx[k]={st:'load',list:c&&c.list||[]};
+  fbLoad().then(fbUser).then(u=>{if(!u)throw new Error('auth');return mkDb().collection('trades').where('k','==',k).limit(30).get()})
+   .then(q=>{mkPx[k]={st:'ok',at:Date.now(),list:q.docs.map(d=>({id:d.id,p:d.data().p|0,at:atMs(d.data().at)})).filter(x=>x.p>0&&!oldEra(x.at))}})
+   .catch(()=>{mkPx[k]={st:'err',at:Date.now(),list:[]}}).then(()=>{if(document.querySelector('[data-mk]'))market()})}
+function mkStats(k){const seen={},L=[];(mkPx[k]&&mkPx[k].list||[]).concat(mkh.list.filter(x=>x.k===k).map(x=>({id:x.id,p:x.p|0,at:atMs(x.at)}))).forEach(x=>{if(x.id&&seen[x.id])return;if(x.id)seen[x.id]=1;L.push(x)});
+  L.sort((a,b)=>b.at-a.at);const ps=L.map(x=>x.p).filter(p=>p>0),srt=ps.slice().sort((a,b)=>a-b),n=srt.length;
+  return {n,list:L,last:n?L[0].p:0,min:n?srt[0]:0,max:n?srt[n-1]:0,med:n?(n%2?srt[(n-1)/2]:Math.round((srt[n/2-1]+srt[n/2])/2)):0}}
+const mkLow=k=>{const uid=USER&&USER.sub,o=mk.list.filter(l=>l.k===k&&l.seller!==uid).map(l=>l.p);return o.length?Math.min(...o):0};
+function mkGuide(k){const st=mkStats(k),low=mkLow(k),N=v=>(+v).toLocaleString('en'),p=mkPrice,ld=mkPx[k]&&mkPx[k].st==='load';
+  const warn=st.n&&st.med?(p<st.med*.5?`<span class="mkw bad">⚠ ${T(`ต่ำกว่าราคากลาง ${Math.round((1-p/st.med)*100)}% ระวังขายขาดทุน`,`${Math.round((1-p/st.med)*100)}% under the middle price: you may lose out`)}</span>`
+    :p>st.med*2?`<span class="mkw hi">${T(`แพงกว่าราคากลาง ${Math.round((p/st.med-1)*100)}% อาจขายไม่ออก`,`${Math.round((p/st.med-1)*100)}% over the middle price: it may not sell`)}</span>`
+    :`<span class="mkw ok">✓ ${T('ราคาใกล้เคียงตลาด','close to the market price')}</span>`):'';
+  const quick=[st.med?[st.med,T('ราคากลาง','Middle price')]:null,low>100?[Math.max(100,Math.floor(low*.99)),T('ถูกกว่าคนอื่นนิด','Just under the cheapest')]:null].filter(Boolean);
+  return `<div class="mkguide"><b>📈 ${T('ราคาตลาดของชิ้นนี้','Market price for this item')}</b>
+   ${st.n?`<span>${T('ขายได้ล่าสุด','Last sold')} <b class="gold">${N(st.last)}</b> · ${T('ราคากลาง','middle')} <b class="gold">${N(st.med)}</b> <small>(${T('จาก','from')} ${st.n} ${T('ครั้ง','sales')})</small></span>`:`<span class="sub">${ld?T('กำลังโหลดราคา…','Loading prices…'):T('ยังไม่มีประวัติการขายชิ้นนี้ ตั้งราคาได้ตามใจ','No sales of this item yet: price it as you like')}</span>`}
+   ${low?`<span>${T('ตั้งขายถูกสุดตอนนี้','Cheapest listing now')} <b class="gold">${N(low)}</b></span>`:''}${warn}
+   ${quick.length?`<span class="mkq">${quick.map(([v,l])=>`<button class="btn alt sm" data-act="mkpx" data-v="${v}">${l} ${N(v)}</button>`).join('')}</span>`:''}</div>`}
+function mkDeal(l){const st=mkStats(l.k);if(st.n<2||!st.med)return '';const d=(l.p-st.med)/st.med;
+  return d<=-.1?`<small class="mkdeal good">▼ ${T(`ถูกกว่าราคากลาง ${Math.round(-d*100)}%`,`${Math.round(-d*100)}% under the middle price`)}</small>`:d>=.3?`<small class="mkdeal bad">▲ ${T(`แพงกว่าราคากลาง ${Math.round(d*100)}%`,`${Math.round(d*100)}% over the middle price`)}</small>`:`<small class="mkdeal">${T('ราคาปกติ','usual price')}</small>`}
+function mkSide(){const k=mkMode==='sell'?mkSel:mkF.k,N=v=>(+v).toLocaleString('en'),L=mkh.list.filter(x=>mkIsTab(x.k)&&(!k||x.k===k)).slice(0,14);let top='';
+  if(k){const st=mkStats(k),low=mkLow(k);top=`<div class="mkfoc">${mkThumb(k)}<span><b class="nt">${mkNm(k)}</b>${st.n?`<small>${T('ล่าสุด','last')} <b class="gold">${N(st.last)}</b> · ${T('กลาง','middle')} <b class="gold">${N(st.med)}</b></small><small>${T('ช่วงราคา','range')} ${N(st.min)}–${N(st.max)} · ${st.n} ${T('ครั้ง','sales')}</small>`:`<small>${mkPx[k]&&mkPx[k].st==='load'?T('กำลังโหลด…','Loading…'):T('ยังไม่มีการซื้อขาย','No trades yet')}</small>`}${low?`<small>${T('ตั้งขายถูกสุด','cheapest listing')} <b class="gold">${N(low)}</b></small>`:''}</span></div>`}
+  else top=`<p class="sub">${mkMode==='sell'?T('แตะของที่จะขาย เพื่อดูว่าขายกันจริงราคาเท่าไหร่','Tap what you want to sell to see what it really sells for'):T('เลือกชื่อในตัวกรอง เพื่อดูราคาของชิ้นนั้น','Pick a name in the filter to see that item\'s prices')}</p>`;
+  return `<div class="mksh"><b>📈 ${T('ราคาตลาด','Market prices')}</b><button class="btn alt sm" data-act="mkref" aria-label="${T('รีเฟรช','Refresh')}" title="${T('รีเฟรช','Refresh')}">⟳</button></div>${top}
+   <h4>${k?T('การขายชิ้นนี้ล่าสุด','Latest sales of this item'):mkTab==='am'?T('เครื่องรางที่ขายได้ล่าสุด','Latest amulet sales'):T('การ์ดที่ขายได้ล่าสุด','Latest card sales')}</h4>
+   ${mkh.state==='load'&&!mkh.list.length?`<p class="sub">${T('กำลังโหลด…','Loading…')}</p>`:L.length?L.map(x=>`<div class="mkhr">${mkThumb(x.k)}<span class="mkhn nt">${mkNm(x.k)}<small>${mkAgo(atMs(x.at))}</small></span><b class="gold nt">${N(x.p|0)}</b></div>`).join(''):`<p class="sub">${T('ยังไม่มีรายการ','Nothing yet')}</p>`}`}
+function market(){if(mkTab==='dm')mkTab='am';if(mkMode==='hist')mkMode='buy';
   if(mkMode==='sell'&&S.mkn){S.mkn=0;save()}
   if(S.myl&&S.myl.length){S.myl.forEach(l=>{S.am[l.k]=(S.am[l.k]||0)+1});S.myl=[];save()}
   const on=mkOn(),buy=mkMode==='buy',hist=mkMode==='hist',flt=buy||hist,rks=mkTab==='am'?['R','L']:['C','UC','R','L','SL','LT'];if(mkF.r&&!rks.includes(mkF.r))mkF.r='';if(mkF.k&&!mkKeys().includes(mkF.k))mkF.k='';if(mkSel&&!mkCan().includes(mkSel))mkSel=null;
-  view(`<div class="cols wide" data-mk="1"><div class="rail">
+  view(`<div class="cols wide mk3" data-mk="1"><div class="rail">
     <div class="row"><button class="btn alt sm" data-act="home">กลับ</button><h2>ตลาดกลาง</h2></div>
     <p class="num gold nt">Gold ${S.gold.toLocaleString('en')}</p>
-    ${on?`<div class="mkmode"><button class="btn sm ${buy?'on':'alt'}" data-act="mkmode" data-m="buy" aria-pressed="${buy}"><span class="nt">${T('ซื้อ','Buy')}</span></button><button class="btn sm ${mkMode==='sell'?'on':'alt'}" data-act="mkmode" data-m="sell" aria-pressed="${mkMode==='sell'}"><span class="nt">${T('ขาย','Sell')}${buy&&S.mkn?` <i style="font-style:normal;color:#10131c;background:#6cf586;padding:0 6px;border-radius:8px">${S.mkn}</i>`:''}</span></button><button class="btn sm ${hist?'on':'alt'}" data-act="mkmode" data-m="hist" aria-pressed="${hist}"><span class="nt">${T('ประวัติ','History')}</span></button></div>
+    ${on?`<div class="mkmode"><button class="btn sm ${buy?'on':'alt'}" data-act="mkmode" data-m="buy" aria-pressed="${buy}"><span class="nt">${T('ซื้อ','Buy')}</span></button><button class="btn sm ${mkMode==='sell'?'on':'alt'}" data-act="mkmode" data-m="sell" aria-pressed="${mkMode==='sell'}"><span class="nt">${T('ขาย','Sell')}${buy&&S.mkn?` <i style="font-style:normal;color:#10131c;background:#6cf586;padding:0 6px;border-radius:8px">${S.mkn}</i>`:''}</span></button></div>
     ${mkMode==='sell'&&mkSel&&mkHave(mkSel)>0?`<div class="px dissum"><span class="sub nt">${T('ราคาขาย','Price')} · ${AM[mkSel]?T(AM[mkSel].n,EN[AM[mkSel].n]||AM[mkSel].n):mkName(mkSel)}</span><b class="nt" style="color:#ffd84a">${mkPrice.toLocaleString('en')} Gold</b>
-      ${kp('mk','mkkp')}${mkPrice<100||mkPrice>MK_MAX?`<span class="sub nt" style="color:#ff8a7a">${T(`ตั้งราคาได้ ${(100).toLocaleString('en')}–${MK_MAX.toLocaleString('en')} Gold`,`Price must be ${(100).toLocaleString('en')}–${MK_MAX.toLocaleString('en')} Gold`)}</span>`:''}
+      ${mkGuide(mkSel)}${kp('mk','mkkp')}${mkPrice<100||mkPrice>MK_MAX?`<span class="sub nt" style="color:#ff8a7a">${T(`ตั้งราคาได้ ${(100).toLocaleString('en')}–${MK_MAX.toLocaleString('en')} Gold`,`Price must be ${(100).toLocaleString('en')}–${MK_MAX.toLocaleString('en')} Gold`)}</span>`:''}
       ${mkSelf(mkSel)?`<span class="sub nt" style="color:#ff8a7a">${T('ไม่มีใบซ้ำ: จะขายการ์ดตัวจริง ถ้าขายออก เลเวลและดาวหายไปกับการ์ด (ยกเลิกการขายจะได้คืนเหมือนเดิม)','No duplicate: the card itself is sold. If it sells, its level and stars go with it (cancelling returns it unchanged)')}</span>`:''}
       <span class="sub nt">${T('ค่าวางขาย','Listing fee')} ${mkFee(mkPrice).toLocaleString('en')} Gold · ${T('ขายได้จะได้รับ','you receive')} ${Math.floor(mkPrice*(1-TAX)).toLocaleString('en')} Gold</span></div>
     <button class="btn go sm" data-act="mklist" ${S.gold<mkFee(mkPrice)||mkPrice<100||mkPrice>MK_MAX?'disabled':''}><span class="nt">${T('ตั้งขาย','List for sale')}</span></button>`:''}
-    <button class="btn alt sm" data-act="mkref"><span class="nt">${hist?T('รีเฟรชประวัติ','Refresh history'):T('รีเฟรชตลาด','Refresh market')}</span></button>
     <p class="sub nt">${T(`ผู้เล่นตั้งราคากันเอง จ่ายด้วย Gold · ค่าวางขาย ${MK_FEE*100}% ของราคา (ขั้นต่ำ 50 ไม่คืน) · ภาษี ${TAX*100}% เมื่อขายได้`,`Players set their own prices in Gold · listing fee ${MK_FEE*100}% of the price (min 50, not refunded) · ${TAX*100}% tax on a sale`)}</p>`:`<p class="sub nt" style="color:#ffe45c">${T('ต้องล็อกอินด้วย Google ก่อนจึงใช้ตลาดได้','Sign in with Google to use the market')}</p>`}
     ${mkMsg()?`<p class="sub" style="color:#6cf586">${mkMsg()}</p>`:''}
   </div><div class="main">
@@ -1706,7 +1737,8 @@ function market(){if(mkTab==='dm')mkTab='am';
       ${hist?'':`<select id="mkfs" class="nt" aria-label="${T('เรียง','Sort')}">${[['pa',T('ราคาต่ำ → สูง','Price low → high')],['pd',T('ราคาสูง → ต่ำ','Price high → low')],['new',T('ลงขายล่าสุด','Newest')]].map(([v,t])=>`<option value="${v}" ${mkF.s===v?'selected':''}>${t}</option>`).join('')}</select>`}
       <select id="mkfn" class="nt" aria-label="${T('ชื่อ','Name')}"><option value="">${mkTab==='am'?T('เครื่องรางทุกชิ้น','All amulets'):T('การ์ดทุกใบ','All cards')}</option>${mkKeys().map(k=>`<option value="${k}" ${mkF.k===k?'selected':''}>${AM[k]?T(AM[k].n,EN[AM[k].n]||AM[k].n):mkName(k)}</option>`).join('')}</select>`:`<b class="nt" style="color:#f2d98a">${T('โหมดขาย','Selling')}</b>`}</div>`:''}
     <div id="mkres">${mkRes()}</div>
-  </div></div>`);
+  </div><aside class="mkside" id="mkside">${on?mkSide():''}</aside></div>`);
+  if(on){if(mkh.state!=='load'&&Date.now()-(mkh.try||0)>30000){mkh.try=Date.now();mkHFetch()}if(mkMode==='sell'&&mkSel)mkPxFetch(mkSel);else if(mkF.k)mkPxFetch(mkF.k)}
 }
 // ---------- b176 diamond market (DIA/GOLD): players trade diamonds for Gold with each other ----------
 // dmo/{id} = an order {u,nm,s:'a' sells diamonds|'b' buys diamonds,p Gold per diamond,q diamonds left,t seller tax %,at}. The maker's diamonds (sell) or Gold (buy) leave the save when it is posted.
@@ -3153,7 +3185,7 @@ $('view').onclick=ev=>{{const w=ev.target.closest('.dk,.ibtn,.pill,.row2 .btn');
   else if(a==='pcls'){prepCls=t.dataset.c;const m=document.querySelector('.rail'),y=m?m.scrollTop:0;prep();const r=document.querySelector('.rail');if(r)r.scrollTop=y}
   else if(a==='amlock'){const m=document.querySelector('.main'),y=m?m.scrollTop:0;setLock(t.dataset.k,!isLock(t.dataset.k));coll();const m2=document.querySelector('.main');if(m2)m2.scrollTop=y}
   else if(a==='market'){mkSel=null;mk.msg='';market();mkFetch(1)}
-  else if(a==='mkref'){mk.msg='';market();if(mkMode==='hist')mkHFetch(1);else mkFetch()}
+  else if(a==='mkref'){mk.msg='';mkPx={};market();mkFetch();mkHFetch(1)}
   else if(a==='settings')settings();
   else if(a==='guide'){gTab=t.dataset.g||gTab;guide();if(t.dataset.g){const m=document.querySelector('.main');if(m)m.scrollTop=0}}
   else if(a==='sfxt'){S.sfx=S.sfx===false;save();settings();sfx('slash')}
@@ -3185,9 +3217,10 @@ $('view').onclick=ev=>{{const w=ev.target.closest('.dk,.ibtn,.pill,.row2 .btn');
   else if(a==='tdec'){const n=tn();if(n&&n.gid&&rt){room.seen[n.gid]=1;rt.me.update({dec:n.gid}).catch(()=>{});n.item=null;n.el.classList.remove('gift')}room.menu=null;$('tui').innerHTML=''}
   else if(a==='tok'){const n=tn();if(!vipOn())return toast('การส่งของในห้องเทรดต้องมีบัตร VIP');if(n&&rt&&!S.pg&&trGive&&trOK(trGive)&&!isLock(trGive)&&trHave(trGive)>0&&!(trSelf(trGive)&&S.me.look===trGive)&&S.gold>=TRADE_TAX){const g={to:n.uid,k:trGive,id:Date.now().toString(36)+Math.random().toString(36).slice(2,6)};S.gold-=TRADE_TAX;lg('trade',-TRADE_TAX);const sv=trTake(trGive);S.pg=sv?{...g,sv}:g;trGive=null;save();cloudFlush();rt.me.update({gift:g}).catch(()=>refundGift('err'));room.menu=null;enterRoom();$('tlog').innerHTML=`ส่ง ${trName(g.k)} ให้ <b class="nt">${String(n.name).replace(/</g,'&lt;')}</b> · รอผู้รับยืนยัน`}}
   else if(a==='trok'){const n=tn();if(n&&n.item&&rt){const got=n.item;room.seen[n.gid]=1;trGet(got);save();cloudFlush();rt.me.update({ack:n.gid}).catch(()=>{});n.item=null;n.el.classList.remove('gift');room.menu=null;$('tui').innerHTML='';sfx('win');$('tlog').innerHTML=`รับแล้ว: ${trName(got)} ← <b class="nt">${String(n.name).replace(/</g,'&lt;')}</b>`}}
-  else if(a==='mksel'){mkSel=t.dataset.k;if(!mkRaw)mkRaw=String(mkPrice);market()}
+  else if(a==='mksel'){mkSel=t.dataset.k;if(!mkRaw)mkRaw=String(mkPrice);market();mkPxFetch(mkSel)}
   else if(a==='mkp'){mkPrice=Math.max(100,Math.min(MK_MAX,mkPrice+ +t.dataset.d));market()}
   else if(a==='mklist')mkList()
+  else if(a==='mkpx'){mkPrice=Math.max(100,Math.min(MK_MAX,+t.dataset.v|0));mkRaw=String(mkPrice);market()}
   else if(a==='mkcancel')mkCancel(t.dataset.id)
   else if(a==='mkbuy')mkBuy(t.dataset.id)
   else if(a==='tam'){S.am=S.am||{};Object.keys(AM).forEach(k=>S.am[k]=(S.am[k]||0)+1);save();settings()}
@@ -4316,7 +4349,7 @@ function titleScreen(){
 }
 // ---------- Firebase: Google sign-in and one cloud save document per account (saves/{uid}) ----------
 const OBT_PAUSED_MODES=true,PV_PAUSED=false; // b215: hide Tower, PvP and World Boss until relaunch
-const BUILD='b247';
+const BUILD='b248';
 // The game moved to its own address. Anyone opening the old address is sent on, but only once the new site answers, so a broken move cannot lock players out.
 const DISCORD='https://discord.gg/dHDzRyPG9',DC_SVG='<svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="currentColor" d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.4189-2.1568 2.4189Z"/></svg>';
 const NEW_HOME='https://pixeldeckbattle.github.io/';
@@ -4341,7 +4374,7 @@ function updGo(){if(updAt<0)return;updAt=-1;try{sessionStorage.setItem('pdb_upd'
   const el=document.getElementById('upd');if(el)el.innerHTML=`<b>${!S||S.lang!=='en'?'กำลังอัปเดต…':'Updating…'}</b>`;
   setTimeout(()=>location.replace(location.pathname+'?v='+updNew.replace(/\D/g,'')),900)}
 document.addEventListener('change',e=>{const t=e.target;if(t&&t.id==='slipin'&&t.files&&t.files[0])slipSend(t.files[0])});
-document.addEventListener('input',e=>{const t=e.target;if(!t||!t.id||!$('mkres'))return;if(t.id==='mkfn')mkF.k=t.value;else if(t.id==='mkfr'){mkF.r=t.value;return market()}else if(t.id==='mkfs')mkF.s=t.value;else return;$('mkres').innerHTML=mkRes()});
+document.addEventListener('input',e=>{const t=e.target;if(!t||!t.id||!$('mkres'))return;if(t.id==='mkfn')mkF.k=t.value;else if(t.id==='mkfr'){mkF.r=t.value;return market()}else if(t.id==='mkfs')mkF.s=t.value;else return;$('mkres').innerHTML=mkRes();const sd=$('mkside');if(sd)sd.innerHTML=mkSide();if(t.id==='mkfn'&&mkF.k)mkPxFetch(mkF.k)});
 setTimeout(updCheck,8000);setInterval(updCheck,UPD_POLL);document.addEventListener('visibilitychange',()=>{if(!document.hidden)updCheck()});const FBV='10.14.1';let fbP=null,cloudT=0,cloudDirty=false;
 function fbLoad(){if(!FB_CFG)return Promise.reject(new Error('no config'));
   return fbP=fbP||['app','auth','firestore','database'].reduce((pr,m)=>pr.then(()=>new Promise((ok,no)=>{const sc=document.createElement('script');sc.src=`https://www.gstatic.com/firebasejs/${FBV}/firebase-${m}-compat.js`;sc.onload=ok;sc.onerror=()=>no(new Error('sdk'));document.head.append(sc)})),Promise.resolve()).then(()=>{if(!firebase.apps.length)firebase.initializeApp(FB_CFG);return firebase})}
