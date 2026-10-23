@@ -1436,9 +1436,19 @@ function rtSync(data){const R=room,wd=$('tworld');if(!R||!wd||!rt)return;const m
     if(g&&R.menu==null){R.menu=u;R.target=null;recvConfirm()}});
   const c=$('rcount');if(c)c.textContent=(R.npcs.length+1)+'/'+ROOM_CAP;
   const pg=S.pg;if(pg){const o=data[pg.to];if(!o)refundGift('left');else if(o.ack===pg.id){S.pg=null;save();rt.me.child('gift').remove().catch(()=>{});const l=$('tlog');if(l)l.textContent='ผู้รับได้รับของแล้ว'}else if(o.dec===pg.id)refundGift('dec')}}
+// b257 PC: walk the trade room with WASD / arrow keys (physical keys, so a Thai keyboard layout works too); Enter opens chat, Esc leaves it
+const RK={},RK_MAP={KeyW:'u',ArrowUp:'u',KeyS:'d',ArrowDown:'d',KeyA:'l',ArrowLeft:'l',KeyD:'r',ArrowRight:'r'};
+const rkVec=()=>{const x=(RK.r?1:0)-(RK.l?1:0),y=(RK.d?1:0)-(RK.u?1:0);if(!x&&!y)return null;const n=Math.hypot(x,y);return{x:x/n,y:y/n}};
+addEventListener('keydown',e=>{if(!$('tfloor'))return;const tg=e.target,typing=tg&&(tg.tagName==='INPUT'||tg.tagName==='TEXTAREA');
+  if(typing){if(e.key==='Escape')tg.blur();return}
+  if(e.key==='Enter'&&$('chi')){e.preventDefault();$('chi').focus();return}
+  const k=RK_MAP[e.code];if(k){RK[k]=1;e.preventDefault()}});
+addEventListener('keyup',e=>{const k=RK_MAP[e.code];if(k)delete RK[k]});
+addEventListener('blur',()=>{for(const k in RK)delete RK[k]});
+addEventListener('focusin',e=>{const tg=e.target;if(tg&&(tg.tagName==='INPUT'||tg.tagName==='TEXTAREA'))for(const k in RK)delete RK[k]});
 function enterRoom(){
   ensureMe();const r=roomNo,on=mkOn();
-  view(`<div class="troom px"><div class="atop"><span class="num">ห้องเทรด ${r+1} · <span class="nt" id="rcount">1/${ROOM_CAP}</span> คน <small class="nt" id="rstat" style="font-size:11px"></small></span><span class="alog" id="tlog">${on?'ใช้จอยสติกเดิน แตะตัวละครอื่นเพื่อส่งของ':'ใช้จอยสติกเดิน · ล็อกอิน Google เพื่อเห็นผู้เล่นอื่น'}</span>
+  view(`<div class="troom px"><div class="atop"><span class="num">ห้องเทรด ${r+1} · <span class="nt" id="rcount">1/${ROOM_CAP}</span> คน <small class="nt" id="rstat" style="font-size:11px"></small></span><span class="alog" id="tlog">${isPC()?T('เดินด้วย WASD หรือปุ่มลูกศร · Enter พิมพ์แชท · คลิกตัวละครอื่นเพื่อส่งของ','Walk with WASD or the arrow keys · Enter to chat · click another player to send an item'):on?'ใช้จอยสติกเดิน แตะตัวละครอื่นเพื่อส่งของ':'ใช้จอยสติกเดิน · ล็อกอิน Google เพื่อเห็นผู้เล่นอื่น'}</span>
     <span class="row"><span class="num gold">Gold ${S.gold.toLocaleString('en')}</span><button class="btn alt sm" data-act="charedit">ตัวละคร</button><button class="btn alt sm" data-act="troom">ห้องอื่น</button><button class="btn alt sm" data-act="home">ออก</button></span></div>
     <div class="tfloor" id="tfloor"><div class="tworld" id="tworld" style="width:${WORLD_W}px"></div><canvas id="tfx"></canvas><div class="vtsch nt" id="vtsch"><b>🌀 ${T('ประตูมิติวันนี้','Portal today')}</b>${vtSched()}</div>
       <div class="chat"><input id="chi" class="nt" maxlength="40" autocomplete="off" enterkeyhint="send" placeholder="${S.lang==='en'?'Say something…':'พิมพ์แชท…'}"><button class="btn sm" data-act="chsend">ส่ง</button></div><div class="joy" id="joy"><i></i></div><div id="tui"></div></div></div>`);
@@ -1458,7 +1468,7 @@ function enterRoom(){
      const r=b.width/2/(uiK()||1),sc=1/(uiK()||1);dx*=sc;dy*=sc;const d=Math.hypot(dx,dy)||1,m=Math.min(1,d/(r*.62));R.joy=m<.18?null:{x:dx/d*m,y:dy/d*m};k.style.transform=`translate(${dx/d*Math.min(d,r*.62)}px,${dy/d*Math.min(d,r*.62)}px)`};
    const end=()=>{pid=null;R.joy=null;k.style.transform='';R.me.tx=R.me.x;R.me.ty=R.me.y;rtSend()};
    j.onpointerdown=e=>{e.preventDefault();pid=e.pointerId;try{j.setPointerCapture(pid)}catch(x){}mv(e)};j.onpointermove=e=>{if(e.pointerId===pid)mv(e)};j.onpointerup=j.onpointercancel=e=>{if(e.pointerId===pid)end()};
-   R.joyTick=t=>{if(!R.joy||R.menu!=null)return;R.target=null;R.me.tx=Math.max(20,Math.min(W-20,R.me.x+R.joy.x*46));R.me.ty=Math.max(H*FLOOR_TOP,Math.min(H-6,R.me.y+R.joy.y*46));if(t-last>220){last=t;rtSend()}}}
+   R.joyTick=t=>{const kv=R.joy?null:rkVec();if(!kv&&R.kon){R.kon=0;R.me.tx=R.me.x;R.me.ty=R.me.y;rtSend()}const J=R.joy||kv;if(!J||R.menu!=null)return;if(kv)R.kon=1;R.target=null;R.me.tx=Math.max(20,Math.min(W-20,R.me.x+J.x*46));R.me.ty=Math.max(H*FLOOR_TOP,Math.min(H-6,R.me.y+J.y*46));if(t-last>220){last=t;rtSend()}}}
   rtJoin(r);
   let last=performance.now();
   (function loop(t){if($('tfloor')!==fl){if(!$('tfloor'))rtLeave();return}const dt=Math.min(.05,(t-last)/1000);last=t;
@@ -4364,6 +4374,7 @@ function guide(){
      T(`<b>ประตูมิติ</b>: ทุกวันเวลา 03:00, 07:00, 12:00, 17:00 และ 22:00 (นาน 1 ชั่วโมง) หลุมดำจะโผล่ในห้องเทรด จุดเปลี่ยนทุกครั้ง เดินเข้าไปจะวาปไปห้องสมบัติ ทุกคนเลือด ${VLT_HP} ขีด โดนตีครั้งละ 1 เท่ากันหมด ใครยืนหน้าประตูกรงครบ 5 วินาทีโดยไม่โดนตีจะเปิดกรงได้ คนแรกที่แตะหีบได้ของตามที่เขียนบนหีบ (ทอง / เพชร / การ์ด Uncommon) หีบใหม่ทุก 15 นาที คนตายจะลอยเป็นวิญญาณจนกว่าหีบใบใหม่มา · ดูเวลาที่เหลือได้ที่ป้าย 🌀 ขอบซ้ายหน้าล้อบบี้ และตารางเวลามุมซ้ายบนในห้องเทรด ตอนประตูเปิด ปุ่มห้องเทรดจะมีป้ายประตูมิติเรืองแสง`,`<b>Portal</b>: every day at 03:00, 07:00, 12:00, 17:00 and 22:00 for one hour a black hole appears in the trade rooms, in a new spot each time. Walk in to warp to the vault. Everyone has ${VLT_HP} life and each hit takes 1. Stand at the cage gate for 5 s without being hit to open it; the first to touch the chest gets what is written on it (Gold / diamonds / an Uncommon card). A new chest every 15 minutes; the fallen float as ghosts until the next chest`),
      T(`การเทรดคือการ<b>ให้ของ</b>ทางเดียว: แตะผู้เล่นอื่น เลือกของที่จะส่ง ผู้ส่งจ่ายค่าธรรมเนียม ${N(TRADE_TAX)} Gold และผู้รับต้องกดยืนยัน`,`A trade is a one-way <b>gift</b>: tap a player, pick an amulet; the sender pays a ${N(TRADE_TAX)} Gold fee and the receiver must confirm`),
      T('ถ้าผู้รับปฏิเสธหรือออกจากห้อง ของและค่าธรรมเนียมจะคืนให้ผู้ส่ง','If the receiver declines or leaves, the item and fee return to the sender'),
+     T('เล่นบน PC: เดินด้วย WASD หรือปุ่มลูกศร ทั้งในห้องเทรดและประตูมิติ (ใช้ได้แม้แป้นเป็นภาษาไทย) · ห้องเทรดกด Enter เพื่อพิมพ์แชท Esc เพื่อออกจากช่องแชท · ประตูมิติกด Space หรือ J เพื่อตี และ E เพื่อเปิดประตูกรง','On PC: walk with WASD or the arrow keys in the trade room and the portal (works on any keyboard layout) · trade room: Enter to chat, Esc to leave the chat box · portal: Space or J to hit, E to open the cage gate'),
      T('ตัวละครที่เดินในห้องคือการ์ดที่เรามี เปลี่ยนได้ที่รูปโปรไฟล์ เอฟเฟกต์รอบตัวบอกระดับการ์ด','Your avatar is one of your own cards (change it from your profile); its effect shows the card\'s rank'),
      T('เกมไม่มีระบบซื้อขายด้วยเงินจริงระหว่างผู้เล่น','The game has no real-money trading between players')])],
    vip:['VIP',()=>ul([
