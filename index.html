@@ -1080,6 +1080,7 @@ h1{color:#f2d98a;text-shadow:0 3px 0 #7a4a1c,0 6px 0 #0a1019}h2{color:#f2d98a;te
 <div id="stage"><div id="view"></div><div id="ov"></div><div id="fsb" hidden></div><div id="tut"></div><div id="gate" hidden></div><div id="zoom" role="dialog" tabindex="-1" hidden></div></div>
 
 <script>(function(){
+let firebase;
 
 const $=id=>document.getElementById(id);
 // rarity tiers in the order the game ranks them; g = stat growth per level
@@ -1615,7 +1616,7 @@ function vltAtk(){const V=vlt;if(!V||V.dead||V.closed)return;const t=Date.now();
 // b258 owner: once a chest is taken the portal closes for that room; everyone goes back and it reopens with the next chest
 function vltReopen(){const w=vltWin();if(w&&w.rd<3)return T(`ประตูมิติเปิดอีกครั้งใน ${vltMMSS(w.left)}`,`The portal reopens in ${vltMMSS(w.left)}`);const {h}=vtNow(),nh=VLT_H.find(x=>x>h);return T(`รอบต่อไป ${vtHH(nh!=null?nh:VLT_H[0])} น.`,`Next round at ${vtHH(nh!=null?nh:VLT_H[0])}`)}
 const vltTaken=(d,rk)=>Object.values(d||{}).some(o=>o&&o.w&&o.w.r===rk);
-function vltPeek(no){const w=vltWin();if(!w||!mkOn()||!window.firebase||!firebase.apps.length||!firebase.database)return Promise.resolve(null);
+function vltPeek(no){const w=vltWin();if(!w||!mkOn()||!firebase||!firebase.apps.length||!firebase.database)return Promise.resolve(null);
   return rtDb().ref('rooms/v'+w.id+'_'+no).get().then(sn=>({rk:w.rk,taken:vltTaken(sn.val(),w.rk)})).catch(()=>null)}
 const vltHits=(ax,ay,face,x,y)=>Math.hypot(x-ax,(y-ay)*VLT_AR/.45)<=VLT_R;   // the ring is an ellipse 0.45 as tall as wide
 function vltOpen(){const V=vlt;if(!V||V.dead||V.closed)return;const st=vltState();if(st.gate||st.win)return;if(Math.hypot(V.x-VLT_GATE.x,(V.y-VLT_GATE.y)*1.5)>.07)return vltMsg(T('ไปยืนหน้าประตูกรงก่อน','Stand at the cage gate first'));
@@ -2063,7 +2064,7 @@ const lgSync=()=>{try{const L=lgInit(0),d=(+S.gold||0)-L.b;if(d){lg('unk',d);L.u
 // Frozen = cannot open packs, fuse, star up, exchange, trade, sell or buy; everything else (stages, farming) still works. The owner unfreezes from the admin page (config/main.unfrz).
 const FRZ_G=500000,FRZ_D=500,FRZ_OLD_G=1000000,FRZ_OLD_D=1000;
 const isFrz=()=>!!(S&&S.frz&&!(CFG&&CFG.unfrz&&USER&&USER.sub&&(+CFG.unfrz[USER.sub]||0)>=(+S.frz.t||0)));
-function frzFlag(why,amt){try{if(!FB_CFG||!USER||!USER.sub||!window.firebase||!firebase.apps.length||!firebase.auth().currentUser)return false;
+function frzFlag(why,amt){try{if(!FB_CFG||!USER||!USER.sub||!firebase||!firebase.apps.length||!firebase.auth().currentUser)return false;
   firebase.firestore().collection('flags').doc(USER.sub).set({why:String(why).slice(0,20),amt:Math.round(+amt||0),n:String(S&&S.me&&S.me.name||'').slice(0,12),gold:Math.round(+S.gold||0),dia:Math.round(+S.dia||0),b:BUILD,at:firebase.firestore.FieldValue.serverTimestamp()},{merge:true}).catch(()=>{});return true}catch(e){return false}}
 function frzSet(why,amt){if(!S||isDev())return;if(!S.frz)S.frz={t:Date.now(),why,amt:Math.round(+amt||0)};S.frzq=S.frzq||[why,Math.round(+amt||0)]}
 const frzMsg=()=>toast(T('บัญชีถูกระงับการใช้ Gold/เพชร ชั่วคราวเพื่อตรวจสอบ · ติดต่อทีมงานใน Discord','Spending is paused on this account for a check · contact the team on Discord'));
@@ -3319,7 +3320,7 @@ $('view').onclick=ev=>{{const w=ev.target.closest('.dk,.ibtn,.pill,.row2 .btn');
   else if(a==='sfxt'){S.sfx=S.sfx===false;save();settings();sfx('slash')}
   else if(a==='snd'){S.snd=S.snd===false;save();settings()}
   else if(a==='lang'){S.lang=t.dataset.l;save();document.documentElement.lang=S.lang;settings()}
-  else if(a==='logout'){save();cloudFlush();USER=null;try{localStorage.removeItem(SESSION)}catch(e){}try{window.firebase&&firebase.auth().signOut()}catch(e){}titleScreen()}
+  else if(a==='logout'){save();cloudFlush();USER=null;try{localStorage.removeItem(SESSION)}catch(e){}try{firebase&&firebase.auth().signOut()}catch(e){}titleScreen()}
   else if(a==='glogin')gLogin()
   else if(a==='glink')gLinkAsk()
   else if(a==='claim'){if(!S.gift){S.gift=true;refTake();if(!S.cleared)S.tut=0;S.afk=Date.now();GIFT.forEach(id=>{if(!S.cards[id]){S.cards[id]={lv:1,exp:0};clAdd(id,'gift')}});if(!S.team.length)S.team=[...GIFT];save();sfx('win')}home()}
@@ -4536,7 +4537,7 @@ function titleScreen(){
 }
 // ---------- Firebase: Google sign-in and one cloud save document per account (saves/{uid}) ----------
 const OBT_PAUSED_MODES=true,PV_PAUSED=false; // b215: hide Tower, PvP and World Boss until relaunch
-const BUILD='b261';
+const BUILD='b262';
 // The game moved to its own address. Anyone opening the old address is sent on, but only once the new site answers, so a broken move cannot lock players out.
 const DISCORD='https://discord.gg/dHDzRyPG9',DC_SVG='<svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="currentColor" d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.4189-2.1568 2.4189Z"/></svg>';
 const NEW_HOME='https://pixeldeckbattle.github.io/';
@@ -4564,7 +4565,7 @@ document.addEventListener('change',e=>{const t=e.target;if(t&&t.id==='slipin'&&t
 document.addEventListener('input',e=>{const t=e.target;if(!t||!t.id||!$('mkres'))return;if(t.id==='mkfn')mkF.k=t.value;else if(t.id==='mkfr'){mkF.r=t.value;return market()}else if(t.id==='mkfs')mkF.s=t.value;else return;$('mkres').innerHTML=mkRes();const sd=$('mkside');if(sd)sd.innerHTML=mkSide();if(t.id==='mkfn'&&mkF.k)mkPxFetch(mkF.k)});
 setTimeout(updCheck,8000);setInterval(updCheck,UPD_POLL);document.addEventListener('visibilitychange',()=>{if(!document.hidden)updCheck()});const FBV='10.14.1';let fbP=null,cloudT=0,cloudDirty=false;
 function fbLoad(){if(!FB_CFG)return Promise.reject(new Error('no config'));
-  return fbP=fbP||['app','auth','firestore','database'].reduce((pr,m)=>pr.then(()=>new Promise((ok,no)=>{const sc=document.createElement('script');sc.src=`https://www.gstatic.com/firebasejs/${FBV}/firebase-${m}-compat.js`;sc.onload=ok;sc.onerror=()=>no(new Error('sdk'));document.head.append(sc)})),Promise.resolve()).then(()=>{if(!firebase.apps.length)firebase.initializeApp(FB_CFG);return firebase})}
+  return fbP=fbP||['app','auth','firestore','database'].reduce((pr,m)=>pr.then(()=>new Promise((ok,no)=>{const sc=document.createElement('script');sc.src=`https://www.gstatic.com/firebasejs/${FBV}/firebase-${m}-compat.js`;sc.onload=ok;sc.onerror=()=>no(new Error('sdk'));document.head.append(sc)})),Promise.resolve()).then(()=>{firebase=firebase||window.firebase;try{delete window.firebase}catch(e){}if(window.firebase)window.firebase=undefined;if(!firebase.apps.length)firebase.initializeApp(FB_CFG);return firebase})}
 const fbUser=()=>new Promise(ok=>{const off=firebase.auth().onAuthStateChanged(u=>{off();ok(u)})});
 const saveDoc=()=>firebase.firestore().collection('saves').doc(USER.sub);
 // take whichever save is newer, the one on this device or the one in the cloud
@@ -4581,7 +4582,7 @@ let cloudChk=0;
 // and at once when it matters: leaving or hiding the page, and right after spending or receiving something (CLOUD_NOW actions, market, trade, top-up). The copy on the device is always saved immediately.
 const CLOUD_GAP=120000,CLOUD_NOW=['exgo','opengold','open','openpro','openltd','vipbuy','exch','asbuy','disgo','fugo','claim','logout','reset'];
 function cloudPush(){if(!FB_CFG||!USER||!USER.sub)return;cloudDirty=true;if(!cloudT)cloudT=setTimeout(cloudFlush,CLOUD_GAP)}
-function cloudFlush(){clearTimeout(cloudT);cloudT=0;if(!cloudDirty||!FB_CFG||!USER||!USER.sub||!window.firebase||!firebase.apps.length||!firebase.auth().currentUser)return;if(CFG&&CFG.bans&&CFG.bans[USER.sub])return;cloudDirty=false;
+function cloudFlush(){clearTimeout(cloudT);cloudT=0;if(!cloudDirty||!FB_CFG||!USER||!USER.sub||!firebase||!firebase.apps.length||!firebase.auth().currentUser)return;if(CFG&&CFG.bans&&CFG.bans[USER.sub])return;cloudDirty=false;
   const put=()=>{const j=JSON.stringify(S);return saveDoc().set({data:j,sg:sgOf(j),ts:S.ts||0,rv:rvOf(S),name:S.me?S.me.name:'',cleared:S.cleared||0,at:firebase.firestore.FieldValue.serverTimestamp()})};
   // after a quiet spell (this copy may have been left behind) look at the cloud copy first; if it is ahead, take it and stop instead of overwriting it
   if(stale)return;if(Date.now()-cloudChk<300000)return void put().catch(()=>{cloudDirty=true});
