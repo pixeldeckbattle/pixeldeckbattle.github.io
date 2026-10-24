@@ -1079,7 +1079,8 @@ h1{color:#f2d98a;text-shadow:0 3px 0 #7a4a1c,0 6px 0 #0a1019}h2{color:#f2d98a;te
 
 <div id="stage"><div id="view"></div><div id="ov"></div><div id="fsb" hidden></div><div id="tut"></div><div id="gate" hidden></div><div id="zoom" role="dialog" tabindex="-1" hidden></div></div>
 
-<script>
+<script>(function(){
+
 const $=id=>document.getElementById(id);
 // rarity tiers in the order the game ranks them; g = stat growth per level
 // keys are the tier slots from lowest to highest: Starter, Common, Uncommon, Rare, Legend, SuperLegend, and Limited (event-only, never in packs)
@@ -2233,7 +2234,15 @@ function cardDropRank(n){let x=Math.random();for(const [r,pr,min] of CD_ODDS){if
 const clInit=()=>{if(!S.cl||!S.cl.own){S.cl={t0:Date.now(),own:Object.keys(S.cards||{}),pk:{},src:{},r:[]}}return S.cl};
 const clPack=k=>{try{const L=clInit();L.pk[k]=(L.pk[k]||0)+1}catch(e){}};
 const clAdd=(id,src,dup)=>{try{const L=clInit();L.src[src]=(L.src[src]||0)+1;if(!L.own.includes(id))L.own.push(id);if(src==='unk'||['L','SL','LT'].includes(C[id].r)){L.r.push([Date.now(),id,src,dup?1:0]);if(L.r.length>60)L.r.shift()}}catch(e){}};
-const clSync=()=>{try{if(!S||!S.cards)return;const L=clInit();Object.keys(S.cards).forEach(id=>{if(C[id]&&!L.own.includes(id))clAdd(id,'unk')});L.own=L.own.filter(id=>S.cards[id])}catch(e){}};
+const clSync=()=>{try{if(!S||!S.cards)return;const L=clInit();Object.keys(S.cards).forEach(id=>{if(C[id]&&!L.own.includes(id))clAdd(id,'unk')});L.own=L.own.filter(id=>S.cards[id]);clCheck(L)}catch(e){}};
+// b261 anti-cheat: the card ledger must add up. Each pack kind gives a fixed number of cards; packs bought with Gold / diamonds must match what was paid.
+const CL_PER={gpack:3,pro:3,starter:3,arena:1};
+function clCheck(L){if(!S||S.frz||isDev())return;const lgo=(S.lg&&S.lg.o)||{},ldo=(S.ld&&S.ld.o)||{};
+  for(const k in CL_PER){const over=(+L.src[k]||0)-(+L.pk[k]||0)*CL_PER[k];if(over>0)return frzSet('card-'+k,over)}
+  const paidG=Math.floor((+lgo.gpack||0)/GPACK),paidP=Math.floor((+lgo.pro||0)/PRO.gold+(+ldo.pro||0)/PRO.dia+1e-9);
+  if((+L.pk.gpack||0)>paidG+2)return frzSet('pack-gpack',(+L.pk.gpack||0)-paidG);
+  if((+L.pk.pro||0)>paidP+2)return frzSet('pack-pro',(+L.pk.pro||0)-paidP);
+  const hi=(L.r||[]).filter(x=>x&&x[2]==='unk'&&C[x[1]]&&['SL','LT'].includes(C[x[1]].r)).length;if(hi>=2)frzSet('card-unk',hi)}
 const giveCard=(id,src='other')=>{if(S.cards[id]){S.cards[id].cp=(S.cards[id].cp||0)+1;clAdd(id,src,1);return{id,dup:true}}S.cards[id]={lv:1,exp:0};clAdd(id,src);return{id}};
 // first win over these bosses hands out guaranteed cards, so a free player can always reach a Rare (S.bc remembers which were paid; older saves get theirs in the lobby)
 const BOSS_CARD={10:['h24'],20:['R','h25']};   // b160: a mage, then a Rare and a tank, so a new free player holds every role by stage 20
@@ -4419,7 +4428,7 @@ function guide(){
      T(`การเทรดคือการ<b>ให้ของ</b>ทางเดียว: แตะผู้เล่นอื่น เลือกของที่จะส่ง ผู้ส่งจ่ายค่าธรรมเนียม ${N(TRADE_TAX)} Gold และผู้รับต้องกดยืนยัน`,`A trade is a one-way <b>gift</b>: tap a player, pick an amulet; the sender pays a ${N(TRADE_TAX)} Gold fee and the receiver must confirm`),
      T('ถ้าผู้รับปฏิเสธหรือออกจากห้อง ของและค่าธรรมเนียมจะคืนให้ผู้ส่ง','If the receiver declines or leaves, the item and fee return to the sender'),
      T('เล่นบน PC: เดินด้วย WASD หรือปุ่มลูกศร ทั้งในห้องเทรดและประตูมิติ (ใช้ได้แม้แป้นเป็นภาษาไทย) · ห้องเทรดกด Enter เพื่อพิมพ์แชท Esc เพื่อออกจากช่องแชท · ประตูมิติกด Space หรือ J เพื่อตี และ E เพื่อเปิดประตูกรง','On PC: walk with WASD or the arrow keys in the trade room and the portal (works on any keyboard layout) · trade room: Enter to chat, Esc to leave the chat box · portal: Space or J to hit, E to open the cage gate'),
-     T('ระบบกันโกง: ถ้ามี Gold หรือเพชรที่ไม่ได้มาจากในเกม (เช่น แก้ไฟล์เซฟ) บัญชีจะถูกระงับการใช้ Gold/เพชร การเปิดแพ็ค การเทรด และการซื้อขายจนกว่าทีมงานจะตรวจเสร็จ · การแก้เซฟหรือใช้โปรแกรมโกงมีโทษระงับบัญชีถาวร','Anti-cheat: Gold or diamonds that did not come from play (an edited save, for example) pause spending, packs, trading and the market until the team has checked · editing saves or using cheat tools means a permanent ban'),
+     T('ระบบกันโกง: ถ้ามี Gold เพชร หรือการ์ดที่ไม่ได้มาจากในเกม (เช่น แก้ไฟล์เซฟ หรือใช้สคริปต์) บัญชีจะถูกระงับการใช้ Gold/เพชร การเปิดแพ็ค การเทรด และการซื้อขายจนกว่าทีมงานจะตรวจเสร็จ · การแก้เซฟหรือใช้โปรแกรมโกงมีโทษระงับบัญชีถาวร','Anti-cheat: Gold, diamonds or cards that did not come from play (an edited save or a script, for example) pause spending, packs, trading and the market until the team has checked · editing saves or using cheat tools means a permanent ban'),
      T('ตัวละครที่เดินในห้องคือการ์ดที่เรามี เปลี่ยนได้ที่รูปโปรไฟล์ เอฟเฟกต์รอบตัวบอกระดับการ์ด','Your avatar is one of your own cards (change it from your profile); its effect shows the card\'s rank'),
      T('เกมไม่มีระบบซื้อขายด้วยเงินจริงระหว่างผู้เล่น','The game has no real-money trading between players')])],
    vip:['VIP',()=>ul([
@@ -4527,7 +4536,7 @@ function titleScreen(){
 }
 // ---------- Firebase: Google sign-in and one cloud save document per account (saves/{uid}) ----------
 const OBT_PAUSED_MODES=true,PV_PAUSED=false; // b215: hide Tower, PvP and World Boss until relaunch
-const BUILD='b260';
+const BUILD='b261';
 // The game moved to its own address. Anyone opening the old address is sent on, but only once the new site answers, so a broken move cannot lock players out.
 const DISCORD='https://discord.gg/dHDzRyPG9',DC_SVG='<svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="currentColor" d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.4189-2.1568 2.4189Z"/></svg>';
 const NEW_HOME='https://pixeldeckbattle.github.io/';
@@ -4646,8 +4655,111 @@ document.addEventListener('focusin',ev=>{const n=ev.target,chat=n.id==='chi';if(
   document.body.append(k);const i=$('kbi');i.value=n.value;const done=ok=>{if(ok){if(chat)chatSend(i.value);else n.value=i.value.slice(0,12)}k.remove()};
   $('kbo').onclick=()=>done(true);$('kbc').onclick=()=>done(false);i.onkeydown=e=>{if(e.key==='Enter')done(true)};setTimeout(()=>i.focus(),30)});
 S=load();try{const l=localStorage.getItem('pdb_lang');if(l&&!USER)S.lang=l}catch(e){}document.documentElement.lang=S.lang||'th';USER?loading(USER.sub?cloudPull().catch(()=>{}):null):titleScreen();
-</script>
-<script src="audio/audio_engine.js?v=b240"></script>
+
+/* ---- audio engine (inlined by tools/harden.py) ---- */
+/* PixelDeck Battle audio engine (b239). Loaded after the core game script; touches no save data except S.bgm (music on/off).
+   Music: one CC0 track per mode, loudness-normalised to -16 LUFS by .github/workflows/pd-audio-b239.yml, crossfaded with HTMLAudio.
+     lobby (menus) = Battle Theme A · stages = Battle Theme B · elite/survival = Hard Battle 1 · boss/lord = Epic Boss Battle
+     PvP = Determined Pursuit · world boss = The Final Battle · market/trade room = The Old Tower Inn · portal minigame = Chiptune Adventures Stage 1
+     victory = Victory Theme. Credits: audio/MUSIC_CREDITS.md.
+   Sound effects: Kenney CC0 packs (Interface, RPG, Casino, Music Jingles), peak-normalised, played through WebAudio buffers.
+   The game's own combat sounds (slash, smash, hit, magic, arrow, heal, ult) are kept; tap / win / lose / start use the new files. */
+(()=>{'use strict';
+const MUSIC={lobby:'lobby',stage:'stage',hard:'hard',boss:'boss',pvp:'pvp',wboss:'wboss',tavern:'tavern',portal:'portal',victory:'victory'};
+const SFX_GAIN={tap:.35,nav:.45,back:.4,confirm:.5,error:.4,tick:.45,coins:.6,pack:.7,fan:.55,latch:.55,door:.5,portal:.5,reward:.55,rare:.7,defeat:.55,start:.5};
+const V="?v=b240",bad={};
+let unlocked=false,want='lobby',current=null,fade=0,seq=0,ctx=null,bus=null,lastCue=0,hushed=false,hushFrom='';
+const enabled=()=>typeof S!=='undefined'&&S&&S.bgm!==false;
+const sfxOn=()=>typeof S!=='undefined'&&S&&S.sfx!==false&&S.snd!==false;
+// b240 (owner): everyone starts at 25%; earlier saved levels are reset once
+try{if(!localStorage.getItem('pdb_bgm_v2')){localStorage.setItem('pdb_bgm_volume','25');localStorage.setItem('pdb_bgm_v2','1')}}catch(e){}
+function level(){let n=25;try{const v=localStorage.getItem('pdb_bgm_volume');if(v!==null)n=Number(v)}catch(e){}return Math.max(0,Math.min(100,Number.isFinite(n)?n:25))}
+const musicVolume=()=>level()/100*.5;
+
+/* ---------- sound effects ---------- */
+const buf={};
+function AC(){if(ctx)return ctx;const K=window.AudioContext||window.webkitAudioContext;if(!K)return null;ctx=new K();bus=ctx.createGain();bus.gain.value=.9;
+ const c=ctx.createDynamicsCompressor();c.threshold.value=-14;c.knee.value=10;c.ratio.value=4;c.attack.value=.003;c.release.value=.15;bus.connect(c).connect(ctx.destination);return ctx}
+function loadSfx(){const A=AC();if(!A)return;Object.keys(SFX_GAIN).forEach(k=>{if(buf[k])return;buf[k]='loading';
+ fetch('audio/sfx/'+k+'.mp3'+V).then(r=>{if(!r.ok)throw 0;return r.arrayBuffer()}).then(a=>new Promise((ok,no)=>A.decodeAudioData(a,ok,no))).then(b=>{buf[k]=b}).catch(()=>{buf[k]=null})})}
+function play(k,delay=0,gain=1){if(!unlocked||!sfxOn())return false;const A=AC(),b=buf[k];if(!A||!b||b==='loading')return false;if(A.state==='suspended')A.resume().catch(()=>{});
+ try{const s=A.createBufferSource(),g=A.createGain();s.buffer=b;g.gain.value=(SFX_GAIN[k]||.5)*gain;s.connect(g).connect(bus);s.start(A.currentTime+delay)}catch(e){return false}return true}
+
+/* ---------- music ---------- */
+function retire(a){if(!a)return;try{a.pause();a.removeAttribute('src');a.load()}catch(e){}}
+function quiet(a){if(!a)return;const v0=a.volume;let k=0;const t=setInterval(()=>{if(++k>=10){clearInterval(t);retire(a);return}a.volume=Math.max(0,v0*(1-k/10))},50)}
+function stopAll(){clearInterval(fade);if(current){quiet(current);current=null}}
+function choose(k){if(!MUSIC[k])k='lobby';want=k;if(hushed)return;if(!unlocked||!enabled()){stopAll();return}
+ if(current&&current._kind===k){if(current.paused&&!document.hidden)current.play().catch(()=>{});return}
+ if(bad[k]){stopAll();return}
+ const token=++seq,previous=current,a=new Audio();current=a;a._kind=k;a.preload='auto';a.loop=k!=='victory';a.volume=0;
+ const fadeIn=()=>{if(token!==seq||current!==a)return;clearInterval(fade);let i=0;const ov=previous?previous.volume:0;
+  fade=setInterval(()=>{if(token!==seq){clearInterval(fade);return}i++;const p=Math.min(1,i/14);a.volume=musicVolume()*p;if(previous)previous.volume=Math.max(0,ov*(1-p));if(p===1){clearInterval(fade);retire(previous)}},55)};
+ a.onerror=()=>{bad[k]=1;if(token!==seq)return;retire(a);if(current===a)current=null;quiet(previous)};
+ a.onended=()=>{if(k==='victory'&&current===a){current=null;choose(want==='victory'?'lobby':want)}};
+ a.src='audio/music/'+MUSIC[k]+'.mp3'+V;
+ if(!document.hidden){const p=a.play();if(p&&p.then)p.then(fadeIn).catch(()=>{});else fadeIn()}
+}
+function changeVolume(n){const v=Math.round(Math.max(0,Math.min(100,Number(n)||0)));try{localStorage.setItem('pdb_bgm_volume',String(v))}catch(e){}if(current)current.volume=musicVolume();const p=document.getElementById('pd-music-pct');if(p)p.textContent=v+'%'}
+/* b240 (owner): music goes quiet for the exciting moments (packs, fusion, amulet forge, arena boxes, Legend pick) until the player leaves that screen */
+function hush(from){hushFrom=from;if(hushed)return;hushed=true;clearInterval(fade);const a=current;if(!a)return;const v0=a.volume;let k=0;const t=setInterval(()=>{if(++k>=8||current!==a){clearInterval(t);if(current===a)a.pause();return}a.volume=Math.max(0,v0*(1-k/8))},40)}
+function unhush(){if(!hushed)return;hushed=false;hushFrom='';const a=current;if(a&&a._kind===want&&enabled()&&unlocked){a.volume=0;a.play().then(()=>{let i=0;clearInterval(fade);fade=setInterval(()=>{i++;a.volume=musicVolume()*Math.min(1,i/14);if(i>=14)clearInterval(fade)},55)}).catch(()=>{})}else choose(want)}
+function screen(name){if(!hushed)return;let pl=null;try{pl=pull}catch(e){}if(name!==hushFrom||(name==='shop'&&!pl))unhush()}
+function unlock(){if(unlocked)return;unlocked=true;AC();loadSfx();if(enabled())choose(want)}
+
+/* ---------- settings row ---------- */
+function injectSettings(){const host=document.querySelector('#view .main');if(!host||document.getElementById('pd-music-row'))return;
+ const en=S&&S.lang==='en',r=document.createElement('div');r.id='pd-music-row';r.className='row nt';r.style.cssText='display:flex;gap:10px;align-items:center;flex-wrap:wrap';
+ r.innerHTML='<span style="flex:1;min-width:100px">'+(en?'Background music':'เพลงประกอบ')+'</span><button class="btn sm '+(enabled()?'on':'alt')+'" type="button" id="pd-music-toggle">'+(enabled()?(en?'On':'เปิด'):(en?'Off':'ปิด'))+'</button><label style="display:flex;align-items:center;gap:6px;width:100%" for="pd-music-volume"><span style="min-width:58px">'+(en?'Volume':'ความดัง')+'</span><input id="pd-music-volume" type="range" min="0" max="100" step="5" value="'+level()+'" style="flex:1;min-width:80px;accent-color:#ffdc6b"><b id="pd-music-pct" style="min-width:38px;text-align:right">'+level()+'%</b></label>';
+ host.insertBefore(r,host.firstChild);
+ r.querySelector('#pd-music-toggle').onclick=()=>{S.bgm=S.bgm===false;save();if(enabled())choose(want);else stopAll();settings()};
+ r.querySelector('#pd-music-volume').oninput=e=>changeVolume(e.target.value)}
+
+/* ---------- button cues ---------- */
+function cue(act){if(/^(home|back|close|wbclose|disno|dressdone)$/.test(act))return 'back';
+ if(/^(go|pvstart|claim|fugo|buy|confirm|tpgo|lselgo|schest|disgo|exgo|mkbuy|mksell)$/.test(act))return 'confirm';
+ if(/^(cancel|no|dismiss)$/.test(act))return 'error';
+ if(/^(settings|guide|shop|market|pvp|pvtab|coll|profile|troom|vault|vip|quests|amulet|fuse|bag)$/.test(act))return 'nav';
+ if(/^(open|openpro|opengold|openltd|asbuy)$/.test(act))return '';   // these get their own sounds below
+ return 'tap'}
+document.addEventListener('pointerdown',e=>{const t=e.target.closest&&e.target.closest('button:not(:disabled),[role=button],[data-act]');unlock();if(!t)return;
+ const c=cue(t.dataset.act||'');if(c&&play(c))lastCue=performance.now();if(enabled()&&!hushed&&!current&&!bad[want])choose(want)},true);
+document.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' ')unlock()},true);
+document.addEventListener('visibilitychange',()=>{if(document.hidden){if(current)current.pause()}else if(unlocked&&enabled()&&!hushed){if(current)current.play().catch(()=>{});else choose(want)}});
+window.addEventListener('pagehide',()=>{if(current)current.pause()});
+
+/* ---------- hooks into the game ---------- */
+const __B={home:[()=>home,v=>{home=v}],titleScreen:[()=>titleScreen,v=>{titleScreen=v}],coll:[()=>coll,v=>{coll=v}],shop:[()=>shop,v=>{shop=v}],prep:[()=>prep,v=>{prep=v}],fuse:[()=>fuse,v=>{fuse=v}],fuseAm:[()=>fuseAm,v=>{fuseAm=v}],guide:[()=>guide,v=>{guide=v}],settings:[()=>settings,v=>{settings=v}],market:[()=>market,v=>{market=v}],roomList:[()=>roomList,v=>{roomList=v}],enterRoom:[()=>enterRoom,v=>{enterRoom=v}],arena:[()=>arena,v=>{arena=v}],pvPick:[()=>pvPick,v=>{pvPick=v}],wbHub:[()=>wbHub,v=>{wbHub=v}],wbJoin:[()=>wbJoin,v=>{wbJoin=v}],vltEnter:[()=>vltEnter,v=>{vltEnter=v}],openPack:[()=>openPack,v=>{openPack=v}],openGold:[()=>openGold,v=>{openGold=v}],openPro:[()=>openPro,v=>{openPro=v}],openLtd:[()=>openLtd,v=>{openLtd=v}],asBuy:[()=>asBuy,v=>{asBuy=v}],fuDo:[()=>fuDo,v=>{fuDo=v}],fuAllDo:[()=>fuAllDo,v=>{fuAllDo=v}],afDo:[()=>afDo,v=>{afDo=v}],lselPick:[()=>lselPick,v=>{lselPick=v}],startBattle:[()=>startBattle,v=>{startBattle=v}]};const wrap=(name,before,after)=>{try{const g=__B[name];if(!g)return;const f=g[0]();if(typeof f!=='function')return;g[1](function(...a){if(before)before.apply(this,a);const r=f.apply(this,a);if(after)after.call(this,r,...a);return r})}catch(e){console.warn('PixelDeck audio hook',name,e)}};
+const best=()=>{try{const L=Array.isArray(pull)?pull:[];return L.some(x=>x&&C[x.id]&&['L','SL','LT'].includes(C[x.id].r))}catch(e){return false}};
+try{
+ const oldSfx=sfx;window.sfx=sfx=function(kind){
+  if(kind==='tap'){if(performance.now()-lastCue<200)return;if(play('tap'))return}
+  else if(kind==='win'){if(play('reward'))return}
+  else if(kind==='lose'){if(play('defeat'))return}
+  else if(kind==='start'){if(play('start'))return}
+  return oldSfx(kind)};
+ const oldBeep=beep;window.beep=beep=function(){unlock();if(!play('tick'))oldBeep()};
+}catch(e){console.warn('PixelDeck audio sfx hook',e)}
+['home','titleScreen','coll','shop','prep','fuse','fuseAm','guide'].forEach(n=>wrap(n,null,()=>{screen(n);choose('lobby')}));
+wrap('settings',null,()=>injectSettings());
+['market','roomList'].forEach(n=>wrap(n,null,()=>{screen(n);choose('tavern')}));
+wrap('enterRoom',()=>{play('door')},()=>{screen('enterRoom');choose('tavern')});
+['arena','pvPick'].forEach(n=>wrap(n,null,()=>{screen(n);choose('pvp')}));
+['wbHub','wbJoin'].forEach(n=>wrap(n,null,()=>{screen(n);choose('wboss')}));
+wrap('vltEnter',()=>{play('portal')},()=>{screen('vltEnter');choose('portal')});
+['openPack','openGold','openPro','openLtd'].forEach(n=>wrap(n,()=>{hush('shop');play('pack');play('fan',.28)},()=>{if(best())play('rare',.7)}));
+wrap('asBuy',function(k){this.__ac=typeof S!=='undefined'?S.ac:0},function(r,k){if(typeof S==='undefined'||S.ac===this.__ac)return;
+ if(k==='gold')play('coins');else{hush('arena');if(k==='pack'){play('pack');play('fan',.28)}else{play('latch');play('reward',.25)}}});
+['fuDo','fuAllDo'].forEach(n=>wrap(n,()=>hush('fuse')));wrap('afDo',()=>hush('fuseAm'));wrap('lselPick',()=>hush('lsel'));
+wrap('startBattle',(n,opp)=>{screen('battle');let k='stage';if(opp)k='pvp';else{const t=typeof stKind==='function'?stKind(n):'';if(t==='lord'||t==='boss'||(typeof ST1!=='undefined'&&n<=ST1&&n%10===0))k='boss';else if(t==='elite'||t==='surv')k='hard'}choose(k)});
+try{const oldFinish=finish;window.finish=finish=function(won,...a){const farm=won&&typeof loop!=='undefined'&&loop===2;
+ if(won&&!farm)choose('victory');else if(!won){stopAll();want='lobby'}return oldFinish.call(this,won,...a)}}catch(e){console.warn('PixelDeck audio finish hook',e)}
+window.PDAudio={choose,play,level,changeVolume,mute:()=>{S.bgm=false;save();stopAll()}};
+})();
+
+window.ov=ov;   // the only game function the page markup calls (onclick="ov('')")
+})();</script>
+
 
 
 <a href="https://pixelpicked.com/game/3QqeaUhmbSp/pixeldeck-battle" target="_blank" rel="noopener">
