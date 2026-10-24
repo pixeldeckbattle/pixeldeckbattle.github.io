@@ -171,6 +171,15 @@ p{margin:0}
 @media (max-height:480px){.afst .btn{min-width:38px}.afto .amu{width:30px;height:30px}}
 .bagt{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;margin:4px 0 14px}.itl{align-items:stretch}.itl .itr{width:100%;box-sizing:border-box}.bagt button{font:700 12px var(--display);white-space:nowrap;padding:5px 1px;border:2px solid #f2c14e;border-radius:8px;background:rgba(10,13,36,.85);color:#eaf2ff;opacity:.7;display:flex;flex-direction:column;align-items:center;gap:1px;line-height:1.1}.bagt button .emi{height:20px}.bagt button.on{opacity:1;background:#ffd23a;color:var(--deep)}.bagt i{font-style:normal;background:#ff4d6d;color:#fff;border-radius:8px;padding:0 5px;font-size:11px}
 .itr{grid-template-columns:52px 1fr auto!important;align-items:center}.iti{display:grid;place-items:center;width:52px;height:52px}.iti img{max-width:48px;max-height:48px}.itg{font-style:normal;font-size:34px;line-height:1}.itr b i{font-style:normal;color:#ffd23a}
+.amhf{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}.amhf button{padding:6px 14px;border-radius:20px;border:2px solid #3a4cae;background:#141a42;color:#c9d1ff;font:inherit;font-weight:700;cursor:pointer}.amhf button.on{background:linear-gradient(180deg,#ffb238,#e8580d);border-color:#ffe27a;color:#fff}.amhf small{opacity:.75;margin-left:2px}
+.amhub{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:14px}
+.amc{--rc:#6cbcff;position:relative;display:grid;grid-template-columns:62px minmax(0,1fr);gap:4px 12px;align-items:center;text-align:left;padding:12px;border:3px solid #10142c;border-radius:14px;background:linear-gradient(160deg,#26337e,#161d50);color:#eef1ff;cursor:pointer;box-shadow:inset 0 0 0 2px var(--rc),0 6px 14px rgba(0,0,0,.4);transition:transform .12s}
+.amc:hover{transform:translateY(-2px)}.amc:active{transform:scale(.98)}.amc.rL{--rc:#ffd23a}.amc.rSL{--rc:#ff9d1a;background:linear-gradient(160deg,#3a2470,#1a1440)}.amc.rLT{--rc:#7dff8a}
+.amc.rd{box-shadow:inset 0 0 0 2px #7dff8a,0 0 16px rgba(125,255,138,.45)}
+.amc .amci{width:62px;align-self:start}.amc span{display:flex;flex-direction:column;gap:2px;min-width:0}.amc b{font-size:16px;line-height:1.2}.amc small{font-size:12.5px;line-height:1.3;color:#c9d1ff}.amc .amef{color:#ffe27a}.amc .amw{font-size:12.5px;color:#9ff0b0}
+.amlvb{display:block;height:7px;border-radius:4px;background:#0d1236;overflow:hidden;margin:2px 0}.amlvb i{display:block;height:100%;background:linear-gradient(90deg,#ffb238,#ffd84a)}
+.amgo{position:absolute;top:-9px;right:10px;font-style:normal;font-size:12px;font-weight:800;padding:2px 10px;border-radius:10px;background:#1f8a3b;color:#fff;box-shadow:0 0 0 2px #10142c;animation:amgo 1.4s ease-in-out infinite}.amgo.mx{background:linear-gradient(180deg,#ffe27a,#d99a12);color:#3a1c00;animation:none}
+@keyframes amgo{50%{transform:scale(1.08)}}
 .auhd{display:flex;gap:12px;align-items:center}.auhd span{display:flex;flex-direction:column}.auhd b{font-size:18px}.aulvt{color:#ffd84a}
 .aubox h3{margin:0 0 4px}.aulv{display:flex;gap:4px;margin:6px 0}.aulv i{flex:1;height:10px;border-radius:4px;background:#262f6e}.aulv i.on{background:linear-gradient(90deg,#ffb238,#ffd84a)}
 .aut{display:flex;flex-direction:column;gap:10px}.aurow{border:3px solid #3a4cae;border-radius:12px;background:#141a42;padding:10px 12px}.aurow.on{border-color:#ffd84a;background:#2a1f10}.aurow.off{opacity:.45}
@@ -2355,7 +2364,7 @@ function home(){wbSpdBack();if(BETA&&USER&&USER.sub&&!isDev()){location.replace(
    <nav class="dock">
     ${dk('coll',UI.bag,'c1',T('กระเป๋าไอเท็ม','Bag'),T('การ์ด · เครื่องราง · ไอเท็ม','Cards · amulets · items'),0,0)}
     ${dk('shop',UI.pack,'c2','ร้านค้า',T('แพ็ค · เพชร · VIP','Packs · diamonds · VIP'),0,.6)}
-    ${dk('amtab',UI.amu,'c3','เครื่องราง','ใบละ 1 ชิ้น',0,1.2)}
+    ${dk('amhub',UI.amu,'c3',T('อัปเกรดเครื่องราง','Amulet Upgrade'),amHubN()?T(`อัปได้ ${amHubN()} ชนิด`,`${amHubN()} ready`):T('เลเวล · ต้นสกิล','Levels · skill tree'),0,1.2)}
     ${dk('fusehub',UI.fuse,'c4','ฟิวชั่น',T('การ์ด / เครื่องราง','Cards / amulets'),0,1.5)}
     ${dk('market',UI.market,'c4','ตลาดกลาง','ซื้อขายด้วย Gold',0,1.8)}
     ${vtDk(dk('troom',UI.trade,'c5','ห้องเทรด','ห้องละ 10 คน',0,2.4))}
@@ -2600,6 +2609,31 @@ function amCostBox(k,c,key,label,lock){const [g,nr,nl]=c,mr=amMat('R',nr,k),ml=a
    ${ok&&(nr||nl)?`<p class="sub nt" style="margin:0 0 6px">${T('จะใช้','Uses')}: ${amMatTxt(mr,ml)}</p>`:''}
    <button class="btn ${ok?'go':'alt'} sm" data-act="${key.split(':')[0]}" data-b="${key.split(':')[1]||''}" ${ok?'':'disabled'}><span class="nt">${amArm===key?T('แตะอีกครั้งเพื่อยืนยัน','Tap again to confirm'):label}</span></button>
    ${lock?`<p class="sub nt warn">${lock}</p>`:poor?`<p class="sub nt warn">${T('Gold ไม่พอ','Not enough Gold')}</p>`:miss?`<p class="sub nt warn">${T('เครื่องรางที่ว่างไม่พอ (ชิ้นที่ใส่อยู่ ชนิดที่ล็อก และชิ้นสุดท้ายของชนิดนี้ไม่ถูกใช้)','Not enough spare amulets (worn pieces, locked types and the last piece of this type are never used)')}</p>`:''}`}
+// b265 lobby hub: every upgradable amulet type the player owns, with its level, branch and whether an upgrade is affordable right now
+let amFrom='bag',amHf='all';
+const amAff=(k,c)=>!!(c&&S.gold>=c[0]&&amMat('R',c[1],k)&&amMat('L',c[2],k));
+const amReady=k=>{const u=amU(k),R=AMU[AM[k].r];return amAff(k,amCost(k,'l'))||(u.b&&u.n<3&&u.l>=R.ul[u.n]&&amAff(k,R.nd[u.n]))};
+const amHubN=()=>{try{return S&&S.am?Object.keys(AM).filter(k=>owned(k)>0&&amCanUp(k)&&worn(k)>0&&amReady(k)).length:0}catch(e){return 0}};
+const amSpare=r=>Object.keys(AM).filter(k=>AM[k].r===r&&!isLock(k)).reduce((n,k)=>n+Math.max(0,spare(k)),0);
+function amHub(){const RK2=['LT','SL','L','R'],ks=Object.keys(AM).filter(k=>owned(k)>0&&amCanUp(k)&&(amHf==='all'||AM[k].r===amHf||(amHf==='SL'&&AM[k].r==='LT')))
+   .sort((a,b)=>(worn(b)>0)-(worn(a)>0)||RK2.indexOf(AM[a].r)-RK2.indexOf(AM[b].r)||amU(b).l-amU(a).l),cnt=r=>Object.keys(AM).filter(k=>owned(k)>0&&amCanUp(k)&&(r==='all'||AM[k].r===r||(r==='SL'&&AM[k].r==='LT'))).length;
+  const card=k=>{const A=AM[k],R=AMU[A.r],u=amU(k),mx=u.l>=R.mx&&(!u.b||u.n>=3),rd=!mx&&amReady(k),o=amX(k,u);
+    return `<button class="amc r${A.r} ${rd?'rd':''}" data-act="amup" data-k="${k}" data-from="hub">${rd?`<i class="amgo nt">${T('อัปได้!','Ready!')}</i>`:mx?`<i class="amgo mx nt">MAX</i>`:''}
+     <i class="amci">${amu(k)}</i><span class="nt"><b>${A.n}</b><small class="art-${A.r}">${RAR[A.r].n} · Lv ${u.l}/${R.mx}</small>
+     <em class="amlvb"><i style="width:${(u.l/R.mx)*100}%"></i></em>
+     <small>${u.b?`🌳 ${T(AMB[u.b].n,AMB[u.b].e)} ${['','I','II','III'][u.n]||''}`:`<span style="opacity:.6">${T('ยังไม่เลือกสาย','No branch yet')}</span>`}</small>
+     <small class="amef">${amLines(o).slice(0,2).join(' · ')}</small>
+     <small>${worn(k)?`<b class="amw">${T('ใส่อยู่','Worn')} ${worn(k)}</b> · `:''}${T('มี','Own')} ${owned(k)}</small></span></button>`};
+  view(`<div class="cols wide"><div class="rail">
+    <div class="row"><button class="btn alt sm" data-act="home">กลับ</button><h2 class="nt">${T('อัปเกรดเครื่องราง','Amulet Upgrade')}</h2></div>
+    <span class="num gold nt" style="margin:0">Gold ${S.gold.toLocaleString('en')}</span>
+    <div class="px dissum nt"><span class="sub"><b>${T('วัตถุดิบที่ว่าง','Spare materials')}</b></span><span class="sub"><b class="art-R">Rare</b> ${amSpare('R')} ${T('ชิ้น','pcs')} · <b class="art-L">Legend</b> ${amSpare('L')} ${T('ชิ้น','pcs')}</span><span class="sub" style="opacity:.75">${T('ไม่นับชิ้นที่ใส่อยู่และชนิดที่ล็อก 🔒','Worn pieces and locked 🔒 types not counted')}</span></div>
+    <div class="px dissum nt"><span class="sub">⬆️ ${T('อัปเลเวล = ผลเครื่องรางแรงขึ้น','Level up = stronger effect')}</span><span class="sub">🌳 ${T('ต้นสกิล เลือก 1 สาย 3 ขั้น','Skill tree: 1 branch, 3 nodes')}</span><span class="sub">✨ ${T('อัปครั้งเดียว ทุกชิ้นของชนิดนั้นได้ผล','One upgrade covers every piece of the type')}</span><span class="sub">⚔️ ${T('PvP ผลต้นสกิลเหลือครึ่ง','PvP: tree at half strength')}</span></div>
+    <button class="btn sm" data-act="amtab"><span class="nt">🎒 ${T('ไปใส่ / ถอดเครื่องราง','Equip amulets')}</span></button>
+  </div><div class="main">
+    <div class="amhf nt">${[['all',T('ทั้งหมด','All')],['SL','SuperLegend'],['L','Legend'],['R','Rare']].map(([r,t])=>`<button class="${amHf===r?'on':''}" data-act="amhf" data-r="${r}">${t} <small>${cnt(r)}</small></button>`).join('')}</div>
+    ${ks.length?`<div class="amhub">${ks.map(card).join('')}</div>`:`<div class="px aubox nt"><p class="sub">${T(`ยังไม่มีเครื่องราง${amHf==='all'?'':'ระดับนี้'} · เครื่องรางได้จากการดรอปในด่าน ฟาร์มออฟไลน์ ตลาดกลาง และฟิวชั่น`,'No amulets here yet · they drop from stages and the offline farm, or come from the market and fusion')}</p></div>`}
+  </div></div>`)}
 function amUp(){const k=amUk;if(!k||!amCanUp(k))return coll();const A=AM[k],R=AMU[A.r],u=amU(k),o=amX(k,u),base=amLines(A),now=amLines(o),cl=amCost(k,'l'),brs=Object.keys(AMB).filter(b=>b!=='sp'||A.r!=='R').sort((x,y)=>(y===u.b)-(x===u.b));   // the chosen branch first
   const nxt=cl?amLines(amX(k,{...u,l:u.l+1})):null;
   view(`<div class="cols wide"><div class="rail">
@@ -3429,8 +3463,10 @@ $('view').onclick=ev=>{{const w=ev.target.closest('.dk,.ibtn,.pill,.row2 .btn');
   else if(a==='mkcancel')mkCancel(t.dataset.id)
   else if(a==='mkbuy')mkBuy(t.dataset.id)
   else if(a==='tam'){S.am=S.am||{};Object.keys(AM).forEach(k=>S.am[k]=(S.am[k]||0)+1);save();settings()}
-  else if(a==='amup'){amUk=t.dataset.k;amArm=null;amMsg='';sfx('tap');amUp()}
-  else if(a==='amupback'){collTab='am';amSel=amUk;amArm=null;coll()}
+  else if(a==='amup'){amUk=t.dataset.k;amFrom=t.dataset.from||'bag';amArm=null;amMsg='';sfx('tap');amUp()}
+  else if(a==='amupback'){amArm=null;if(amFrom==='hub')amHub();else{collTab='am';amSel=amUk;coll()}}
+  else if(a==='amhub'){amFrom='hub';sfx('tap');amHub()}
+  else if(a==='amhf'){amHf=t.dataset.r;amHub()}
   else if(a==='amupl'||a==='amupn'||a==='amrs'){const key=a==='amupn'?a+':'+t.dataset.b:a,m=document.querySelector('.main'),y=m?m.scrollTop:0;
     if(amArm!==key){amArm=key;amMsg=''}else{amArm=null;const r=amDo(amUk,a==='amupl'?'l':a==='amupn'?'n':'rs',t.dataset.b);
       amMsg=r==='ok'?(a==='amrs'?T('รีเซ็ตสายแล้ว','Branch reset'):T('อัปสำเร็จ!','Upgraded!')):r==='frz'?T('บัญชีถูกระงับการใช้ Gold ชั่วคราว','Gold spending is on hold for this account'):'';if(r==='ok')sfx('win')}
@@ -4620,7 +4656,7 @@ function titleScreen(){
 }
 // ---------- Firebase: Google sign-in and one cloud save document per account (saves/{uid}) ----------
 const OBT_PAUSED_MODES=true,PV_PAUSED=false; // b215: hide Tower, PvP and World Boss until relaunch
-const BUILD='b264';
+const BUILD='b265';
 // The game moved to its own address. Anyone opening the old address is sent on, but only once the new site answers, so a broken move cannot lock players out.
 const DISCORD='https://discord.gg/dHDzRyPG9',DC_SVG='<svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="currentColor" d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.4189-2.1568 2.4189Z"/></svg>';
 const NEW_HOME='https://pixeldeckbattle.github.io/';
