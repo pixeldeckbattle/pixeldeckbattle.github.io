@@ -2046,8 +2046,10 @@ let TAMPER='';
 function stash(){try{const j=JSON.stringify(S),g=sgOf(j);localStorage.setItem(saveKey(),j);localStorage.setItem(rvKey(),rvOf(S));localStorage.setItem(bkKey(),j);localStorage.setItem(sgKey(),g);localStorage.setItem(SGV,'1')}catch(e){}}
 function load(){let m=null,b=null,rm=null,rb=null;try{rm=localStorage.getItem(saveKey());m=JSON.parse(rm)}catch(e){}try{rb=localStorage.getItem(bkKey());b=JSON.parse(rb)}catch(e){}
   // b259: once a signed build has run on this device, an unsigned or mismatched copy of a signed-in save is treated as edited and not used (the cloud copy takes over). Guest saves never leave the device, so they are left alone.
-  try{if(USER&&USER.sub&&localStorage.getItem(SGV)){const g=localStorage.getItem(sgKey()),okm=rm&&g&&sgOf(rm)===g,okb=rb&&g&&sgOf(rb)===g;if(rm&&!okm){m=null;TAMPER='local'}if(rb&&!okb){b=null;TAMPER='local'}}}catch(e){}
-  if(!(m&&m.cards))m=null;if(!(b&&b.cards))b=null;const s=b&&(!m||!m.rv||rvOf(b)>rvOf(m))?b:m;if(!s){try{localStorage.removeItem(rvKey())}catch(e){}return unlock(fresh())}return rvSeed(unlock(s))}
+  try{if(USER&&USER.sub&&localStorage.getItem(SGV)){const g=localStorage.getItem(sgKey()),okm=rm&&g&&sgOf(rm)===g,okb=rb&&g&&sgOf(rb)===g;if(rm&&!okm){m=null;TAMPER='local'}if(rb&&!okb){b=null;TAMPER='local'}}
+    // b263: a guest save is kept (it has no other copy) but marked when its signature does not match, so linking it to Google freezes the account
+    else if(!(USER&&USER.sub)&&localStorage.getItem(SGV)){const g=localStorage.getItem(sgKey());if((rm&&!(g&&sgOf(rm)===g))||(rb&&!(g&&sgOf(rb)===g)))TAMPER='guest'}}catch(e){}
+  if(!(m&&m.cards))m=null;if(!(b&&b.cards))b=null;const s=b&&(!m||!m.rv||rvOf(b)>rvOf(m))?b:m;if(!s){try{localStorage.removeItem(rvKey())}catch(e){}return unlock(fresh())}if(TAMPER==='guest'){s.gtp=1;TAMPER=''}return rvSeed(unlock(s))}
 // Gold ledger for the admin page: every place Gold moves calls lg(kind, amount) right after changing S.gold, so the save carries totals by source (i), by use (o) and a count (c).
 // lg.b is the balance the ledger expects; save() compares it with the real S.gold and books any difference as 'unk' (Gold that moved without going through the game's own code, such as an edited save or an old build).
 // g0/t0 are the balance and time when tracking began on this save.
@@ -4537,7 +4539,7 @@ function titleScreen(){
 }
 // ---------- Firebase: Google sign-in and one cloud save document per account (saves/{uid}) ----------
 const OBT_PAUSED_MODES=true,PV_PAUSED=false; // b215: hide Tower, PvP and World Boss until relaunch
-const BUILD='b262';
+const BUILD='b263';
 // The game moved to its own address. Anyone opening the old address is sent on, but only once the new site answers, so a broken move cannot lock players out.
 const DISCORD='https://discord.gg/dHDzRyPG9',DC_SVG='<svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="currentColor" d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.4189-2.1568 2.4189Z"/></svg>';
 const NEW_HOME='https://pixeldeckbattle.github.io/';
@@ -4604,6 +4606,7 @@ function gLinkGo(){glBox(T('กำลังเชื่อมต่อ…','Conn
       try{const l=JSON.parse(localStorage.getItem(KEY+'_'+u.uid));if(l&&l.cards)has=true}catch(e){}
       if(has){glPend=nu;return glBox(T(`บัญชี <b>${esc(u.email||'')}</b> มีเซฟของเกมนี้อยู่แล้ว จึงผูกไม่ได้ (ระบบไม่ทับข้อมูลเดิม)<span class="glsm">เลือกได้ว่าจะเข้าเล่นบัญชีนั้น หรือกลับไปเล่นตัว Guest ต่อ ตัว Guest ยังอยู่ในเครื่องนี้ครบ</span>`,`The account <b>${esc(u.email||'')}</b> already has a save in this game, so it cannot be linked (nothing is overwritten)<span class="glsm">Play that account instead, or go back to your guest player, which is still on this device</span>`),
         `<button class="btn go" data-gl="use">${T('เข้าเล่นบัญชีนั้น','Play that account')}</button><button class="btn alt" data-gl="stay">${T('กลับไปเล่น Guest','Back to guest')}</button>`)}
+      if(S.gtp)frzSet('edit-guest',0);frzOld();   // b263: an edited guest save, or one carrying a lot of unexplained Gold/diamonds, is frozen as it reaches the cloud
       save();S.lnk={at:Date.now()};USER=nu;try{localStorage.setItem(SESSION,JSON.stringify(nu))}catch(e){}save();
       [KEY,KEY+'_bk',KEY+'_rv'].forEach(k=>{try{localStorage.removeItem(k)}catch(e){}});
       ov('');fx.push(['view',T('ผูกบัญชี Google สำเร็จ เซฟขึ้นคลาวด์แล้ว','Linked to Google: your save is now in the cloud'),'g']);signIn(nu)})})
