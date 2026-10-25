@@ -2223,7 +2223,7 @@ const AFK_H=8,afkRate=()=>Math.max(AFK_MIN,10*goldBase(Math.max(1,S.cleared)));
 const OFF_WPH=8,OFF_KEEP_AM=.5,OFF_AMS=7,OFF_CARDS=3,OFF_CR={L:.02,R:.15},OFF_SL=.0001;
 function afkDrops(ms){if(!vipPaid())return{am:{},cards:[],k:0};const n0=Math.max(1,S.cleared||1),n=n0%10===0?Math.max(1,n0-1):n0,k=Math.floor(Math.min(Math.max(0,ms),afkH()*36e5)/36e5*OFF_WPH*vipP().afk),am={},cards=[];let nAm=0;
   for(let i=0;i<k;i++){if(nAm<OFF_AMS&&Math.random()<dropP(n,DROP,DROP_BOSS,false)){nAm++;let x=amRoll();if(AM[x].r==='L'&&Math.random()>OFF_KEEP_AM){const rs=Object.keys(AM).filter(k=>AM[k].r==='R');x=rs[Math.floor(Math.random()*rs.length)]}S.am=S.am||{};S.am[x]=(S.am[x]||0)+1;am[x]=(am[x]||0)+1}
-    if(cards.length<OFF_CARDS&&Math.random()<dropP(n,CDROP,CDROP_BOSS,false)){const x=Math.random(),r=Math.random()<OFF_SL?'SL':x<OFF_CR.L?'L':x<OFF_CR.L+OFF_CR.R?'R':'UC';cards.push(giveCard(randOf(r),'afk'))}}
+    if(cards.length<OFF_CARDS&&Math.random()<dropP(n,CDROP,CDROP_BOSS,false)*CD_REPLAY){const x=Math.random(),r=Math.random()<OFF_SL?'SL':x<OFF_CR.L?'L':x<OFF_CR.L+OFF_CR.R?'R':'UC';cards.push(giveCard(randOf(r),'afk'))}}
   const rs=S.cleared>ST1?Math.min(OFF_RS,Math.floor(Math.min(Math.max(0,ms),afkH()*36e5)/36e5/OFF_RS_H)):0;if(rs)S.rs=(S.rs||0)+rs;
   return{am,cards,k,rs}}
 function afkShow(g,got){if(!got||(!got.cards.length&&!Object.keys(got.am).length&&!got.rs))return;const by={};got.cards.forEach(c=>{by[c.id]=(by[c.id]||0)+1});
@@ -2268,7 +2268,7 @@ const vipRem=()=>{const m=Math.max(0,(S.vip||0)-Date.now()),d=Math.floor(m/864e5
 // Drop chance follows the stage: x0.5 at stage 1, x1 at stage 150, x1.5 from stage 300 up (b151). It applies to every win, including the replay loop;
 // a first clear never gets less than x1. Amulet = DROP/DROP_BOSS, card = CDROP/CDROP_BOSS, all x this x the VIP bonus.
 const dropMul=(n,first)=>{const m=Math.max(.5,Math.min(1.5,.5+n/300));return first?Math.max(1,m):m},dropP=(n,base,boss,first)=>Math.min(1,(n%10===0?boss:base)*dropMul(n,first)*vipP().dr);
-const CDROP=.04,CDROP_BOSS=.12,CD_ODDS=[['SL',.001,250],['L',.009,100],['R',.05,30],['UC',.24,1]];
+const CDROP=.02,CDROP_BOSS=.06,CD_REPLAY=.5,CD_ODDS=[['SL',.001,250],['L',.009,100],['R',.05,30],['UC',.24,1]];
 function cardDropRank(n){let x=Math.random();for(const [r,pr,min] of CD_ODDS){if(n>=min&&(x-=pr)<0)return r}return 'C'}
 // b163 card ledger for the admin page (S.cl): pk = packs opened by kind, src = cards received by source, r = the last 60 Legend-or-better cards with time and source,
 // own = the card ids the ledger knows about. save() compares own with the real collection; a card that appeared without passing through the game's own code is booked as 'unk'.
@@ -3208,7 +3208,7 @@ async function finish(won){
   if(my.pvp){bt=null;busy=false;return pvpResult(won,my.pvp)}
   const n=bt.n,team=bt.al.map(a=>a.id),farm=!!bt.farm,first=!!bt.first,sw=won&&n>ST1?starsOf(bt):0;bt=null;let rsg=0,swNew=0;busy=false;let rows='',g=0,drop=null,jp=false,bb=0,eb=0,cdrop=null,bcs=[];
   if(won){const rg=rollGold(n);g=Math.round(rg.g*VX()*(1+Math.max(0,...team.map(id=>(amOf(id)||{}).gd||0))));jp=rg.jp;bb=bossBonus(n);eb=earlyB(n);S.gold+=g+bb+eb;lg('stage',g);lg('boss',bb);lg('early',eb);qAdd('win');if(n%10===0)qAdd('boss');if(Math.random()<dropP(n,DROP,DROP_BOSS,first)){drop=amRoll();S.am=S.am||{};S.am[drop]=(S.am[drop]||0)+1}
-    if(Math.random()<dropP(n,CDROP,CDROP_BOSS,first))cdrop=giveCard(randOf(cardDropRank(n)),'drop');
+    if(Math.random()<dropP(n,CDROP,CDROP_BOSS,first)*(first?1:CD_REPLAY))cdrop=giveCard(randOf(cardDropRank(n)),'drop');
     if(!cdrop&&hasLuck()&&Math.random()<luckP(n)){cdrop=giveCard(randOf('L'),'lucky');cdrop.lucky=1}const x0=Math.round(expOf(n)*VX()*(first?1:REPLAY_XP));
     let ups=0;rows=team.map(id=>{const x=Math.round(x0*(amOf(id)&&amOf(id).xp||1)),was=S.cards[id].lv,wasMax=maxed(id),up=addExp(id,x),c=S.cards[id];ups+=up;
       return `<div class="mini r-${C[id].r} glow ${fr(id)}">${fxh(id)}${rib(id)}<div class="art"><img src="${artSrc(id)}" alt=""></div></div><div><b>${C[id].n}</b> ${wasMax?'<span class="gold">Lv MAX</span>':'Exp +'+x} ${up?`<span class="gold">Lv ${was} → ${c.lv}</span>`:`· Lv ${c.lv}`}<div class="hp xp"><i style="width:${maxed(id)?100:c.exp/need(c.lv)*100}%"></i></div></div>`}).join('');
