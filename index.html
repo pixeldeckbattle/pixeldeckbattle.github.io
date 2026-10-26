@@ -1780,6 +1780,16 @@ function mkList(){if(isFrz())return frzMsg();const k=mkSel,p=Math.floor(mkPrice)
    .then(ref=>{const sv=mkTake(k);if(sv&&ref&&ref.id){S.mks=S.mks||{};S.mks[ref.id]=sv;const ks=Object.keys(S.mks);if(ks.length>40)delete S.mks[ks[0]]}mkSel=null;S.gold-=fee;lg('mkfee',-fee);save();cloudFlush();mk.msg='listed'},e=>{mk.msg='err:'+(e&&e.code||'')}).then(()=>{mk.busy=false;mkFetch()})}
 function mkCancel(id){const l=mk.list.find(x=>x.id===id);if(!l||l.seller!==USER.sub||mk.busy)return;mk.busy=true;
   mkDb().collection('market').doc(id).delete().then(()=>{mkGive(l.k,S.mks&&S.mks[id],'mkback');if(S.mks)delete S.mks[id];save();cloudFlush();mk.msg='cancelled'},e=>{mk.msg='err:'+(e&&e.code||'')}).then(()=>{mk.busy=false;mkFetch()})}
+// b268: market buy / list asks once more in a popup (item, price, fee) so a stray tap does nothing
+function mkAsk(m,id){if(isFrz())return frzMsg();if(mk.busy)return;let k,p,rows;
+  if(m==='buy'){const l=mk.list.find(x=>x.id===id);if(!l||l.seller===USER.sub||S.gold<l.p)return;k=l.k;p=l.p;
+    rows=`<span>${T('ราคา','Price')} <b style="color:#ffd84a">${p.toLocaleString('en')} Gold</b></span><span>${T('ผู้ขาย','Seller')}: <b>${esc(l.name||'-')}</b></span><span>${T('Gold คงเหลือหลังซื้อ','Gold left after')}: <b>${(S.gold-p).toLocaleString('en')}</b></span>`}
+  else{k=mkSel;p=Math.floor(mkPrice);const fee=mkFee(p);if(!k||!(p>=100&&p<=MK_MAX)||!(mkHave(k)>0)||isLock(k)||S.gold<fee)return;
+    rows=`<span>${T('ราคาตั้งขาย','Listing price')} <b style="color:#ffd84a">${p.toLocaleString('en')} Gold</b></span><span>${T('ค่าลงขาย (จ่ายตอนนี้)','Listing fee (paid now)')}: <b>${fee.toLocaleString('en')} Gold</b></span><span>${T('ขายได้จะได้รับ','You get when sold')}: <b style="color:#6cf586">${Math.floor(p*(1-TAX)).toLocaleString('en')} Gold</b></span>`}
+  const nm=AM[k]?T(AM[k].n,EN[AM[k].n]||AM[k].n):mkName(k);
+  ov(`<div class="cd dlg nt bx"><div class="px cdbox swbox"><button type="button" class="bxx" data-bx="1" aria-label="ปิด">✕</button><b>${m==='buy'?T('ยืนยันการซื้อ?','Confirm purchase?'):T('ยืนยันการตั้งขาย?','Confirm listing?')}</b>
+   <div style="display:flex;justify-content:center;margin:6px 0">${AM[k]?amu(k):`<img src="${img(k)}" alt="" style="height:110px;border-radius:6px;box-shadow:0 0 14px rgba(0,0,0,.6)">`}</div><div style="text-align:center;font-weight:900">${nm}</div><div class="newsl">${rows}</div>
+   <div class="row"><button class="btn go" data-mkok="${m==='buy'?id:'-'}">${m==='buy'?T('ยืนยันซื้อ','Buy'):T('ยืนยันขาย','List it')}</button><button class="btn alt" onclick="ov('')">${T('ยกเลิก','Cancel')}</button></div></div></div>`)}
 function mkBuy(id){if(isFrz())return frzMsg();const l=mk.list.find(x=>x.id===id);if(!l||l.seller===USER.sub||S.gold<l.p||mk.busy)return;mk.busy=true;const db=mkDb(),ref=db.collection('market').doc(id);
   db.runTransaction(tx=>tx.get(ref).then(d=>{if(!d.exists)throw new Error('sold-out');const v=d.data();tx.delete(ref);tx.set(db.collection('payouts').doc(id),{to:v.seller,gold:Math.floor(v.p*(1-TAX)),k:v.k,p:v.p,by:String(S.me&&S.me.name||'').slice(0,12),at:firebase.firestore.FieldValue.serverTimestamp()});return v}))
    .then(v=>{mkLog(v);S.gold-=v.p;lg('mkbuy',-v.p);mkGive(v.k);save();cloudFlush();sfx('win');mk.msg='bought:'+v.k},e=>{mk.msg=e&&e.message==='sold-out'?'gone':'err:'+(e&&e.code||e&&e.message||'')}).then(()=>{mk.busy=false;mkFetch()})}
@@ -2349,7 +2359,7 @@ function devGrant(){if(!isDev())return;let ch=0;
   if(!S.fd||!S.fdg){S.fd=1;S.fdg=1;ch=1}['T1.1','T2.1','T3.1','P5.1','P3.1'].forEach(c=>{if(!(S.sh||[]).includes(c)){shAdd(c);ch=1}});   // b166: the Dev account carries the FOUNDER title too
   if(ch)save()}
 function home(){wbSpdBack();if(BETA&&USER&&USER.sub&&!isDev()){location.replace('./');return}
-  bt=null;busy=false;if((S.era||1)<ERA){S=unlock(S);save();cloudFlush();return welcome()}ldInit(0);devGrant();ensureMe();grantFetch();mkPayCheck();dmRefundAll();giftTake();compTake();oeQuest();bcLate();if(S.f1100==='try')f1100Claim();if(!OBT_PAUSED_MODES||!PV_PAUSED)twRoll();news233()||oePop()||news231()||news189()||news182()||news180()||news176()||news174()||news167()||news165();vipDaily();plDaily();if(!OBT_PAUSED_MODES&&mkOn())wbInbox();if(!OBT_PAUSED_MODES&&wbPopQ){const q=wbPopQ;wbPopQ=null;setTimeout(()=>wbPop(q),800)}if(!S.afk){S.afk=Date.now();save()}const own=Object.keys(S.cards).length,next=Math.min(MAXST,S.cleared+1);
+  bt=null;busy=false;if((S.era||1)<ERA){S=unlock(S);save();cloudFlush();return welcome()}ldInit(0);devGrant();ensureMe();grantFetch();mkPayCheck();dmRefundAll();giftTake();compTake();oeQuest();bcLate();if(S.f1100==='try')f1100Claim();if(!OBT_PAUSED_MODES||!PV_PAUSED)twRoll();news268()||news233()||oePop()||news231()||news189()||news182()||news180()||news176()||news174()||news167()||news165();vipDaily();plDaily();if(!OBT_PAUSED_MODES&&mkOn())wbInbox();if(!OBT_PAUSED_MODES&&wbPopQ){const q=wbPopQ;wbPopQ=null;setTimeout(()=>wbPop(q),800)}if(!S.afk){S.afk=Date.now();save()}const own=Object.keys(S.cards).length,next=Math.min(MAXST,S.cleared+1);
   const ico=(src,d=0)=>`<span class="ico" style="--m:url(${src});--d:${d}s"><img src="${src}" alt=""></span>`;
   const dk=(act,ic,c,t,sub,dis,d)=>{const lk=plLock({troom:'troom',market:'market',pvp:'pvp'}[act]);return `<button class="dk ${c}${lk?' dklk':''}" ${dis?'disabled':`data-act="${act}"`}>${lk?`<i class="dklb nt">🔒 Lv${lk}</i>`:''}${ico(ic,d)}<span>${t}<small>${sub}</small></span></button>`};
   view(`<div class="lobby" style="--bg:url(${mapImg(next)})"><div class="lbg"></div>${oeAny()?`<button class="oetab nt" data-act="evp" aria-label="${T('กิจกรรม','Events')}"><i>🎉</i><b>${T('กิจกรรม','EVENTS')}</b></button>`:''}<button class="vttab nt ${oeAny()?'':'solo'} ${vtNext().live?'live':''}" data-act="vtp" aria-label="${T('ประตูมิติ','Portal')}">${vtTab()}</button>
@@ -3519,10 +3529,10 @@ $('view').onclick=ev=>{{const w=ev.target.closest('.dk,.ibtn,.pill,.row2 .btn');
   else if(a==='trok'){const n=tn();if(n&&n.item&&rt){const got=n.item;room.seen[n.gid]=1;trGet(got);save();cloudFlush();rt.me.update({ack:n.gid}).catch(()=>{});n.item=null;n.el.classList.remove('gift');room.menu=null;$('tui').innerHTML='';sfx('win');$('tlog').innerHTML=`รับแล้ว: ${trName(got)} ← <b class="nt">${String(n.name).replace(/</g,'&lt;')}</b>`}}
   else if(a==='mksel'){mkSel=t.dataset.k;if(!mkRaw)mkRaw=String(mkPrice);market();mkPxFetch(mkSel)}
   else if(a==='mkp'){mkPrice=Math.max(100,Math.min(MK_MAX,mkPrice+ +t.dataset.d));market()}
-  else if(a==='mklist')mkList()
+  else if(a==='mklist')mkAsk('list')
   else if(a==='mkpx'){mkPrice=Math.max(100,Math.min(MK_MAX,+t.dataset.v|0));mkRaw=String(mkPrice);market()}
   else if(a==='mkcancel')mkCancel(t.dataset.id)
-  else if(a==='mkbuy')mkBuy(t.dataset.id)
+  else if(a==='mkbuy')mkAsk('buy',t.dataset.id)
   else if(a==='tam'){S.am=S.am||{};Object.keys(AM).forEach(k=>S.am[k]=(S.am[k]||0)+1);save();settings()}
   else if(a==='amup'){amUk=t.dataset.k;amFrom=t.dataset.from||'bag';amArm=null;amMsg='';sfx('tap');amUp()}
   else if(a==='amupback'){amArm=null;if(amFrom==='hub')amHub();else{collTab='am';amSel=amUk;coll()}}
@@ -4398,6 +4408,16 @@ function oePanel(){const q=S.evq||{},cl=S.cleared||0,ftb=S.ftb;
 let oeShown=0;
 function oePop(){if(oeShown||!oeAny()||S.tut!=null)return false;oeShown=1;let k=0;const t=setInterval(()=>{if(++k>60)return clearInterval(t);if(bt||$('ov').innerHTML.trim()||!document.querySelector('.lobby'))return;clearInterval(t);oePanel()},800);return false}   /* waits until other popups are closed; returns false so the one-time news still shows first */
 $('ov').addEventListener('click',e=>{const t=e.target.closest('[data-evgo]');if(!t)return;ov('');if(t.dataset.evgo==='topup')topup()});
+$('ov').addEventListener('click',e=>{const t=e.target.closest('[data-mkok]');if(t){const id=t.dataset.mkok;ov('');if(id==='-')mkList();else mkBuy(id);return}
+  const g=e.target.closest('[data-n268]');if(g){ov('');if(!TW_ON)return;if(plLock('tower')){plLockMsg('tower');return}tower()}});
+function news268(){if(S.tut!=null||S.n268)return false;if(!S.cleared){S.n268=1;return false}
+  setTimeout(()=>{if(bt||S.n268||$('ov').innerHTML.trim()||!document.querySelector('.lobby,.dk'))return;S.n268=1;save();
+  ov(`<div class="cd dlg nt bx"><div class="px cdbox swbox"><button type="button" class="bxx" data-bx="1" aria-label="ปิด">✕</button><b>✨ ${T('อัปเดตใหญ่มาแล้ว!','Big update is here!')}</b><div class="newsl">
+   <span>🟣 ${T('การ์ดระดับ Mythic ใหม่ 3 ใบ: ฮาเดส · อานูบิส · อาเรส พร้อมสกิลใหม่ (หลอมที่ หลอมการ์ด → Mythic)','3 new Mythic cards: Hades · Anubis · Ares with new skills (Fusion → Mythic)')}</span>
+   <span>🗺️ ${T('ด่านใหม่ 1501–2000 ศัตรูมาทีละ 4 ตัว','New stages 1501–2000, enemies come 4 at a time')}</span>
+   <span>🏛️ ${T('หอคอยแห่งทวยเทพ ซีซั่น 1 · ตัดรอบทุกวันอาทิตย์ 08:00 รางวัลส่งเข้าจดหมาย','Spire of the Gods season 1 · resets every Sunday 08:00, rewards go to your mailbox')}</span>
+   <span>🛒 ${T('ตลาดกลาง: กดซื้อ/ตั้งขาย จะถามยืนยันอีกครั้ง กันกดพลาด','Market: buy / list now asks you to confirm, no more misclicks')}</span></div>
+   <div class="row"><button class="btn go" data-n268="1">${T('ไปหอคอย','Go to Spire')}</button><button class="btn alt" onclick="ov('')">${T('ปิด','Close')}</button></div></div></div>`)},900);return true}
 function news233(){if(S.tut!=null||S.n233)return false;if(!S.cleared){S.n233=1;return false}
   setTimeout(()=>{if(bt||S.n233||$('ov').innerHTML.trim()||!document.querySelector('.lobby,.dk'))return;S.n233=1;save();
   ov(`<div class="cd dlg nt bx"><div class="px cdbox swbox"><button type="button" class="bxx" data-bx="1" aria-label="ปิด">✕</button><b>⚔ ${T('PvP เปิดแล้ว!','PvP is open!')}</b><div class="newsl"><span>${T('สู้กับผู้เล่นจริง เก็บดาวไต่แร้งค์ ได้ Gold และเหรียญอารีน่า (ปลดล็อกที่เลเวลโปรไฟล์ '+PL_LOCK.pvp+')','Fight real players, climb the ranks, earn Gold and arena coins (unlocks at profile level '+PL_LOCK.pvp+')')}</span>
@@ -4724,7 +4744,7 @@ function titleScreen(){
 }
 // ---------- Firebase: Google sign-in and one cloud save document per account (saves/{uid}) ----------
 const OBT_PAUSED_MODES=true,PV_PAUSED=false; // b215: hide Tower, PvP and World Boss until relaunch
-const BUILD='b267';
+const BUILD='b268';
 // The game moved to its own address. Anyone opening the old address is sent on, but only once the new site answers, so a broken move cannot lock players out.
 const DISCORD='https://discord.gg/dHDzRyPG9',DC_SVG='<svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="currentColor" d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.4189-2.1568 2.4189Z"/></svg>';
 const NEW_HOME='https://pixeldeckbattle.github.io/';
