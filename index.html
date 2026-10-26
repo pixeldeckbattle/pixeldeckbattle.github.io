@@ -3910,7 +3910,7 @@ function lselGo(id){if(!(S.lsel>0)||!lselPool().includes(id))return;S.lsel--;con
 /* ---------- b252 PvP opening date + season rewards ---------- */
 const PV_OPEN_AT=Date.parse('2026-10-27T00:00:00+07:00'),pvShut=()=>!isDev()&&now()<PV_OPEN_AT,pvT0=()=>Math.max(CFG&&CFG.obtAt?+CFG.obtAt:0,PV_OPEN_AT);
 const pvCd=()=>{const ms=Math.max(0,PV_OPEN_AT-now()),d=Math.floor(ms/864e5),h=Math.floor(ms%864e5/36e5),m=Math.floor(ms%36e5/6e4);return d?T(`${d} วัน ${h} ชม.`,`${d}d ${h}h`):h?T(`${h} ชม. ${m} นาที`,`${h}h ${m}m`):T(`${m} นาที`,`${m}m`)};
-const pvOpenTxt=()=>T('จันทร์ 27 ต.ค. 00:00 น.','Mon 27 Oct 00:00 (Thai time)');
+const pvOpenTxt=()=>T('อังคาร 27 ต.ค. 00:00 น. (เที่ยงคืนนี้)','Tue 27 Oct 00:00 (Thai time)');
 function pvDk(h){if(!pvShut())return h;return h.replace(/<i class="dklb nt">[^<]*<\/i>/,'').replace('<button class="dk ','<button class="dk pvsoon ').replace(/(<button[^>]*>)/,`$1<i class="dklb dkcd nt">⏳ ${pvCd()}</i>`)}
 setInterval(()=>{try{const b=document.querySelector('#stage .lobby .dock [data-act="pvp"]');if(!b)return;const c=b.querySelector('.dkcd');if(pvShut()){if(c)c.textContent='⏳ '+pvCd()}else if(c){c.remove();b.classList.remove('pvsoon')}}catch(e){}},5000);
 /* rank rewards on top of the season shield + coins */
