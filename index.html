@@ -361,6 +361,11 @@ p{margin:0}
 @keyframes imp{from{transform:translate(-50%,-50%) scale(.3) rotate(0);opacity:1}to{transform:translate(-50%,-50%) scale(1.5) rotate(25deg);opacity:0}}
 /* overlays: VS intro, START / FINISH banners, skill cut-ins */
 #gate{position:absolute;inset:0;z-index:30;display:grid;place-content:center;justify-items:center;gap:10px;text-align:center;padding:24px;background:rgba(6,9,26,.96);color:#eef2ff}#gate[hidden]{display:none}#gate h2{font-size:26px;color:#ffd84a}#gate p{max-width:520px;font-size:15px;line-height:1.6;white-space:pre-wrap}.ivbn~.heroz .logo3{display:none}
+.dcbn{position:absolute;z-index:3;left:max(76px,calc(36% - 240px));top:236px;display:flex;align-items:center;gap:10px;padding:7px 14px;border:2px solid #ffd84a;border-radius:12px;background:linear-gradient(135deg,#5a2a00,#b8560a 55%,#3a1a00);color:#fff;cursor:pointer;font:inherit;box-shadow:0 4px 0 rgba(0,0,0,.5),0 0 18px rgba(255,190,60,.6);text-align:left}
+.dcbn i{font-style:normal;font-size:30px}.dcbn b{display:block;font-family:var(--display);font-size:19px;color:#ffe45c;text-shadow:0 2px 0 #000}.dcbn small{display:block;font-size:12px;color:#ffe9c8}
+@media (max-height:430px){.dcbn{left:72px;top:186px;padding:5px 10px}.dcbn i{font-size:22px}.dcbn b{font-size:15px}.dcbn small{font-size:10.5px}}
+.dcpool{display:grid;grid-template-columns:repeat(auto-fill,minmax(118px,1fr));gap:8px}.dcc{display:grid;gap:1px;padding:4px;border:2px solid #3a4a8a;border-radius:9px;background:#141c44;color:#fff;font:inherit;cursor:pointer;text-align:center}.dcc img{width:100%;aspect-ratio:5/3;object-fit:cover;border-radius:6px}.dcc b{font-size:12.5px;line-height:1.15}.dcc small{font-size:10.5px;color:#cfd8ff;line-height:1.2}.dcc.sel{outline:3px solid #ffd84a;outline-offset:-1px;box-shadow:0 0 12px rgba(255,216,74,.6)}.rail .dcpool{grid-template-columns:repeat(3,minmax(0,1fr))}.rail .dcc small:nth-of-type(n+2){display:none}
+.dctop li{margin:3px 0}.dctop img{width:26px;height:26px;object-fit:cover;border-radius:4px;vertical-align:middle;margin-left:2px}
 .vtpg{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px}.vtp{display:flex;align-items:center;gap:8px;padding:6px 8px;border:2px solid #3a4a8a;border-radius:10px;background:#141c44;color:#fff;cursor:pointer;font:inherit;text-align:left}.vtp.on{outline:3px solid #ffd84a;outline-offset:-2px;box-shadow:0 0 14px rgba(255,216,74,.7)}#view .tul{display:flex;flex-direction:column;overflow-y:auto;gap:6px}#view .tul>*{flex:none}#view .tul>.dpg{grid-template-rows:96px 96px;height:198px}.vtp img{width:38px;height:auto}.vtp span{display:grid;line-height:1.2}.vtp b{font-family:var(--display);font-size:15px}.vtp small{font-size:11.5px;color:#cfd8ff}.vtp em{font-style:normal;font-weight:900;color:#ffd84a;font-size:15px}
 .ivbn{position:absolute;z-index:3;left:max(76px,calc(36% - 240px));top:70px;width:min(470px,54vw);display:grid;grid-template-columns:auto 1fr;gap:8px;align-items:center;padding:8px 10px;border:2px solid #e9b8ff;border-radius:12px;background:linear-gradient(135deg,#2a0b44,#5b1a8a 55%,#1a0630);color:#fff;cursor:pointer;box-shadow:0 4px 0 rgba(0,0,0,.5),0 0 22px rgba(190,90,255,.65);animation:ivg 2.4s ease-in-out infinite;text-align:left;font:inherit}
 .ivbn .ivc{position:relative;width:150px;height:118px}.ivbn .ivc img{position:absolute;width:66px;height:92px;object-fit:cover;border:2px solid #c98bff;border-radius:5px;box-shadow:0 2px 6px #000;bottom:0}
@@ -2388,7 +2393,7 @@ function home(){wbSpdBack();if(BETA&&USER&&USER.sub&&!isDev()){location.replace(
     <button class="ibtn gearb" data-act="settings" title="ตั้งค่า">${ico(UI.gear,9)}</button>
    </div>
    <div class="mid">
-    ${ivShow()?ivBanner():!REF_ON?'':evOn()&&!S.fd?`<button class="evb nt" data-act="invite">${fdBadge()}<em>🔥 ${T('ชวน 3 คน รับของ Limited','Invite 3, get Limited loot')}</em><small>${evLeft()}</small></button>`:`<button class="invb nt" data-act="invite"><b>🎁 ${T('ชวนเพื่อน','Invite')}</b><span>${T('รับ','get')} ${REF_DIA} 💎</span></button>`}${CFG.notice?`<p class="ntc nt">📢 ${esc(String(CFG.notice).slice(0,160))}</p>`:''}<div class="heroz"><h1 class="logo3" aria-label="PixelDeck Battle"><i></i></h1><p class="onl nt" id="onlw" hidden><i></i>${T('ออนไลน์','Online')} <b id="onl">0</b> ${T('คน','players')}</p>
+    ${dcShow()?dcBtn():''}${ivShow()?ivBanner():!REF_ON?'':evOn()&&!S.fd?`<button class="evb nt" data-act="invite">${fdBadge()}<em>🔥 ${T('ชวน 3 คน รับของ Limited','Invite 3, get Limited loot')}</em><small>${evLeft()}</small></button>`:`<button class="invb nt" data-act="invite"><b>🎁 ${T('ชวนเพื่อน','Invite')}</b><span>${T('รับ','get')} ${REF_DIA} 💎</span></button>`}${CFG.notice?`<p class="ntc nt">📢 ${esc(String(CFG.notice).slice(0,160))}</p>`:''}<div class="heroz"><h1 class="logo3" aria-label="PixelDeck Battle"><i></i></h1><p class="onl nt" id="onlw" hidden><i></i>${T('ออนไลน์','Online')} <b id="onl">0</b> ${T('คน','players')}</p>
      ${S.tut!=null?`<div class="squad">${S.team.map(id=>hero(id)).join('')}</div>`:''}</div>
     <div class="side">
      <div class="row2"><button class="btn sm" data-act="afk" ${afkGold()<1?'disabled':''}>${ico(UI.afk,2)}<span>ออฟไลน์</span> <i class="nt" id="afkv">+${afkGold().toLocaleString('en')}</i></button><button class="btn alt sm" data-act="quests">${ico(UI.quest,4.2)}<span>ภารกิจ</span>${qReady()?` <i class="nt badge">${qReady()}</i>`:''}</button></div>
@@ -3285,6 +3290,7 @@ $('ov').addEventListener('click',e=>{const t=e.target.closest('[data-lp]');if(!t
 async function finish(won){
   if(bt&&bt.wb)return wbFinish(won);
   if(bt&&bt.tw)return twFinish(won);
+  if(bt&&bt.dc)return dcFinish(won);
   const my=bt;busy=true;sfx(won?'win':'lose');await banner(won?'FINISH':'DEFEAT',won?'':'lose');if(bt!==my)return;
   if(my.pvp){bt=null;busy=false;return pvpResult(won,my.pvp)}
   const n=bt.n,team=bt.al.map(a=>a.id),farm=!!bt.farm,first=!!bt.first,sw=won&&n>ST1?starsOf(bt):0;bt=null;let rsg=0,swNew=0;busy=false;let rows='',g=0,drop=null,jp=false,bb=0,eb=0,cdrop=null,bcs=[];
@@ -3360,6 +3366,59 @@ function invite(){if(ivShow())return ivPage();const on=mkOn(),ok=rf.list.filter(
      <p class="sub">${T('นับเฉพาะบัญชีใหม่ที่เข้าผ่านลิงก์ของคุณ · บัญชีหนึ่งถูกนับได้ครั้งเดียว · ชวนตัวเองไม่ได้ · การสร้างบัญชีปลอมเพื่อรับเพชรผิดกติกาและอาจถูกระงับบัญชี · เพชรที่ได้ช่วง CBT ถูกล้างเมื่อจบ CBT','Only new accounts that arrive through your link count · an account counts once · you cannot invite yourself · fake accounts made to collect diamonds break the rules and may be suspended · diamonds earned in the CBT are wiped when it ends')}</p></div>
     ${rf.list.length?`<div class="px tustep" style="margin-top:10px"><b>${T('เพื่อนที่ผ่านเงื่อนไขแล้ว','Friends who qualified')} (${rf.list.length})</b><p style="margin:6px 0 0;line-height:1.9">${rf.list.map(x=>`<span class="chipr ${x.claimed?'ok':''}">${esc(x.name||'?')} ${x.claimed?'✓ +'+REF_DIA:T('เกินโควตา','over the cap')}</span>`).join(' ')}</p></div>`:`<p class="sub" style="margin-top:10px">${rf.state==='load'?T('กำลังเช็ก…','Checking…'):T('ยังไม่มีเพื่อนที่ผ่านด่าน '+REF_NEED,'No friend has cleared stage '+REF_NEED+' yet')}</p>`}`}
   </div></div>`)}
+
+/* ---------- b271 tournament "Draft Cup" (30 Oct 00:00 – 31 Oct 00:00 Bangkok) ----------
+   Everyone drafts 3 cards from the same DC_POOL, all at DC_LV / DC_STAR with no amulets and no profile buff, so nobody's own collection matters
+   (Limited and Mythic cannot enter). A run climbs floors (floor k = normal stage DC_ST(k), the same for everyone) until the first loss; DC_TRIES runs,
+   the best floor counts, ties go to whoever reached it first. Board: dcr/{uid} = {f,name,team,at} (Firestore rule: only inside the window, f only up).
+   Prizes 150/100/50 THB are paid by the owner after checking the board; every player who clears floor 1 gets DC_PART Gold once. */
+const DC_FROM=1793293200000,DC_END=1793379600000,DC_SHOW=DC_END+3*864e5,DC_POOL=['h03','h07','h22','h27','h29','h30','h31','h04','h13','h14','h15','h19','h26','h34'],
+  DC_LV=90,DC_STAR=5,DC_TRIES=3,DC_ST=k=>200+5*k,DC_MAXF=100,DC_PART=30000,DC_PRIZE=[150,100,50];
+const dcLive=()=>{const t=Date.now();return t>=DC_FROM&&t<DC_END},dcShow=()=>Date.now()<DC_SHOW&&(Date.now()>=DC_FROM-2*864e5),dcSt=()=>{S.dc=S.dc||{t:0,best:0,team:[]};return S.dc};
+const dcLeft=()=>{const t=Date.now(),e=t<DC_FROM?DC_FROM:DC_END,ms=Math.max(0,e-t),h=Math.floor(ms/36e5),m=Math.floor(ms%36e5/6e4);return (t<DC_FROM?T('เริ่มใน ','Starts in '):t<DC_END?T('เหลือ ','Ends in '):'')+(t>=DC_END?T('จบแล้ว','ended'):T(`${h} ชม. ${m} นาที`,`${h}h ${m}m`))};
+let dc={top:[],state:'idle',at:0,run:null};
+const dcCard=(id,on)=>{const v=stat(id,DC_LV,{star:DC_STAR});return `<button class="dcc r-${C[id].r}${on?' sel':''}" data-act="dcpick" data-id="${id}"><img src="${artSrc(id)}" alt=""><b>${C[id].n}</b><small class="r-${C[id].r}" style="color:var(--gl)">${RAR[C[id].r].n}</small><small>${T(EL_N[elOf(id)][0],EL_N[elOf(id)][1])} · ${C[id].m?T('เวท','magic'):T('กายภาพ','physical')}${C[id].role==='tank'?' · '+T('แท้งค์','tank'):C[id].role==='sup'?' · '+T('ซัพพอร์ต','support'):''}</small><small>ATK ${v.atk} · HP ${v.hp} · DEF ${v.def}</small></button>`};
+const dcBtn=()=>`<button class="dcbn nt" data-act="dcup"><i>🏆</i><span><b>${T('ทัวร์นาเมนต์ Draft Cup','Draft Cup Tournament')}</b><small>${T('ชิงเงินรางวัล 300 บาท','Win 300 THB')} · ⏳ ${dcLeft()}</small></span></button>`;
+function dcTop(force){if(!mkOn()||(!force&&Date.now()-dc.at<60000))return;dc.at=Date.now();dc.state='load';fbLoad().then(fbUser).then(u=>{if(!u)throw 0;return firebase.firestore().collection('dcr').orderBy('f','desc').limit(40).get()})
+  .then(q=>{dc.top=q.docs.map(d=>({id:d.id,...d.data()})).sort((a,b)=>b.f-a.f||atMs(a.at)-atMs(b.at)).slice(0,30);dc.state='ok'},()=>{dc.state='err'}).then(()=>{if(document.querySelector('[data-dc]'))dcHub()})}
+function dcPush(){const d=dcSt();if(!mkOn()||!(d.best>0)||d.best===d.pushed||Date.now()>=DC_END)return;const f=d.best;
+  fbLoad().then(fbUser).then(u=>{if(!u)return;return firebase.firestore().collection('dcr').doc(USER.sub).set({f,name:(S.me&&S.me.name||'').slice(0,12),team:(d.bt||d.team).slice(0,3),at:firebase.firestore.FieldValue.serverTimestamp()}).then(()=>{d.pushed=f;save()})}).catch(()=>{})}
+function dcHub(){const d=dcSt(),live=dcLive(),left=DC_TRIES-(d.t||0),me=USER&&USER.sub,team=d.team||[];
+  view(`<div class="cols wide nt" data-dc="1"><div class="rail"><div class="row"><button class="btn alt sm" data-act="home">${T('กลับ','Back')}</button><h2>🏆 Draft Cup</h2></div>
+    <p class="num" style="color:#ffd84a">${dcLeft()}</p>
+    <p class="num">${T('ชั้นสูงสุดของคุณ','Your best floor')} <b class="gold" style="font-size:22px">${d.best||0}</b></p>
+    <p class="sub">${T('โอกาสเหลือ','Runs left')} <b style="color:${left>0?'#6cf586':'#ff8a7a'}">${Math.max(0,left)}</b> / ${DC_TRIES}</p>
+    <p class="sub">${T('ทีมของคุณ (เลือก 3 ใบจากกองด้านขวา)','Your team (pick 3 from the pool)')}</p>
+    <div class="dcpool">${[0,1,2].map(k=>team[k]?dcCard(team[k],1):`<span class="empty" style="display:grid;place-items:center;min-height:90px;border:2px dashed #556;border-radius:8px">${k+1}</span>`).join('')}</div>
+    <div class="stk">${!mkOn()?`<p class="sub" style="color:#ffe45c">${T('ต้องล็อกอินด้วย Google','Sign in with Google to join')}</p>`:!live?`<p class="sub" style="color:#ffe45c">${Date.now()<DC_FROM?T('ยังไม่เริ่ม','Not started yet'):T('จบแล้ว','Ended')}</p>`
+      :`<button class="btn go" data-act="dcgo" ${team.length===3&&left>0?'':'disabled'}>${left>0?T('เริ่มรอบที่ ','Start run ')+((d.t||0)+1):T('ใช้ครบแล้ว','No runs left')}</button>`}</div>
+   </div><div class="main">
+    <div class="px tustep"><b>${T('กติกา','Rules')}</b><ol>
+     <li>${T('ทุกคนใช้การ์ดชุดเดียวกัน เลเวล '+DC_LV+' ดาว '+DC_STAR+' ไม่มีเครื่องราง ไม่ใช้การ์ดในกระเป๋าตัวเอง','Everyone uses the same cards at level '+DC_LV+', '+DC_STAR+' stars, no amulets; your own collection is not used')}</li>
+     <li>${T('เลือก 3 ใบ แล้วปีนชั้นไปเรื่อยๆ แพ้ครั้งแรก = จบรอบ','Pick 3 and climb; the first loss ends the run')}</li>
+     <li>${T(`มี ${DC_TRIES} รอบ เปลี่ยนทีมได้ทุกรอบ นับชั้นที่ดีที่สุด · ชั้นเท่ากัน ใครถึงก่อนชนะ`,`${DC_TRIES} runs, change team between runs, best floor counts · on a tie whoever got there first wins`)}</li>
+     <li>${T(`รางวัล: ที่ 1 ${DC_PRIZE[0]} บาท · ที่ 2 ${DC_PRIZE[1]} บาท · ที่ 3 ${DC_PRIZE[2]} บาท · ทุกคนที่ผ่านชั้น 1 ได้ ${DC_PART.toLocaleString('en')} Gold`,`Prizes: 1st ${DC_PRIZE[0]} THB · 2nd ${DC_PRIZE[1]} · 3rd ${DC_PRIZE[2]} · everyone who clears floor 1 gets ${DC_PART.toLocaleString('en')} Gold`)}</li>
+     <li>${T('ผู้ชนะติดต่อแอดมินรับเงินผ่านพร้อมเพย์ภายใน 7 วัน · ต้องล็อกอิน Google · โกง/ปั้มไอดี ตัดสิทธิ์และแบนถาวร','Winners contact the admin within 7 days for PromptPay · Google sign-in needed · cheating or farm accounts = disqualified and banned')}</li></ol></div>
+    <b style="display:block;margin:10px 0 6px">${T('กองการ์ด (แตะเพื่อเลือก/เอาออก)','Card pool (tap to pick / remove)')}</b>
+    <div class="dcpool">${DC_POOL.map(id=>dcCard(id,team.includes(id))).join('')}</div>
+    <div class="px tustep dctop" style="margin-top:10px"><b>🏆 ${T('อันดับ','Ranking')}</b> <button class="btn alt sm" data-act="dcref" style="float:right">${T('รีเฟรช','Refresh')}</button>
+     ${dc.top.length?`<ol style="margin:6px 0 0">${dc.top.map((x,i)=>`<li${x.id===me?' style="color:#ffe45c"':''}>${i<3?['🥇','🥈','🥉'][i]+' ':''}${esc(x.name||'?')} · ${T('ชั้น','floor')} <b>${x.f}</b> ${(x.team||[]).filter(id=>C[id]).map(id=>`<img src="${artSrc(id)}" alt="${C[id].n}" title="${C[id].n}">`).join('')}</li>`).join('')}</ol>`:`<p class="sub">${dc.state==='load'?T('กำลังโหลด…','Loading…'):T('ยังไม่มีใครติดอันดับ','No entries yet')}</p>`}</div>
+   </div></div>`)}
+function dcPick(id){const d=dcSt();if(!DC_POOL.includes(id))return;d.team=d.team||[];const k=d.team.indexOf(id);if(k>=0)d.team.splice(k,1);else if(d.team.length<3)d.team.push(id);save();dcHub()}
+function dcGo(){const d=dcSt();if(!dcLive()||!mkOn()||(d.team||[]).length!==3||(d.t||0)>=DC_TRIES||isFrz())return;d.t=(d.t||0)+1;dc.run={f:1,team:d.team.slice()};save();cloudFlush();dcBattle(1)}
+async function dcBattle(f){const n=DC_ST(f),m=softMul(n);loop=0;
+  bt={n,dc:f,round:1,sel:0,log:'',pvp:null,farm:false,first:false,al:dc.run.team.map(id=>fighter(id,DC_LV,{star:DC_STAR})),
+    en:stageDef(n).map(e=>{const hp=Math.max(1,Math.round(e.hp*m)),atk=Math.max(1,Math.round(e.atk*m));return{...e,atk,base:atk,hp,max:hp}})};
+  bt.rule=ruleOf(n);bt.surv=stKind(n)==='surv';const my=bt;busy=true;draw();sfx('start');await banner(T('ชั้น ','FLOOR ')+f);if(bt!==my)return;
+  busy=false;my.log=T('เลือกสกิล แล้วแตะศัตรู','Pick a skill, then tap an enemy');draw();if(S.auto)autoAct()}
+async function dcFinish(won){const my=bt,f=my.dc,d=dcSt();busy=true;
+  if(won&&dcLive()){sfx('win');if(f>(d.best||0)){d.best=f;d.bt=dc.run.team.slice()}if(!d.part){d.part=1;S.gold+=DC_PART;lg('dcup',DC_PART)}save();if(f%5===0)dcPush();
+    await banner(T('ผ่านชั้น ','CLEARED ')+f);if(bt!==my)return;if(f<DC_MAXF){dc.run.f=f+1;bt=null;return dcBattle(f+1)}}
+  else{sfx('lose');await banner('DEFEAT','lose');if(bt!==my&&bt)return}
+  bt=null;busy=false;dc.run=null;save();cloudFlush();dcPush();dcTop(1);
+  ov(`<div class="cd dlg nt bx"><div class="px cdbox swbox"><button type="button" class="bxx" data-bx="1" aria-label="ปิด">✕</button><b>🏆 ${T('จบรอบ','Run over')}</b><p style="text-align:center;margin:6px 0">${T('รอบนี้ไปถึงชั้น','This run reached floor')} <b class="gold" style="font-size:22px">${won?f:f-1}</b><br>${T('สถิติดีที่สุด','Best')}: <b>${d.best||0}</b> · ${T('เหลือ','runs left')} ${Math.max(0,DC_TRIES-(d.t||0))} ${T('รอบ','')}</p></div></div>`);dcHub()}
+$('view').addEventListener('click',e=>{const t=e.target.closest('[data-act]');if(!t||t.disabled)return;const a=t.dataset.act;
+  if(a==='dcup'){dcHub();dcTop(1)}else if(a==='dcpick')dcPick(t.dataset.id);else if(a==='dcgo')dcGo();else if(a==='dcref')dcTop(1)});
 
 /* ---------- b269 invite event "ชวนเพื่อน ชิง MYTHIC" ----------
    A friend counts when they came in through the inviter's link during the event (S.rfAt), on a Google account that was new (refTake: stage <= 10),
@@ -3557,7 +3616,7 @@ $('view').onclick=ev=>{{const w=ev.target.closest('.dk,.ibtn,.pill,.row2 .btn');
   if(a!=='reset')armed=false;
   if(a==='home')home();
   else if(a==='schest'){const k=chestsLeft();if(k<=0)return;S.csc=(S.csc||0)+k;S.rs=(S.rs||0)+k;S.gold+=k*CHEST_G;lg('chest',k*CHEST_G);save();cloudFlush();sfx('win');fx.push(['view',`🎁 💠+${k} · Gold +${(k*CHEST_G).toLocaleString('en')}`,'g']);t.remove();return}
-  else if(a==='prep'){loop=0;fsEnd();if(bt&&bt.tw)return twLeave();if(bt&&bt.pvp){const o=bt.pvp;bt=null;busy=false;ov('');pvpResult(false,o);return}prepN=bt?bt.n:Math.min(MAXST,S.cleared+1);bt=null;busy=false;ov('');prep()}
+  else if(a==='prep'){loop=0;fsEnd();if(bt&&bt.tw)return twLeave();if(bt&&bt.dc)return dcFinish(false);if(bt&&bt.pvp){const o=bt.pvp;bt=null;busy=false;ov('');pvpResult(false,o);return}prepN=bt?bt.n:Math.min(MAXST,S.cleared+1);bt=null;busy=false;ov('');prep()}
   else if(a==='pvp'){pv.tab='hub';arena();pvpFetch(1)}
   else if(a==='pvtab'){pv.tab=t.dataset.t;pv.got=null;arena()}
   else if(a==='asbuy')asBuy(t.dataset.k);
@@ -4830,7 +4889,7 @@ function titleScreen(){
 }
 // ---------- Firebase: Google sign-in and one cloud save document per account (saves/{uid}) ----------
 const OBT_PAUSED_MODES=true,PV_PAUSED=false; // b215: hide Tower, PvP and World Boss until relaunch
-const BUILD='b270';
+const BUILD='b271';
 // The game moved to its own address. Anyone opening the old address is sent on, but only once the new site answers, so a broken move cannot lock players out.
 const DISCORD='https://discord.gg/dHDzRyPG9',DC_SVG='<svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="currentColor" d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.4189-2.1568 2.4189Z"/></svg>';
 const NEW_HOME='https://pixeldeckbattle.github.io/';
