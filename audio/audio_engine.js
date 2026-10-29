@@ -70,7 +70,7 @@ document.addEventListener('visibilitychange',()=>{if(document.hidden){if(current
 window.addEventListener('pagehide',()=>{if(current)current.pause()});
 
 /* ---------- hooks into the game ---------- */
-const wrap=(name,before,after)=>{try{const f=window[name];if(typeof f!=='function')return;window[name]=function(...a){if(before)before.apply(this,a);const r=f.apply(this,a);if(after)after.call(this,r,...a);return r}}catch(e){console.warn('PixelDeck audio hook',name,e)}};
+const wrap=(name,before,after)=>{try{const f=window[name];if(typeof f!=='function')return;window[name]=function(...a){const c={};if(before)before.apply(c,a);const r=f.apply(this,a);if(after)after.call(c,r,...a);return r}}catch(e){console.warn('PixelDeck audio hook',name,e)}};
 const best=()=>{try{const L=Array.isArray(pull)?pull:[];return L.some(x=>x&&C[x.id]&&['L','SL','LT'].includes(C[x.id].r))}catch(e){return false}};
 try{
  const oldSfx=sfx;window.sfx=sfx=function(kind){
